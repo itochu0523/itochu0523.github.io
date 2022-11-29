@@ -6,7 +6,13 @@
 ### アクセス方法
 
 ```html
-http://itochu0523.github.io
+https://itochu0523.github.io
+```
+```html
+https://itochu0523.github.io/docs/kakugen.html
+```
+```html
+https://itochu0523.github.io/docs/kakugen.html
 ```
 
 #### 見出し4
