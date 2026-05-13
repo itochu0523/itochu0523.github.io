@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="めしログ">
+<meta name="theme-color" content="#1a0a00">
+<title>めしログ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a0a00;
+    --paper: #faf6ef;
+    --warm: #f5ede0;
+    --accent: #c94f1a;
+    --gold: #c8922a;
+    --muted: #8a7a6a;
+    --border: #ddd4c0;
+    --card: #ffffff;
+    --shadow: 0 2px 12px rgba(26,10,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif JP', serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo span {
+    color: var(--gold);
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.15em;
+    margin-top: 2px;
+  }
+
+  /* Nav tabs */
+  .nav {
+    display: flex;
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0 20px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 10px 4px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-btn.active { color: var(--gold); }
+  .nav-btn .icon { font-size: 18px; }
+
+  /* Main content */
+  .main { padding: 16px 16px 100px; }
+
+  /* Search bar */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 14px 48px 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+
+  .search-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  /* Filter chips */
+  .filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* Restaurant cards */
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-body { padding: 14px 16px; }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+
+  .card-name {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+    margin-right: 8px;
+  }
+
+  .fav-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+
+  .fav-btn:active { transform: scale(1.3); }
+
+  .card-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--warm);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tag.genre { color: var(--accent); background: rgba(201,79,26,0.08); }
+
+  .card-address {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+
+  .action-btn {
+    flex: 1;
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: none;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+
+  .action-btn:active { background: var(--warm); }
+  .action-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
+  .action-btn.liked { color: #e05555; border-color: #e05555; background: rgba(224,85,85,0.06); }
+
+  /* My note textarea */
+  .my-note {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--warm);
+    resize: none;
+    outline: none;
+    margin-top: 8px;
+    display: none;
+    transition: border-color 0.2s;
+  }
+
+  .my-note:focus { border-color: var(--accent); }
+  .my-note.visible { display: block; }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty .emoji { font-size: 48px; margin-bottom: 16px; }
+  .empty p { font-size: 14px; line-height: 1.8; }
+
+  /* Search result info */
+  .result-info {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Views */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Favorites list */
+  .fav-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  /* Note view */
+  .note-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .note-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .note-card-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .note-date {
+    font-size: 10px;
+    color: var(--border);
+    font-family: 'DM Mono', monospace;
+    margin-top: 6px;
+  }
+
+  /* Map link badge */
+  .map-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #1a73e8;
+    text-decoration: none;
+    padding: 4px 0;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 200;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* PWA install banner */
+  .install-banner {
+    background: linear-gradient(135deg, var(--accent), #a03010);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    display: none;
+  }
+
+  .install-banner.show { display: flex; }
+
+  .install-banner-btn {
+    background: white;
+    color: var(--accent);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="logo">🍜 <span>めし</span>ログ</div>
+    <div class="logo-sub">YOUR PERSONAL FOOD JOURNAL</div>
+  </div>
+</div>
+
+<div class="install-banner" id="installBanner">
+  <span>📱 ホーム画面に追加して使おう</span>
+  <button class="install-banner-btn" onclick="showInstallGuide()">追加方法</button>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="switchView('search')" id="nav-search">
+    <span class="icon">🔍</span>探す
+  </button>
+  <button class="nav-btn" onclick="switchView('favorites')" id="nav-favorites">
+    <span class="icon">⭐</span>お気に入り
+  </button>
+  <button class="nav-btn" onclick="switchView('notes')" id="nav-notes">
+    <span class="icon">📓</span>メモ
+  </button>
+</nav>
+
+<!-- SEARCH VIEW -->
+<div class="view active" id="view-search">
+  <div class="main">
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchInput"
+        placeholder="店名・エリア・料理名で検索..."
+        onkeyup="handleSearch(event)">
+      <button class="search-btn" onclick="doSearch()">🔍</button>
+    </div>
+
+    <div class="filters" id="genreFilters">
+      <button class="chip active" onclick="filterGenre('all', this)">すべて</button>
+      <button class="chip" onclick="filterGenre('ラーメン', this)">🍜 ラーメン</button>
+      <button class="chip" onclick="filterGenre('寿司', this)">🍣 寿司</button>
+      <button class="chip" onclick="filterGenre('焼肉', this)">🥩 焼肉</button>
+      <button class="chip" onclick="filterGenre('蕎麦', this)">🍵 蕎麦</button>
+      <button class="chip" onclick="filterGenre('居酒屋', this)">🍺 居酒屋</button>
+      <button class="chip" onclick="filterGenre('イタリアン', this)">🍝 イタリアン</button>
+      <button class="chip" onclick="filterGenre('カフェ', this)">☕ カフェ</button>
+    </div>
+
+    <div class="section-label" id="resultLabel">山形の人気店</div>
+    <div id="restaurantList"></div>
+  </div>
+</div>
+
+<!-- FAVORITES VIEW -->
+<div class="view" id="view-favorites">
+  <div class="main">
+    <div class="section-label">お気に入りリスト</div>
+    <div id="favoritesList"></div>
+  </div>
+</div>
+
+<!-- NOTES VIEW -->
+<div class="view" id="view-notes">
+  <div class="main">
+    <div class="section-label">マイメモ</div>
+    <div id="notesList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== DATA ==========
+const YAMAGATA_RESTAURANTS = [
+  { id: 1, name: '霞城苑', genre: '焼肉', area: '山形市', address: '山形市城南町1-1-1', tel: '023-641-0777', price: '¥3,000〜', desc: '山形牛を堪能できる老舗焼肉店。地元で長年愛されるお店。', map: 'https://maps.google.com/?q=山形市+霞城苑' },
+  { id: 2, name: 'そば処 庄司屋', genre: '蕎麦', area: '山形市', address: '山形市本町2-1-1', tel: '023-622-3322', price: '¥1,000〜', desc: '創業200年以上の老舗蕎麦屋。山形の蕎麦文化を体現する名店。', map: 'https://maps.google.com/?q=山形市+庄司屋' },
+  { id: 3, name: '栄屋本店', genre: 'ラーメン', area: '山形市', address: '山形市香澄町3-5-1', tel: '023-632-6868', price: '〜¥1,000', desc: '山形冷やしラーメン発祥の店。夏の冷やしは別格の美味しさ。', map: 'https://maps.google.com/?q=山形市+栄屋本店' },
+  { id: 4, name: '旬魚菜 つかさ', genre: '居酒屋', area: '山形市', address: '山形市七日町2-7-1', tel: '023-623-3456', price: '¥3,000〜', desc: '山形の地酒と新鮮な魚介が楽しめる名居酒屋。季節の食材を大切に。', map: 'https://maps.google.com/?q=山形市+つかさ' },
+  { id: 5, name: '山形イタリア料理 ナポリ', genre: 'イタリアン', area: '山形市', address: '山形市香澄町1-2-10', tel: '023-624-1111', price: '¥2,000〜', desc: '山形野菜をふんだんに使ったイタリアン。地元産食材へのこだわりが光る。', map: 'https://maps.google.com/?q=山形市+ナポリ' },
+  { id: 6, name: '寿司処 ひかり', genre: '寿司', area: '山形市', address: '山形市旅籠町3-1-1', tel: '023-622-8888', price: '¥4,000〜', desc: '日本海の新鮮な魚介を使った江戸前寿司。カウンター席でじっくり味わいたい。', map: 'https://maps.google.com/?q=山形市+寿司ひかり' },
+  { id: 7, name: '珈琲哲学 山形店', genre: 'カフェ', area: '山形市', address: '山形市馬見ヶ崎1-1-1', tel: '023-633-5555', price: '〜¥1,000', desc: 'こだわりのサードウェーブコーヒーと山形産フルーツのスイーツが人気。', map: 'https://maps.google.com/?q=山形市+珈琲哲学' },
+  { id: 8, name: '肉の庄内', genre: '焼肉', area: '鶴岡市', address: '鶴岡市馬場町1-1', tel: '0235-22-0000', price: '¥3,000〜', desc: '庄内牛を豪快に楽しめる鶴岡の名店。タレが絶品と評判。', map: 'https://maps.google.com/?q=鶴岡市+肉の庄内' },
+  { id: 9, name: '海産物 酒田港食堂', genre: '寿司', area: '酒田市', address: '酒田市南新町1-2-3', tel: '0234-22-1234', price: '¥2,000〜', desc: '酒田港直送の新鮮魚介。朝どれの海鮮丼は絶品。地元漁師も通う店。', map: 'https://maps.google.com/?q=酒田市+港食堂' },
+  { id: 10, name: 'そば道場 出羽屋', genre: '蕎麦', area: '西川町', address: '西村山郡西川町大井沢123', tel: '0237-74-1234', price: '¥1,000〜', desc: '月山の麓で食べる山形蕎麦。山の空気と共に味わう手打ち蕎麦は格別。', map: 'https://maps.google.com/?q=西川町+出羽屋+蕎麦' },
+  { id: 11, name: '蔵元居酒屋 初孫', genre: '居酒屋', area: '酒田市', address: '酒田市十里塚村東200', tel: '0234-31-1111', price: '¥3,000〜', desc: '地酒「初孫」の蔵元直営居酒屋。醸造所で飲む酒は格別の味わい。', map: 'https://maps.google.com/?q=酒田市+初孫+居酒屋' },
+  { id: 12, name: 'ラーメン 龍上海', genre: 'ラーメン', area: '赤湯', address: '南陽市赤湯123', tel: '0238-43-2153', price: '〜¥1,000', desc: '赤湯辛みそラーメンの元祖。辛味噌の辛さと旨みが絶妙な名店。', map: 'https://maps.google.com/?q=南陽市+龍上海' },
+];
+
+let allRestaurants = [...YAMAGATA_RESTAURANTS];
+let displayedRestaurants = [...YAMAGATA_RESTAURANTS];
+let currentGenre = 'all';
+let favorites = JSON.parse(localStorage.getItem('meshi_favorites') || '[]');
+let notes = JSON.parse(localStorage.getItem('meshi_notes') || '{}');
+let likes = JSON.parse(localStorage.getItem('meshi_likes') || '[]');
+
+// ========== RENDER ==========
+function renderRestaurant(r, container) {
+  const isFav = favorites.includes(r.id);
+  const isLiked = likes.includes(r.id);
+  const note = notes[r.id] || '';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-name">${r.name}</div>
+        <button class="fav-btn" onclick="toggleFav(${r.id}, this)" title="お気に入り">${isFav ? '⭐' : '☆'}</button>
+      </div>
+      <div class="card-meta">
+        <span class="tag genre">${r.genre}</span>
+        <span class="tag">${r.area}</span>
+        <span class="tag">${r.price}</span>
+      </div>
+      <div class="card-address">📍 ${r.address}</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:8px">${r.desc}</div>
+      <a href="${r.map}" target="_blank" class="map-badge">🗺️ Googleマップで見る</a>
+      <textarea class="my-note ${note ? 'visible' : ''}" 
+        placeholder="メモを書く..." 
+        id="note-${r.id}"
+        onchange="saveNote(${r.id}, this.value)">${note}</textarea>
+      <div class="card-actions">
+        <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${r.id}, this)">
+          ${isLiked ? '❤️' : '🤍'} いいね
+        </button>
+        <button class="action-btn" onclick="toggleNote(${r.id})">
+          ✏️ メモ
+        </button>
+        <a href="tel:${r.tel}" class="action-btn primary" style="text-decoration:none;flex:1">
+          📞 電話
+        </a>
+      </div>
+    </div>
+  `;
+  container.appendChild(card);
+}
+
+function renderList(restaurants, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  if (restaurants.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="emoji">🍽️</div><p>お店が見つかりません。<br>別のキーワードで検索してみてください。</p></div>`;
+    return;
+  }
+  restaurants.forEach(r => renderRestaurant(r, container));
+}
+
+function renderFavorites() {
+  const favRestaurants = YAMAGATA_RESTAURANTS.filter(r => favorites.includes(r.id));
+  const container = document.getElementById('favoritesList');
+  container.innerHTML = '';
+  if (favRestaurants.length === 0) {
+    container.innerHTML = `<div class="fav-empty"><div style="font-size:48px;margin-bottom:16px">⭐</div><p style="font-size:14px;color:var(--muted);line-height:1.8">まだお気に入りがありません。<br>☆ボタンでお気に入り登録しよう！</p></div>`;
+    return;
+  }
+  favRestaurants.forEach(r => renderRestaurant(r, container));
+}
+
+function renderNotes() {
+  const container = document.getElementById('notesList');
+  container.innerHTML = '';
+  const noteEntries = Object.entries(notes).filter(([id, text]) => text.trim());
+  if (noteEntries.length === 0) {
+    container.innerHTML = `<div class="fav-empty"><div style="font-size:48px;margin-bottom:16px">📓</div><p style="font-size:14px;color:var(--muted);line-height:1.8">メモがありません。<br>お店のカードからメモを書こう！</p></div>`;
+    return;
+  }
+  noteEntries.forEach(([id, text]) => {
+    const r = YAMAGATA_RESTAURANTS.find(r => r.id == id);
+    if (!r) return;
+    const card = document.createElement('div');
+    card.className = 'note-card';
+    card.innerHTML = `
+      <div class="note-card-name">${r.name} <span style="font-size:11px;color:var(--muted);font-weight:400">${r.genre} · ${r.area}</span></div>
+      <div class="note-card-text">${text.replace(/\n/g, '<br>')}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ========== ACTIONS ==========
+function toggleFav(id, btn) {
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(f => f !== id);
+    btn.textContent = '☆';
+    showToast('お気に入りを解除しました');
+  } else {
+    favorites.push(id);
+    btn.textContent = '⭐';
+    showToast('⭐ お気に入りに追加しました！');
+  }
+  localStorage.setItem('meshi_favorites', JSON.stringify(favorites));
+}
+
+function toggleLike(id, btn) {
+  if (likes.includes(id)) {
+    likes = likes.filter(l => l !== id);
+    btn.innerHTML = '🤍 いいね';
+    btn.className = 'action-btn';
+  } else {
+    likes.push(id);
+    btn.innerHTML = '❤️ いいね';
+    btn.className = 'action-btn liked';
+    showToast('❤️ いいね！');
+  }
+  localStorage.setItem('meshi_likes', JSON.stringify(likes));
+}
+
+function toggleNote(id) {
+  const textarea = document.getElementById(`note-${id}`);
+  if (textarea) {
+    textarea.classList.toggle('visible');
+    if (textarea.classList.contains('visible')) textarea.focus();
+  }
+}
+
+function saveNote(id, text) {
+  notes[id] = text;
+  localStorage.setItem('meshi_notes', JSON.stringify(notes));
+  showToast('📝 メモを保存しました');
+}
+
+// ========== SEARCH & FILTER ==========
+function handleSearch(e) {
+  if (e.key === 'Enter') doSearch();
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  applyFilter(q, currentGenre);
+}
+
+function filterGenre(genre, btn) {
+  currentGenre = genre;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  applyFilter(q, genre);
+}
+
+function applyFilter(q, genre) {
+  let results = YAMAGATA_RESTAURANTS;
+  if (genre !== 'all') results = results.filter(r => r.genre === genre);
+  if (q) results = results.filter(r =>
+    r.name.toLowerCase().includes(q) ||
+    r.area.toLowerCase().includes(q) ||
+    r.genre.toLowerCase().includes(q) ||
+    r.desc.toLowerCase().includes(q)
+  );
+  displayedRestaurants = results;
+  const label = document.getElementById('resultLabel');
+  label.textContent = q || genre !== 'all'
+    ? `検索結果 ${results.length}件`
+    : `山形の人気店`;
+  renderList(results, 'restaurantList');
+}
+
+// ========== VIEW SWITCHING ==========
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${view}`).classList.add('active');
+  document.getElementById(`nav-${view}`).classList.add('active');
+  if (view === 'favorites') renderFavorites();
+  if (view === 'notes') renderNotes();
+}
+
+// ========== TOAST ==========
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// ========== INSTALL GUIDE ==========
+function showInstallGuide() {
+  alert('📱 ホーム画面への追加方法\n\nSafariで開いて：\n1. 画面下の「共有」ボタン（□↑）をタップ\n2.「ホーム画面に追加」をタップ\n3.「追加」をタップ\n\nこれでアプリのように使えます！');
+}
+
+// Show install banner on iOS Safari
+function isIOS() {
+  return /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+}
+function isInStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+}
+if (isIOS() && !isInStandaloneMode()) {
+  document.getElementById('installBanner').classList.add('show');
+}
+
+// ========== INIT ==========
+renderList(YAMAGATA_RESTAURANTS, 'restaurantList');
+</script>
+</body>
+</html>
