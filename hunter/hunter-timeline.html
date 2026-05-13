@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ハンターへの道">
+<title>🦌 ハンターへの道</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
+  :root{--green:#52b788;--green-dark:#2d6a4f;--green-dim:rgba(82,183,136,0.15);--text:#e8e8e8;--muted:#888;--card:rgba(255,255,255,0.04)}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:linear-gradient(135deg,#0d1b2a 0%,#1b2838 40%,#0f2027 100%);min-height:100vh;font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;color:var(--text);padding-bottom:80px}
+
+  #header{background:linear-gradient(90deg,#1a3a2a,#0d2518);border-bottom:2px solid #2d6a4f;padding:14px 14px 10px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+  .hd-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .hd-sub{font-size:10px;color:#74b49b;letter-spacing:2px;text-transform:uppercase}
+  .hd-ttl{font-size:17px;font-weight:700;color:#e8f5e9;line-height:1.2}
+  .prog-row{display:flex;justify-content:space-between;font-size:11px;color:#74b49b;margin-bottom:4px}
+  .prog-bar{background:#0d2518;border-radius:8px;height:9px;overflow:hidden}
+  .prog-fill{height:100%;background:linear-gradient(90deg,#2d6a4f,#52b788);border-radius:8px;transition:width .5s}
+  #cannow{display:none;margin-top:7px;background:var(--green-dim);border:1px solid var(--green);border-radius:7px;padding:4px 10px;font-size:11px;color:#95d5b2}
+
+  #tabs{padding:9px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #tabs::-webkit-scrollbar{display:none}
+  .tabs-inner{display:flex;gap:6px;min-width:max-content}
+  .tbtn{padding:5px 11px;border-radius:20px;border:none;cursor:pointer;font-size:11px;font-family:inherit;white-space:nowrap;background:rgba(255,255,255,.07);color:#aaa;transition:all .2s}
+  .tbtn.act{font-weight:700;color:#fff}
+  .t-pend{border:1px solid #444;background:transparent;color:#888}
+  .t-pend.on{border-color:#e8a838;background:rgba(232,168,56,.15);color:#e8a838}
+
+  #toolbar{padding:0 12px 10px;display:flex;gap:7px;flex-wrap:wrap}
+  .tlbtn{padding:5px 11px;border-radius:7px;border:1px solid #2d6a4f;background:rgba(45,106,79,.2);color:#74b49b;font-size:11px;font-family:inherit;cursor:pointer;transition:all .2s}
+  .tlbtn:active{background:rgba(45,106,79,.4)}
+
+  #tasks{padding:0 12px}
+  .ph-sec{margin-bottom:20px}
+  .ph-hd{display:flex;align-items:center;gap:8px;padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid rgba(255,255,255,.06)}
+  .ph-nm{font-weight:700;font-size:14px}
+  .ph-ct{font-size:10px;color:#666;margin-left:auto;background:rgba(255,255,255,.05);padding:2px 8px;border-radius:10px}
+
+  .tcard{border-radius:9px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.07);transition:all .2s}
+  .tcard.done{background:rgba(82,183,136,.06);border-color:rgba(45,106,79,.3)}
+  .tcard.now{background:rgba(82,183,136,.1);border-color:rgba(82,183,136,.3)}
+  .tcard.norm{background:var(--card)}
+
+  .thead{padding:10px 11px;cursor:pointer;user-select:none;display:flex;align-items:flex-start;gap:8px}
+  .chk{width:21px;height:21px;border-radius:50%;flex-shrink:0;border:2px solid #555;background:transparent;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;transition:all .2s;font-family:inherit}
+  .chk.on{border-color:var(--green);background:var(--green)}
+  .tmain{flex:1;min-width:0}
+  .trow{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .ttl{font-size:13px;font-weight:600;color:var(--text)}
+  .ttl.done{text-decoration:line-through;color:#4a7c59}
+  .b-now{font-size:9px;background:rgba(82,183,136,.15);color:var(--green);border:1px solid rgba(82,183,136,.4);border-radius:4px;padding:1px 5px;white-space:nowrap}
+  .b-urg{font-size:9px;background:rgba(217,83,79,.15);color:#e88;border:1px solid rgba(217,83,79,.4);border-radius:4px;padding:1px 5px;white-space:nowrap}
+  .b-dt{font-size:9px;color:#777;background:rgba(255,255,255,.05);border-radius:4px;padding:1px 5px}
+  .tdet{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .chev{color:#555;font-size:11px;flex-shrink:0;margin-top:3px}
+
+  .titems{border-top:1px solid rgba(255,255,255,.05);padding:8px 11px 9px 40px;background:rgba(0,0,0,.2);display:none}
+  .titems.open{display:block}
+  .ilabel{font-size:10px;color:#74b49b;margin-bottom:4px;letter-spacing:1px}
+  .irow{font-size:11px;color:#ccc;padding:2px 0;display:flex;align-items:flex-start;gap:5px}
+  .idot{color:var(--green);font-size:9px;margin-top:3px;flex-shrink:0}
+
+  .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px}
+  .ov.open{display:flex}
+  .mbox{background:#1a2e22;border:1px solid #2d6a4f;border-radius:13px;padding:18px;width:100%;max-width:390px;max-height:85vh;overflow-y:auto}
+  .mbox h3{color:#74b49b;font-size:14px;margin-bottom:4px}
+  .mbox p{color:#aaa;font-size:11px;margin-bottom:10px;line-height:1.6}
+  .mbox textarea{width:100%;height:110px;background:rgba(0,0,0,.3);border:1px solid #2d6a4f;border-radius:7px;color:#e8e8e8;font-size:10px;padding:7px;font-family:monospace;resize:none;margin-bottom:10px}
+  .mbtns{display:flex;gap:7px;flex-wrap:wrap}
+  .mb{flex:1;padding:8px;border-radius:7px;border:none;font-size:12px;font-family:inherit;cursor:pointer;min-width:70px}
+  .mb.p{background:var(--green);color:#fff;font-weight:700}
+  .mb.s{background:rgba(255,255,255,.1);color:#ccc}
+  .sstep{background:rgba(0,0,0,.3);border-radius:7px;padding:9px 11px;margin-bottom:7px;border-left:3px solid var(--green)}
+  .sstep h4{font-size:11px;color:#95d5b2;margin-bottom:3px}
+  .sstep code{font-size:10px;color:#74b49b;background:rgba(0,0,0,.4);padding:3px 6px;border-radius:3px;display:block;margin-top:3px;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+  .sstep p{color:#999;font-size:10px;margin:3px 0 0;line-height:1.5}
+
+  #foot{margin:14px 12px 0;background:rgba(255,255,255,.03);border-radius:9px;padding:9px 11px;font-size:10px;color:#555;line-height:1.8;border:1px solid rgba(255,255,255,.05)}
+  #foot strong{color:#74b49b}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="hd-top">
+    <span style="font-size:24px">🦌</span>
+    <div>
+      <div class="hd-sub">山形転入 ＆ 車手続き ＆ 狩猟免許 ＆ 銃所持許可</div>
+      <div class="hd-ttl">ハンターへの道 完全タイムライン</div>
+    </div>
+  </div>
+  <div class="prog-row"><span>全体進捗</span><span id="ptxt">0 / 0 完了 (0%)</span></div>
+  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+  <div id="cannow"></div>
+</div>
+
+<div id="tabs"><div class="tabs-inner" id="ti"></div></div>
+
+<div id="toolbar">
+  <button class="tlbtn" onclick="openM('setup-m')">📱 Mac/iPhone設定</button>
+  <button class="tlbtn" onclick="openIcs()">📅 カレンダー連携</button>
+  <button class="tlbtn" onclick="doExp()">💾 進捗保存</button>
+  <button class="tlbtn" onclick="openM('imp-m')">📥 進捗読込</button>
+</div>
+
+<div id="tasks"></div>
+
+<div id="foot">
+  ℹ️ <strong>注意</strong>　手続きの受付時間・書類は変更の場合があります。当日前に必ず確認を。<br>
+  ✅ 進捗はSafariに自動保存されます。Mac↔iPhone間は「💾保存→📥読込」で同期してください。
+</div>
+
+<!-- ICS -->
+<div class="ov" id="ics-m" onclick="bgClose(event,'ics-m')">
+  <div class="mbox">
+    <h3>📅 Googleカレンダーに追加</h3>
+    <p>ICSをコピー → テキストエディタに貼り付けて「schedule.ics」で保存 → Googleカレンダー「他のカレンダー＋」→「ファイルからインポート」</p>
+    <textarea id="ics-txt" readonly></textarea>
+    <div class="mbtns">
+      <button class="mb p" onclick="copyIcs()">📋 コピー</button>
+      <button class="mb s" onclick="closeM('ics-m')">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- Setup -->
+<div class="ov" id="setup-m" onclick="bgClose(event,'setup-m')">
+  <div class="mbox">
+    <h3>📱 Mac ＆ iPhone セットアップ</h3>
+    <p>このHTMLファイル1つでMac・iPhone両対応です。</p>
+    <div class="sstep">
+      <h4>① iCloud Driveに保存（Mac）</h4>
+      <code>Finder → iCloud Drive →「狩猟プロジェクト」フォルダを作成して保存</code>
+    </div>
+    <div class="sstep">
+      <h4>② デスクトップ起動アイコン（Automator）</h4>
+      <code>Automator → 新規 → アプリケーション
+→「シェルスクリプトを実行」追加
+→ 以下を貼り付けて保存：
+open -a Safari ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/狩猟プロジェクト/hunter-timeline.html</code>
+      <p>保存したアプリをデスクトップに置けばダブルクリックで起動！</p>
+    </div>
+    <div class="sstep">
+      <h4>③ iPhone ホーム画面に追加</h4>
+      <p>ファイルアプリ → iCloud Drive → hunter-timeline.html → Safariで開く → 共有(□↑) →「ホーム画面に追加」</p>
+    </div>
+    <div class="sstep">
+      <h4>④ デバイス間の進捗同期</h4>
+      <p>「💾進捗保存」でJSONを書き出し → もう一方のデバイスで「📥進捗読込」に貼り付けて同期。</p>
+    </div>
+    <div class="mbtns" style="margin-top:12px">
+      <button class="mb p" onclick="closeM('setup-m')">OK！</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import -->
+<div class="ov" id="imp-m" onclick="bgClose(event,'imp-m')">
+  <div class="mbox">
+    <h3>📥 進捗を読み込む</h3>
+    <p>別デバイスでエクスポートしたJSONを貼り付けてください。</p>
+    <textarea id="imp-txt" placeholder='{"tasks":[...]}' style="height:130px"></textarea>
+    <div class="mbtns">
+      <button class="mb p" onclick="applyImp()">読み込む</button>
+      <button class="mb s" onclick="closeM('imp-m')">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PHASES=["🏠 転入・行政手続き","🚗 車・免許手続き","📚 狩猟免許の準備","🎓 初心者講習会","📝 狩猟免許試験","🤝 猟友会・保険","🔫 銃所持許可","🦌 狩猟登録・初猟"];
+const PCOL={"🏠 転入・行政手続き":"#4a9eca","🚗 車・免許手続き":"#17a2b8","📚 狩猟免許の準備":"#5cb85c","🎓 初心者講習会":"#e8a838","📝 狩猟免許試験":"#d9534f","🤝 猟友会・保険":"#9b59b6","🔫 銃所持許可":"#e67e22","🦌 狩猟登録・初猟":"#27ae60"};
+
+const INIT=[
+  // ── 転入・行政手続き ──
+  {id:101,phase:"🏠 転入・行政手続き",title:"転出届 発行済み",detail:"東京都目黒区役所にて5/12に発行済み",date:"2025-05-12",done:true,now:false,urg:false,items:[]},
+  {id:102,phase:"🏠 転入・行政手続き",title:"転入届を提出",detail:"山形市役所 市民課（1F）。平日8:30〜17:15、第2・4土曜9:00〜12:00",date:"2025-05-14",done:false,now:true,urg:true,items:["転出証明書（目黒区で発行済み）","マイナンバーカード","印鑑（認印でOK）"]},
+  {id:103,phase:"🏠 転入・行政手続き",title:"マイナンバーカード住所更新",detail:"転入届と同じ窓口で同時手続き可能。暗証番号を忘れずに",date:"2025-05-14",done:false,now:true,urg:true,items:["マイナンバーカード","暗証番号（設定済みのもの）"]},
+  {id:104,phase:"🏠 転入・行政手続き",title:"住民票を複数枚取得",detail:"狩猟免許・銃所持許可・車手続きで使うので3〜4枚まとめて取得すると便利",date:"2025-05-14",done:false,now:true,urg:true,items:["マイナンバーカード or 本人確認書類","手数料（1枚300円程度）","3〜4枚取得を推奨"]},
+  {id:105,phase:"🏠 転入・行政手続き",title:"国民健康保険の切り替え",detail:"前の保険を脱退して山形市国保に加入（会社員で社保継続の場合は不要）",date:null,done:false,now:true,urg:false,items:["住民票","前職の健康保険資格喪失証明書（会社員だった場合）","印鑑"]},
+  {id:106,phase:"🏠 転入・行政手続き",title:"国民年金の住所変更",detail:"市役所窓口または年金機構オンラインで変更",date:null,done:false,now:true,urg:false,items:["マイナンバーカード or 基礎年金番号通知書","新住所の住民票"]},
+  {id:107,phase:"🏠 転入・行政手続き",title:"銀行・クレジットカードの住所変更",detail:"各銀行アプリ or Webで変更。カードによっては書面郵送が必要な場合あり",date:null,done:false,now:true,urg:false,items:["各銀行・カード会社のアプリ or Web","通帳・カード番号を手元に"]},
+  {id:108,phase:"🏠 転入・行政手続き",title:"各種サービス・サブスクの住所変更",detail:"Amazon・楽天・保険会社・スマホキャリアなど",date:null,done:false,now:true,urg:false,items:["Amazonアカウント設定","楽天・その他EC","スマホキャリアアプリ","各種保険会社"]},
+
+  // ── 車・免許手続き ──
+  {id:201,phase:"🚗 車・免許手続き",title:"運転免許証の住所変更",detail:"山形県警察署 or 山形県免許センター。住民票があれば即日・手数料無料",date:"2025-05-15",done:false,now:true,urg:true,items:["運転免許証","新住所の住民票（5/14取得分）","手数料不要"]},
+  {id:202,phase:"🚗 車・免許手続き",title:"購入ディーラーに連絡（代行検討）",detail:"軽自動車の車検証・ナンバー変更を代行してもらえるか確認。代行なら楽",date:"2025-05-15",done:false,now:true,urg:false,items:["購入店の連絡先","「住所変更手続きの代行はできますか？」と確認"]},
+  {id:203,phase:"🚗 車・免許手続き",title:"軽自動車の住所変更（車検証・ナンバー）",detail:"軽自動車検査協会 山形事務所。車庫証明不要！普通車より手続きが簡単",date:null,done:false,now:false,urg:false,items:["車検証","新住所の住民票","印鑑","手数料（ナンバー変更する場合 約1,500円）","軽自動車検査協会 山形事務所（山形市下東山）へ"]},
+  {id:204,phase:"🚗 車・免許手続き",title:"ソニー損保 住所変更（Web完結）",detail:"ソニー損保のマイページから住所変更のみ。5分程度で完了",date:null,done:false,now:true,urg:false,items:["ソニー損保マイページにログイン","証券番号を手元に","変更後に確認メールを保存"]},
+  {id:205,phase:"🚗 車・免許手続き",title:"自賠責保険の住所変更",detail:"車検証の住所変更後、証書記載の保険会社に電話で連絡",date:null,done:false,now:false,urg:false,items:["自賠責保険証書","保険会社の連絡先（証書に記載）"]},
+
+  // ── 狩猟免許の準備 ──
+  {id:301,phase:"📚 狩猟免許の準備",title:"山形県みどり自然課に電話して試験日程確認",detail:"6月申込・7〜8月試験が今年の目標。今すぐ電話して日程を確定させる",date:null,done:false,now:true,urg:true,items:["山形県庁 みどり自然課（023-630-2368 目安）","「今年の狩猟免許試験の日程を教えてください」","試験日・申込期間・必要書類をメモ"]},
+  {id:302,phase:"📚 狩猟免許の準備",title:"山形県猟友会に連絡・事前講習会を確認",detail:"猟友会の事前講習会はほぼ必須レベル。日程・入会・費用を確認",date:null,done:false,now:true,urg:true,items:["山形県猟友会（023-622-3120 目安）","講習会の日程・場所・費用を確認","入会についても聞く"]},
+  {id:303,phase:"📚 狩猟免許の準備",title:"狩猟読本を購入して予習開始",detail:"大日本猟友会発行の「狩猟読本」が公式テキスト。試験の出題元",date:null,done:false,now:true,urg:false,items:["狩猟読本（大日本猟友会・Amazon等で購入）","鳥獣保護管理法の基礎を学ぶ","鳥獣識別（鴨・雉・鹿・猪など）の練習"]},
+  {id:304,phase:"📚 狩猟免許の準備",title:"医師の診断書を手配",detail:"狩猟免許申請に必要。視力・聴力・運動能力の証明。予約が必要なことも",date:null,done:false,now:true,urg:false,items:["かかりつけ医または内科に予約","「狩猟免許申請用の診断書が必要」と伝える","費用：5,000〜10,000円程度"]},
+  {id:305,phase:"📚 狩猟免許の準備",title:"証明写真を用意（多めに）",detail:"各申請書類に使用。6ヶ月以内撮影のもの。複数枚まとめて用意推奨",date:null,done:false,now:true,urg:false,items:["証明写真（3cm×2.4cm）を6枚以上","コンビニ証明写真機 or 写真屋","清潔感ある服装・表情"]},
+
+  // ── 初心者講習会 ──
+  {id:401,phase:"🎓 初心者講習会",title:"初心者講習会に申し込む",detail:"山形県猟友会主催。転入後・住所確定後に申込可能。例年6〜8月開催",date:null,done:false,now:false,urg:false,items:["申込書（猟友会HPよりDL）","証明写真2枚","受講料（約6,000〜8,000円）","印鑑"]},
+  {id:402,phase:"🎓 初心者講習会",title:"初心者講習会を受講",detail:"座学（法律・安全・識別）＋実技（銃の取扱い模擬）。1〜2日間",date:null,done:false,now:false,urg:false,items:["狩猟読本","筆記用具","昼食・飲み物","受講票","動きやすい服装"]},
+
+  // ── 狩猟免許試験 ──
+  {id:501,phase:"📝 狩猟免許試験",title:"狩猟免許試験に申し込む（6月目標）",detail:"山形県主催。6月申込・7〜8月試験が今年のデッドライン",date:"2025-06-01",done:false,now:false,urg:true,items:["申請書（みどり自然課からDL）","証明写真2枚（3cm×2.4cm）","住民票（山形市）","医師の診断書","受験手数料（約5,200円）","欠格事由に関する申告書"]},
+  {id:502,phase:"📝 狩猟免許試験",title:"狩猟免許試験を受験・合格",detail:"筆記（知識・鳥獣識別）＋適性（視力・聴力）＋技能（銃の扱い）。7〜8月目標",date:"2025-08-01",done:false,now:false,urg:false,items:["受験票","筆記用具","狩猟読本（直前復習）","動きやすい服装（技能試験）"]},
+  {id:503,phase:"📝 狩猟免許試験",title:"狩猟免許の交付申請",detail:"合格通知受領後、山形県に申請。数日〜1週間で交付",date:null,done:false,now:false,urg:false,items:["合格通知書","申請書","証明写真","交付手数料（約1,800円）","住民票"]},
+
+  // ── 猟友会・保険 ──
+  {id:601,phase:"🤝 猟友会・保険",title:"山形県猟友会に入会",detail:"免許取得後に入会。狩猟者登録・ハンター保険加入に必要",date:null,done:false,now:false,urg:false,items:["狩猟免許証コピー","入会申込書","年会費（地区による・約5,000〜15,000円）","印鑑"]},
+  {id:602,phase:"🤝 猟友会・保険",title:"ハンター保険に加入",detail:"猟友会経由または日本国際ハンター協会等で加入。狩猟登録前に必要",date:null,done:false,now:false,urg:false,items:["狩猟免許証","保険申込書","保険料（年間約2,000〜5,000円）"]},
+
+  // ── 銃所持許可 ──
+  {id:701,phase:"🔫 銃所持許可",title:"猟銃等講習会（初心者）を受講",detail:"公安委員会主催。銃所持許可申請の前提条件。山形県警察で受講",date:null,done:false,now:false,urg:false,items:["申込書","証明写真","受講料（約6,700円）","住民票"]},
+  {id:702,phase:"🔫 銃所持許可",title:"猟銃等講習会の考査に合格",detail:"筆記試験あり。合格証明書を取得。テキストは講習会で配布される",date:null,done:false,now:false,urg:false,items:["テキスト（講習会で配布）を熟読","合格証明書を受け取り保管"]},
+  {id:703,phase:"🔫 銃所持許可",title:"ガンロッカー・実包等保管庫を設置",detail:"許可前に自宅での設置確認あり。施錠できる専用スペースが必要",date:null,done:false,now:false,urg:false,items:["ガンロッカー購入（3〜8万円）","実包等保管庫購入（1〜3万円）","設置場所の確保（施錠できる部屋）","ネジ固定など防犯対策"]},
+  {id:704,phase:"🔫 銃所持許可",title:"銃砲店で購入する銃を選ぶ",detail:"山形市内の銃砲店に相談。射撃場での試し撃ちも検討",date:null,done:false,now:false,urg:false,items:["予算検討（猟銃：15〜40万円程度）","銃砲店への相談予約","散弾銃（ショットガン）が第一種入門に多い"]},
+  {id:705,phase:"🔫 銃所持許可",title:"銃所持許可申請（山形県警）",detail:"所轄警察署（生活安全課）に申請。審査に約2〜3ヶ月かかる",date:null,done:false,now:false,urg:false,items:["申請書","住民票","身分証明書（本籍地市区町村発行）","医師の診断書（精神科・かかりつけ医）","同居親族書","経歴書","猟銃等講習会考査合格証明書","狩猟免許証コピー","証明写真（2枚）","手数料（約10,500円）"]},
+  {id:706,phase:"🔫 銃所持許可",title:"警察の立入検査・許可証受領",detail:"自宅にガンロッカー等の確認のため警察が来訪。その後許可証発行",date:null,done:false,now:false,urg:false,items:["ガンロッカー・保管庫の設置確認","許可証受領後に銃砲店で銃を受取"]},
+
+  // ── 狩猟登録・初猟 ──
+  {id:801,phase:"🦌 狩猟登録・初猟",title:"狩猟者登録（山形県）",detail:"毎年10月頃〜受付。猟期（11/15〜翌2/15）前に登録が必要",date:"2025-10-01",done:false,now:false,urg:false,items:["狩猟免許証","銃所持許可証","ハンター保険証","登録手数料（約1,800円）","猟友会会員証"]},
+  {id:802,phase:"🦌 狩猟登録・初猟",title:"猟場・猟区・入猟許可の確認",detail:"山形県内の入猟可能エリアを猟友会や先輩ハンターに確認",date:null,done:false,now:false,urg:false,items:["山形県猟友会への問い合わせ","地形図・鳥獣保護区マップ確認"]},
+  {id:803,phase:"🦌 狩猟登録・初猟",title:"🎉 初猟！",detail:"猟期：11月15日〜翌2月15日。先輩ハンターに同行してもらうと安全！",date:"2025-11-15",done:false,now:false,urg:false,items:["猟具一式","狩猟者登録証","蛍光ベスト・安全装備","無線機・スマートフォン","十分な食料・防寒具"]},
+];
+
+let tasks=loadT(),activePhase="全て",showPend=false,expId=null;
+
+function loadT(){
+  try{const s=localStorage.getItem('hunter_v3');if(s){const sv=JSON.parse(s);return INIT.map(t=>{const f=sv.find(x=>x.id===t.id);return f?{...t,done:f.done}:{...t};});}}catch(e){}
+  return INIT.map(t=>({...t}));
+}
+function save(){localStorage.setItem('hunter_v3',JSON.stringify(tasks.map(t=>({id:t.id,done:t.done}))));}
+
+function render(){
+  const done=tasks.filter(t=>t.done).length,pct=Math.round(done/tasks.length*100);
+  document.getElementById('ptxt').textContent=`${done} / ${tasks.length} 完了 (${pct}%)`;
+  document.getElementById('pfill').style.width=pct+'%';
+  const cn=tasks.filter(t=>!t.done&&t.now).length;
+  const cb=document.getElementById('cannow');
+  cb.style.display=cn>0?'block':'none';cb.textContent=`⚡ 今すぐできること：残り ${cn} 件`;
+
+  // tabs
+  const ti=document.getElementById('ti');
+  ti.innerHTML=['全て',...PHASES].map(p=>{
+    const act=activePhase===p,col=PCOL[p]||'#52b788';
+    const st=act&&p!=='全て'?`background:${col};color:#fff;font-weight:700`:act?`background:#52b788;color:#fff;font-weight:700`:'';
+    return `<button class="tbtn${act?' act':''}" style="${st}" onclick="setP(${JSON.stringify(p)})">${p}</button>`;
+  }).join('')+`<button class="tbtn t-pend${showPend?' on':''}" onclick="togPend()">未完了のみ</button>`;
+
+  // tasks
+  const phases=PHASES.filter(p=>activePhase==='全て'||p===activePhase);
+  let html='';
+  for(const ph of phases){
+    const pt=tasks.filter(t=>{if(t.phase!==ph)return false;if(showPend&&t.done)return false;return true;});
+    if(!pt.length)continue;
+    const pd=tasks.filter(t=>t.phase===ph&&t.done).length,ptot=tasks.filter(t=>t.phase===ph).length,col=PCOL[ph];
+    html+=`<div class="ph-sec"><div class="ph-hd" style="border-bottom-color:${col}44"><span class="ph-nm" style="color:${col}">${ph}</span><span class="ph-ct">${pd}/${ptot}</span></div>`;
+    for(const t of pt){
+      const cls=t.done?'done':t.now?'now':'norm',bl=t.done?'#2d6a4f':t.now?'#52b788':col,ex=expId===t.id;
+      html+=`<div class="tcard ${cls}" style="border-left:3px solid ${bl}">
+        <div class="thead" onclick="togExp(${t.id})">
+          <button class="chk${t.done?' on':''}" onclick="event.stopPropagation();togDone(${t.id})">${t.done?'✓':''}</button>
+          <div class="tmain">
+            <div class="trow">
+              <span class="ttl${t.done?' done':''}">${t.title}</span>
+              ${t.urg&&!t.done?'<span class="b-urg">⚠️ 急ぎ</span>':''}
+              ${t.now&&!t.done?'<span class="b-now">⚡ 今すぐ可</span>':''}
+              ${t.date?`<span class="b-dt">📅 ${t.date}</span>`:''}
+            </div>
+            <div class="tdet">${t.detail}</div>
+          </div>
+          <span class="chev">${ex?'▲':'▼'}</span>
+        </div>
+        ${t.items.length?`<div class="titems${ex?' open':''}"><div class="ilabel">📋 持ち物・準備するもの</div>${t.items.map(i=>`<div class="irow"><span class="idot">◆</span>${i}</div>`).join('')}</div>`:''}
+      </div>`;
+    }
+    html+='</div>';
+  }
+  document.getElementById('tasks').innerHTML=html;
+}
+
+function setP(p){activePhase=p;render();}
+function togPend(){showPend=!showPend;render();}
+function togExp(id){expId=expId===id?null:id;render();}
+function togDone(id){tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);save();render();}
+
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function bgClose(e,id){if(e.target.id===id)closeM(id);}
+
+function openIcs(){document.getElementById('ics-txt').value=genIcs();openM('ics-m');}
+function copyIcs(){
+  const ta=document.getElementById('ics-txt');ta.select();document.execCommand('copy');
+  if(navigator.clipboard)navigator.clipboard.writeText(ta.value).catch(()=>{});
+  alert('コピーしました！.icsファイルとして保存してGoogleカレンダーにインポートしてください。');
+}
+
+function doExp(){
+  const data=JSON.stringify({tasks:tasks.map(t=>({id:t.id,title:t.title,done:t.done}))},null,2);
+  try{
+    const b=new Blob([data],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download='hunter-progress.json';a.click();URL.revokeObjectURL(u);
+  }catch(e){}
+  if(/iPad|iPhone/.test(navigator.userAgent))prompt('進捗データ（コピーして別デバイスの「読込」に貼り付け）:',data);
+}
+function applyImp(){
+  try{
+    const raw=document.getElementById('imp-txt').value.trim();
+    const json=JSON.parse(raw),arr=json.tasks||json;
+    tasks=INIT.map(t=>{const f=arr.find(x=>x.id===t.id);return f?{...t,done:f.done}:{...t};});
+    save();closeM('imp-m');render();alert('進捗を読み込みました！');
+  }catch(e){alert('形式が正しくありません。エクスポートしたJSONをそのまま貼り付けてください。');}
+}
+
+function genIcs(){
+  const now=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  let L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HunterTimeline//JP','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  for(const t of tasks.filter(t=>t.date)){
+    const d=t.date.replace(/-/g,'');
+    L.push('BEGIN:VEVENT',`UID:ht-${t.id}-${d}@h`,`DTSTAMP:${now}`,`DTSTART;VALUE=DATE:${d}`,`DTEND;VALUE=DATE:${d}`,
+      `SUMMARY:${t.phase.replace(/[🏠🚗📚🎓📝🤝🔫🦌]/g,'').trim()} ${t.title}`,
+      `DESCRIPTION:${t.detail}\\n持物: ${t.items.join(' / ')}`,'END:VEVENT');
+  }
+  const MS=[{s:'20250614',t:'🦌 狩猟免許試験 申込期限（目安）',d:'6月中に申込完了が今年の目標'},
+    {s:'20250801',t:'🦌 狩猟免許試験（目安）',d:'山形県主催 7〜8月'},
+    {s:'20250901',t:'🔫 猟銃等講習会（目安）',d:'公安委員会主催'},
+    {s:'20251015',t:'🦌 狩猟者登録 受付開始（目安）',d:'猟期前に登録'},
+    {s:'20251115',t:'🦌 猟期スタート！',d:'山形県 11/15〜翌2/15'}];
+  for(const m of MS)L.push('BEGIN:VEVENT',`UID:ht-ms-${m.s}@h`,`DTSTAMP:${now}`,`DTSTART;VALUE=DATE:${m.s}`,`DTEND;VALUE=DATE:${m.s}`,`SUMMARY:${m.t}`,`DESCRIPTION:${m.d}`,'END:VEVENT');
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+
+render();
+</script>
+</body>
+</html>
