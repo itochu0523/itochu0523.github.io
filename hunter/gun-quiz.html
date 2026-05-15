@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="銃砲講習 完全攻略">
+<title>🔫 猟銃等講習会 完全攻略</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+:root{
+  --bg:#0a0c14;--bg2:#111520;--bg3:#1a1f35;
+  --blue:#60a5fa;--blue2:#1d4ed8;--blue3:#0a1020;
+  --red:#f87171;--red2:#dc2626;--red3:#2d0a0a;
+  --yellow:#fbbf24;--green:#4ade80;
+  --text:#e8eeff;--muted:#6b7280;--card:#0d1020;
+  --border:rgba(96,165,250,0.15);
+  --font:'Zen Kaku Gothic New',sans-serif;
+  --mono:'Share Tech Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:var(--bg);min-height:100vh;font-family:var(--font);color:var(--text);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+
+/* HOME */
+#home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+.home-icon{font-size:72px;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(96,165,250,0.5));animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(96,165,250,0.5))}50%{filter:drop-shadow(0 0 40px rgba(96,165,250,0.9))}}
+.home-title{font-size:26px;font-weight:900;color:var(--blue);letter-spacing:-1px;line-height:1.1;margin-bottom:6px;text-shadow:0 0 30px rgba(96,165,250,0.4)}
+.home-sub{font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:32px;line-height:1.6}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:380px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.stat-num{font-family:var(--mono);font-size:22px;color:var(--blue);font-weight:700}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+
+.mode-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px}
+.mode-btn{padding:16px;border-radius:14px;border:none;cursor:pointer;font-family:var(--font);font-size:15px;font-weight:700;display:flex;align-items:center;gap:12px;text-align:left;transition:all .15s;position:relative;overflow:hidden}
+.mode-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+.btn-main{background:linear-gradient(135deg,#1d4ed8,#0a1020);color:var(--blue);border:1px solid rgba(96,165,250,.3)}
+.btn-main:active{transform:scale(.98)}
+.btn-weak{background:linear-gradient(135deg,#7c2d12,#1c0a00);color:#fb923c;border:1px solid rgba(251,146,60,.3)}
+.btn-wrong{background:linear-gradient(135deg,#7f1d1d,#1a0000);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.btn-cat{background:linear-gradient(135deg,#164e63,#0a1a1a);color:#22d3ee;border:1px solid rgba(34,211,238,.3)}
+.mode-btn .icon{font-size:24px;flex-shrink:0}
+.mode-btn .desc{font-size:10px;opacity:.7;font-weight:400;margin-top:2px}
+.btn-badge{background:rgba(248,113,113,.2);color:var(--red);border-radius:20px;padding:2px 8px;font-size:10px;margin-left:auto;font-family:var(--mono);flex-shrink:0}
+.btn-badge.yellow{background:rgba(251,191,36,.2);color:var(--yellow)}
+
+/* CATEGORY SELECT */
+#catscreen{display:none;flex-direction:column;min-height:100vh;padding:20px}
+.screen-hd{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.back-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-family:var(--font);font-size:13px;cursor:pointer}
+.screen-ttl{font-size:18px;font-weight:900;color:var(--blue)}
+.cat-grid{display:flex;flex-direction:column;gap:10px}
+.cat-btn{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;transition:all .15s}
+.cat-btn:active{transform:scale(.98);background:var(--bg3)}
+.cat-icon{font-size:28px;flex-shrink:0}
+.cat-info{flex:1}
+.cat-name{font-size:15px;font-weight:700;color:var(--text)}
+.cat-count{font-size:11px;color:var(--muted);margin-top:2px}
+.cat-rate{font-family:var(--mono);font-size:14px;font-weight:700;flex-shrink:0}
+
+/* QUIZ */
+#quiz{display:none;flex-direction:column;min-height:100vh}
+.quiz-header{padding:14px 16px 10px;position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.q-exit{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font)}
+.q-info{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.q-cat-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:1px}
+.prog-wrap{background:rgba(255,255,255,.05);border-radius:4px;height:4px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--blue2),var(--blue));border-radius:4px;transition:width .4s ease}
+
+.quiz-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px}
+.q-number{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px}
+.q-text{font-size:17px;font-weight:700;line-height:1.6;color:var(--text)}
+
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.choice{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .15s;text-align:left;font-family:var(--font)}
+.choice:active{transform:scale(.99)}
+.choice-label{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:var(--mono)}
+.choice-text{font-size:14px;line-height:1.5;color:var(--text)}
+
+.choice.correct{background:rgba(74,222,128,.1);border-color:#4ade80;animation:correctPop .3s ease}
+.choice.wrong{background:rgba(248,113,113,.1);border-color:var(--red)}
+.choice.show-correct{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.4)}
+.choice.correct .choice-label{background:#4ade80;color:#000}
+.choice.wrong .choice-label{background:var(--red);color:#fff}
+@keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+.result-box{border-radius:14px;padding:14px 16px;display:none;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-box.correct-box{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3)}
+.result-box.wrong-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3)}
+.result-label{font-size:13px;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.result-explain{font-size:13px;color:#cbd5e1;line-height:1.7}
+.result-ref{font-size:10px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
+
+.mark-btn{background:transparent;border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:6px 12px;color:var(--yellow);font-size:12px;cursor:pointer;font-family:var(--font);margin-top:8px}
+.mark-btn.marked{background:rgba(251,191,36,.15);border-color:var(--yellow)}
+
+.next-btn{background:linear-gradient(135deg,var(--blue2),#0a1020);border:1px solid rgba(96,165,250,.3);border-radius:14px;padding:16px;color:var(--blue);font-size:16px;font-weight:900;cursor:pointer;font-family:var(--font);width:100%;margin-top:4px;transition:all .15s;display:none}
+.next-btn:active{transform:scale(.98)}
+.next-btn.finish{background:linear-gradient(135deg,#065f46,#022c22);border-color:rgba(74,222,128,.3);color:#4ade80}
+
+/* RESULT */
+#result{display:none;flex-direction:column;min-height:100vh;padding:24px;align-items:center}
+.result-title{font-size:28px;font-weight:900;margin:16px 0 4px;text-align:center}
+.result-score{font-family:var(--mono);font-size:72px;font-weight:700;text-align:center;line-height:1;margin:16px 0}
+.score-perfect{color:#4ade80;text-shadow:0 0 40px rgba(74,222,128,.6)}
+.score-good{color:var(--yellow)}
+.score-bad{color:var(--red)}
+.result-msg{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.7}
+
+.result-cats{width:100%;max-width:400px;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.cat-result{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.cat-result-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cat-result-name{font-size:13px;font-weight:700}
+.cat-result-score{font-family:var(--mono);font-size:13px}
+.cat-bar-bg{background:rgba(255,255,255,.06);border-radius:4px;height:5px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+
+.result-btns{display:flex;flex-direction:column;gap:8px;width:100%;max-width:400px}
+.res-btn{padding:14px;border-radius:12px;border:none;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;transition:all .15s}
+.res-btn:active{transform:scale(.98)}
+.res-btn.primary{background:linear-gradient(135deg,var(--blue2),#0a1020);color:var(--blue);border:1px solid rgba(96,165,250,.3)}
+.res-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+
+/* TOAST */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#0d1a35;border:1px solid var(--blue);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--blue);z-index:1000;transition:transform .3s ease;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <div class="home-icon">🔫</div>
+  <div class="home-title">猟銃等講習会<br>完全攻略</div>
+  <div class="home-sub">初心者講習 考査対策 · 100点主義<br>銃砲刀剣類所持等取締法 · 火薬類取締法</div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="st-total">0</div>
+      <div class="stat-lbl">累計回答</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-rate" style="color:var(--yellow)">-%</div>
+      <div class="stat-lbl">正答率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-wrong" style="color:var(--red)">0</div>
+      <div class="stat-lbl">要復習</div>
+    </div>
+  </div>
+
+  <div class="mode-btns">
+    <button class="mode-btn btn-main" onclick="startMode('random')">
+      <span class="icon">🎯</span>
+      <div><div>ランダム出題 20問</div><div class="desc">全分野から網羅的に出題・100点主義</div></div>
+    </button>
+    <button class="mode-btn btn-wrong" onclick="startMode('wrong')">
+      <span class="icon">❌</span>
+      <div><div>間違えた問題だけ</div><div class="desc">苦手を徹底的に潰す</div></div>
+      <span class="btn-badge" id="wrong-count-badge">0問</span>
+    </button>
+    <button class="mode-btn btn-weak" onclick="startMode('weak')">
+      <span class="icon">⭐</span>
+      <div><div>マーク済み問題</div><div class="desc">自分でマークした重要問題</div></div>
+      <span class="btn-badge yellow" id="mark-count-badge">0問</span>
+    </button>
+    <button class="mode-btn btn-cat" onclick="showCatScreen()">
+      <span class="icon">📚</span>
+      <div><div>分野別に攻める</div><div class="desc">法令・取扱・保管・安全・火薬</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- CATEGORY SELECT -->
+<div id="catscreen">
+  <div class="screen-hd">
+    <button class="back-btn" onclick="showHome()">← 戻る</button>
+    <div class="screen-ttl">分野を選ぶ</div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="quiz-header">
+    <div class="quiz-top">
+      <button class="q-exit" onclick="exitQuiz()">✕ 終了</button>
+      <span class="q-info" id="q-counter">1 / 20</span>
+      <span class="q-cat-badge" id="q-cat-badge"></span>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:5%"></div></div>
+  </div>
+  <div class="quiz-body">
+    <div class="q-number" id="q-number">Q.001</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="choices" id="choices"></div>
+    <div class="result-box" id="result-box">
+      <div class="result-label" id="result-label"></div>
+      <div class="result-explain" id="result-explain"></div>
+      <div class="result-ref" id="result-ref"></div>
+      <button class="mark-btn" id="mark-btn" onclick="toggleMark()">☆ 重要マーク</button>
+    </div>
+    <button class="next-btn" id="next-btn" onclick="nextQ()">次の問題 →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result">
+  <div style="font-size:48px;margin-top:20px" id="result-emoji">🎯</div>
+  <div class="result-title" id="result-title">セッション結果</div>
+  <div class="result-score" id="result-score">0%</div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-cats" id="result-cats"></div>
+  <div class="result-btns">
+    <button class="res-btn primary" onclick="startMode('random')">🎯 もう一度20問</button>
+    <button class="res-btn secondary" onclick="startMode('wrong')">❌ 間違えた問題を復習</button>
+    <button class="res-btn secondary" onclick="showHome()">🏠 ホームへ</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// 分野定義
+// ══════════════════════════════════════════════
+const CATS = {
+  law:  {name:'銃砲関連法令',     icon:'⚖️',  color:'#60a5fa'},
+  safe: {name:'安全な取扱い',     icon:'🛡️',  color:'#4ade80'},
+  keep: {name:'保管・携帯・運搬', icon:'🔒',  color:'#f97316'},
+  mech: {name:'銃の構造・機能',   icon:'⚙️',  color:'#a78bfa'},
+  exp:  {name:'火薬類・実包',     icon:'💥',  color:'#f43f5e'},
+  acc:  {name:'事故・応急処置',   icon:'🚨',  color:'#fbbf24'},
+};
+
+// ══════════════════════════════════════════════
+// 問題データベース（100問）
+// ══════════════════════════════════════════════
+const QDB = [
+// ── 銃砲関連法令 ──
+{id:1,cat:'law',q:'銃砲刀剣類所持等取締法において、猟銃を所持するために必要な手続きはどれか？',
+ choices:['都道府県知事の許可','公安委員会の所持許可','警察署長への届出のみ','市区町村長の許可'],
+ answer:1,explain:'猟銃の所持には都道府県公安委員会（警察）の所持許可が必要。許可なく所持した場合は銃刀法違反（懲役または罰金）。',ref:'銃砲刀剣類所持等取締法 第4条'},
+
+{id:2,cat:'law',q:'猟銃の所持許可の有効期間はどれくらいか？',
+ choices:['1年','3年','5年','10年'],
+ answer:1,explain:'猟銃所持許可の有効期間は3年。更新の際は射撃教習・技能検定等が必要。期限切れは無許可所持となり違法。',ref:'銃砲刀剣類所持等取締法 第9条の5'},
+
+{id:3,cat:'law',q:'猟銃の所持許可申請に必要な「猟銃等講習会考査合格証明書」の有効期間はどれか？',
+ choices:['6ヶ月','1年','2年','3年'],
+ answer:1,explain:'猟銃等講習会（初心者）の考査合格証明書の有効期間は1年。1年以内に所持許可申請をしなければ再受講が必要。',ref:'銃砲刀剣類所持等取締法施行規則'},
+
+{id:4,cat:'law',q:'次のうち猟銃の所持許可が取り消される理由に該当しないものはどれか？',
+ choices:['精神障害者と診断された','禁錮以上の刑に処せられた','引越しして住所が変わった','ストーカー規制法違反で規制命令を受けた'],
+ answer:2,explain:'住所変更は許可取消事由ではなく、変更届出が必要。精神障害・禁錮以上の刑・ストーカー規制法違反等は許可取消・欠格事由となる。',ref:'銃砲刀剣類所持等取締法 第11条'},
+
+{id:5,cat:'law',q:'猟銃所持許可証を他人に貸すことはできるか？',
+ choices:['猟友会員なら貸せる','絶対にできない（許可証は本人のみ有効）','緊急時のみ可能','家族なら貸せる'],
+ answer:1,explain:'所持許可証は本人専用。他人に貸すことは禁止。また自分の銃を他人に使用させることも原則禁止（射撃場での使用等は例外）。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:6,cat:'law',q:'猟銃等講習会（初心者）を受講できない（欠格事由がある）者はどれか？',
+ choices:['18歳未満の者','色覚異常がある者','左利きの者','身長150cm未満の者'],
+ answer:0,explain:'猟銃等講習会の受講資格：18歳以上。他にも精神障害・薬物中毒・禁固以上の刑歴（執行後5年未満）等の欠格事由がある。',ref:'銃砲刀剣類所持等取締法 第5条'},
+
+{id:7,cat:'law',q:'猟銃の所持許可を受けた者が行わなければならない定期的な検査は何か？',
+ choices:['毎年の目視確認','3年ごとの更新時の技能検定','毎月の警察への報告','年2回の銃砲店への持ち込み確認'],
+ answer:1,explain:'所持許可更新時（3年ごと）に技能検定（実技試験）または射撃教習が必要。また許可証の更新手続きが必要。',ref:'銃砲刀剣類所持等取締法 第9条の5'},
+
+{id:8,cat:'law',q:'猟銃の所持許可申請時に必要な書類として誤っているのはどれか？',
+ choices:['身分証明書（本籍地市区町村発行）','医師の診断書','猟友会の推薦状','住民票の写し'],
+ answer:2,explain:'猟友会の推薦状は必要書類ではない。必要なのは：住民票・身分証明書・診断書・経歴書・同居親族書・考査合格証明書・写真等。',ref:'銃砲刀剣類所持等取締法施行規則'},
+
+{id:9,cat:'law',q:'猟銃を新たに購入（譲り受け）する際に必要なことは？',
+ choices:['購入後30日以内に届け出る','購入前に「猟銃等の譲受許可」を取得する','購入後すぐに使用できる','猟友会に報告する'],
+ answer:1,explain:'猟銃の購入・譲り受けには事前に公安委員会の「譲受許可」が必要。許可なしに受け取ることは違法。',ref:'銃砲刀剣類所持等取締法 第4条'},
+
+{id:10,cat:'law',q:'猟銃を廃棄（処分）する場合の手続きとして正しいのはどれか？',
+ choices:['ゴミとして廃棄できる','銃砲刀剣類等登録機関に届け出て抹消手続きを行う','警察に届け出て指示に従う','公安委員会に廃棄届を提出する'],
+ answer:3,explain:'猟銃の廃棄には公安委員会への廃棄届が必要。また、廃棄にあたっては銃砲店等専門家による無効化処理が必要。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:11,cat:'law',q:'猟銃で使用できる実包（弾薬）の取得に必要な手続きは？',
+ choices:['特に手続き不要でどこでも購入できる','都道府県公安委員会の火薬類譲受許可が必要','猟友会の許可が必要','警察署に届け出るだけでよい'],
+ answer:1,explain:'実包（弾薬）は火薬類取締法の規制を受ける。購入には都道府県公安委員会の「火薬類譲受許可」が必要。',ref:'火薬類取締法 第17条'},
+
+{id:12,cat:'law',q:'猟銃所持者が住所を変更した場合、何日以内に届け出る必要があるか？',
+ choices:['5日以内','15日以内','30日以内','60日以内'],
+ answer:2,explain:'住所変更は変更後30日以内に所持許可を受けた公安委員会（警察）に届け出る義務がある。届出を怠ると罰則あり。',ref:'銃砲刀剣類所持等取締法 第8条'},
+
+{id:13,cat:'law',q:'猟銃の所持許可証を紛失した場合の対応として正しいのはどれか？',
+ choices:['再発行は不可能なので新規申請が必要','速やかに警察（公安委員会）に届け出て再交付申請をする','猟友会に報告すればよい','紛失しても問題ない'],
+ answer:1,explain:'許可証紛失は速やかに警察署に届け出る義務がある。同時に再交付申請が可能。許可証なしに銃を所持することは違法。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:14,cat:'law',q:'猟銃等講習会の考査（筆記試験）について正しいのはどれか？',
+ choices:['口頭試問で行われる','講習終了後に行われる筆記試験で、合格基準は正答率90%以上','実技のみで筆記はない','合否は関係なく受講すれば合格'],
+ answer:1,explain:'猟銃等講習会の考査は筆記試験。合格基準は正答率90%以上（10問中9問正解）。不合格の場合は再受講が必要。',ref:'銃砲刀剣類所持等取締法施行規則'},
+
+{id:15,cat:'law',q:'猟銃の名義変更（所持者変更）が必要なのはどのような場合か？',
+ choices:['住所が変わった場合','銃を別の人に譲渡・贈与する場合','猟友会を変更した場合','狩猟区域を変更した場合'],
+ answer:1,explain:'猟銃を他人に譲渡・贈与する場合は、譲受人が新たに所持許可を取得する必要がある。許可証は個人・銃ごとに紐づく。',ref:'銃砲刀剣類所持等取締法'},
+
+// ── 安全な取扱い ──
+{id:21,cat:'safe',q:'銃の安全取扱いの第一原則として正しいのはどれか？',
+ choices:['安全装置をかけておけば何でも安全','すべての銃は常に装填されているものとして扱う','銃は素早く操作することが重要','引き金に指をかけていると素早く対応できる'],
+ answer:1,explain:'「すべての銃は常に装填されている」という意識が安全の基本。これにより不用意な取り扱いを防ぐ。安全装置への過信は禁物。',ref:'猟銃等取扱読本 安全編'},
+
+{id:22,cat:'safe',q:'猟銃の引き金（トリガー）への指のかけ方として安全なのはどれか？',
+ choices:['常に引き金に指をかけておく','発射する直前まで引き金の外（トリガーガードの外）に指を置く','引き金に軽く触れておく','安全装置がかかっていれば引き金に指をかけてよい'],
+ answer:1,explain:'発射する直前まで引き金に指をかけない（トリガーガードの外側に置く）のが原則。予期しない発射（暴発）の防止。',ref:'猟銃等取扱読本 安全編'},
+
+{id:23,cat:'safe',q:'狩猟中、休憩や移動の際の銃の正しい取り扱いはどれか？',
+ choices:['安全装置をかけるだけでよい','必ず薬室を開放（弾を抜く）してから移動する','弾を込めたまま肩にかけてよい','地面に銃口を向けて立てかける'],
+ answer:1,explain:'休憩・移動時は必ず薬室を開放し弾を抜く。安全装置だけでは不十分。薬室開放が最も確実な安全措置。',ref:'猟銃等取扱読本 安全編'},
+
+{id:24,cat:'safe',q:'散弾銃を折り畳む（開放する）タイミングとして正しいのはどれか？',
+ choices:['狩猟が終わったときだけ','獲物が見えなくなったとき','藪に入るとき・移動するとき・人に近づくときなど、射撃しない場面では常に開放する','1日に1回開放する'],
+ answer:2,explain:'射撃しない場面（移動・休憩・話し合い・藪通過等）では常に銃を開放（薬室を空に）する。これが散弾銃ユーザーの基本マナー。',ref:'猟銃等取扱読本 安全編'},
+
+{id:25,cat:'safe',q:'人に銃を渡す（見せる）ときの正しい手順はどれか？',
+ choices:['安全装置をかけて渡す','薬室を開放して弾がないことを確認してから渡す','素早く渡す','引き金を引いて確認してから渡す'],
+ answer:1,explain:'銃を渡すときは必ず薬室を開放し、弾がないことを確認してから渡す。受け取る側も自分で確認することが大切。',ref:'猟銃等取扱読本 安全編'},
+
+{id:26,cat:'safe',q:'猟銃で「空撃ち（からうち）」を繰り返すことの問題点はどれか？',
+ choices:['問題はない','ファイアリングピン（撃針）等の部品を傷める可能性がある','音が出るので迷惑なだけ','実包が勿体ないだけ'],
+ answer:1,explain:'実包なしの空撃ちは機種によってはファイアリングピン・チャンバー等を傷める原因になる。メーカーが禁止している場合もある。',ref:'猟銃等取扱読本 構造編'},
+
+{id:27,cat:'safe',q:'猟銃の銃身（バレル）に異物・詰まりがないか確認する方法として正しいのはどれか？',
+ choices:['引き金を引いて確認する','薬室を開放した状態で、銃口から光を当てて目視確認する','弾を装填して発射して確認する','確認は銃砲店のみが行う'],
+ answer:1,explain:'銃身の確認は薬室を必ず開放（弾を抜いた状態）にしてから、銃口から光を当てて目視で行う。詰まりがある状態で発射すると銃身破裂の危険がある。',ref:'猟銃等取扱読本 安全編'},
+
+{id:28,cat:'safe',q:'複数人で狩猟する際に最も重要な安全事項はどれか？',
+ choices:['なるべく離れて行動する','常に互いの位置を把握し、射線上に人がいないことを確認してから発射する','先頭の人だけが銃を持つ','無線で常に連絡を取り合う'],
+ answer:1,explain:'複数人での狩猟では互いの位置把握が最重要。発射前に射線（弾の飛ぶ方向とその延長線）上に人がいないことを必ず確認する。',ref:'猟銃等取扱読本 安全編'},
+
+{id:29,cat:'safe',q:'猟銃の「安全装置（セフティ）」について正しい説明はどれか？',
+ choices:['安全装置がかかっていれば絶対に発射されない','安全装置は補助的なもので、機械的故障や強い衝撃で解除される可能性がある','安全装置は実包を抜く代わりになる','安全装置をかければ銃口を人に向けてもよい'],
+ answer:1,explain:'安全装置は補助的安全措置。衝撃・故障・誤操作で解除・発火する可能性がある。安全装置に頼り切ることは非常に危険。',ref:'猟銃等取扱読本 安全編'},
+
+{id:30,cat:'safe',q:'猟銃を持ったまま転倒しそうになったとき、どう対処するか？',
+ choices:['銃を守ることを最優先に転倒を防ぐ','銃を遠くに放り投げる','銃口を安全な方向に向けたまま転倒し、引き金に指をかけない','安全装置をかける'],
+ answer:2,explain:'転倒時も銃口の方向が最優先。引き金に指をかけないこと、銃口を人のいない方向に向けることを維持する。銃を守ろうとして引き金に触れると暴発の危険。',ref:'猟銃等取扱読本 安全編'},
+
+{id:31,cat:'safe',q:'猟銃使用後（狩猟終了後）に必ず行うべきことはどれか？',
+ choices:['翌日まとめて行えばよい','全ての実包を抜き、薬室を開放し、銃を清掃してからガンロッカーに保管する','安全装置をかけてそのまま保管する','猟友会に使用報告をする'],
+ answer:1,explain:'使用後は：①全実包を抜く②薬室開放③銃腔・機関部の清掃④ガンロッカーに保管、が基本手順。さびや残滓の放置は故障・事故の原因。',ref:'猟銃等取扱読本 取扱編'},
+
+{id:32,cat:'safe',q:'誤射（意図しない発射）を防ぐための最重要事項はどれか？',
+ choices:['高性能な安全装置の銃を選ぶ','目標とその前後の安全を確認してから発射する','素早く発射する','仲間に声をかけてから発射する'],
+ answer:1,explain:'誤射防止の鉄則：①目標が確実に獲物であることを確認②目標の前後に人・民家等がないことを確認③確認できない場合は発射しない。',ref:'猟銃等取扱読本 安全編'},
+
+{id:33,cat:'safe',q:'猟銃のクリーニング（手入れ）に使用する溶剤・油の取り扱いで注意すべきことは？',
+ choices:['特に注意事項はない','引火性があるものが多いため、火気のない場所で作業する','水で洗い流せばよい','食用油で代用できる'],
+ answer:1,explain:'銃の清掃に使用するガンオイル・クリーナーは引火性がある製品が多い。火気厳禁の場所で使用し、換気を十分に行う。',ref:'猟銃等取扱読本 取扱編'},
+
+{id:34,cat:'safe',q:'猟銃を携帯して公道を移動する場合に必要なことはどれか？',
+ choices:['所持許可証を携帯し、銃を専用ケースに入れ実包を抜いた状態で携帯する','所持許可証があれば弾を込めたまま持ち歩ける','猟友会の会員証があれば許可証は不要','特に規制はない'],
+ answer:0,explain:'公道での携帯：①所持許可証を必ず携帯②銃は専用ケース等に収納③薬室を開放し実包を抜く④実包は別に保管。違反は銃刀法違反。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:35,cat:'safe',q:'猟銃を他人（家族を含む）が触れられる場所に置くことはどうか？',
+ choices:['家族なら問題ない','絶対に禁止。施錠されたガンロッカーに保管し、他人が触れられないようにする','猟友会員なら触れさせてよい','短時間なら問題ない'],
+ answer:1,explain:'猟銃は施錠されたガンロッカーに保管し、所持許可を持たない人が触れることのないようにする義務がある。家族も例外ではない。',ref:'銃砲刀剣類所持等取締法 第10条の6'},
+
+// ── 保管・携帯・運搬 ──
+{id:41,cat:'keep',q:'ガンロッカーの設置に関して正しいのはどれか？',
+ choices:['どこに設置してもよい','床または壁に固定し、盗難・転倒防止措置を施す必要がある','賃貸住宅には設置できない','鍵はかけなくてよい'],
+ answer:1,explain:'ガンロッカーは床・壁等に固定することが義務づけられている。単に置いてあるだけでは盗難時に持ち去られる危険がある。',ref:'銃砲刀剣類所持等取締法 第10条の6'},
+
+{id:42,cat:'keep',q:'実包（弾薬）の保管場所として正しいのはどれか？',
+ choices:['ガンロッカーに銃と一緒に保管','銃とは別の施錠できる実包等保管庫に保管する','冷蔵庫に保管する','クローゼットに保管する'],
+ answer:1,explain:'実包は銃とは別の施錠できる実包等保管庫（火工品保管庫）に保管する義務がある。銃と実包を同じ場所に保管することは法令違反。',ref:'銃砲刀剣類所持等取締法 第10条の6'},
+
+{id:43,cat:'keep',q:'車で猟銃を運搬する際の正しい方法はどれか？',
+ choices:['助手席に置いておく','薬室を開放し実包を抜いた状態で専用ケースに収納し、トランク等に保管する','実包を装填したまま後部座席に置く','床に寝かせておく'],
+ answer:1,explain:'車での運搬：①薬室開放②全実包を抜く③専用ケース等に収納④トランクや後部スペースに保管。助手席・運転席周辺への放置は禁止。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:44,cat:'keep',q:'猟銃の保管場所について、警察（公安委員会）に届け出る義務があるか？',
+ choices:['届出は不要','所持許可申請時に保管場所を届け出る義務があり、変更時も届出が必要','猟友会に届け出ればよい','警察の立入検査時に見せれば届出は不要'],
+ answer:1,explain:'猟銃の保管場所は所持許可申請時に届け出る義務がある。保管場所を変更する場合も変更届が必要。警察による立入検査も行われる。',ref:'銃砲刀剣類所持等取締法 第10条の8'},
+
+{id:45,cat:'keep',q:'旅行・出張等で自宅を長期間留守にする場合の猟銃の取り扱いとして正しいのはどれか？',
+ choices:['ガンロッカーに保管しておけばよい','警察署に一時保管を依頼することができる','隣人に預けてよい','銃砲店に有料保管してもらう'],
+ answer:0,explain:'長期不在時はガンロッカーへの施錠保管が基本。不安な場合は警察署への一時保管依頼も可能。無許可の他人（隣人等）への預け入れは違法。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:46,cat:'keep',q:'ガンロッカーの鍵の管理として正しいのはどれか？',
+ choices:['鍵は分かりやすい場所に置いておく','鍵は所持許可者本人が管理し、他人が使用できないようにする','家族全員が使える場所に置く','スペアキーを近所に預ける'],
+ answer:1,explain:'ガンロッカーの鍵は所持許可者本人が管理する。他人が使用できるような保管は許可証の管理義務違反となる。',ref:'銃砲刀剣類所持等取締法 第10条の6'},
+
+{id:47,cat:'keep',q:'猟銃を自宅以外の場所（別荘・山小屋等）に保管することはできるか？',
+ choices:['どこでも保管できる','公安委員会に届け出た保管場所にのみ保管できる','猟友会の許可があれば可能','保管場所の制限はない'],
+ answer:1,explain:'猟銃は届け出た保管場所にのみ保管できる。別荘・山小屋等に保管する場合は変更届が必要。無届けでの保管場所変更は法令違反。',ref:'銃砲刀剣類所持等取締法'},
+
+{id:48,cat:'keep',q:'猟銃の盗難・紛失が発生した場合の対応として正しいのはどれか？',
+ choices:['まず猟友会に連絡する','直ちに警察（公安委員会）に届け出る','まず自分で探す','保険会社に連絡する'],
+ answer:1,explain:'猟銃の盗難・紛失は直ちに警察（公安委員会）に届け出る義務がある。紛失届の遅延は法令違反となる場合がある。',ref:'銃砲刀剣類所持等取締法'},
+
+// ── 銃の構造・機能 ──
+{id:51,cat:'mech',q:'散弾銃（ショットガン）の「チョーク」の役割として正しいのはどれか？',
+ choices:['反動を軽減する','銃口付近の絞りで散弾の広がりを調節する','消音効果がある','引き金の重さを調節する'],
+ answer:1,explain:'チョークは銃口の絞り（コンストリクション）。フルチョーク：弾が集まり遠距離向き。シリンダー（無絞り）：弾が広がり近距離向き。',ref:'猟銃等取扱読本 構造編'},
+
+{id:52,cat:'mech',q:'「薬室（チェンバー）」とは何か？',
+ choices:['引き金機構が収まる部分','実包が装填される銃身後部の空間','銃の照準器','弾倉（マガジン）のこと'],
+ answer:1,explain:'薬室（チェンバー）は銃身後部の、実包が収まる空間。発射時はここで火薬が燃焼し、弾頭が銃身を通って発射される。',ref:'猟銃等取扱読本 構造編'},
+
+{id:53,cat:'mech',q:'半自動式散弾銃（セミオート）の特徴として正しいのはどれか？',
+ choices:['引き金を引き続けると連続発射される','1回引き金を引くたびに1発発射され、自動的に排莢・次弾装填される','手動で次弾を装填する必要がある','2発しか装填できない'],
+ answer:1,explain:'半自動式（セミオートマチック）：1トリガー1発射。ガス圧や反動を利用して自動排莢・次弾装填。ポンプアクションより操作が少ない。',ref:'猟銃等取扱読本 構造編'},
+
+{id:54,cat:'mech',q:'「撃鉄（ハンマー）」と「撃針（ファイアリングピン）」の役割として正しいのはどれか？',
+ choices:['弾倉から弾を送り出す部品','撃鉄が撃針を叩き、撃針が実包の雷管を打撃して発火させる','銃を閉鎖する部品','照準を合わせる部品'],
+ answer:1,explain:'引き金を引く→撃鉄が解放→撃針を叩く→撃針が雷管を打撃→雷管の火が火薬に点火→発射、という連鎖で発射が起きる。',ref:'猟銃等取扱読本 構造編'},
+
+{id:55,cat:'mech',q:'散弾銃の「エジェクター」と「エクストラクター」の違いとして正しいのはどれか？',
+ choices:['どちらも同じもの','エジェクターは発射済み薬莢を自動排出、エクストラクターは薬莢を引き出すだけ（手で取る）','エジェクターは新しい弾を装填する','エクストラクターは発射を補助する'],
+ answer:1,explain:'エジェクター：開放時に発射済み薬莢を自動的に跳ね飛ばす。エクストラクター：薬莢を引き出す（薬室から出すだけで自動排出はしない）。',ref:'猟銃等取扱読本 構造編'},
+
+{id:56,cat:'mech',q:'散弾銃の「リブ（照準溝）」の役割はどれか？',
+ choices:['銃身の強度を高める','銃身上部にある溝で、照準の目安となる','反動を軽減する','チョークを固定する'],
+ answer:1,explain:'リブは銃身上部にある平らな溝（rib）。射撃時の照準補助として機能する。照準器（サイト）が取り付けられることもある。',ref:'猟銃等取扱読本 構造編'},
+
+{id:57,cat:'mech',q:'「ボルトアクション」ライフルの操作方法として正しいのはどれか？',
+ choices:['フォアエンドを前後にスライドして排莢・装填する','ボルトハンドルを持ち上げて引き、押し戻すことで排莢・装填する','レバーを操作して排莢する','自動的に次弾が装填される'],
+ answer:1,explain:'ボルトアクション：ボルトハンドルを上→後ろに引く（排莢）→前に押して上げる（装填・閉鎖）の手動操作。精度が高くシンプルな構造。',ref:'猟銃等取扱読本 構造編'},
+
+{id:58,cat:'mech',q:'猟銃の「銃床（ストック）」の役割として正しいのはどれか？',
+ choices:['弾薬を保管する','射手が銃を保持・制御するための部分で、反動を肩で受ける','照準器が付いている部分','銃身を支える金属部品'],
+ answer:1,explain:'銃床（ストック）は射手が銃を保持するための木製・合成樹脂製の部分。肩当て（バットプレート）部分で発射時の反動を吸収する。',ref:'猟銃等取扱読本 構造編'},
+
+{id:59,cat:'mech',q:'空気銃（エアライフル）の動力源として正しいものはすべてどれか？',
+ choices:['ガス（CO2）のみ','圧縮空気（プリチャージ）・スプリング・CO2ガスなど複数の方式がある','火薬','電気'],
+ answer:1,explain:'空気銃の動力：①プリチャージ式（圧縮空気タンク）②スプリング式（コッキング時にバネを圧縮）③CO2カートリッジ式等がある。いずれも猟銃用は所持許可が必要。',ref:'猟銃等取扱読本 構造編'},
+
+{id:60,cat:'mech',q:'散弾銃の銃身長（バレル長）が狩猟に与える影響として正しいのはどれか？',
+ choices:['銃身が長いほど近距離向き','銃身が長いほど弾道が安定し遠距離向きだが、取り回しが悪くなる','銃身の長さは性能に関係ない','銃身が短いほど射程が長い'],
+ answer:1,explain:'銃身が長い：弾道安定・初速高め・遠距離向きだが重く取り回しが悪い。銃身が短い：軽く機動性高いが近距離向き。狩猟用は60〜76cm程度が一般的。',ref:'猟銃等取扱読本 構造編'},
+
+// ── 火薬類・実包 ──
+{id:71,cat:'exp',q:'散弾実包（ショットシェル）の構造で「プライマー（雷管）」の役割はどれか？',
+ choices:['弾頭が詰まっている部分','撃針の打撃を受けて点火し、火薬（推進薬）に点火する役割','散弾が詰まっている部分','ワッズ（詰め物）のこと'],
+ answer:1,explain:'プライマー（雷管）は弾の底部にある感熱・感圧起爆材。撃針に叩かれることで点火し、その火が推進薬（火薬）に点火して弾を発射させる。',ref:'猟銃等取扱読本 実包編'},
+
+{id:72,cat:'exp',q:'実包の保管で注意すべきことはどれか？',
+ choices:['直射日光・高温多湿を避け、施錠できる保管庫に保管する','冷蔵庫に入れると長持ちする','密閉袋に入れれば何処でも保管できる','特に保管方法に注意点はない'],
+ answer:0,explain:'実包は直射日光・高温多湿を避けて保管。高温による変質・自然発火の危険がある。施錠できる実包保管庫に保管することが法令上の義務。',ref:'火薬類取締法・猟銃等取扱読本'},
+
+{id:73,cat:'exp',q:'散弾実包に記載されているゲージ（番）の数字について正しいのはどれか？',
+ choices:['数字が大きいほど口径が大きい','数字が小さいほど口径が大きい（12番>20番）','ゲージと口径は無関係','日本独自の規格で海外とは異なる'],
+ answer:1,explain:'ゲージ（番）は英国式の口径表示。鉛1ポンドを何個に分けると銃身内径と同じ球ができるかを示す。12番（約18.5mm）>16番>20番>28番>.410。',ref:'猟銃等取扱読本 実包編'},
+
+{id:74,cat:'exp',q:'散弾実包の「ワッズ（Wad）」の役割はどれか？',
+ choices:['銃身と散弾の間のガス漏れを防ぎ、散弾を包んで銃身内を進む緩衝材','雷管のこと','散弾を数えるためのもの','火薬のこと'],
+ answer:0,explain:'ワッズはプラスチック製の容器状部品。①火薬と散弾を分離②ガス漏れ防止（オブチュレーション）③散弾を銃身内でまとめて運ぶ役割を持つ。',ref:'猟銃等取扱読本 実包編'},
+
+{id:75,cat:'exp',q:'使用期限が切れた実包の取り扱いとして正しいのはどれか？',
+ choices:['使用期限は目安なのでそのまま使用できる','使用を避け、銃砲火薬店や警察に相談して適切に処分する','埋めて処分する','ゴミとして捨てる'],
+ answer:1,explain:'期限切れ実包は火薬の劣化により不完全燃焼・不発・銃身内閉塞等の事故原因になる。銃砲火薬店に持ち込み適切に処分する。絶対にゴミ捨てしない。',ref:'火薬類取締法・猟銃等取扱読本'},
+
+{id:76,cat:'exp',q:'水で濡れた実包はどうするべきか？',
+ choices:['乾かせば問題なく使用できる','使用せずに廃棄する（銃砲火薬店に持ち込む）','乾燥機で乾かす','そのまま使用できる'],
+ answer:1,explain:'水に濡れた実包は雷管・火薬が変質している可能性がある。不発や異常燃焼の危険があり、使用しない。銃砲火薬店に持ち込んで処分してもらう。',ref:'猟銃等取扱読本 実包編'},
+
+{id:77,cat:'exp',q:'「不発（ミスファイア）」が発生した場合の正しい対処法はどれか？',
+ choices:['すぐに薬室を開けて薬莢を取り出す','そのまま銃口を安全な方向に向けて少なくとも30秒待ち、その後慎重に薬室を開ける','引き金をもう一度引く','銃を振って確認する'],
+ answer:1,explain:'不発時は遅発（スローファイア）の危険がある。銃口を安全方向に向けたまま30秒以上待つ。その後ゆっくり薬室を開放する。絶対にすぐ開けない。',ref:'猟銃等取扱読本 安全編'},
+
+{id:78,cat:'exp',q:'自分で実包を手作り（リロード）することは可能か？',
+ choices:['趣味の範囲なら可能','火薬類取締法違反となるため不可（所持許可取得者も同様）','猟友会の許可があれば可能','自家消費目的なら可能'],
+ answer:1,explain:'火薬類の製造（リロードを含む）は火薬類取締法で規制される。許可なき製造は違法。市販の正規実包のみ使用すること。',ref:'火薬類取締法'},
+
+{id:79,cat:'exp',q:'実包の購入数量の制限について正しいのはどれか？',
+ choices:['制限はなく何発でも購入できる','火薬類譲受許可証に記載された数量の範囲内で購入できる','猟友会の推薦があれば無制限','購入後届け出れば無制限'],
+ answer:1,explain:'実包は火薬類譲受許可証に記載された数量の範囲内でのみ購入可能。許可証なしの購入・許可数量超過は火薬類取締法違反。',ref:'火薬類取締法 第17条'},
+
+{id:80,cat:'exp',q:'猟銃の「口径」と「チャンバー長（薬室長）」が合わない実包を使用するとどうなるか？',
+ choices:['威力が上がる','銃身破裂や薬室破損など重大な事故が起きる危険がある','発射されないだけで安全','少し精度が落ちる程度'],
+ answer:1,explain:'銃の規格に合わない実包の使用は絶対禁止。過圧・不完全閉鎖により銃身破裂・薬室破損が起き、射手が重傷を負う可能性がある。必ず銃に適合した実包を使用する。',ref:'猟銃等取扱読本 実包編'},
+
+// ── 事故・応急処置 ──
+{id:91,cat:'acc',q:'猟銃事故の主な原因として最も多いのはどれか？',
+ choices:['銃の機械的故障','人為的なミス（取扱不注意・安全確認不足・射線上への侵入等）','実包の品質問題','悪天候'],
+ answer:1,explain:'猟銃事故の大多数は人為的ミスが原因。取扱不注意・安全確認の省略・射線上への人の侵入等。機械的故障は少数。だからこそ知識と習慣が重要。',ref:'猟銃事故統計・猟銃等取扱読本'},
+
+{id:92,cat:'acc',q:'銃創（銃による傷）への応急処置として正しいのはどれか？',
+ choices:['傷口を水で洗い流す','直ちに119番・110番に連絡し、出血箇所を清潔な布等で圧迫止血する','傷口に砂や土をかけて止血する','弾を自分で取り出す'],
+ answer:1,explain:'銃創応急処置：①直ちに119番・110番に通報②出血箇所を清潔な布（タオル等）で強く圧迫止血③体を動かさず救急を待つ。傷口操作・弾の取り出しはしない。',ref:'応急処置テキスト'},
+
+{id:93,cat:'acc',q:'猟銃事故が発生した場合、直ちに行うべきことの順序として正しいのはどれか？',
+ choices:['現場から逃げる','負傷者の救護→警察・救急への通報→現場保存','まず猟友会に連絡する','事故を隠蔽する'],
+ answer:1,explain:'事故発生時：①負傷者の救護（最優先）②119番・110番に通報③現場保存（証拠を動かさない）④猟友会等への連絡。逃走・隠蔽は絶対NG。',ref:'猟銃等取扱読本 安全編'},
+
+{id:94,cat:'acc',q:'「銃身内閉塞」（銃身が詰まった状態）を見落として発射するとどうなるか？',
+ choices:['弾の威力が弱まるだけ','銃身が破裂し、射手・周囲の人が重傷を負う危険がある','空砲のように音だけ出る','銃が止まるだけ'],
+ answer:1,explain:'銃身内閉塞（泥・雪・先発弾の残留等）を無視して発射すると、圧力逃げ場がなく銃身が破裂。射手の顔・手に重大な傷害を負う。使用前の確認が必須。',ref:'猟銃等取扱読本 安全編'},
+
+{id:95,cat:'acc',q:'猟中に仲間が心肺停止（意識・呼吸なし）になった場合の応急処置として正しいのはどれか？',
+ choices:['意識が戻るまで揺さぶる','119番に連絡しながら、直ちに胸骨圧迫（心臓マッサージ）を開始する','水をかけて意識を回復させる','そのまま安静にして救急を待つ'],
+ answer:1,explain:'心肺停止時は一刻を争う。①119番通報（他の人に依頼しながら同時進行）②直ちに胸骨圧迫（30回）→人工呼吸（2回）を繰り返す。AEDがあれば使用。',ref:'応急処置テキスト'},
+
+{id:96,cat:'acc',q:'自然の中での狩猟中、熱中症になった仲間への対応として正しいのはどれか？',
+ choices:['そのまま休ませておく','涼しい場所に移動させ、水分・塩分を補給し、体を冷やす。重症の場合は119番','無理に歩かせる','水をかけるだけでよい'],
+ answer:1,explain:'熱中症対応：①涼しい場所（日陰・冷房）へ移動②体を冷やす（首・脇・足の付け根に氷等）③水分・塩分補給④意識がない・嘔吐等は直ちに119番。',ref:'応急処置テキスト'},
+
+{id:97,cat:'acc',q:'猟銃で事故を起こした場合、法的にどのような責任を負う可能性があるか？',
+ choices:['民事責任のみ','刑事責任（業務上過失致死傷等）・民事責任（損害賠償）・行政責任（許可取消等）を負う可能性がある','責任は問われない','猟友会が代わりに責任を負う'],
+ answer:1,explain:'猟銃事故は刑事責任（業務上過失致死傷・重過失致死傷）・民事責任（損害賠償）・行政責任（所持許可取消・欠格事由）のすべてを負う可能性がある。',ref:'刑法・民法・銃砲刀剣類所持等取締法'},
+
+{id:98,cat:'acc',q:'ハンター保険（猟銃所持者賠償責任保険）の目的として正しいのはどれか？',
+ choices:['銃の修理費用を補償する','狩猟中の事故で第三者に損害を与えた場合の賠償責任を補償する','猟獲物の損失を補償する','銃の盗難を補償する'],
+ answer:1,explain:'ハンター保険（狩猟者賠償責任保険）：狩猟中の事故で他者（人・物）に損害を与えた場合の賠償責任を補償。猟友会経由で加入が一般的。狩猟者登録に加入証明が必要。',ref:'ハンター保険約款'},
+
+{id:99,cat:'acc',q:'山中で道に迷った場合の対応として正しいのはどれか？',
+ choices:['沢（川）を下れば必ず助かる','むやみに動き回らず、スマートフォンで位置情報を確認し、110番・119番に連絡する','夜になるまで待つ','早く出ようと焦って走る'],
+ answer:1,explain:'遭難時：①むやみに動かない（体力消耗・さらに迷う）②スマートフォンのGPSで位置確認③110番・119番に通報（GPSの位置情報を伝える）④体温を保つ。',ref:'山岳遭難対策テキスト'},
+
+{id:100,cat:'acc',q:'猟銃所持者が精神的に不安定な状態にある場合、どうすべきか？',
+ choices:['狩猟を続けてよい','猟銃の使用を自粛し、必要に応じて家族や医師に相談する。また警察への相談も選択肢','安全装置をかければ問題ない','仲間に話せばよい'],
+ answer:1,explain:'精神的不安定時の銃使用は事故・自傷の危険。自分で気づいた場合は使用を自粛し家族・医師に相談。法律上も精神障害は欠格事由。周囲も積極的にサポートを。',ref:'銃砲刀剣類所持等取締法・精神保健福祉法'},
+];
+
+// ══════════════════════════════════════════════
+// STATE & LOGIC（狩猟クイズと同一エンジン）
+// ══════════════════════════════════════════════
+let state = loadState();
+let session = {qs:[],idx:0,answers:[],mode:'',cat:''};
+let currentQ = null;
+let answered = false;
+
+function loadState(){
+  try{const s=localStorage.getItem('gun_quiz_v1');if(s)return JSON.parse(s);}catch(e){}
+  return {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
+}
+function saveState(){localStorage.setItem('gun_quiz_v1',JSON.stringify(state));}
+
+function showHome(){
+  hideAll();
+  document.getElementById('home').style.display='flex';
+  updateHomeStats();
+}
+function updateHomeStats(){
+  const rate=state.totalAnswered>0?Math.round(state.totalCorrect/state.totalAnswered*100):null;
+  document.getElementById('st-total').textContent=state.totalAnswered;
+  document.getElementById('st-rate').textContent=rate!==null?rate+'%':'-%';
+  document.getElementById('st-rate').style.color=rate===100?'#4ade80':rate>=80?'var(--yellow)':'var(--red)';
+  document.getElementById('st-wrong').textContent=state.wrongIds.length;
+  document.getElementById('wrong-count-badge').textContent=state.wrongIds.length+'問';
+  document.getElementById('mark-count-badge').textContent=state.markedIds.length+'問';
+}
+
+function showCatScreen(){
+  hideAll();
+  document.getElementById('catscreen').style.display='flex';
+  document.getElementById('cat-grid').innerHTML=Object.entries(CATS).map(([k,v])=>{
+    const qs=QDB.filter(q=>q.cat===k);
+    const cs=state.catStats[k]||{a:0,c:0};
+    const rate=cs.a>0?Math.round(cs.c/cs.a*100):null;
+    const rc=rate===null?'var(--muted)':rate===100?'#4ade80':rate>=80?'var(--yellow)':'var(--red)';
+    return `<button class="cat-btn" onclick="startMode('cat','${k}')">
+      <span class="cat-icon">${v.icon}</span>
+      <div class="cat-info"><div class="cat-name">${v.name}</div><div class="cat-count">${qs.length}問収録</div></div>
+      <div class="cat-rate" style="color:${rc}">${rate!==null?rate+'%':'--'}</div>
+    </button>`;
+  }).join('');
+}
+
+function startMode(mode,cat=''){
+  let pool=[];
+  if(mode==='random') pool=shuffle([...QDB]);
+  else if(mode==='wrong'){
+    pool=QDB.filter(q=>state.wrongIds.includes(q.id));
+    if(!pool.length){showToast('間違えた問題がありません！完璧です！🎉');return;}
+    pool=shuffle(pool);
+  } else if(mode==='weak'){
+    pool=QDB.filter(q=>state.markedIds.includes(q.id));
+    if(!pool.length){showToast('マーク済み問題がありません');return;}
+    pool=shuffle(pool);
+  } else if(mode==='cat'){
+    pool=shuffle(QDB.filter(q=>q.cat===cat));
+  }
+  const count=Math.min(20,pool.length);
+  session={qs:pool.slice(0,count),idx:0,answers:[],mode,cat};
+  hideAll();
+  document.getElementById('quiz').style.display='flex';
+  renderQ();
+}
+
+function renderQ(){
+  const q=session.qs[session.idx];
+  currentQ=q;answered=false;
+  const ci=CATS[q.cat];
+  const badge=document.getElementById('q-cat-badge');
+  badge.textContent=ci.name;
+  badge.style.cssText=`background:${ci.color}22;color:${ci.color};border:1px solid ${ci.color}44;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:1px`;
+  document.getElementById('q-number').textContent=`Q.${String(q.id).padStart(3,'0')}`;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('q-counter').textContent=`${session.idx+1} / ${session.qs.length}`;
+  document.getElementById('prog-bar').style.width=((session.idx+1)/session.qs.length*100)+'%';
+  const labels=['A','B','C','D'];
+  document.getElementById('choices').innerHTML=q.choices.map((c,i)=>
+    `<button class="choice" onclick="answer(${i})">
+      <span class="choice-label">${labels[i]}</span>
+      <span class="choice-text">${c}</span>
+    </button>`).join('');
+  document.getElementById('result-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  updateMarkBtn();
+}
+
+function answer(idx){
+  if(answered)return;
+  answered=true;
+  const q=currentQ;
+  const correct=idx===q.answer;
+  session.answers.push({id:q.id,correct,chosen:idx});
+  state.totalAnswered++;
+  if(correct)state.totalCorrect++;
+  if(!state.catStats[q.cat])state.catStats[q.cat]={a:0,c:0};
+  state.catStats[q.cat].a++;
+  if(correct)state.catStats[q.cat].c++;
+  if(!correct){if(!state.wrongIds.includes(q.id))state.wrongIds.push(q.id);}
+  else{state.wrongIds=state.wrongIds.filter(id=>id!==q.id);}
+  saveState();
+  const choices=document.querySelectorAll('.choice');
+  choices.forEach((el,i)=>{
+    if(i===q.answer)el.classList.add(correct&&i===idx?'correct':'show-correct');
+    else if(i===idx)el.classList.add('wrong');
+    el.style.pointerEvents='none';
+  });
+  if(idx===q.answer)choices[idx].classList.add('correct');
+  const rb=document.getElementById('result-box');
+  rb.className='result-box '+(correct?'correct-box':'wrong-box');
+  rb.style.display='block';
+  document.getElementById('result-label').innerHTML=correct
+    ?'✅ <span style="color:#4ade80">正解！</span>'
+    :`❌ <span style="color:var(--red)">不正解</span>　正解は <strong style="color:#4ade80">${['A','B','C','D'][q.answer]}</strong>`;
+  document.getElementById('result-explain').textContent=q.explain;
+  document.getElementById('result-ref').textContent='📖 '+q.ref;
+  updateMarkBtn();
+  const nb=document.getElementById('next-btn');
+  nb.style.display='block';
+  nb.textContent=session.idx+1>=session.qs.length?'結果を見る 🏁':'次の問題 →';
+  nb.className='next-btn'+(session.idx+1>=session.qs.length?' finish':'');
+}
+
+function nextQ(){
+  session.idx++;
+  if(session.idx>=session.qs.length){showResult();return;}
+  renderQ();
+  window.scrollTo(0,0);
+}
+
+function exitQuiz(){if(confirm('終了しますか？'))showHome();}
+
+function toggleMark(){
+  const id=currentQ.id;
+  if(state.markedIds.includes(id)){state.markedIds=state.markedIds.filter(x=>x!==id);showToast('マークを解除しました');}
+  else{state.markedIds.push(id);showToast('⭐ 重要マークをつけました');}
+  saveState();updateMarkBtn();
+}
+function updateMarkBtn(){
+  if(!currentQ)return;
+  const marked=state.markedIds.includes(currentQ.id);
+  const btn=document.getElementById('mark-btn');
+  btn.textContent=marked?'⭐ マーク済み（タップで解除）':'☆ 重要マーク';
+  btn.className='mark-btn'+(marked?' marked':'');
+}
+
+function showResult(){
+  hideAll();
+  document.getElementById('result').style.display='flex';
+  const correct=session.answers.filter(a=>a.correct).length;
+  const total=session.answers.length;
+  const pct=Math.round(correct/total*100);
+  const sc=document.getElementById('result-score');
+  sc.textContent=pct+'%';
+  sc.className='result-score '+(pct===100?'score-perfect':pct>=80?'score-good':'score-bad');
+  document.getElementById('result-emoji').textContent=pct===100?'🏆':pct>=80?'🎯':pct>=60?'📚':'💪';
+  document.getElementById('result-title').textContent=pct===100?'完璧！考査合格確実！':pct>=80?'素晴らしい！':pct>=60?'もう一息！':'基礎から固め直そう！';
+  document.getElementById('result-msg').innerHTML=`${total}問中 <strong style="color:#4ade80;font-size:18px">${correct}問</strong> 正解<br>${pct===100?'全問正解！考査本番も万全！🔫🎯':'間違えた問題を必ず復習しよう！'}`;
+  const catMap={};
+  for(const a of session.answers){
+    const q=QDB.find(x=>x.id===a.id);
+    if(!catMap[q.cat])catMap[q.cat]={c:0,t:0};
+    catMap[q.cat].t++;
+    if(a.correct)catMap[q.cat].c++;
+  }
+  document.getElementById('result-cats').innerHTML=Object.entries(catMap).map(([k,v])=>{
+    const r=Math.round(v.c/v.t*100);
+    const col=r===100?'#4ade80':r>=80?'var(--yellow)':'var(--red)';
+    return `<div class="cat-result">
+      <div class="cat-result-top"><span class="cat-result-name">${CATS[k].icon} ${CATS[k].name}</span><span class="cat-result-score" style="color:${col}">${v.c}/${v.t}問 (${r}%)</span></div>
+      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${r}%;background:${col}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function hideAll(){['home','catscreen','quiz','result'].forEach(id=>document.getElementById(id).style.display='none');}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+showHome();
+</script>
+</body>
+</html>
