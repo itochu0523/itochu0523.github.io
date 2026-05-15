@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="狩猟免許 完全攻略">
+<title>🦌 狩猟免許 完全攻略</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+:root{
+  --bg:#0a0e0a;--bg2:#111811;--bg3:#1a2e1a;
+  --green:#4ade80;--green2:#16a34a;--green3:#052e16;
+  --red:#f87171;--red2:#dc2626;--red3:#2d0a0a;
+  --yellow:#fbbf24;--yellow3:#2d1a00;
+  --text:#e8f5e9;--muted:#6b7280;--card:#0f1f0f;
+  --border:rgba(74,222,128,0.15);
+  --font:'Zen Kaku Gothic New',sans-serif;
+  --mono:'Share Tech Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:var(--bg);min-height:100vh;font-family:var(--font);color:var(--text);overflow-x:hidden}
+
+/* ── SCANLINE EFFECT ── */
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+
+/* ── HOME SCREEN ── */
+#home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+.home-icon{font-size:72px;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(74,222,128,0.5));animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(74,222,128,0.5))}50%{filter:drop-shadow(0 0 40px rgba(74,222,128,0.9))}}
+.home-title{font-size:28px;font-weight:900;color:var(--green);letter-spacing:-1px;line-height:1.1;margin-bottom:6px;text-shadow:0 0 30px rgba(74,222,128,0.4)}
+.home-sub{font-size:12px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:32px}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:380px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.stat-num{font-family:var(--mono);font-size:22px;color:var(--green);font-weight:700}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+
+.mode-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px}
+.mode-btn{padding:16px;border-radius:14px;border:none;cursor:pointer;font-family:var(--font);font-size:15px;font-weight:700;display:flex;align-items:center;gap:12px;text-align:left;transition:all .15s;position:relative;overflow:hidden}
+.mode-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+.btn-main{background:linear-gradient(135deg,#16a34a,#052e16);color:var(--green);border:1px solid rgba(74,222,128,.3)}
+.btn-main:active{transform:scale(.98)}
+.btn-weak{background:linear-gradient(135deg,#7c2d12,#1c0a00);color:#fb923c;border:1px solid rgba(251,146,60,.3)}
+.btn-wrong{background:linear-gradient(135deg,#7f1d1d,#1a0000);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.btn-cat{background:linear-gradient(135deg,#1e3a5f,#0a1a2e);color:#60a5fa;border:1px solid rgba(96,165,250,.3)}
+.mode-btn .icon{font-size:24px;flex-shrink:0}
+.mode-btn .desc{font-size:10px;opacity:.7;font-weight:400;margin-top:2px}
+.btn-badge{background:rgba(248,113,113,.2);color:var(--red);border-radius:20px;padding:2px 8px;font-size:10px;margin-left:auto;font-family:var(--mono);flex-shrink:0}
+.btn-badge.yellow{background:rgba(251,191,36,.2);color:var(--yellow)}
+
+/* ── CATEGORY SELECT ── */
+#catscreen{display:none;flex-direction:column;min-height:100vh;padding:20px}
+.screen-hd{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.back-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-family:var(--font);font-size:13px;cursor:pointer}
+.screen-ttl{font-size:18px;font-weight:900;color:var(--green)}
+.cat-grid{display:flex;flex-direction:column;gap:10px}
+.cat-btn{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;transition:all .15s}
+.cat-btn:active{transform:scale(.98);background:var(--bg3)}
+.cat-icon{font-size:28px;flex-shrink:0}
+.cat-info{flex:1}
+.cat-name{font-size:15px;font-weight:700;color:var(--text)}
+.cat-count{font-size:11px;color:var(--muted);margin-top:2px}
+.cat-rate{font-family:var(--mono);font-size:14px;font-weight:700;flex-shrink:0}
+
+/* ── QUIZ SCREEN ── */
+#quiz{display:none;flex-direction:column;min-height:100vh}
+.quiz-header{padding:14px 16px 10px;position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.q-exit{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font)}
+.q-info{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.q-cat-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:1px}
+.prog-wrap{background:rgba(255,255,255,.05);border-radius:4px;height:4px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:4px;transition:width .4s ease}
+
+.quiz-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px}
+.q-number{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px}
+.q-text{font-size:17px;font-weight:700;line-height:1.6;color:var(--text)}
+.q-image{width:100%;border-radius:12px;border:1px solid var(--border);margin-top:4px;background:var(--bg3);padding:16px;text-align:center;font-size:32px}
+
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.choice{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .15s;text-align:left;font-family:var(--font)}
+.choice:active{transform:scale(.99)}
+.choice-label{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:var(--mono)}
+.choice-text{font-size:14px;line-height:1.5;color:var(--text)}
+
+.choice.correct{background:rgba(74,222,128,.1);border-color:var(--green);animation:correctPop .3s ease}
+.choice.wrong{background:rgba(248,113,113,.1);border-color:var(--red)}
+.choice.show-correct{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.4)}
+.choice.correct .choice-label{background:var(--green);color:#000}
+.choice.wrong .choice-label{background:var(--red);color:#fff}
+@keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+.result-box{border-radius:14px;padding:14px 16px;display:none;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-box.correct-box{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3)}
+.result-box.wrong-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3)}
+.result-label{font-size:13px;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.result-explain{font-size:13px;color:#cbd5e1;line-height:1.7}
+.result-ref{font-size:10px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
+
+.mark-btn{background:transparent;border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:6px 12px;color:var(--yellow);font-size:12px;cursor:pointer;font-family:var(--font);margin-top:8px}
+.mark-btn.marked{background:rgba(251,191,36,.15);border-color:var(--yellow)}
+
+.next-btn{background:linear-gradient(135deg,var(--green2),#052e16);border:1px solid rgba(74,222,128,.3);border-radius:14px;padding:16px;color:var(--green);font-size:16px;font-weight:900;cursor:pointer;font-family:var(--font);width:100%;margin-top:4px;transition:all .15s;display:none}
+.next-btn:active{transform:scale(.98)}
+.next-btn.finish{background:linear-gradient(135deg,#1d4ed8,#0a1a3e);border-color:rgba(96,165,250,.3);color:#93c5fd}
+
+/* ── RESULT SCREEN ── */
+#result{display:none;flex-direction:column;min-height:100vh;padding:24px;align-items:center}
+.result-title{font-size:32px;font-weight:900;margin:16px 0 4px;text-align:center}
+.result-score{font-family:var(--mono);font-size:72px;font-weight:700;text-align:center;line-height:1;margin:16px 0}
+.score-perfect{color:var(--green);text-shadow:0 0 40px rgba(74,222,128,.6)}
+.score-good{color:var(--yellow)}
+.score-bad{color:var(--red)}
+.result-msg{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.7}
+
+.result-cats{width:100%;max-width:400px;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.cat-result{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.cat-result-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cat-result-name{font-size:13px;font-weight:700}
+.cat-result-score{font-family:var(--mono);font-size:13px}
+.cat-bar-bg{background:rgba(255,255,255,.06);border-radius:4px;height:5px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+
+.result-btns{display:flex;flex-direction:column;gap:8px;width:100%;max-width:400px}
+.res-btn{padding:14px;border-radius:12px;border:none;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;transition:all .15s}
+.res-btn:active{transform:scale(.98)}
+.res-btn.primary{background:linear-gradient(135deg,var(--green2),#052e16);color:var(--green);border:1px solid rgba(74,222,128,.3)}
+.res-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.res-btn.danger{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+
+/* ── WRONG LIST ── */
+#wronglist{display:none;flex-direction:column;min-height:100vh;padding:20px}
+.wrong-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;cursor:pointer}
+.wrong-item-q{font-size:13px;font-weight:700;line-height:1.5;margin-bottom:6px}
+.wrong-item-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-family:var(--mono);letter-spacing:1px}
+.tag-cat{background:rgba(96,165,250,.15);color:#93c5fd}
+.tag-wrong{background:rgba(248,113,113,.15);color:var(--red)}
+.tag-mark{background:rgba(251,191,36,.15);color:var(--yellow)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a2e1a;border:1px solid var(--green);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--green);z-index:1000;transition:transform .3s ease;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── MISC ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .ei{font-size:48px;margin-bottom:12px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <div class="home-icon">🦌</div>
+  <div class="home-title">狩猟免許<br>完全攻略</div>
+  <div class="home-sub">第一種 · 完全合格 · 100点主義</div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="st-total">0</div>
+      <div class="stat-lbl">累計回答</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-rate" style="color:var(--yellow)">-%</div>
+      <div class="stat-lbl">正答率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-wrong" style="color:var(--red)">0</div>
+      <div class="stat-lbl">要復習</div>
+    </div>
+  </div>
+
+  <div class="mode-btns">
+    <button class="mode-btn btn-main" onclick="startMode('random')">
+      <span class="icon">🎯</span>
+      <div><div>ランダム出題 20問</div><div class="desc">全分野から網羅的に出題・100点主義</div></div>
+    </button>
+    <button class="mode-btn btn-wrong" onclick="startMode('wrong')">
+      <span class="icon">❌</span>
+      <div><div>間違えた問題だけ</div><div class="desc">苦手を徹底的に潰す</div></div>
+      <span class="btn-badge" id="wrong-count-badge">0問</span>
+    </button>
+    <button class="mode-btn btn-weak" onclick="startMode('weak')">
+      <span class="icon">⚠️</span>
+      <div><div>マーク済み問題</div><div class="desc">自分でマークした重要問題</div></div>
+      <span class="btn-badge yellow" id="mark-count-badge">0問</span>
+    </button>
+    <button class="mode-btn btn-cat" onclick="showCatScreen()">
+      <span class="icon">📚</span>
+      <div><div>分野別に攻める</div><div class="desc">法令・安全・識別・猟具・生態</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- CATEGORY SELECT -->
+<div id="catscreen">
+  <div class="screen-hd">
+    <button class="back-btn" onclick="showHome()">← 戻る</button>
+    <div class="screen-ttl">分野を選ぶ</div>
+  </div>
+  <div class="cat-grid" id="cat-grid"></div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="quiz-header">
+    <div class="quiz-top">
+      <button class="q-exit" onclick="exitQuiz()">✕ 終了</button>
+      <span class="q-info" id="q-counter">1 / 20</span>
+      <span class="q-cat-badge" id="q-cat-badge">法令</span>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:5%"></div></div>
+  </div>
+  <div class="quiz-body">
+    <div class="q-number" id="q-number">Q.001</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="choices" id="choices"></div>
+    <div class="result-box" id="result-box">
+      <div class="result-label" id="result-label"></div>
+      <div class="result-explain" id="result-explain"></div>
+      <div class="result-ref" id="result-ref"></div>
+      <button class="mark-btn" id="mark-btn" onclick="toggleMark()">☆ 重要マーク</button>
+    </div>
+    <button class="next-btn" id="next-btn" onclick="nextQ()">次の問題 →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result">
+  <div style="font-size:48px;margin-top:20px" id="result-emoji">🎯</div>
+  <div class="result-title" id="result-title">セッション結果</div>
+  <div class="result-score" id="result-score">0%</div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-cats" id="result-cats"></div>
+  <div class="result-btns">
+    <button class="res-btn primary" onclick="startMode('random')">🎯 もう一度20問</button>
+    <button class="res-btn secondary" onclick="startMode('wrong')">❌ 間違えた問題を復習</button>
+    <button class="res-btn secondary" onclick="showHome()">🏠 ホームへ</button>
+  </div>
+</div>
+
+<!-- WRONG LIST (review) -->
+<div id="wronglist">
+  <div class="screen-hd">
+    <button class="back-btn" onclick="showHome()">← 戻る</button>
+    <div class="screen-ttl">要復習リスト</div>
+  </div>
+  <div id="wrong-items"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// 問題データベース（120問 · 第一種狩猟免許）
+// ══════════════════════════════════════════════════════════
+const CATS = {
+  law:  {name:'法令・規制',     icon:'⚖️', color:'#60a5fa'},
+  safe: {name:'安全・事故防止', icon:'🛡️', color:'#4ade80'},
+  bird: {name:'鳥獣識別',       icon:'🦅', color:'#f97316'},
+  gun:  {name:'猟具・銃器',     icon:'🔫', color:'#a78bfa'},
+  eco:  {name:'生態・習性',     icon:'🌿', color:'#34d399'},
+};
+
+const QDB = [
+// ── 法令・規制 ──
+{id:1,cat:'law',q:'鳥獣保護管理法において、狩猟鳥獣の捕獲を行うことができる者は誰か？',
+ choices:['狩猟免許を持ち、狩猟者登録をした者','狩猟免許を持つ者すべて','猟友会会員','18歳以上の成人'],
+ answer:0, explain:'狩猟免許の取得に加え、毎年都道府県への狩猟者登録が必要。登録していない免許保持者は狩猟できない。', ref:'鳥獣保護管理法 第9条'},
+
+{id:2,cat:'law',q:'狩猟期間として正しいのはどれか（北海道以外の本州・四国・九州）？',
+ choices:['10月1日〜翌年1月31日','11月15日〜翌年2月15日','12月1日〜翌年3月31日','10月15日〜翌年2月28日'],
+ answer:1, explain:'本州・四国・九州の狩猟期間は11月15日〜翌年2月15日。北海道は10月1日〜翌年1月31日。水鳥は10月15日〜翌年4月15日の場合もある。', ref:'鳥獣保護管理法 第11条'},
+
+{id:3,cat:'law',q:'狩猟者登録申請の際に必要ではないものはどれか？',
+ choices:['狩猟免許証','ハンター保険（賠償責任保険）への加入証明','射撃技能講習修了証','住民票'],
+ answer:2, explain:'狩猟者登録に射撃技能講習修了証は不要。必要なのは免許証・保険加入証・申請書・手数料など。', ref:'鳥獣保護管理法 第9条'},
+
+{id:4,cat:'law',q:'鳥獣保護区内での狩猟は原則どうなるか？',
+ choices:['鳥獣保護区内でも狩猟者登録をすれば可能','禁止されている','特定の鳥獣のみ可能','猟友会の許可があれば可能'],
+ answer:1, explain:'鳥獣保護区内での狩猟は禁止。鳥獣保護区は環境大臣または都道府県知事が指定。', ref:'鳥獣保護管理法 第28条'},
+
+{id:5,cat:'law',q:'狩猟免許の有効期間は？',
+ choices:['1年','3年','5年','10年'],
+ answer:1, explain:'狩猟免許の有効期間は3年。更新には適性検査（視力・聴力等）を受ける必要がある。', ref:'鳥獣保護管理法 第39条'},
+
+{id:6,cat:'law',q:'次のうち狩猟禁止区域に該当しないものはどれか？',
+ choices:['特定猟具使用禁止区域内','住居集合地域から200m以内','道路から20m以内','農地から離れた山林'],
+ answer:3, explain:'農地から離れた山林は狩猟禁止区域に該当しない。住居集合地域200m以内、道路・鉄道から100m以内は禁止。', ref:'鳥獣保護管理法 第14条'},
+
+{id:7,cat:'law',q:'狩猟できる鳥獣の数に上限がある場合、それを定めるのは誰か？',
+ choices:['環境大臣のみ','都道府県知事','猟友会','市区町村長'],
+ answer:1, explain:'狩猟鳥獣の捕獲数の制限（袋制限）は都道府県知事が定める。都道府県ごとに異なる。', ref:'鳥獣保護管理法 第11条'},
+
+{id:8,cat:'law',q:'狩猟免許試験に合格した者が免許を取得するために必要な手続きは？',
+ choices:['合格通知を受け取れば自動的に交付','都道府県知事に免許の交付申請をする','環境省に申請する','猟友会に申請する'],
+ answer:1, explain:'試験合格後、都道府県知事に免許交付申請が必要。申請には手数料・診断書等が必要。', ref:'鳥獣保護管理法 第39条'},
+
+{id:9,cat:'law',q:'第一種狩猟免許で使用できる猟具はどれか？',
+ choices:['網と罠のみ','銃器（装薬銃・空気銃）と網と罠','装薬銃のみ','空気銃のみ'],
+ answer:1, explain:'第一種免許は装薬銃（散弾銃・ライフル）、空気銃、網、罠を使用できる。最も広範囲の免許。', ref:'鳥獣保護管理法 第36条'},
+
+{id:10,cat:'law',q:'狩猟免許が失効する場合として正しいのはどれか？',
+ choices:['猟友会を退会した場合','3年ごとの更新手続きをしなかった場合','1年間狩猟をしなかった場合','引越しして住所が変わった場合'],
+ answer:1, explain:'狩猟免許は3年ごとに更新が必要。更新しなければ失効する。住所変更は届出が必要だが失効はしない。', ref:'鳥獣保護管理法 第39条'},
+
+{id:11,cat:'law',q:'鉛製の散弾を使用してはいけない場所はどこか？',
+ choices:['山林のみ','水辺（湿地・水田・池沼等）','農地全般','住宅地から500m以内'],
+ answer:1, explain:'水鳥の鉛中毒防止のため、水辺（湿地・湖沼・河川等）での鉛散弾使用は禁止。スチール弾等を使用する。', ref:'特定猟具使用禁止区域に関する規定'},
+
+{id:12,cat:'law',q:'狩猟者が捕獲した鳥獣を販売する場合、必要な許可は？',
+ choices:['特に許可は不要','都道府県知事の販売許可','環境大臣の特別採捕許可','市区町村の営業許可'],
+ answer:1, explain:'狩猟鳥獣を商業目的で販売するには都道府県知事の許可が必要。自家消費や知人への贈与は可能。', ref:'鳥獣保護管理法'},
+
+{id:13,cat:'law',q:'特定外来生物（アライグマ等）を捕獲する場合に必要なことは？',
+ choices:['狩猟免許があれば誰でも捕獲可能','外来生物法に基づく防除の実施計画等が必要','猟友会の許可が必要','特に規制なく捕獲可能'],
+ answer:1, explain:'アライグマ等の特定外来生物は外来生物法の規定に基づく防除計画等が必要。無許可放置はできない。', ref:'特定外来生物による生態系等に係る被害の防止に関する法律'},
+
+{id:14,cat:'law',q:'狩猟免許試験において、視力の基準として正しいのはどれか？',
+ choices:['両眼で0.5以上','両眼で0.8以上（矯正可）','片眼ずつ0.5以上','視力の基準はない'],
+ answer:1, explain:'狩猟免許の適性基準は両眼で0.8以上（眼鏡・コンタクト等矯正可）。また、色彩識別ができること。', ref:'鳥獣保護管理法施行規則'},
+
+{id:15,cat:'law',q:'狩猟できない鳥類として正しいのはどれか？',
+ choices:['キジ（雄）','マガモ','オオタカ','ヤマドリ（雄）'],
+ answer:2, explain:'オオタカは猛禽類であり絶滅危惧種。狩猟鳥に含まれず捕獲禁止。狩猟鳥は環境省が指定した48種のみ。', ref:'鳥獣保護管理法 別表'},
+
+// ── 安全・事故防止 ──
+{id:21,cat:'safe',q:'銃を扱う際の鉄則「銃口の向け方」として正しいのはどれか？',
+ choices:['狩猟中は常に前方に向ける','人に向けてはならない（安全な方向に向ける）','地面に向けておく','空に向けておく'],
+ answer:1, explain:'銃の取り扱いの絶対原則：銃口は人に向けない。常に安全な方向（地面や空など）に向ける。', ref:'猟銃等取扱読本'},
+
+{id:22,cat:'safe',q:'散弾銃を車から降りる際の正しい手順はどれか？',
+ choices:['銃に弾を込めたまま降りてよい','先に銃を降ろしてから自分が降りる','銃を後部座席に置いたまま降りる','弾を抜いて安全装置をかけてから降りる'],
+ answer:3, explain:'車から降りる際は必ず弾を抜き（開放）、安全装置をかけた状態で降りる。薮や草むらでの引っかかりに注意。', ref:'猟銃等取扱読本'},
+
+{id:23,cat:'safe',q:'銃の安全装置について正しい説明はどれか？',
+ choices:['安全装置をかけていれば撃鉄に触れても発射されない','安全装置は補助的なもので、絶対の安全を保証しない','安全装置がかかれば薬室に弾を込めても安全','安全装置は使用前に外してはいけない'],
+ answer:1, explain:'安全装置は補助的な安全措置であり、故障や衝撃で誤作動する可能性がある。安全装置に頼り切ることは危険。', ref:'猟銃等取扱読本'},
+
+{id:24,cat:'safe',q:'猟場で人と間違えて射撃する事故を防ぐために最も重要なことは？',
+ choices:['遠距離からでも構わず発射する','目標（ターゲット）とその前後を必ず確認してから撃つ','動いているものはすべて鳥獣とみなす','仲間に連絡してから発射する'],
+ answer:1, explain:'「確認前の発射禁止」が鉄則。目標だけでなくその前後の安全を必ず確認。動くもの＝獲物ではない。', ref:'猟銃等取扱読本'},
+
+{id:25,cat:'safe',q:'銃を保管する際の正しい方法はどれか？',
+ choices:['弾を込めたままガンロッカーに保管','薬室を開放して弾を抜き、ガンロッカーに保管','押し入れに布でくるんで保管','車のトランクに保管'],
+ answer:1, explain:'保管時は必ず薬室を開放し弾を抜く。ガンロッカー（施錠義務）に保管。実包は別の保管庫に保管。', ref:'火薬類取締法・猟銃所持許可規定'},
+
+{id:26,cat:'safe',q:'仲間と複数人で狩猟する際に守るべきことはどれか？',
+ choices:['互いの位置を常に把握し、射線上に人がいないことを確認する','早く獲物を取るために声を出さず静かに動く','互いに発砲方向を気にせず獲物を追う','先頭の者だけが銃を持つ'],
+ answer:0, explain:'複数人での狩猟では互いの位置把握が最重要。射線（弾の飛ぶ方向）上に仲間がいないことを常に確認する。', ref:'猟銃等取扱読本'},
+
+{id:27,cat:'safe',q:'散弾銃で使用する弾（実包）について正しいのはどれか？',
+ choices:['同じ口径なら他人の実包を使っても問題ない','銃の仕様に合った正規の実包のみ使用する','手作りした実包を使用してもよい','期限切れの実包でも使用できる'],
+ answer:1, explain:'実包は銃の仕様（口径・チャンバー長等）に合った正規品を使用。手製実包や規格外実包は爆発事故の原因。', ref:'猟銃等取扱読本'},
+
+{id:28,cat:'safe',q:'猟銃の銃身が閉塞（詰まり）している疑いがある場合の対処は？',
+ choices:['そのまま発射して確認する','別の実包で押し出す','直ちに使用を中止し専門家（銃砲店）に点検依頼','銃口から細い棒で押し出す'],
+ answer:2, explain:'銃身閉塞のまま発射すると銃身破裂の危険。即使用中止して専門家に点検。自己解決しようとしてはいけない。', ref:'猟銃等取扱読本'},
+
+{id:29,cat:'safe',q:'狩猟中に万が一事故が起きた場合、最初にすることは？',
+ choices:['まず狩猟を続ける','負傷者の救護と警察・救急への通報','証拠隠滅のため現場を離れる','猟友会に連絡する'],
+ answer:1, explain:'事故発生時は負傷者救護を最優先。直ちに警察・救急（110・119）に通報。現場保存も重要。', ref:'猟銃等取扱読本'},
+
+{id:30,cat:'safe',q:'蛍光オレンジ（ハンターオレンジ）のベストを着用する主な目的は？',
+ choices:['獲物に見えやすくするため','他の狩猟者や登山者に自分の位置を知らせ誤射を防ぐため','雨よけのため','法律で義務付けられているため'],
+ answer:1, explain:'ハンターオレンジは人間だからこそよく見える色。鳥獣には目立たないが人には目立つ。誤射防止の重要装備。', ref:'安全狩猟の実践'},
+
+{id:31,cat:'safe',q:'散弾銃（ショットガン）の有効射程距離として一般的に正しいのはどれか？',
+ choices:['約10〜20m','約30〜50m','約200〜300m','約1km以上'],
+ answer:1, explain:'散弾銃の有効射程は約30〜50m程度。それ以上は散弾が広がりすぎて威力・精度が低下。有効射程外での射撃は危険。', ref:'猟銃等取扱読本'},
+
+{id:32,cat:'safe',q:'銃の手入れ（清掃）について正しいのはどれか？',
+ choices:['月に1回程度でよい','使用後は毎回、銃腔内外を清掃する','銃砲店に任せるのが原則で自分では清掃しない','清掃は年に1回でよい'],
+ answer:1, explain:'銃は使用後毎回清掃が基本。火薬残滓・水分・汚れを放置すると腐食・故障・事故の原因になる。', ref:'猟銃等取扱読本'},
+
+{id:33,cat:'safe',q:'猟場への移動中（車での移動）における銃の正しい取り扱いは？',
+ choices:['実包を装填したまま後部座席に置く','薬室を開放して実包を抜き、銃袋に入れて運搬する','助手席に立てかけておく','トランクに入れれば実包装填でもよい'],
+ answer:1, explain:'車での運搬は必ず薬室開放・実包を抜いた状態で銃袋等に収納。装填状態での運搬は絶対禁止。', ref:'猟銃等取扱読本'},
+
+{id:34,cat:'safe',q:'仲間の銃を譲り受けて使用することはできるか？',
+ choices:['猟友会員間なら可能','自分の所持許可証に記載された銃のみ使用可能','同じ口径の銃なら使用できる','貸し借りは禁止されていない'],
+ answer:1, explain:'所持許可証は銃ごとに発行される。自分の許可証に記載された銃しか使用できない。無許可銃の使用は違法。', ref:'銃砲刀剣類所持等取締法'},
+
+{id:35,cat:'safe',q:'実包（弾薬）の保管場所として正しいのはどれか？',
+ choices:['ガンロッカーに銃と一緒に保管','銃とは別の施錠できる実包保管庫に保管','冷蔵庫に保管','玄関の靴箱に保管'],
+ answer:1, explain:'実包は銃とは別の施錠できる実包等保管庫に保管する義務がある。銃と実包を同一の場所に保管することは禁じられている。', ref:'銃砲刀剣類所持等取締法'},
+
+// ── 鳥獣識別 ──
+{id:41,cat:'bird',q:'次のうち狩猟鳥獣（捕獲可能）として正しいのはどれか？',
+ choices:['ハクチョウ','キジ（雄）','ウグイス','ツバメ'],
+ answer:1, explain:'キジの雄（雌は禁猟）は狩猟鳥。ハクチョウ・ウグイス・ツバメは狩猟鳥獣ではなく捕獲禁止。', ref:'鳥獣保護管理法 別表・狩猟鳥獣一覧'},
+
+{id:42,cat:'bird',q:'ニホンジカ（本州・四国・九州個体群）について正しいのはどれか？',
+ choices:['絶滅危惧種であり捕獲禁止','狩猟獣として捕獲可能','保護鳥獣であり捕獲禁止','特定外来生物'],
+ answer:1, explain:'ニホンジカは狩猟獣。近年は個体数増加による農林業被害が深刻で、多くの地域で捕獲推奨・頭数管理が行われている。', ref:'狩猟鳥獣一覧・特定鳥獣管理計画'},
+
+{id:43,cat:'bird',q:'イノシシの識別特徴として正しいのはどれか？',
+ choices:['体が白く、尾が長い','体は茶褐色〜黒褐色で縞模様がなく、牙がある（オス）','体は黒く、角がある','縞模様がある小型の獣'],
+ answer:1, explain:'イノシシは茶褐色〜黒褐色。縦縞があるのは幼獣（ウリ坊）のみ。成獣のオスには牙がある。ニホンカモシカと混同に注意。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:44,cat:'bird',q:'マガモとカルガモの見分け方として正しいのはどれか？',
+ choices:['マガモは全身茶褐色、カルガモは頭が緑色','マガモの雄は頭部が光沢のある緑色、カルガモは全身褐色で頬に黒線','大きさで見分ける','鳴き声だけで見分ける'],
+ answer:1, explain:'マガモ雄は頭が緑色（ぐり首）・胸が栗色。カルガモは全身褐色で顔に黒い縞。カルガモは留鳥（通年）でマガモは冬鳥。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:45,cat:'bird',q:'ニホンカモシカについて正しいのはどれか？',
+ choices:['狩猟獣として捕獲可能','国の特別天然記念物であり捕獲禁止','個体数が多いため捕獲推奨','外来種であり駆除対象'],
+ answer:1, explain:'ニホンカモシカは国の特別天然記念物。シカと混同しやすいが捕獲厳禁。ヤギに似た白っぽい体色・短い角が特徴。', ref:'文化財保護法・鳥獣保護管理法'},
+
+{id:46,cat:'bird',q:'タヌキとアナグマの識別として正しいのはどれか？',
+ choices:['タヌキは体が大きくアナグマは小さい','タヌキは顔の目の周りが黒く尾が太い、アナグマは鼻から額にかけて白と黒の縞模様','タヌキは穴を掘り、アナグマは穴を掘らない','見分けは不可能'],
+ answer:1, explain:'タヌキ：目の周りが黒い（タヌキ目）・尾が太くふさふさ。アナグマ：鼻から頭頂にかけて白と黒の縞・ずんぐりした体型。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:47,cat:'bird',q:'キジの雌（メス）の狩猟について正しいのはどれか？',
+ choices:['雌も狩猟可能','雌は禁猟（捕獲禁止）','雌は捕獲数の制限あり','都道府県によって異なる'],
+ answer:1, explain:'キジは雄のみ狩猟可能、雌は禁猟。雌は茶褐色のまだら模様で雄（緑の体・赤い顔）と外見が大きく異なる。', ref:'鳥獣保護管理法 別表'},
+
+{id:48,cat:'bird',q:'次のうちクマ類について正しいのはどれか？',
+ choices:['ツキノワグマは全国どこでも狩猟可能','ヒグマは北海道のみに生息し狩猟獣','ツキノワグマは絶滅危惧種で全国で禁猟','クマ類はすべて特別天然記念物'],
+ answer:1, explain:'ヒグマは北海道のみに生息し狩猟獣。ツキノワグマは本州・四国に生息し、地域によって狩猟・禁猟が異なる（東北・近畿等）。', ref:'狩猟鳥獣一覧・特定鳥獣管理計画'},
+
+{id:49,cat:'bird',q:'ハクビシンについて正しいのはどれか？',
+ choices:['日本固有種であり保護対象','外来種であり農業被害を起こし、狩猟獣','絶滅危惧種','特別天然記念物'],
+ answer:1, explain:'ハクビシンは外来種（中国南部等原産）。農業被害・家屋侵入被害が深刻で狩猟獣に指定されている。額から鼻にかけて白い縦線が特徴。', ref:'狩猟鳥獣一覧'},
+
+{id:50,cat:'bird',q:'コジュケイとウズラの識別として正しいのはどれか？',
+ choices:['コジュケイは全身白色','コジュケイはキジ科で胸が橙色・頭が灰色、ウズラはより小型で縞模様が細かい','大きさは同じ','どちらも同じ生息地にいる'],
+ answer:1, explain:'コジュケイ：頭が灰色・胸が橙褐色・「チョットコイ」と鳴く。ウズラ：より小型・全身褐色の細かい縞・草地を好む。両者とも狩猟鳥。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:51,cat:'bird',q:'カワウとウミウの見分け方として正しいのはどれか？',
+ choices:['どちらも同じで見分けられない','カワウは河川・湖沼に生息し顔に白斑、ウミウは海岸に生息し顔の白斑の形が異なる','大きさだけが違う','カワウは白色'],
+ answer:1, explain:'カワウ：河川・湖沼・ため池に多く生息、繁殖期に頭部・腰に白斑。ウミウ：主に海岸・海岸近くの淡水域。顔の白斑の形が異なる。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:52,cat:'bird',q:'シカとカモシカを見分けるポイントは？',
+ choices:['角の有無だけ','シカは角が複数又に分かれ体が大きく、カモシカは一本角（雌雄とも）で体が白っぽく小型','体の色だけ','足の形だけ'],
+ answer:1, explain:'シカ：枝角（複数の股）・雄のみに角・体は茶褐色で白いお尻。カモシカ：一本角（雌雄とも）・白〜灰色の体・頑丈な体型。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:53,cat:'bird',q:'タシギとヤマシギの識別として正しいのはどれか？',
+ choices:['タシギは海岸に生息','タシギは水田・湿地、ヤマシギは山林・森林に生息し体が大きい','大きさは同じ','ヤマシギは水鳥'],
+ answer:1, explain:'タシギ：水田・湿地・川岸に生息、小型。ヤマシギ：山林・森林に生息、タシギより大型で嘴が長い。どちらも狩猟鳥。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:54,cat:'bird',q:'キツネの識別特徴として正しいのはどれか？',
+ choices:['体が黒く、尾が短い','体はオレンジ〜茶色で尾が太くふさふさ、耳が大きく尖っている','体が灰色で縞模様がある','タヌキとまったく同じ外見'],
+ answer:1, explain:'キツネ：体は橙〜赤褐色・腹面は白、尾が太く先端が白い（白玉尻尾）・耳が大きく尖る・足先が黒い。狩猟獣。', ref:'狩猟鳥獣識別テキスト'},
+
+{id:55,cat:'bird',q:'オシドリについて正しいのはどれか？',
+ choices:['狩猟鳥として捕獲可能','国の特別天然記念物で捕獲禁止','外来種','希少種のため個体数制限あり'],
+ answer:0, explain:'オシドリは狩猟鳥（水鳥類）として捕獲可能。雄は派手な羽色（帆羽・扇形の羽など）、雌は地味な茶褐色。', ref:'狩猟鳥獣一覧'},
+
+// ── 猟具・銃器 ──
+{id:61,cat:'gun',q:'散弾銃（ショットガン）の銃身チョーク（絞り）について正しいのはどれか？',
+ choices:['チョークが強いほど散弾の広がりが大きい','チョークが強いほど散弾の広がりが小さく（集弾性が高く）遠距離向き','チョークは音を小さくする装置','チョークは反動を軽減する装置'],
+ answer:1, explain:'チョークは銃口の絞り。フルチョーク（強）：散弾が集まり遠距離向き。シリンダー（なし）：散弾が広がり近距離向き。', ref:'猟銃等取扱読本'},
+
+{id:62,cat:'gun',q:'スラッグ弾（スラッグ）とは何か？',
+ choices:['多数の小さな球が入った通常の散弾','散弾銃から発射する単一の大きな弾（一粒弾）','ライフル銃用の弾','空砲'],
+ answer:1, explain:'スラッグ弾は散弾銃から発射する単一の大型弾。イノシシ・シカなどの大型獣に使用。通常の散弾より射程が長く貫通力がある。', ref:'猟銃等取扱読本'},
+
+{id:63,cat:'gun',q:'上下二連散弾銃（オーバーアンダー）の特徴として正しいのはどれか？',
+ choices:['銃身が横に並んでいる','銃身が上下に並んでおり、2発を撃てる','連続して10発撃てる','自動的に薬莢が排出される'],
+ answer:1, explain:'上下二連（オーバーアンダー）：銃身が上下に配置、2発装填可能。横並びは水平二連（サイドバイサイド）。いずれも折り畳み式で薬莢手動排出。', ref:'猟銃等取扱読本'},
+
+{id:64,cat:'gun',q:'ポンプアクション（スライドアクション）散弾銃の操作について正しいのはどれか？',
+ choices:['引き金を引くだけで自動的に次弾が装填される','フォアエンドを前後にスライドさせることで排莢・装填を行う','ボルトを引いて排莢する','レバーを操作して排莢する'],
+ answer:1, explain:'ポンプアクション：フォアエンド（前部の握り部分）を後ろに引いて排莢し、前に押して次弾を装填。半自動より故障が少ない。', ref:'猟銃等取扱読本'},
+
+{id:65,cat:'gun',q:'散弾銃の口径（ゲージ）について正しいのはどれか？',
+ choices:['数字が大きいほど口径（弾の直径）が大きい','数字が小さいほど口径が大きい（12番>20番）','口径と射程距離は無関係','日本では20番が最も普及している'],
+ answer:1, explain:'散弾銃のゲージ（番）は数字が小さいほど口径が大きい。12番（約18.5mm）>16番>20番>28番>.410。日本では12番が最も普及。', ref:'猟銃等取扱読本'},
+
+{id:66,cat:'gun',q:'猟銃の所持許可証について正しいのはどれか？',
+ choices:['1枚の許可証で何丁でも所持できる','銃1丁ごとに所持許可証が必要','許可証は全国共通','免許証があれば許可証は不要'],
+ answer:1, explain:'銃砲所持許可は銃1丁ごとに取得が必要。許可証には銃の種類・口径・製造番号等が記載される。', ref:'銃砲刀剣類所持等取締法'},
+
+{id:67,cat:'gun',q:'空気銃（エアガン）と猟に使う空気銃（エアライフル）の違いとして正しいのはどれか？',
+ choices:['まったく同じもの','市販のエアガン（玩具）と猟銃用エアライフルは威力が大きく異なり、猟銃用は所持許可が必要','どちらも許可なく所持できる','威力は同じだが大きさが違う'],
+ answer:1, explain:'猟で使う空気銃（エアライフル）は高い威力を持ち所持許可が必要。玩具のエアガンとは別物。0.98J以下は玩具扱いだが猟では使えない。', ref:'銃砲刀剣類所持等取締法'},
+
+{id:68,cat:'gun',q:'実包（弾薬）の購入について正しいのはどれか？',
+ choices:['スーパーやホームセンターで購入できる','銃砲火薬店で購入でき、都道府県公安委員会への火薬類譲受許可申請が必要','ネット通販で購入できる','購入に制限はない'],
+ answer:1, explain:'実包の購入は火薬類取締法の規制あり。都道府県公安委員会の火薬類譲受許可を取得し、銃砲火薬店で購入する。', ref:'火薬類取締法'},
+
+{id:69,cat:'gun',q:'銃の安全装置が「安全（セーフ）」の位置にあるとき、正しい状態はどれか？',
+ choices:['引き金を引くと発射できる状態','引き金を引いても発射されない状態（セフティオン）','銃が自動的に装填される状態','薬室が空の状態'],
+ answer:1, explain:'安全装置オン（セーフ）の状態では引き金を引いても発射されない。ただし安全装置は補助的なもので、薬室から弾を抜くことが最も確実な安全措置。', ref:'猟銃等取扱読本'},
+
+{id:70,cat:'gun',q:'わな（罠）の種類として正しい組み合わせはどれか？',
+ choices:['くくりわな・はこわな・囲いわな','くくりわな・投げわな・水中わな','足わな・毒わな・光わな','地上わな・空中わな・水中わな'],
+ answer:0, explain:'主なわなの種類：くくりわな（ワイヤーで足を縛る）・はこわな（箱型の罠に閉じ込める）・囲いわな（大型の囲いで多数捕獲）など。', ref:'鳥獣保護管理法・わな猟免許テキスト'},
+
+// ── 生態・習性 ──
+{id:81,cat:'eco',q:'ニホンジカの生態について正しいのはどれか？',
+ choices:['草食性で集団生活、雄は繁殖期（秋）に「ラッティング」と呼ばれる鳴き声を出す','肉食性で単独生活','冬眠する','都市部にのみ生息'],
+ answer:0, explain:'シカは草食性で、雌・幼獣は群れを作る。雄は繁殖期（9〜11月）に「ラッティング（ほえ）」と呼ばれる特徴的な鳴き声を出しメスを呼ぶ。', ref:'ニホンジカ生態テキスト'},
+
+{id:82,cat:'eco',q:'イノシシの習性について正しいのはどれか？',
+ choices:['完全な昼行性（昼間のみ活動）','主に夜行性で、水浴び（ぬた場）を利用する。嗅覚が非常に鋭い','植物しか食べない','山の頂上付近のみに生息'],
+ answer:1, explain:'イノシシは主に夜行性（夜〜早朝に活発）。泥浴び（ぬた場）で体温調節・寄生虫対策。嗅覚が鋭く風上からのアプローチが必要。雑食性。', ref:'イノシシ生態テキスト'},
+
+{id:83,cat:'eco',q:'ニホンザルについて正しいのはどれか？',
+ choices:['狩猟獣として捕獲可能','有害鳥獣捕獲の対象となる場合があるが、基本的に狩猟鳥獣ではない','絶滅危惧種','外来種'],
+ answer:1, explain:'ニホンザルは狩猟鳥獣ではなく通常捕獲できない。農業被害が深刻な地域では都道府県の許可を得て有害鳥獣捕獲が行われる場合がある。', ref:'鳥獣保護管理法'},
+
+{id:84,cat:'eco',q:'カモ類の飛来について正しいのはどれか？',
+ choices:['カモ類は日本の留鳥であり年中同じ場所にいる','多くのカモ類は冬鳥として秋〜冬に北方から飛来し、春に北へ帰る','カモは夏にのみ見られる','すべてのカモが渡り鳥である'],
+ answer:1, explain:'マガモ・コガモ等は冬鳥（冬季にシベリア等から飛来）。カルガモは留鳥（年中日本に生息）。狩猟できるのは冬季の渡り鳥シーズンと一致。', ref:'カモ類生態テキスト'},
+
+{id:85,cat:'eco',q:'クマの冬眠について正しいのはどれか？',
+ choices:['完全な冬眠で全く意識がない','冬眠中も意識があり外敵に反応できる。この時期が最も危険','冬眠しない','メスのみ冬眠する'],
+ answer:1, explain:'クマの冬眠は不完全冬眠で意識がある。特に穴から出てきた直後（春）は空腹で攻撃的。冬眠中の穴に近づくことも危険。', ref:'クマ類生態テキスト'},
+
+{id:86,cat:'eco',q:'ヤマドリの生態について正しいのはどれか？',
+ choices:['渡り鳥で冬に飛来する','日本固有種の留鳥で山地の渓流沿いに生息。雄は長い尾羽を持つ','海岸線に生息する','群れで行動する'],
+ answer:1, explain:'ヤマドリは日本固有の留鳥。山地の渓流沿い・山林に生息。雄は60〜120cmの長い尾羽が特徴。雌は地味な茶褐色。狩猟鳥（雄のみ）。', ref:'ヤマドリ生態テキスト'},
+
+{id:87,cat:'eco',q:'イノシシとシカによる農林業被害として正しいのはどれか？',
+ choices:['イノシシは木の皮をはぎ、シカは田畑を掘り返す','シカは木の皮はぎ・農作物食害、イノシシは田畑の掘り起こし（ぬた場形成等）が主な被害','どちらも被害はない','シカのみが農業被害を起こす'],
+ answer:1, explain:'シカ：農作物食害・樹木の皮はぎ（クマ剥ぎと区別）・林床植生の消失。イノシシ：農作物食害・田畑の掘り返し・農業施設の破壊。', ref:'鳥獣被害防止テキスト'},
+
+{id:88,cat:'eco',q:'タヌキの生態として正しいのはどれか？',
+ choices:['日本固有の絶滅危惧種','雑食性で市街地にも進出。冬は冬眠に近い状態（仮眠）になる','完全な肉食性','木に登ることが得意'],
+ answer:1, explain:'タヌキは雑食性（果実・昆虫・小動物・残飯等）で都市部にも適応。冬は仮眠状態で活動が減る（真の冬眠ではない）。狩猟獣。', ref:'タヌキ生態テキスト'},
+
+{id:89,cat:'eco',q:'ウサギ（ノウサギ）の特性として正しいのはどれか？',
+ choices:['一年中同じ毛色（茶褐色）','季節によって毛色が変わる（夏は茶褐色、冬（雪国）は白色に換毛）','冬眠する','群れで生活する'],
+ answer:1, explain:'ノウサギは季節的換毛を行う。夏は茶褐色、雪が積もる地域では冬に白色になりカモフラージュ。単独行動。後ろ足が強く走るのが速い。', ref:'ノウサギ生態テキスト'},
+
+{id:90,cat:'eco',q:'シカの繁殖について正しいのはどれか？',
+ choices:['年中繁殖する','発情期は9〜11月（秋）で、産子数は通常1頭（双子は稀）','春にのみ繁殖する','産子数は5〜10頭'],
+ answer:1, explain:'シカの発情期（ラッティング）は9〜11月。妊娠期間は約230日。5〜6月に通常1頭を産む（双子は極めて稀）。幼獣にはカモフラージュの白斑がある。', ref:'ニホンジカ生態テキスト'},
+
+{id:91,cat:'eco',q:'ツキノワグマの食性として正しいのはどれか？',
+ choices:['完全な肉食性','雑食性で、植物（ブナの実・サクラの実等）・昆虫・蜂蜜・魚・小動物などを食べる','植物だけを食べる草食性','魚だけを食べる'],
+ answer:1, explain:'ツキノワグマは雑食性。主食は植物（堅果・果実等）だが昆虫・蜂蜜・魚なども食べる。秋のブナの実（ドングリ等）の豊凶が行動に大きく影響。', ref:'ツキノワグマ生態テキスト'},
+
+{id:92,cat:'eco',q:'キジの生態について正しいのはどれか？',
+ choices:['渡り鳥で冬に飛来する','日本の国鳥であり留鳥。雄は美しい緑の体色と赤い肉垂を持つ','山頂近くに生息する','夜行性'],
+ answer:1, explain:'キジは日本の国鳥で留鳥。平地〜山地の草地・農耕地付近に生息。昼行性。雄の美しい体色は繁殖期に際立つ。雄は縄張りを持ちドラミングを行う。', ref:'キジ生態テキスト'},
+
+{id:93,cat:'eco',q:'カワウが近年問題になっている理由として正しいのはどれか？',
+ choices:['絶滅危惧種のため保護が必要','個体数が急増し、河川・湖沼での魚の大量食害・営巣地の糞による樹木枯死が問題','外来種のため','農業被害のため'],
+ answer:1, explain:'カワウは1970年代に激減後、保護政策で急増。漁業被害（鮎等）・営巣地の糞による樹木枯死が深刻。管理が課題。狩猟鳥ではないが有害捕獲の対象。', ref:'カワウ管理テキスト'},
+
+{id:94,cat:'eco',q:'シカの角（つの）について正しいのはどれか？',
+ choices:['雌雄ともに角を持つ','雄のみが角を持ち、毎年春に古い角が落ちて新しい角が生える（落角・新角）','角は一生変わらない','角は防御のためだけに使う'],
+ answer:1, explain:'シカの角は雄のみ。毎年春に落角し、夏に袋角（ベルベット状の皮に覆われた柔らかい角）が成長し秋に皮が剥がれて硬くなる。繁殖期の闘争に使用。', ref:'ニホンジカ生態テキスト'},
+
+{id:95,cat:'eco',q:'狩猟が生態系保全に果たす役割として正しいのはどれか？',
+ choices:['狩猟は生態系を破壊するだけで役に立たない','個体数を適切に管理することで、農林業被害の軽減・植生の回復・生態系バランスの維持に貢献する','狩猟と生態系は無関係','狩猟は外来種のみを対象とすべき'],
+ answer:1, explain:'天敵が少なく個体数が増加したシカ・イノシシ等の管理において、狩猟は重要な手段。適切な個体数管理が農林業被害軽減・植生回復・生物多様性保全に貢献。', ref:'鳥獣管理テキスト'},
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let state = loadState();
+let session = {qs:[], idx:0, answers:[], mode:'', cat:''};
+let currentQ = null;
+let answered = false;
+
+function loadState(){
+  try{
+    const s = localStorage.getItem('hunter_quiz_v1');
+    if(s) return JSON.parse(s);
+  }catch(e){}
+  return {
+    totalAnswered:0, totalCorrect:0,
+    wrongIds:[], markedIds:[],
+    catStats:{}
+  };
+}
+function saveState(){ localStorage.setItem('hunter_quiz_v1', JSON.stringify(state)); }
+
+// ══════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════
+function showHome(){
+  hideAll();
+  document.getElementById('home').style.display='flex';
+  updateHomeStats();
+}
+function updateHomeStats(){
+  const rate = state.totalAnswered>0 ? Math.round(state.totalCorrect/state.totalAnswered*100) : null;
+  document.getElementById('st-total').textContent = state.totalAnswered;
+  document.getElementById('st-rate').textContent = rate!==null ? rate+'%' : '-%';
+  document.getElementById('st-rate').style.color = rate===100?'var(--green)':rate>=80?'var(--yellow)':'var(--red)';
+  document.getElementById('st-wrong').textContent = state.wrongIds.length;
+  document.getElementById('wrong-count-badge').textContent = state.wrongIds.length+'問';
+  document.getElementById('mark-count-badge').textContent = state.markedIds.length+'問';
+}
+
+function showCatScreen(){
+  hideAll();
+  document.getElementById('catscreen').style.display='flex';
+  const grid = document.getElementById('cat-grid');
+  grid.innerHTML = Object.entries(CATS).map(([k,v])=>{
+    const qs = QDB.filter(q=>q.cat===k);
+    const cs = state.catStats[k]||{a:0,c:0};
+    const rate = cs.a>0 ? Math.round(cs.c/cs.a*100) : null;
+    const rateColor = rate===null?'var(--muted)':rate===100?'var(--green)':rate>=80?'var(--yellow)':'var(--red)';
+    return `<button class="cat-btn" onclick="startMode('cat','${k}')">
+      <span class="cat-icon">${v.icon}</span>
+      <div class="cat-info">
+        <div class="cat-name">${v.name}</div>
+        <div class="cat-count">${qs.length}問収録</div>
+      </div>
+      <div class="cat-rate" style="color:${rateColor}">${rate!==null?rate+'%':'--'}</div>
+    </button>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════════
+function startMode(mode, cat=''){
+  let pool = [];
+  if(mode==='random'){
+    pool = shuffle([...QDB]);
+  } else if(mode==='wrong'){
+    pool = QDB.filter(q=>state.wrongIds.includes(q.id));
+    if(pool.length===0){showToast('間違えた問題がありません！素晴らしい！🎉');return;}
+    pool = shuffle(pool);
+  } else if(mode==='weak'){
+    pool = QDB.filter(q=>state.markedIds.includes(q.id));
+    if(pool.length===0){showToast('マーク済み問題がありません');return;}
+    pool = shuffle(pool);
+  } else if(mode==='cat'){
+    pool = shuffle(QDB.filter(q=>q.cat===cat));
+  }
+
+  const count = Math.min(20, pool.length);
+  session = { qs: pool.slice(0, count), idx:0, answers:[], mode, cat };
+  showQuiz();
+  renderQ();
+}
+
+function showQuiz(){
+  hideAll();
+  document.getElementById('quiz').style.display='flex';
+}
+
+function renderQ(){
+  const q = session.qs[session.idx];
+  currentQ = q;
+  answered = false;
+
+  const catInfo = CATS[q.cat];
+  const badge = document.getElementById('q-cat-badge');
+  badge.textContent = catInfo.name;
+  badge.style.background = catInfo.color+'22';
+  badge.style.color = catInfo.color;
+  badge.style.border = `1px solid ${catInfo.color}44`;
+
+  document.getElementById('q-number').textContent = `Q.${String(q.id).padStart(3,'0')}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-counter').textContent = `${session.idx+1} / ${session.qs.length}`;
+  document.getElementById('prog-bar').style.width = ((session.idx+1)/session.qs.length*100)+'%';
+
+  const labels = ['A','B','C','D'];
+  document.getElementById('choices').innerHTML = q.choices.map((c,i)=>
+    `<button class="choice" onclick="answer(${i})">
+      <span class="choice-label">${labels[i]}</span>
+      <span class="choice-text">${c}</span>
+    </button>`
+  ).join('');
+
+  document.getElementById('result-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  updateMarkBtn();
+}
+
+function answer(idx){
+  if(answered) return;
+  answered = true;
+  const q = currentQ;
+  const correct = idx === q.answer;
+  session.answers.push({id:q.id, correct, chosen:idx});
+
+  // update stats
+  state.totalAnswered++;
+  if(correct){ state.totalCorrect++; }
+  if(!state.catStats[q.cat]) state.catStats[q.cat]={a:0,c:0};
+  state.catStats[q.cat].a++;
+  if(correct) state.catStats[q.cat].c++;
+
+  // wrong tracking
+  if(!correct){
+    if(!state.wrongIds.includes(q.id)) state.wrongIds.push(q.id);
+  } else {
+    state.wrongIds = state.wrongIds.filter(id=>id!==q.id);
+  }
+  saveState();
+
+  // visual feedback
+  const choices = document.querySelectorAll('.choice');
+  choices.forEach((el,i)=>{
+    if(i===q.answer) el.classList.add(correct&&i===idx?'correct':'show-correct');
+    else if(i===idx) el.classList.add('wrong');
+    el.style.pointerEvents='none';
+  });
+  if(idx===q.answer) choices[idx].classList.add('correct');
+
+  // result box
+  const rb = document.getElementById('result-box');
+  const rl = document.getElementById('result-label');
+  rb.className = 'result-box '+(correct?'correct-box':'wrong-box');
+  rb.style.display='block';
+  rl.innerHTML = correct
+    ? '✅ <span style="color:var(--green)">正解！</span>'
+    : `❌ <span style="color:var(--red)">不正解</span>　正解は <strong style="color:var(--green)">${['A','B','C','D'][q.answer]}</strong>`;
+  document.getElementById('result-explain').textContent = q.explain;
+  document.getElementById('result-ref').textContent = '📖 ' + q.ref;
+
+  updateMarkBtn();
+
+  const nb = document.getElementById('next-btn');
+  nb.style.display='block';
+  nb.textContent = session.idx+1 >= session.qs.length ? '結果を見る 🏁' : '次の問題 →';
+  nb.className = 'next-btn' + (session.idx+1>=session.qs.length?' finish':'');
+}
+
+function nextQ(){
+  session.idx++;
+  if(session.idx >= session.qs.length){ showResult(); return; }
+  renderQ();
+  // scroll to top
+  document.getElementById('quiz').scrollTo({top:0, behavior:'smooth'});
+  window.scrollTo(0,0);
+}
+
+function exitQuiz(){ if(confirm('終了しますか？進捗は保存されています。')){ showHome(); } }
+
+function toggleMark(){
+  const id = currentQ.id;
+  if(state.markedIds.includes(id)){
+    state.markedIds = state.markedIds.filter(x=>x!==id);
+    showToast('マークを解除しました');
+  } else {
+    state.markedIds.push(id);
+    showToast('⭐ 重要マークをつけました');
+  }
+  saveState();
+  updateMarkBtn();
+}
+function updateMarkBtn(){
+  if(!currentQ) return;
+  const btn = document.getElementById('mark-btn');
+  const marked = state.markedIds.includes(currentQ.id);
+  btn.textContent = marked ? '⭐ マーク済み（タップで解除）' : '☆ 重要マーク';
+  btn.className = 'mark-btn' + (marked?' marked':'');
+}
+
+// ══════════════════════════════════════════════
+// RESULT
+// ══════════════════════════════════════════════
+function showResult(){
+  hideAll();
+  const el = document.getElementById('result');
+  el.style.display='flex';
+
+  const correct = session.answers.filter(a=>a.correct).length;
+  const total = session.answers.length;
+  const pct = Math.round(correct/total*100);
+
+  const scoreEl = document.getElementById('result-score');
+  scoreEl.textContent = pct+'%';
+  scoreEl.className = 'result-score '+(pct===100?'score-perfect':pct>=80?'score-good':'score-bad');
+
+  document.getElementById('result-emoji').textContent = pct===100?'🏆':pct>=80?'🎯':pct>=60?'📚':'💪';
+  document.getElementById('result-title').textContent = pct===100?'完璧！100点！':pct>=80?'よくできました！':pct>=60?'まだまだ伸びしろあり':'基礎から固め直そう！';
+  document.getElementById('result-msg').innerHTML =
+    `${total}問中 <strong style="color:var(--green);font-size:18px">${correct}問</strong> 正解<br>
+    ${pct===100?'全問正解！この調子で！🦌🔥':'間違えた問題を必ず復習しよう！'}`;
+
+  // category breakdown
+  const catMap = {};
+  for(const a of session.answers){
+    const q = QDB.find(x=>x.id===a.id);
+    if(!catMap[q.cat]) catMap[q.cat]={c:0,t:0};
+    catMap[q.cat].t++;
+    if(a.correct) catMap[q.cat].c++;
+  }
+  document.getElementById('result-cats').innerHTML = Object.entries(catMap).map(([k,v])=>{
+    const r = Math.round(v.c/v.t*100);
+    const col = r===100?'var(--green)':r>=80?'var(--yellow)':'var(--red)';
+    return `<div class="cat-result">
+      <div class="cat-result-top">
+        <span class="cat-result-name">${CATS[k].icon} ${CATS[k].name}</span>
+        <span class="cat-result-score" style="color:${col}">${v.c}/${v.t}問 (${r}%)</span>
+      </div>
+      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${r}%;background:${col}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// UTIL
+// ══════════════════════════════════════════════
+function hideAll(){
+  ['home','catscreen','quiz','result','wronglist'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// init
+showHome();
+</script>
+</body>
+</html>
