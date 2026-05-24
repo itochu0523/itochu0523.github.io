@@ -856,10 +856,26 @@ function showQuiz(){
   document.getElementById('quiz').style.display='flex';
 }
 
+// 毎回選択肢をシャッフルして正解indexを動的に追跡
+let shuffledAnswerIdx = 0;
+
+function shuffleChoices(q){
+  const indexed = q.choices.map((text,i)=>({text,isCorrect:i===q.answer}));
+  for(let i=indexed.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [indexed[i],indexed[j]]=[indexed[j],indexed[i]];
+  }
+  return indexed;
+}
+
 function renderQ(){
   const q = session.qs[session.idx];
   currentQ = q;
   answered = false;
+
+  const shuffled = shuffleChoices(q);
+  shuffledAnswerIdx = shuffled.findIndex(c=>c.isCorrect);
+  currentQ._shuffled = shuffled;
 
   const catInfo = CATS[q.cat];
   const badge = document.getElementById('q-cat-badge');
@@ -874,10 +890,10 @@ function renderQ(){
   document.getElementById('prog-bar').style.width = ((session.idx+1)/session.qs.length*100)+'%';
 
   const labels = ['A','B','C','D'];
-  document.getElementById('choices').innerHTML = q.choices.map((c,i)=>
+  document.getElementById('choices').innerHTML = shuffled.map((c,i)=>
     `<button class="choice" onclick="answer(${i})">
       <span class="choice-label">${labels[i]}</span>
-      <span class="choice-text">${c}</span>
+      <span class="choice-text">${c.text}</span>
     </button>`
   ).join('');
 
@@ -890,17 +906,15 @@ function answer(idx){
   if(answered) return;
   answered = true;
   const q = currentQ;
-  const correct = idx === q.answer;
+  const correct = idx === shuffledAnswerIdx;
   session.answers.push({id:q.id, correct, chosen:idx});
 
-  // update stats
   state.totalAnswered++;
   if(correct){ state.totalCorrect++; }
   if(!state.catStats[q.cat]) state.catStats[q.cat]={a:0,c:0};
   state.catStats[q.cat].a++;
   if(correct) state.catStats[q.cat].c++;
 
-  // wrong tracking
   if(!correct){
     if(!state.wrongIds.includes(q.id)) state.wrongIds.push(q.id);
   } else {
@@ -908,14 +922,13 @@ function answer(idx){
   }
   saveState();
 
-  // visual feedback
   const choices = document.querySelectorAll('.choice');
   choices.forEach((el,i)=>{
-    if(i===q.answer) el.classList.add(correct&&i===idx?'correct':'show-correct');
+    if(i===shuffledAnswerIdx) el.classList.add(correct&&i===idx?'correct':'show-correct');
     else if(i===idx) el.classList.add('wrong');
     el.style.pointerEvents='none';
   });
-  if(idx===q.answer) choices[idx].classList.add('correct');
+  if(idx===shuffledAnswerIdx) choices[idx].classList.add('correct');
 
   // result box
   const rb = document.getElementById('result-box');
