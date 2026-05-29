@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="デイリータスク">
@@ -10,841 +10,1069 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-:root {
-  --bg: #111a14; --bg2: #1a2b1e; --bg3: #223028;
-  --green: #6fcf97; --green2: #27ae60; --green3: rgba(111,207,151,0.12);
-  --blue: #7ab8d4; --purple: #b08ac0; --orange: #e07b54; --gold: #c4963a;
-  --text: #e8f5e9; --muted: rgba(232,245,233,0.45); --card: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.07); --radius: 18px; --nav-h: 72px;
+:root{
+  --bg:#111a14;--bg2:#1a2b1e;--bg3:#223028;
+  --green:#6fcf97;--green2:#27ae60;--green3:rgba(111,207,151,0.12);
+  --blue:#7ab8d4;--purple:#b08ac0;--orange:#e07b54;--gold:#c4963a;--red:#f87171;
+  --text:#e8f5e9;--muted:rgba(232,245,233,0.42);--card:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.07);--radius:18px;--nav-h:72px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-body { background: linear-gradient(155deg, #0e1710 0%, #111a14 50%, #131520 100%); min-height: 100vh; font-family: 'Noto Sans JP', sans-serif; color: var(--text); overflow-x: hidden; padding-bottom: var(--nav-h); }
-
-/* ─── PAGES ─── */
-.page { display: none; max-width: 480px; margin: 0 auto; padding: 0 14px; }
-.page.active { display: block; }
-
-/* ─── HEADER ─── */
-.header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0 18px; }
-.h-left .date-small { color: rgba(111,207,151,0.65); font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
-.h-left .date-main { color: white; font-size: 24px; font-weight: 700; }
-.h-right { display: flex; align-items: center; gap: 12px; }
-.gear-btn { background: none; border: none; font-size: 22px; cursor: pointer; opacity: 0.6; padding: 4px; }
-
-/* ─── PROGRESS RING ─── */
-.ring-wrap { display: flex; flex-direction: column; align-items: center; }
-.ring-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-/* ─── SECTION ─── */
-.sec { margin-bottom: 20px; }
-.sec-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-left: 2px; }
-
-/* ─── TASK BUTTON (large, mobile-friendly) ─── */
-.task-btn {
-  width: 100%; display: flex; align-items: center; gap: 14px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 16px;
-  min-height: 72px; margin-bottom: 10px; cursor: pointer;
-  transition: all 0.2s ease; text-align: left;
-  -webkit-appearance: none; appearance: none;
-}
-.task-btn:active { transform: scale(0.97); }
-.task-btn.done { background: rgba(111,207,151,0.07); }
-.task-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 26px; transition: background 0.25s; }
-.task-info { flex: 1; }
-.task-label { color: white; font-size: 17px; font-weight: 600; margin-bottom: 3px; }
-.task-btn.done .task-label { color: var(--muted); text-decoration: line-through; }
-.task-sub { color: var(--muted); font-size: 13px; }
-.check-circle {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 800; transition: all 0.25s ease;
-  border: 2px solid rgba(255,255,255,0.18); background: transparent;
-}
-.task-btn.done .check-circle { color: #111a14; }
-
-/* ─── SHOPPING CHIPS ─── */
-.shop-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.shop-chip {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  border-radius: 30px; padding: 10px 18px; min-height: 44px;
-  cursor: pointer; font-size: 15px; color: white; font-family: inherit;
-  transition: all 0.2s;
-}
-.shop-chip:active { transform: scale(0.95); }
-.shop-chip.bought { background: rgba(111,207,151,0.1); border-color: rgba(111,207,151,0.3); opacity: 0.55; }
-.shop-chip .chip-check { color: var(--green); font-weight: 800; min-width: 14px; font-size: 14px; }
-.shop-chip.bought span:last-child { text-decoration: line-through; color: var(--muted); }
-.shop-footer { font-size: 12px; color: var(--muted); margin-top: 6px; padding-left: 4px; }
-
-/* ─── STAT CARDS ─── */
-.stat-row { display: flex; gap: 10px; margin-bottom: 22px; }
-.stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.stat-num { font-size: 28px; font-weight: 700; }
-.stat-lbl { font-size: 11px; color: var(--muted); text-align: center; }
-
-/* ─── CHART ─── */
-.chart-wrap { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 16px 8px 10px; }
-.chart-wrap canvas { max-height: 180px; }
-
-/* ─── TASK STAT BARS ─── */
-.ts-item { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
-.ts-label { font-size: 13px; color: rgba(232,245,233,0.65); width: 108px; flex-shrink: 0; }
-.ts-bar-bg { flex: 1; height: 9px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; }
-.ts-bar { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
-.ts-pct { font-size: 14px; font-weight: 700; color: white; width: 38px; text-align: right; }
-
-/* ─── SHOPPING PAGE ─── */
-.tab-row { display: flex; gap: 8px; margin-bottom: 16px; }
-.tab-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 13px; padding: 12px 8px; color: var(--muted); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; min-height: 48px; }
-.tab-btn.on { background: rgba(111,207,151,0.12); border-color: rgba(111,207,151,0.25); color: var(--green); }
-.hint-txt { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
-.check-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 16px; margin-bottom: 9px; min-height: 60px; }
-.big-check { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); background: transparent; display: flex; align-items: center; justify-content: center; color: #111a14; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; font-family: inherit; }
-.big-check.on { background: var(--green); border-color: var(--green); }
-.check-lbl { flex: 1; font-size: 16px; color: var(--muted); }
-.check-row.on .check-lbl { color: white; font-weight: 600; }
-.badge { font-size: 11px; padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
-.badge.done { background: rgba(111,207,151,0.15); border-color: rgba(111,207,151,0.3); color: var(--green); }
-.input-row { display: flex; gap: 10px; margin-bottom: 16px; }
-.input-row input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 15px 16px; color: white; font-size: 16px; outline: none; font-family: inherit; min-height: 54px; }
-.input-row input::placeholder { color: var(--muted); }
-.add-btn { background: var(--green); border: none; border-radius: 14px; padding: 15px 20px; color: #111a14; font-weight: 700; font-size: 16px; cursor: pointer; font-family: inherit; min-height: 54px; }
-.manage-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 16px; margin-bottom: 9px; min-height: 60px; }
-.manage-dot { font-size: 16px; }
-.manage-txt { flex: 1; font-size: 16px; color: white; }
-.del-btn { background: none; border: none; color: rgba(255,80,80,0.5); font-size: 18px; cursor: pointer; padding: 6px; border-radius: 8px; }
-.empty-state { display: flex; flex-direction: column; align-items: center; padding: 50px 20px; gap: 10px; }
-.empty-state .ei { font-size: 44px; }
-.empty-state .et { font-size: 14px; color: var(--muted); }
-
-/* ─── BOTTOM NAV ─── */
-#bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(12,20,14,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.07); display: flex; z-index: 100; }
-.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: none; border: none; color: var(--muted); cursor: pointer; font-family: inherit; padding-bottom: env(safe-area-inset-bottom, 0); position: relative; }
-.nav-btn .nav-icon { font-size: 26px; }
-.nav-btn .nav-lbl { font-size: 11px; }
-.nav-btn.on { color: var(--green); }
-.nav-dot { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0) + 7px); width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
-
-/* ─── SETTINGS MODAL ─── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 200; align-items: flex-end; }
-.modal-overlay.open { display: flex; }
-.modal-box { background: #1a2b1e; border-radius: 24px 24px 0 0; padding: 28px 20px 40px; width: 100%; max-width: 480px; margin: 0 auto; }
-.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-.modal-row { margin-bottom: 14px; }
-.modal-row label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 1px; }
-.modal-row input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 13px 14px; color: white; font-size: 14px; outline: none; font-family: monospace; }
-.modal-btns { display: flex; gap: 10px; margin-top: 18px; }
-.m-btn { flex: 1; padding: 15px; border-radius: 14px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 54px; }
-.m-btn.primary { background: var(--green); color: #111a14; }
-.m-btn.secondary { background: rgba(255,255,255,0.08); color: white; }
-.sync-status { font-size: 12px; margin-top: 10px; padding: 8px 12px; border-radius: 10px; }
-.sync-ok { background: rgba(111,207,151,0.1); color: var(--green); }
-.sync-err { background: rgba(255,80,80,0.1); color: #f87171; }
-
-/* ─── MISC ─── */
-.spacer { height: 16px; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-height:100vh;font-family:'Noto Sans JP',sans-serif;color:var(--text);overflow-x:hidden;padding-bottom:var(--nav-h);}
+.page{display:none;max-width:480px;margin:0 auto;padding:0 14px;}
+.page.active{display:block;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:24px 0 16px;}
+.h-left .ds{color:rgba(111,207,151,0.65);font-size:12px;letter-spacing:1px;margin-bottom:4px;}
+.h-left .dm{color:white;font-size:24px;font-weight:700;}
+.h-right{display:flex;align-items:center;gap:12px;}
+.gear-btn{background:none;border:none;font-size:22px;cursor:pointer;opacity:0.6;padding:4px;}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;}
+.ring-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.sec{margin-bottom:18px;}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:2px;}
+/* Task buttons */
+.task-btn{width:100%;display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px 16px;min-height:72px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;text-align:left;-webkit-appearance:none;}
+.task-btn:active{transform:scale(0.97);}
+.task-btn.done{background:rgba(111,207,151,0.07);}
+.t-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;transition:background 0.25s;}
+.t-info{flex:1;}
+.t-lbl{color:white;font-size:17px;font-weight:600;margin-bottom:3px;}
+.task-btn.done .t-lbl{color:var(--muted);text-decoration:line-through;}
+.t-sub{color:var(--muted);font-size:13px;}
+.chk{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;transition:all 0.25s;border:2px solid rgba(255,255,255,0.18);background:transparent;}
+.task-btn.done .chk{color:#111a14;}
+/* Tabs */
+.tab-row{display:flex;gap:8px;margin-bottom:14px;}
+.tab-btn{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:13px;padding:12px 8px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;min-height:48px;}
+.tab-btn.on{background:var(--green3);border-color:rgba(111,207,151,0.25);color:var(--green);}
+/* Shopping */
+.shop-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.shop-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:30px;padding:10px 18px;min-height:44px;cursor:pointer;font-size:15px;color:white;font-family:inherit;transition:all 0.2s;}
+.shop-chip:active{transform:scale(0.95);}
+.shop-chip.bought{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);opacity:0.55;}
+.chip-chk{color:var(--green);font-weight:800;min-width:14px;font-size:14px;}
+.shop-chip.bought span:last-child{text-decoration:line-through;color:var(--muted);}
+/* Meal cards */
+.meal-cards{display:flex;flex-direction:column;gap:10px;}
+.meal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
+.meal-card:active{transform:scale(0.98);}
+.meal-card.selected{background:var(--green3);border-color:rgba(111,207,151,0.3);}
+.mc-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.mc-emoji{font-size:32px;}
+.mc-info{flex:1;}
+.mc-name{font-size:16px;font-weight:700;color:white;}
+.mc-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+.mc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.mc-tag{font-size:11px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);}
+.mc-time{font-size:12px;color:var(--muted);}
+.mc-nutr{display:flex;gap:12px;padding-top:8px;border-top:1px solid var(--border);}
+.mc-n{font-size:12px;color:var(--muted);}
+.mc-n span{color:white;font-weight:600;}
+/* Nutrition bars */
+.nutr-bar-row{margin-bottom:10px;}
+.nutr-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
+.nutr-bar-bg{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
+.nutr-bar{height:100%;border-radius:4px;}
+/* Fridge/Stock items */
+.stock-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:60px;}
+.si-name{flex:1;font-size:15px;color:white;}
+.si-status{display:flex;gap:6px;}
+.status-btn{border:none;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;min-height:36px;}
+.s-ok{background:rgba(111,207,151,0.12);color:var(--green);}
+.s-low{background:rgba(196,150,58,0.15);color:var(--gold);}
+.s-out{background:rgba(248,113,113,0.15);color:var(--red);}
+.cat-header{font-size:13px;font-weight:700;color:var(--muted);padding:8px 0 6px;margin-top:4px;letter-spacing:1px;}
+/* Fridge */
+.fridge-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:56px;}
+.fi-name{flex:1;font-size:15px;color:white;}
+.fi-amt{font-size:13px;color:var(--muted);margin-right:8px;}
+.fi-del{background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px;border-radius:8px;}
+.add-form{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.add-form input{flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:13px 14px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;}
+.add-form input::placeholder{color:var(--muted);}
+.add-form input.sm{flex:0 0 80px;}
+.green-btn{background:var(--green);border:none;border-radius:14px;padding:13px 18px;color:#111a14;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;min-height:52px;}
+/* Shopping page */
+.shop-cat-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;padding-left:2px;}
+.shop-section{margin-bottom:14px;}
+.check-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:60px;}
+.big-chk{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;display:flex;align-items:center;justify-content:center;color:#111a14;font-weight:800;font-size:16px;cursor:pointer;transition:all 0.2s;flex-shrink:0;font-family:inherit;}
+.big-chk.on{background:var(--green);border-color:var(--green);}
+.cr-lbl{flex:1;font-size:15px;color:var(--muted);}
+.check-row.on .cr-lbl{color:white;font-weight:600;}
+.badge{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
+.badge.done{background:rgba(111,207,151,0.15);border-color:rgba(111,207,151,0.3);color:var(--green);}
+.manage-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:58px;}
+.mr-txt{flex:1;font-size:15px;color:white;}
+.del-btn{background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px;border-radius:8px;}
+/* Stats */
+.stat-row{display:flex;gap:10px;margin-bottom:20px;}
+.stat-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.stat-num{font-size:26px;font-weight:700;}
+.stat-lbl{font-size:10px;color:var(--muted);text-align:center;}
+.chart-wrap{background:rgba(0,0,0,0.2);border-radius:16px;padding:14px 6px 8px;}
+.chart-wrap canvas{max-height:170px;}
+.ts-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ts-lbl{font-size:12px;color:rgba(232,245,233,0.6);width:100px;flex-shrink:0;}
+.ts-bg{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
+.ts-bar{height:100%;border-radius:4px;transition:width 0.6s;}
+.ts-pct{font-size:13px;font-weight:700;width:36px;text-align:right;}
+/* Nav */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:rgba(10,18,12,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);display:flex;z-index:100;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--muted);cursor:pointer;font-family:inherit;padding-bottom:env(safe-area-inset-bottom,0);position:relative;}
+.nav-btn .ni{font-size:22px;}
+.nav-btn .nl{font-size:10px;}
+.nav-btn.on{color:var(--green);}
+.nav-dot{position:absolute;bottom:calc(env(safe-area-inset-bottom,0) + 6px);width:4px;height:4px;border-radius:50%;background:var(--green);}
+/* Modals */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:200;align-items:flex-end;}
+.modal-ov.open{display:flex;}
+.modal-box{background:#1a2b1e;border-radius:24px 24px 0 0;padding:26px 18px 36px;width:100%;max-width:480px;margin:0 auto;max-height:85vh;overflow-y:auto;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:14px;}
+.m-row{margin-bottom:12px;}
+.m-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:1px;}
+.m-row input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 14px;color:white;font-size:14px;outline:none;font-family:monospace;}
+.m-btns{display:flex;gap:10px;margin-top:16px;}
+.m-btn{flex:1;padding:15px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;min-height:54px;}
+.m-btn.p{background:var(--green);color:#111a14;}
+.m-btn.s{background:rgba(255,255,255,0.08);color:white;}
+.sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
+.sync-err{background:rgba(255,80,80,0.1);color:var(--red);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
+/* Recipe modal */
+.recipe-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.r-emoji{font-size:44px;}
+.r-info h2{font-size:20px;font-weight:700;}
+.r-info p{font-size:13px;color:var(--muted);margin-top:4px;}
+.recipe-nutr{display:flex;gap:16px;background:rgba(111,207,151,0.08);border-radius:14px;padding:14px;margin-bottom:16px;}
+.rn{flex:1;text-align:center;}
+.rn-val{font-size:20px;font-weight:700;color:var(--green);}
+.rn-lbl{font-size:11px;color:var(--muted);}
+.recipe-section{margin-bottom:14px;}
+.recipe-section h3{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.ing-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.ing-row .missing{color:var(--orange);}
+.step-row{display:flex;gap:10px;margin-bottom:10px;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--green3);border:1px solid rgba(111,207,151,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--green);flex-shrink:0;margin-top:1px;}
+.step-txt{font-size:14px;line-height:1.6;flex:1;}
+.hint-txt{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.empty-state{display:flex;flex-direction:column;align-items:center;padding:40px 20px;gap:10px;}
+.empty-state .ei{font-size:40px;}
+.empty-state .et{font-size:14px;color:var(--muted);}
+.input-row{display:flex;gap:10px;margin-bottom:14px;}
+.input-row input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;}
+.input-row input::placeholder{color:var(--muted);}
+.pill-btn{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:20px;padding:8px 16px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
 </style>
 </head>
 <body>
 
-<!-- ホームページ -->
+<!-- ホーム -->
 <div id="page-home" class="page active">
   <div class="header">
-    <div class="h-left">
-      <div class="date-small" id="hdr-date"></div>
-      <div class="date-main" id="hdr-day"></div>
-    </div>
+    <div class="h-left"><div class="ds" id="hdr-date"></div><div class="dm" id="hdr-day"></div></div>
     <div class="h-right">
       <button class="gear-btn" onclick="openSettings()">⚙️</button>
       <div class="ring-wrap">
-        <svg id="progress-ring" width="60" height="60" viewBox="0 0 60 60">
+        <svg width="60" height="60" viewBox="0 0 60 60">
           <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
           <circle id="ring-arc" cx="30" cy="30" r="24" fill="none" stroke="#6fcf97" stroke-width="4"
             stroke-linecap="round" transform="rotate(-90 30 30)"
-            stroke-dasharray="150.8" stroke-dashoffset="150.8"
-            style="transition:stroke-dashoffset 0.6s ease"/>
+            stroke-dasharray="150.8" stroke-dashoffset="150.8" style="transition:stroke-dashoffset 0.6s ease"/>
           <text x="30" y="35" text-anchor="middle" fill="white" font-size="13" font-weight="700" id="ring-pct">0%</text>
         </svg>
         <div class="ring-sub" id="ring-sub">0/0</div>
       </div>
     </div>
   </div>
-
-  <!-- ゴミ捨て -->
-  <div class="sec" id="sec-trash" style="display:none">
-    <div class="sec-label">🗑️ ゴミ捨て</div>
-    <div id="trash-task"></div>
-  </div>
-
-  <!-- 掃除 -->
-  <div class="sec">
-    <div class="sec-label">🧹 今日の掃除</div>
-    <div id="clean-task"></div>
-  </div>
-
-  <!-- 毎日タスク -->
-  <div class="sec">
-    <div class="sec-label">📋 毎日タスク</div>
-    <div id="daily-tasks"></div>
-  </div>
-
-  <!-- 買い物リスト -->
-  <div class="sec" id="sec-shop" style="display:none">
-    <div class="sec-label" id="shop-sec-label">🛒 買い物リスト</div>
+  <div id="sec-trash" class="sec" style="display:none"><div class="sec-label">🗑️ ゴミ捨て</div><div id="trash-task"></div></div>
+  <div class="sec"><div class="sec-label">🧹 今日の掃除</div><div id="clean-task"></div></div>
+  <div class="sec"><div class="sec-label">🍳 今日の食事</div><div id="meal-task"></div></div>
+  <div class="sec"><div class="sec-label">📋 毎日タスク</div><div id="daily-tasks"></div></div>
+  <div id="sec-shop" class="sec" style="display:none">
+    <div class="sec-label">🛒 買い物リスト</div>
     <div id="shop-chips"></div>
-    <div class="shop-footer" id="shop-footer"></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:5px;padding-left:2px" id="shop-footer"></div>
   </div>
-
-  <!-- 週タスク -->
-  <div class="sec">
-    <div class="sec-label">📅 今週のタスク</div>
-    <div id="weekly-tasks"></div>
-  </div>
-
+  <div class="sec"><div class="sec-label">📅 今週のタスク</div><div id="weekly-tasks"></div></div>
   <div style="height:20px"></div>
 </div>
 
-<!-- 買い物ページ -->
-<div id="page-shop" class="page">
-  <div class="header">
-    <div class="h-left">
-      <div class="date-main">🛒 買い物リスト</div>
-    </div>
-  </div>
+<!-- 食事 -->
+<div id="page-meal" class="page">
+  <div class="header"><div class="h-left"><div class="dm">🍳 食事管理</div></div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="tab-check" onclick="setShopTab('check')">✅ 必要チェック</button>
-    <button class="tab-btn" id="tab-manage" onclick="setShopTab('manage')">⚙️ リスト管理</button>
+    <button class="tab-btn on" id="mt-rec" onclick="setMealTab('rec')">おすすめ</button>
+    <button class="tab-btn" id="mt-today" onclick="setMealTab('today')">今日の献立</button>
+    <button class="tab-btn" id="mt-nutr" onclick="setMealTab('nutr')">栄養</button>
   </div>
-  <div id="shop-check-view">
-    <p class="hint-txt">必要なものをチェック → ホームのタスクに表示されます</p>
-    <div id="check-list"></div>
+  <div id="meal-rec-view">
+    <p class="hint-txt">冷蔵庫の在庫と最近の食事履歴をもとにおすすめしています</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:13px;color:var(--muted)">おすすめメニュー</span>
+      <button class="pill-btn" onclick="shuffleRecs()">🔀 別のメニュー</button>
+    </div>
+    <div id="meal-cards" class="meal-cards"></div>
   </div>
+  <div id="meal-today-view" style="display:none">
+    <div id="today-meal-detail"></div>
+  </div>
+  <div id="meal-nutr-view" style="display:none">
+    <div id="nutr-detail"></div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- 在庫 -->
+<div id="page-stock" class="page">
+  <div class="header"><div class="h-left"><div class="dm">📦 在庫管理</div></div></div>
+  <div class="tab-row">
+    <button class="tab-btn on" id="st-fridge" onclick="setStockTab('fridge')">🧊 冷蔵庫</button>
+    <button class="tab-btn" id="st-staples" onclick="setStockTab('staples')">📦 常備品</button>
+  </div>
+  <div id="stock-fridge-view">
+    <div class="add-form">
+      <input type="text" id="fridge-name" placeholder="食材名" style="flex:2">
+      <input type="text" id="fridge-amt" placeholder="量" class="sm">
+      <button class="green-btn" onclick="addFridge()">追加</button>
+    </div>
+    <div id="fridge-list"></div>
+  </div>
+  <div id="stock-staples-view" style="display:none">
+    <p class="hint-txt">「残り少」「切れ」にすると買い物リストに自動追加されます</p>
+    <div id="staples-list"></div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- 買い物 -->
+<div id="page-shop" class="page">
+  <div class="header"><div class="h-left"><div class="dm">🛒 買い物リスト</div></div></div>
+  <div class="tab-row">
+    <button class="tab-btn on" id="sh-check" onclick="setShopTab('check')">✅ 今日買うもの</button>
+    <button class="tab-btn" id="sh-manage" onclick="setShopTab('manage')">⚙️ リスト管理</button>
+  </div>
+  <div id="shop-check-view"><div id="shop-check-content"></div></div>
   <div id="shop-manage-view" style="display:none">
     <div class="input-row">
-      <input type="text" id="new-item-input" placeholder="アイテムを入力..." onkeydown="if(event.key==='Enter')addItem()">
-      <button class="add-btn" onclick="addItem()">追加</button>
+      <input type="text" id="new-item-input" placeholder="アイテムを追加..." onkeydown="if(event.key==='Enter')addItem()">
+      <button class="green-btn" onclick="addItem()">追加</button>
     </div>
     <div id="manage-list"></div>
   </div>
   <div style="height:20px"></div>
 </div>
 
-<!-- 記録ページ -->
+<!-- 記録 -->
 <div id="page-hist" class="page">
-  <div class="header">
-    <div class="h-left">
-      <div class="date-main">📊 記録・分析</div>
-    </div>
-  </div>
+  <div class="header"><div class="h-left"><div class="dm">📊 記録・分析</div></div></div>
   <div class="stat-row">
-    <div class="stat-card">
-      <div class="stat-num" id="st-streak" style="color:#e07b54">🔥 0</div>
-      <div class="stat-lbl">連続達成日</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="st-today" style="color:#6fcf97">✅ 0</div>
-      <div class="stat-lbl">今日の完了</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="st-days" style="color:#b08ac0">📅 0</div>
-      <div class="stat-lbl">記録日数</div>
-    </div>
+    <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">🔥 0</div><div class="stat-lbl">連続達成日</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-today" style="color:#6fcf97">✅ 0</div><div class="stat-lbl">今日の完了</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">📅 0</div><div class="stat-lbl">記録日数</div></div>
   </div>
-  <div class="sec">
-    <div class="sec-label">📈 直近14日間（完了タスク数）</div>
-    <div class="chart-wrap">
-      <canvas id="hist-chart"></canvas>
-    </div>
-  </div>
-  <div class="sec">
-    <div class="sec-label">🏅 タスク別達成率（30日間）</div>
-    <div id="task-stats"></div>
-  </div>
+  <div class="sec"><div class="sec-label">📈 直近14日間（完了タスク数）</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
+  <div class="sec"><div class="sec-label">🏅 タスク別達成率（30日間）</div><div id="task-stats"></div></div>
   <div style="height:20px"></div>
 </div>
 
 <!-- ボトムナビ -->
 <nav id="bottom-nav">
-  <button class="nav-btn on" id="nav-home" onclick="setPage('home')">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-lbl">ホーム</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-btn" id="nav-shop" onclick="setPage('shop')">
-    <span class="nav-icon">🛒</span>
-    <span class="nav-lbl">買い物</span>
-  </button>
-  <button class="nav-btn" id="nav-hist" onclick="setPage('hist')">
-    <span class="nav-icon">📊</span>
-    <span class="nav-lbl">記録</span>
-  </button>
+  <button class="nav-btn on" id="nav-home" onclick="setPage('home')"><span class="ni">🏠</span><span class="nl">ホーム</span><div class="nav-dot"></div></button>
+  <button class="nav-btn" id="nav-meal" onclick="setPage('meal')"><span class="ni">🍳</span><span class="nl">食事</span></button>
+  <button class="nav-btn" id="nav-stock" onclick="setPage('stock')"><span class="ni">📦</span><span class="nl">在庫</span></button>
+  <button class="nav-btn" id="nav-shop" onclick="setPage('shop')"><span class="ni">🛒</span><span class="nl">買い物</span></button>
+  <button class="nav-btn" id="nav-hist" onclick="setPage('hist')"><span class="ni">📊</span><span class="nl">記録</span></button>
 </nav>
 
 <!-- 設定モーダル -->
-<div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeSettings()">
+<div class="modal-ov" id="settings-modal" onclick="if(event.target===this)closeSettings()">
   <div class="modal-box">
     <div class="modal-title">⚙️ クラウド同期設定</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">JSONBin.io（無料）を使用してスマホ・PCのデータを同期します。</p>
-    <div class="modal-row">
-      <label>API KEY（Secret Key）</label>
-      <input type="password" id="cfg-apikey" placeholder="$2b$10$..." autocomplete="off">
-    </div>
-    <div class="modal-row">
-      <label>BIN ID（初回は空白でOK）</label>
-      <input type="text" id="cfg-binid" placeholder="自動生成されます">
-    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">JSONBin.io（無料）でスマホ・PC間のデータを同期します</p>
+    <div class="m-row"><label>API KEY (Secret Key)</label><input type="password" id="cfg-apikey" placeholder="$2b$10$..." autocomplete="off"></div>
+    <div class="m-row"><label>BIN ID（初回は空欄でOK）</label><input type="text" id="cfg-binid" placeholder="自動生成されます"></div>
     <div id="sync-status"></div>
-    <div class="modal-btns">
-      <button class="m-btn primary" onclick="saveSettings()">🚀 同期を開始</button>
-      <button class="m-btn secondary" onclick="closeSettings()">閉じる</button>
+    <div class="m-btns">
+      <button class="m-btn p" onclick="saveSettings()">🚀 同期を開始</button>
+      <button class="m-btn s" onclick="closeSettings()">閉じる</button>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6">
-      設定手順: <a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → 登録 → API Keys → Secret Key をコピー → ここに貼り付け
-    </p>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6"><a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → 登録 → API Keys → Secret Key をコピー → ここに貼り付け</p>
+  </div>
+</div>
+
+<!-- レシピモーダル -->
+<div class="modal-ov" id="recipe-modal" onclick="if(event.target===this)closeRecipe()">
+  <div class="modal-box">
+    <div id="recipe-content"></div>
+    <div class="m-btns" id="recipe-btns"></div>
   </div>
 </div>
 
 <script>
-// ─── 定数 ──────────────────────────────────────────────────────
-const DAYS_JP = ['日','月','火','水','木','金','土'];
-
-const TRASH = {
-  1: { label:'燃えるゴミ',  icon:'🔥', color:'#e07b54' },
-  2: { label:'燃えないゴミ',icon:'🚯', color:'#7a8fa6' },
-  3: { label:'ペットボトル', icon:'♻️', color:'#4a9e7f' },
-  4: { label:'燃えるゴミ',  icon:'🔥', color:'#e07b54' },
-  5: { label:'瓶・缶ゴミ',  icon:'🍶', color:'#c4963a' },
+// ════════════════════════════════════════════════════
+//  定数
+// ════════════════════════════════════════════════════
+const DAYS_JP=['日','月','火','水','木','金','土'];
+const TRASH={
+  1:{label:'燃えるゴミ',icon:'🔥',color:'#e07b54'},
+  2:{label:'燃えないゴミ',icon:'🚯',color:'#7a8fa6'},
+  3:{label:'ペットボトル',icon:'♻️',color:'#4a9e7f'},
+  4:{label:'燃えるゴミ',icon:'🔥',color:'#e07b54'},
+  5:{label:'瓶・缶ゴミ',icon:'🍶',color:'#c4963a'},
 };
-
-const CLEANING = {
-  0: { icon:'🚪', label:'玄関掃除' },
-  1: { icon:'🍳', label:'キッチン掃除' },
-  2: { icon:'🛁', label:'浴室掃除' },
-  3: { icon:'🪥', label:'洗面所掃除' },
-  4: { icon:'🧹', label:'床掃除' },
-  5: { icon:'🛋️', label:'リビング掃除' },
-  6: { icon:'🪟', label:'窓・ベランダ掃除' },
+const CLEANING={
+  0:{icon:'🚪',label:'玄関掃除'},1:{icon:'🍳',label:'キッチン掃除'},
+  2:{icon:'🛁',label:'浴室掃除'},3:{icon:'🪥',label:'洗面所掃除'},
+  4:{icon:'🧹',label:'床掃除'},5:{icon:'🛋️',label:'リビング掃除'},
+  6:{icon:'🪟',label:'窓・ベランダ掃除'},
 };
+const DAILY_TASKS=[
+  {id:'meditation',icon:'🧘',label:'瞑想',sub:'5分'},
+  {id:'reading',icon:'📖',label:'読書',sub:'20ページ'},
+  {id:'toilet',icon:'🚿',label:'トイレ掃除',sub:''},
+  {id:'walk',icon:'🚶',label:'散歩',sub:''},
+  {id:'hunting',icon:'🎯',label:'狩猟免許勉強',sub:''},
+];
+const WEEKLY_TASKS=[
+  {id:'carwash',icon:'🚗',label:'洗車',sub:'週1回'},
+  {id:'bedding',icon:'🛏️',label:'布団関連洗濯',sub:'週1回'},
+];
+const TASK_LABELS={
+  trash:'ゴミ捨て',cleaning:'掃除',meal:'食事',
+  meditation:'瞑想',reading:'読書',toilet:'トイレ掃除',
+  walk:'散歩',hunting:'狩猟免許勉強',carwash:'洗車',bedding:'布団洗濯',
+};
+const HIST_IDS=Object.keys(TASK_LABELS);
 
-const DAILY = [
-  { id:'meditation', icon:'🧘', label:'瞑想',       sub:'5分' },
-  { id:'reading',    icon:'📖', label:'読書',       sub:'20ページ' },
-  { id:'toilet',     icon:'🚿', label:'トイレ掃除', sub:'' },
-  { id:'walk',       icon:'🚶', label:'散歩',       sub:'' },
-  { id:'hunting',    icon:'🎯', label:'狩猟免許勉強',sub:'' },
+// 常備品マスターデータ
+const STAPLES_MASTER=[
+  {id:'s01',name:'無料1',cat:'水関連'},{id:'s02',name:'無料2',cat:'水関連'},
+  {id:'s03',name:'飲料1',cat:'水関連'},{id:'s04',name:'湧水タンク',cat:'水関連'},
+  {id:'s05',name:'豆乳',cat:'水関連'},{id:'s06',name:'氷結',cat:'水関連'},
+  {id:'s07',name:'赤ワイン',cat:'水関連'},{id:'s08',name:'バナナ',cat:'水関連'},
+  {id:'s11',name:'ビニール2L',cat:'ビニール関連'},{id:'s12',name:'ビニールSS',cat:'ビニール関連'},
+  {id:'s13',name:'燃えるゴミ袋 20L',cat:'ビニール関連'},{id:'s14',name:'燃えないごみ袋 20L',cat:'ビニール関連'},
+  {id:'s15',name:'透明ゴミ袋 30L',cat:'ビニール関連'},{id:'s16',name:'半透明袋 15L',cat:'ビニール関連'},
+  {id:'s21',name:'シャンプー',cat:'風呂系'},{id:'s22',name:'トリートメント',cat:'風呂系'},
+  {id:'s23',name:'洗顔',cat:'風呂系'},{id:'s24',name:'ボディーソープ',cat:'風呂系'},
+  {id:'s25',name:'化粧水',cat:'風呂系'},{id:'s26',name:'オールインワンジェル',cat:'風呂系'},
+  {id:'s27',name:'日焼け止め',cat:'風呂系'},{id:'s28',name:'歯磨き粉',cat:'風呂系'},
+  {id:'s29',name:'マウスウォッシュ',cat:'風呂系'},{id:'s2a',name:'GUMフロス',cat:'風呂系'},
+  {id:'s2b',name:'マツキヨ極細フロス',cat:'風呂系'},
+  {id:'s31',name:'トイレ拭き',cat:'掃除系'},{id:'s32',name:'バスジェット',cat:'掃除系'},
+  {id:'s33',name:'トイレマジックリン',cat:'掃除系'},{id:'s34',name:'コロコロ',cat:'掃除系'},
+  {id:'s35',name:'洗濯洗剤',cat:'掃除系'},{id:'s36',name:'柔軟剤',cat:'掃除系'},
+  {id:'s37',name:'ハンドソープ',cat:'掃除系'},{id:'s38',name:'食器洗剤Joy',cat:'掃除系'},
+  {id:'s39',name:'洗濯槽クリーナー',cat:'掃除系'},{id:'s3a',name:'超浅型水切り',cat:'掃除系'},
+  {id:'s41',name:'ティッシュ',cat:'ペーパー類'},{id:'s42',name:'トイレットペーパー',cat:'ペーパー類'},
+  {id:'s43',name:'キッチンペーパー',cat:'ペーパー類'},{id:'s44',name:'安いなんでもペーパー',cat:'ペーパー類'},
+  {id:'s45',name:'ラップ',cat:'ペーパー類'},{id:'s46',name:'クッキングペーパー',cat:'ペーパー類'},
+  {id:'s47',name:'ウェットティッシュ',cat:'ペーパー類'},{id:'s48',name:'雑巾',cat:'ペーパー類'},
 ];
 
-const WEEKLY = [
-  { id:'carwash', icon:'🚗', label:'洗車',       sub:'週1回' },
-  { id:'bedding', icon:'🛏️', label:'布団関連洗濯', sub:'週1回' },
+// 食事データベース
+const MEALS=[
+  {id:'m01',emoji:'🍗',name:'鶏の照り焼き',desc:'甘辛ジューシーな定番おかず',tags:['和食','鶏肉'],time:20,
+   nutr:{cal:420,protein:35,fat:18,carb:22},
+   ings:[{n:'鶏もも肉',a:'250g'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ2'},{n:'酒',a:'大さじ1'},{n:'砂糖',a:'小さじ1'}],
+   steps:['鶏もも肉の皮にフォークで穴を開ける','フライパンで皮目から中火で5分焼く','裏返して3分焼く','醤油・みりん・酒・砂糖のタレを加えて絡める','タレが煮詰まったら完成']},
+  {id:'m02',emoji:'🥩',name:'豚の生姜焼き',desc:'ご飯が進む生姜の効いた豚炒め',tags:['和食','豚肉'],time:15,
+   nutr:{cal:380,protein:28,fat:16,carb:24},
+   ings:[{n:'豚ロース薄切り',a:'200g'},{n:'玉ねぎ',a:'1/2個'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ1'},{n:'生姜すりおろし',a:'1かけ'}],
+   steps:['玉ねぎを薄切りにする','豚肉に醤油・みりん・生姜を揉み込む（10分）','油を熱し玉ねぎを炒め、透き通ったら脇に寄せる','豚肉を加え両面焼く','全体を混ぜながらタレを絡めて完成']},
+  {id:'m03',emoji:'🍲',name:'肉じゃが',desc:'ほっこり温まる家庭の味',tags:['和食','牛肉','作り置き'],time:35,
+   nutr:{cal:350,protein:20,fat:10,carb:42},
+   ings:[{n:'牛薄切り肉',a:'150g'},{n:'じゃがいも',a:'3個'},{n:'玉ねぎ',a:'1個'},{n:'にんじん',a:'1本'},{n:'醤油',a:'大さじ3'},{n:'砂糖',a:'大さじ2'},{n:'みりん',a:'大さじ2'}],
+   steps:['じゃがいも・にんじん・玉ねぎを切る','油で牛肉を炒め、野菜を加えて炒める','だし汁・醤油・砂糖・みりんを加える','落し蓋をして中火で20分煮る','じゃがいもが柔らかくなったら完成']},
+  {id:'m04',emoji:'🥚',name:'親子丼',desc:'ふわとろ卵と鶏肉の黄金コンビ',tags:['和食','鶏肉','丼'],time:20,
+   nutr:{cal:480,protein:30,fat:14,carb:54},
+   ings:[{n:'鶏もも肉',a:'150g'},{n:'卵',a:'3個'},{n:'玉ねぎ',a:'1/2個'},{n:'だし汁',a:'150ml'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ2'},{n:'ご飯',a:'1人分'}],
+   steps:['鶏肉と玉ねぎを切る','だし・醤油・みりんで煮汁を作る','鶏肉と玉ねぎを煮汁で煮る','溶き卵を2回に分けて加え、半熟で火を止める','ご飯の上に乗せて完成']},
+  {id:'m05',emoji:'🍛',name:'野菜カレー',desc:'具だくさんで栄養満点',tags:['カレー','野菜','作り置き'],time:40,
+   nutr:{cal:520,protein:15,fat:18,carb:70},
+   ings:[{n:'玉ねぎ',a:'2個'},{n:'にんじん',a:'1本'},{n:'じゃがいも',a:'2個'},{n:'カレールー',a:'3かけ'},{n:'トマト缶',a:'1/2缶'}],
+   steps:['野菜を一口大に切る','玉ねぎをあめ色になるまで炒める（15分）','野菜を加えて炒め、水とトマト缶を加える','15分煮てルーを溶かす','さらに10分煮て完成']},
+  {id:'m06',emoji:'🍚',name:'チャーハン',desc:'パラパラ炒めた本格炒飯',tags:['中華','ご飯'],time:15,
+   nutr:{cal:460,protein:18,fat:16,carb:58},
+   ings:[{n:'ご飯',a:'1人分（冷ご飯）'},{n:'卵',a:'2個'},{n:'長ねぎ',a:'1/3本'},{n:'醤油',a:'大さじ1'},{n:'ごま油',a:'小さじ1'},{n:'塩こしょう',a:'適量'}],
+   steps:['ご飯は冷たいものを使う','強火で油を熱し溶き卵を入れる','卵が半熟のうちにご飯を加えてほぐす','長ねぎを加えて炒める','醤油・塩こしょう・ごま油で味を整える']},
+  {id:'m07',emoji:'🐟',name:'鮭の塩焼き定食',desc:'シンプルで体に優しい定食',tags:['和食','魚'],time:15,
+   nutr:{cal:360,protein:32,fat:14,carb:30},
+   ings:[{n:'鮭の切り身',a:'2切れ'},{n:'塩',a:'少量'},{n:'レモン',a:'1/4個'},{n:'ご飯',a:'1人分'},{n:'味噌汁の具',a:'適量'}],
+   steps:['鮭に塩を振り10分置く','水気を拭いてフライパンで中火3分焼く','裏返してさらに3分焼く','レモンを絞って完成','味噌汁・ご飯と一緒に盛り付け']},
+  {id:'m08',emoji:'🍝',name:'ペペロンチーノ',desc:'シンプルなにんにくオイルパスタ',tags:['パスタ','洋食'],time:20,
+   nutr:{cal:440,protein:14,fat:18,carb:56},
+   ings:[{n:'スパゲッティ',a:'100g'},{n:'にんにく',a:'2かけ'},{n:'鷹の爪',a:'1本'},{n:'オリーブオイル',a:'大さじ3'},{n:'塩',a:'適量'},{n:'パスタの茹で汁',a:'50ml'}],
+   steps:['塩を加えたお湯でパスタを表示通り茹でる','フライパンにオリーブオイル・にんにく・鷹の爪を入れ弱火で熱する','にんにくが黄金色になったらパスタの茹で汁を加える','茹で上がったパスタを加え乳化させる','塩で味を整えて完成']},
+  {id:'m09',emoji:'🥡',name:'麻婆豆腐',desc:'ピリ辛でご飯が止まらない',tags:['中華','豆腐'],time:20,
+   nutr:{cal:350,protein:22,fat:18,carb:20},
+   ings:[{n:'木綿豆腐',a:'1丁'},{n:'豚ひき肉',a:'100g'},{n:'長ねぎ',a:'1/2本'},{n:'豆板醤',a:'小さじ1'},{n:'醤油',a:'大さじ1'},{n:'片栗粉',a:'大さじ1'},{n:'ごま油',a:'少量'}],
+   steps:['豆腐を一口大に切り水切りする','ひき肉を炒め豆板醤を加えて香りを出す','水・醤油・ねぎを加えて煮立てる','豆腐を加えて3分煮る','水溶き片栗粉でとろみをつけごま油を垂らす']},
+  {id:'m10',emoji:'🥗',name:'蒸し鶏サラダ',desc:'さっぱりヘルシーな主菜サラダ',tags:['洋食','鶏肉','ヘルシー'],time:25,
+   nutr:{cal:280,protein:30,fat:10,carb:12},
+   ings:[{n:'鶏むね肉',a:'200g'},{n:'レタス',a:'1/4玉'},{n:'きゅうり',a:'1本'},{n:'トマト',a:'1個'},{n:'ポン酢',a:'大さじ2'},{n:'ごま油',a:'小さじ1'}],
+   steps:['鶏肉に塩をすり込む','耐熱容器に入れラップし電子レンジ600Wで4分','そのまま5分置いて余熱で火を通す','粗熱が取れたら手で裂く','野菜を切り盛り付け、ポン酢・ごま油をかける']},
+  {id:'m11',emoji:'🥟',name:'餃子',desc:'カリカリジューシーな手作り餃子',tags:['中華','豚肉'],time:40,
+   nutr:{cal:420,protein:22,fat:20,carb:36},
+   ings:[{n:'餃子の皮',a:'20枚'},{n:'豚ひき肉',a:'150g'},{n:'キャベツ',a:'1/4個'},{n:'にんにく',a:'1かけ'},{n:'生姜',a:'1かけ'},{n:'醤油',a:'大さじ1'},{n:'ごま油',a:'小さじ1'}],
+   steps:['キャベツをみじん切りにし塩もみして絞る','ひき肉・野菜・調味料を混ぜて餡を作る','皮に包んで端を折りたたむ','フライパンに並べて焼き色をつける','水を加えて蓋をし蒸し焼きにして完成']},
+  {id:'m12',emoji:'🍜',name:'豚汁うどん',desc:'具だくさんの豚汁とうどんの組み合わせ',tags:['和食','豚肉'],time:25,
+   nutr:{cal:450,protein:25,fat:14,carb:52},
+   ings:[{n:'豚バラ薄切り',a:'100g'},{n:'うどん',a:'1玉'},{n:'大根',a:'1/4本'},{n:'にんじん',a:'1/2本'},{n:'ごぼう',a:'1/3本'},{n:'味噌',a:'大さじ2'},{n:'だし汁',a:'600ml'}],
+   steps:['野菜を切り豚肉を2cm幅に切る','鍋で豚肉を炒め、野菜を加えて炒める','だし汁を加えて野菜が柔らかくなるまで煮る','味噌を溶く','うどんを加えて温め完成']},
+  {id:'m13',emoji:'🍳',name:'オムライス',desc:'ケチャップご飯をふわとろ卵で包む',tags:['洋食','卵'],time:20,
+   nutr:{cal:520,protein:20,fat:20,carb:60},
+   ings:[{n:'ご飯',a:'1人分'},{n:'卵',a:'3個'},{n:'鶏むね肉',a:'80g'},{n:'玉ねぎ',a:'1/4個'},{n:'ケチャップ',a:'大さじ3'},{n:'バター',a:'10g'}],
+   steps:['鶏肉・玉ねぎを炒め、ご飯を加えてケチャップで炒める','ケチャップライスをラップで楕円形に成形する','溶き卵を薄くのばしバターで焼く','卵でご飯を包んで盛り付ける','ケチャップをかけて完成']},
+  {id:'m14',emoji:'🐄',name:'牛丼',desc:'甘辛牛肉とたまねぎのさっと煮',tags:['和食','牛肉','丼'],time:20,
+   nutr:{cal:580,protein:28,fat:20,carb:66},
+   ings:[{n:'牛バラ薄切り',a:'200g'},{n:'玉ねぎ',a:'1個'},{n:'醤油',a:'大さじ3'},{n:'みりん',a:'大さじ2'},{n:'砂糖',a:'大さじ1'},{n:'だし汁',a:'200ml'},{n:'ご飯',a:'1人分'}],
+   steps:['玉ねぎを薄切りにする','だし・醤油・みりん・砂糖で煮汁を作る','玉ねぎを煮汁で2分煮る','牛肉を加えてさっと煮る（煮過ぎない）','ご飯の上に乗せて完成']},
+  {id:'m15',emoji:'🥦',name:'野菜炒め定食',desc:'色々な野菜をシャキシャキ炒め',tags:['和食','野菜','ヘルシー'],time:15,
+   nutr:{cal:280,protein:12,fat:12,carb:30},
+   ings:[{n:'もやし',a:'1袋'},{n:'キャベツ',a:'1/4個'},{n:'にんじん',a:'1/2本'},{n:'豚バラ',a:'80g'},{n:'醤油',a:'大さじ1'},{n:'オイスターソース',a:'大さじ1'},{n:'ごま油',a:'少量'}],
+   steps:['野菜を食べやすい大きさに切る','強火で豚肉を炒める','にんじん→キャベツ→もやしの順に加える','醤油・オイスターソースで味付け','ごま油を回しかけて完成']},
 ];
 
-const TASK_LABELS = {
-  trash:'ゴミ捨て', cleaning:'掃除',
-  meditation:'瞑想', reading:'読書', toilet:'トイレ掃除',
-  walk:'散歩', hunting:'狩猟免許勉強',
-  carwash:'洗車', bedding:'布団洗濯',
-};
-const HIST_IDS = Object.keys(TASK_LABELS);
+// ════════════════════════════════════════════════════
+//  状態
+// ════════════════════════════════════════════════════
+let state={days:{},weeks:{},shopping:[],bought:{},fridge:[],staples:{},meals:{}};
+let cfg={apiKey:'',binId:''};
+let histChart=null;
+let syncTimer=null;
+let recIndexes=[];
+let currentMealTab='rec';
+let currentStockTab='fridge';
+let currentShopTab='check';
 
-// ─── 状態 ──────────────────────────────────────────────────────
-let state = { days:{}, weeks:{}, shopping:[], bought:{} };
-let cfg = { apiKey:'', binId:'' };
-let histChart = null;
-let currentShopTab = 'check';
-let syncTimer = null;
+// ════════════════════════════════════════════════════
+//  ユーティリティ
+// ════════════════════════════════════════════════════
+const pad=n=>String(n).padStart(2,'0');
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function mondayStr(){const d=new Date(),dw=d.getDay();d.setDate(d.getDate()-(dw===0?6:dw-1));return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function daysAgoStr(n){const d=new Date();d.setDate(d.getDate()-n);return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function getFridge(){return state.fridge||[];}
+function getStaples(){return state.staples||{};}
+function getMealToday(){return (state.meals||{})[todayStr()]||{menuId:null,cooked:false,eaten:false};}
+function fridgeHas(ingName){return getFridge().some(f=>f.name.includes(ingName)||ingName.includes(f.name));}
+function getMealById(id){return MEALS.find(m=>m.id===id);}
 
-// ─── 日付ユーティリティ ──────────────────────────────────────
-const pad = n => String(n).padStart(2,'0');
-function todayStr() {
-  const d = new Date();
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+// ════════════════════════════════════════════════════
+//  ストレージ
+// ════════════════════════════════════════════════════
+function loadLocal(){
+  try{const s=localStorage.getItem('dts');if(s)state=JSON.parse(s);}catch(e){}
+  try{const c=localStorage.getItem('dtc');if(c)cfg=JSON.parse(c);}catch(e){}
+  // 常備品初期化
+  if(!state.staples||Object.keys(state.staples).length===0){
+    state.staples={};
+    STAPLES_MASTER.forEach(m=>{state.staples[m.id]={name:m.name,cat:m.cat,status:'ok'};});
+  }
 }
-function mondayStr() {
-  const d = new Date(), dow = d.getDay();
-  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-function daysAgoStr(n) {
-  const d = new Date(); d.setDate(d.getDate() - n);
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-function mondayForDate(iso) {
-  const d = new Date(iso), dow = d.getDay();
-  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
+function saveLocal(){localStorage.setItem('dts',JSON.stringify(state));}
+function saveCfg(){localStorage.setItem('dtc',JSON.stringify(cfg));}
 
-// ─── ローカルストレージ ───────────────────────────────────────
-function loadLocal() {
-  try {
-    const s = localStorage.getItem('daily_tasks_state');
-    if (s) state = JSON.parse(s);
-    const c = localStorage.getItem('daily_tasks_cfg');
-    if (c) cfg = JSON.parse(c);
-  } catch(e) {}
-}
-function saveLocal() {
-  localStorage.setItem('daily_tasks_state', JSON.stringify(state));
-}
-function saveCfg() {
-  localStorage.setItem('daily_tasks_cfg', JSON.stringify(cfg));
-}
-
-// ─── JSONBin同期 ─────────────────────────────────────────────
-async function pushToCloud() {
-  if (!cfg.apiKey) return;
-  try {
-    if (!cfg.binId) {
-      const r = await fetch('https://api.jsonbin.io/v3/b', {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json', 'X-Master-Key':cfg.apiKey, 'X-Bin-Name':'DailyTasks' },
-        body: JSON.stringify(state)
-      });
-      const j = await r.json();
-      if (j.metadata?.id) {
-        cfg.binId = j.metadata.id;
-        saveCfg();
-        document.getElementById('cfg-binid').value = cfg.binId;
-        showSyncStatus('✅ 同期開始！Bin ID: ' + cfg.binId, true);
-      }
-    } else {
-      await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
-        method:'PUT',
-        headers:{ 'Content-Type':'application/json', 'X-Master-Key':cfg.apiKey },
-        body: JSON.stringify(state)
-      });
+// JSONBin
+async function pushToCloud(){
+  if(!cfg.apiKey)return;
+  try{
+    if(!cfg.binId){
+      const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},body:JSON.stringify(state)});
+      const j=await r.json();
+      if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();document.getElementById('cfg-binid').value=cfg.binId;showSync('✅ 同期開始！Bin ID: '+cfg.binId,true);}
+    }else{
+      await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(state)});
     }
-  } catch(e) { console.error('push error', e); }
+  }catch(e){console.error(e);}
 }
-
-async function pullFromCloud() {
-  if (!cfg.apiKey || !cfg.binId) return;
-  try {
-    const r = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
-      headers:{ 'X-Master-Key':cfg.apiKey }
-    });
-    const j = await r.json();
-    if (j.record) {
-      state = j.record;
-      saveLocal();
-      renderAll();
-    }
-  } catch(e) { console.error('pull error', e); }
+async function pullFromCloud(){
+  if(!cfg.apiKey||!cfg.binId)return;
+  try{
+    const r=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{headers:{'X-Master-Key':cfg.apiKey}});
+    const j=await r.json();
+    if(j.record){state=j.record;saveLocal();renderAll();}
+  }catch(e){console.error(e);}
 }
+function schedulePush(){clearTimeout(syncTimer);syncTimer=setTimeout(pushToCloud,1500);}
 
-// ─── 設定モーダル ────────────────────────────────────────────
-function openSettings() {
-  document.getElementById('cfg-apikey').value = cfg.apiKey || '';
-  document.getElementById('cfg-binid').value  = cfg.binId  || '';
-  document.getElementById('sync-status').innerHTML = '';
+// ════════════════════════════════════════════════════
+//  設定
+// ════════════════════════════════════════════════════
+function openSettings(){
+  document.getElementById('cfg-apikey').value=cfg.apiKey||'';
+  document.getElementById('cfg-binid').value=cfg.binId||'';
+  document.getElementById('sync-status').innerHTML='';
   document.getElementById('settings-modal').classList.add('open');
 }
-function closeSettings() {
-  document.getElementById('settings-modal').classList.remove('open');
-}
-function showSyncStatus(msg, ok) {
-  const el = document.getElementById('sync-status');
-  el.className = 'sync-status ' + (ok ? 'sync-ok' : 'sync-err');
-  el.textContent = msg;
-}
-async function saveSettings() {
-  cfg.apiKey = document.getElementById('cfg-apikey').value.trim();
-  cfg.binId  = document.getElementById('cfg-binid').value.trim();
-  saveCfg();
-  showSyncStatus('🔄 接続中...', true);
-  if (cfg.binId) {
-    await pullFromCloud();
-    showSyncStatus('✅ 同期完了！', true);
-  } else {
-    await pushToCloud();
-  }
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+function showSync(msg,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=msg;}
+async function saveSettings(){
+  cfg.apiKey=document.getElementById('cfg-apikey').value.trim();
+  cfg.binId=document.getElementById('cfg-binid').value.trim();
+  saveCfg();showSync('🔄 接続中...',true);
+  if(cfg.binId)await pullFromCloud();else await pushToCloud();
   renderAll();
 }
 
-// ─── ページ切替 ──────────────────────────────────────────────
-function setPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.classList.remove('on');
-    const dot = b.querySelector('.nav-dot');
-    if (dot) dot.remove();
+// ════════════════════════════════════════════════════
+//  ページ切替
+// ════════════════════════════════════════════════════
+function setPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('on');const d=b.querySelector('.nav-dot');if(d)d.remove();});
+  document.getElementById('page-'+id).classList.add('active');
+  const nb=document.getElementById('nav-'+id);nb.classList.add('on');
+  if(!nb.querySelector('.nav-dot')){const d=document.createElement('div');d.className='nav-dot';nb.appendChild(d);}
+  if(id==='hist')renderHistory();
+  if(id==='meal')renderMealPage();
+  if(id==='stock')renderStockPage();
+  if(id==='shop')renderShopPage();
+}
+function setMealTab(t){
+  currentMealTab=t;
+  ['rec','today','nutr'].forEach(k=>{
+    document.getElementById('mt-'+k).className='tab-btn'+(t===k?' on':'');
+    document.getElementById('meal-'+k+'-view').style.display=t===k?'':'none';
   });
-  document.getElementById('page-' + id).classList.add('active');
-  const nb = document.getElementById('nav-' + id);
-  nb.classList.add('on');
-  if (!nb.querySelector('.nav-dot')) {
-    const d = document.createElement('div');
-    d.className = 'nav-dot';
-    nb.appendChild(d);
+  renderMealTab(t);
+}
+function setStockTab(t){
+  currentStockTab=t;
+  document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');
+  document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');
+  document.getElementById('stock-fridge-view').style.display=t==='fridge'?'':'none';
+  document.getElementById('stock-staples-view').style.display=t==='staples'?'':'none';
+  renderStockTab(t);
+}
+function setShopTab(t){
+  currentShopTab=t;
+  document.getElementById('sh-check').className='tab-btn'+(t==='check'?' on':'');
+  document.getElementById('sh-manage').className='tab-btn'+(t==='manage'?' on':'');
+  document.getElementById('shop-check-view').style.display=t==='check'?'':'none';
+  document.getElementById('shop-manage-view').style.display=t==='manage'?'':'none';
+  renderShopTab(t);
+}
+
+// ════════════════════════════════════════════════════
+//  データ操作
+// ════════════════════════════════════════════════════
+function getDayDone(id){return !!(state.days[todayStr()]||{})[id];}
+function getWeekDone(id){return !!(state.weeks[mondayStr()]||{})[id];}
+function getNeeded(){return (state.shopping||[]).filter(i=>i.needed);}
+function getBoughtToday(id){return !!(state.bought[todayStr()]||{})[id];}
+
+function toggleDay(id){
+  const k=todayStr();
+  if(!state.days[k])state.days[k]={};
+  state.days[k][id]=!state.days[k][id];
+  WEEKLY_TASKS.forEach(t=>{state.days[k][t.id]=getWeekDone(t.id);});
+  const meal=getMealToday();
+  state.days[k].meal=(meal.cooked&&meal.eaten);
+  saveLocal();schedulePush();renderHome();
+}
+function toggleWeek(id){
+  const k=mondayStr(),dk=todayStr();
+  if(!state.weeks[k])state.weeks[k]={};
+  state.weeks[k][id]=!state.weeks[k][id];
+  if(!state.days[dk])state.days[dk]={};
+  state.days[dk][id]=state.weeks[k][id];
+  saveLocal();schedulePush();renderHome();
+}
+function toggleBought(id){
+  const k=todayStr();
+  if(!state.bought[k])state.bought[k]={};
+  state.bought[k][id]=!state.bought[k][id];
+  saveLocal();schedulePush();renderHome();renderShopPage();
+}
+function toggleNeeded(id){
+  state.shopping=(state.shopping||[]).map(i=>i.id===id?{...i,needed:!i.needed}:i);
+  saveLocal();schedulePush();renderHome();renderShopPage();
+}
+function addItem(){
+  const inp=document.getElementById('new-item-input');
+  const txt=inp.value.trim();if(!txt)return;
+  state.shopping=[...(state.shopping||[]),{id:Date.now().toString(),text:txt,needed:true,cat:'その他'}];
+  inp.value='';saveLocal();schedulePush();renderShopPage();renderHome();
+}
+function deleteItem(id){
+  state.shopping=(state.shopping||[]).filter(i=>i.id!==id);
+  Object.keys(state.bought||{}).forEach(k=>{if(state.bought[k])delete state.bought[k][id];});
+  saveLocal();schedulePush();renderShopPage();renderHome();
+}
+function addFridge(){
+  const name=document.getElementById('fridge-name').value.trim();
+  const amt=document.getElementById('fridge-amt').value.trim();
+  if(!name)return;
+  state.fridge=[...(state.fridge||[]),{id:Date.now().toString(),name,amt:amt||'適量'}];
+  document.getElementById('fridge-name').value='';document.getElementById('fridge-amt').value='';
+  saveLocal();schedulePush();renderStockTab('fridge');
+}
+function deleteFridge(id){
+  state.fridge=(state.fridge||[]).filter(f=>f.id!==id);
+  saveLocal();schedulePush();renderStockTab('fridge');
+}
+function setStapleStatus(id,status){
+  if(!state.staples[id])return;
+  state.staples[id].status=status;
+  // 切れ・残り少 → 買い物リストに自動追加
+  const name=state.staples[id].name;
+  const exists=(state.shopping||[]).find(s=>s.text===name);
+  if(status==='out'||status==='low'){
+    if(!exists){
+      state.shopping=[...(state.shopping||[]),{id:'stpl_'+id,text:name,needed:true,cat:'補充品'}];
+    }
+  }else if(status==='ok'&&exists){
+    state.shopping=(state.shopping||[]).filter(s=>s.text!==name);
   }
-  if (id === 'hist') renderHistory();
+  saveLocal();schedulePush();renderStockPage();renderShopPage();renderHome();
+}
+// 食事
+function selectMeal(mealId){
+  const k=todayStr();
+  if(!state.meals)state.meals={};
+  state.meals[k]={menuId:mealId,cooked:false,eaten:false};
+  const meal=getMealById(mealId);
+  // 不足食材を買い物リストに追加
+  if(meal){
+    meal.ings.forEach(ing=>{
+      if(!fridgeHas(ing.n)){
+        const exists=(state.shopping||[]).find(s=>s.text===ing.n);
+        if(!exists){
+          state.shopping=[...(state.shopping||[]),{id:'ing_'+Date.now()+'_'+ing.n,text:ing.n,needed:true,cat:'食材'}];
+        }
+      }
+    });
+  }
+  saveLocal();schedulePush();renderHome();renderMealPage();renderShopPage();
+  closeRecipe();
+}
+function toggleMealCooked(){
+  const k=todayStr();if(!state.meals)state.meals={};
+  if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
+  state.meals[k].cooked=!state.meals[k].cooked;
+  if(!state.days[k])state.days[k]={};
+  state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
+  saveLocal();schedulePush();renderHome();renderMealPage();
+}
+function toggleMealEaten(){
+  const k=todayStr();if(!state.meals)state.meals={};
+  if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
+  state.meals[k].eaten=!state.meals[k].eaten;
+  if(!state.days[k])state.days[k]={};
+  state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
+  saveLocal();schedulePush();renderHome();renderMealPage();
 }
 
-// ─── 買い物タブ ──────────────────────────────────────────────
-function setShopTab(tab) {
-  currentShopTab = tab;
-  document.getElementById('tab-check').className  = 'tab-btn' + (tab==='check' ? ' on':'');
-  document.getElementById('tab-manage').className = 'tab-btn' + (tab==='manage'? ' on':'');
-  document.getElementById('shop-check-view').style.display  = tab==='check'  ? '' : 'none';
-  document.getElementById('shop-manage-view').style.display = tab==='manage' ? '' : 'none';
-  renderShopPage();
-}
-
-// ─── データ取得ヘルパー ───────────────────────────────────────
-const getDay  = (k) => state.days[k]   || {};
-const getWeek = (k) => state.weeks[k]  || {};
-const getShop = ()  => state.shopping  || [];
-const getBought = (k) => state.bought[k] || {};
-
-function getDayDone(id)   { return !!getDay(todayStr())[id]; }
-function getWeekDone(id)  { return !!getWeek(mondayStr())[id]; }
-function getNeeded()      { return getShop().filter(i => i.needed); }
-function getBoughtToday(id) { return !!getBought(todayStr())[id]; }
-
-// ─── トグル処理 ───────────────────────────────────────────────
-function toggleDay(id) {
-  const k = todayStr();
-  if (!state.days[k]) state.days[k] = {};
-  state.days[k][id] = !state.days[k][id];
-  // 週タスクも今日のスナップショットに含める
-  WEEKLY.forEach(t => { state.days[k][t.id] = getWeekDone(t.id); });
-  saveLocal();
-  schedulePush();
-  renderAll();
-}
-
-function toggleWeek(id) {
-  const k = mondayStr(), dk = todayStr();
-  if (!state.weeks[k]) state.weeks[k] = {};
-  state.weeks[k][id] = !state.weeks[k][id];
-  // 日次スナップショットにも反映
-  if (!state.days[dk]) state.days[dk] = {};
-  state.days[dk][id] = state.weeks[k][id];
-  saveLocal();
-  schedulePush();
-  renderAll();
-}
-
-function toggleBought(id) {
-  const k = todayStr();
-  if (!state.bought[k]) state.bought[k] = {};
-  state.bought[k][id] = !state.bought[k][id];
-  saveLocal();
-  schedulePush();
-  renderHome();
-  if (document.getElementById('page-shop').classList.contains('active')) renderShopPage();
-}
-
-function toggleNeeded(id) {
-  state.shopping = getShop().map(i => i.id === id ? {...i, needed:!i.needed} : i);
-  saveLocal();
-  schedulePush();
-  renderHome();
-  renderShopPage();
-}
-
-function addItem() {
-  const inp = document.getElementById('new-item-input');
-  const txt = inp.value.trim();
-  if (!txt) return;
-  state.shopping = [...getShop(), { id: Date.now().toString(), text:txt, needed:true }];
-  inp.value = '';
-  saveLocal();
-  schedulePush();
-  renderShopPage();
-  renderHome();
-}
-
-function deleteItem(id) {
-  state.shopping = getShop().filter(i => i.id !== id);
-  Object.keys(state.bought).forEach(k => { delete state.bought[k][id]; });
-  saveLocal();
-  schedulePush();
-  renderShopPage();
-  renderHome();
-}
-
-function schedulePush() {
-  clearTimeout(syncTimer);
-  syncTimer = setTimeout(pushToCloud, 1500);
-}
-
-// ─── タスクボタン生成 ─────────────────────────────────────────
-function makeTaskBtn(id, icon, label, sub, done, accent, onClick) {
-  const btn = document.createElement('button');
-  btn.className = 'task-btn' + (done ? ' done' : '');
-  btn.onclick = onClick;
-
-  const ic = document.createElement('div');
-  ic.className = 'task-icon';
-  ic.style.background = done ? (accent||'#6fcf97') + '28' : 'rgba(255,255,255,0.05)';
-  ic.textContent = icon;
-
-  const info = document.createElement('div');
-  info.className = 'task-info';
-  const lbl = document.createElement('div');
-  lbl.className = 'task-label';
-  lbl.textContent = label;
+// ════════════════════════════════════════════════════
+//  タスクボタン生成
+// ════════════════════════════════════════════════════
+function makeBtn(icon,label,sub,done,accent,onClick){
+  const btn=document.createElement('button');
+  btn.className='task-btn'+(done?' done':'');
+  btn.onclick=onClick;
+  const ic=document.createElement('div');ic.className='t-icon';
+  ic.style.background=done?(accent||'#6fcf97')+'28':'rgba(255,255,255,0.05)';
+  ic.textContent=icon;
+  const info=document.createElement('div');info.className='t-info';
+  const lbl=document.createElement('div');lbl.className='t-lbl';lbl.textContent=label;
   info.appendChild(lbl);
-  if (sub) {
-    const s = document.createElement('div');
-    s.className = 'task-sub';
-    s.textContent = sub;
-    info.appendChild(s);
-  }
-
-  const chk = document.createElement('div');
-  chk.className = 'check-circle';
-  if (done) {
-    chk.textContent = '✓';
-    chk.style.background = accent || '#6fcf97';
-    chk.style.border = '2px solid ' + (accent || '#6fcf97');
-  }
-
-  btn.appendChild(ic);
-  btn.appendChild(info);
-  btn.appendChild(chk);
+  if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;info.appendChild(s);}
+  const chk=document.createElement('div');chk.className='chk';
+  if(done){chk.textContent='✓';chk.style.background=accent||'#6fcf97';chk.style.border='2px solid '+(accent||'#6fcf97');}
+  btn.appendChild(ic);btn.appendChild(info);btn.appendChild(chk);
   return btn;
 }
 
-// ─── ホーム描画 ───────────────────────────────────────────────
-function renderHome() {
-  const dow = new Date().getDay();
-  const trash = TRASH[dow];
-  const clean = CLEANING[dow];
-  const needed = getNeeded();
+// ════════════════════════════════════════════════════
+//  ホーム描画
+// ════════════════════════════════════════════════════
+function renderHome(){
+  const dow=new Date().getDay();
+  const trash=TRASH[dow];const clean=CLEANING[dow];
+  const d=new Date();
+  document.getElementById('hdr-date').textContent=d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
+  document.getElementById('hdr-day').textContent=DAYS_JP[dow]+'曜日';
 
-  // ヘッダー
-  const d = new Date();
-  document.getElementById('hdr-date').textContent =
-    d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
-  document.getElementById('hdr-day').textContent = DAYS_JP[dow] + '曜日';
-
-  // ゴミ捨て
-  const trashSec = document.getElementById('sec-trash');
-  const trashEl  = document.getElementById('trash-task');
-  if (trash) {
-    trashSec.style.display = '';
-    trashEl.innerHTML = '';
-    const done = getDayDone('trash');
-    const btn = makeTaskBtn('trash','🗑️', trash.icon+' '+trash.label,'今日のゴミ',done,trash.color,()=>toggleDay('trash'));
-    if (done) btn.style.borderColor = trash.color + '50';
+  // ゴミ
+  const trashSec=document.getElementById('sec-trash');
+  const trashEl=document.getElementById('trash-task');
+  if(trash){
+    trashSec.style.display='';trashEl.innerHTML='';
+    const done=getDayDone('trash');
+    const btn=makeBtn('🗑️',trash.icon+' '+trash.label,'今日のゴミ',done,trash.color,()=>toggleDay('trash'));
+    if(done)btn.style.borderColor=trash.color+'50';
     trashEl.appendChild(btn);
-  } else {
-    trashSec.style.display = 'none';
-  }
+  }else{trashSec.style.display='none';}
 
   // 掃除
-  const cleanEl = document.getElementById('clean-task');
-  cleanEl.innerHTML = '';
-  const cd = getDayDone('cleaning');
-  cleanEl.appendChild(makeTaskBtn('cleaning',clean.icon,clean.label,'',cd,'#7ab8d4',()=>toggleDay('cleaning')));
+  document.getElementById('clean-task').innerHTML='';
+  document.getElementById('clean-task').appendChild(makeBtn(clean.icon,clean.label,'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning')));
+
+  // 食事タスク
+  const mealEl=document.getElementById('meal-task');mealEl.innerHTML='';
+  const todayMeal=getMealToday();
+  const meal=todayMeal.menuId?getMealById(todayMeal.menuId):null;
+  if(!todayMeal.menuId){
+    const btn=document.createElement('button');
+    btn.className='task-btn';btn.style.justifyContent='center';
+    btn.innerHTML='<span style="font-size:15px;color:var(--green);font-weight:600">＋ メニューを選ぶ</span>';
+    btn.onclick=()=>setPage('meal');
+    mealEl.appendChild(btn);
+  }else{
+    const allDone=todayMeal.cooked&&todayMeal.eaten;
+    if(!todayMeal.cooked){
+      mealEl.appendChild(makeBtn(meal.emoji,meal.name+'を調理する','材料は準備OK？',false,'#e07b54',toggleMealCooked));
+    }else if(!todayMeal.eaten){
+      mealEl.appendChild(makeBtn(meal.emoji,meal.name+'を食べる','調理完了！',false,'#c4963a',toggleMealEaten));
+    }else{
+      mealEl.appendChild(makeBtn(meal.emoji,meal.name,'調理・食事完了',true,'#6fcf97',()=>{}));
+    }
+  }
 
   // 毎日タスク
-  const dailyEl = document.getElementById('daily-tasks');
-  dailyEl.innerHTML = '';
-  DAILY.forEach(t => {
-    const done = getDayDone(t.id);
-    dailyEl.appendChild(makeTaskBtn(t.id,t.icon,t.label,t.sub,done,'#6fcf97',()=>toggleDay(t.id)));
-  });
+  const dailyEl=document.getElementById('daily-tasks');dailyEl.innerHTML='';
+  DAILY_TASKS.forEach(t=>{dailyEl.appendChild(makeBtn(t.icon,t.label,t.sub,getDayDone(t.id),'#6fcf97',()=>toggleDay(t.id)));});
 
-  // 買い物リスト
-  const shopSec  = document.getElementById('sec-shop');
-  const shopEl   = document.getElementById('shop-chips');
-  const shopFoot = document.getElementById('shop-footer');
-  if (needed.length > 0) {
-    shopSec.style.display = '';
-    shopEl.innerHTML = '';
-    const grid = document.createElement('div');
-    grid.className = 'shop-grid';
-    let boughtCnt = 0;
-    needed.forEach(item => {
-      const bought = getBoughtToday(item.id);
-      if (bought) boughtCnt++;
-      const chip = document.createElement('button');
-      chip.className = 'shop-chip' + (bought ? ' bought' : '');
-      chip.onclick = () => toggleBought(item.id);
-      chip.innerHTML = `<span class="chip-check">${bought?'✓':''}</span><span>${item.text}</span>`;
+  // 買い物
+  const needed=getNeeded();
+  const shopSec=document.getElementById('sec-shop');
+  if(needed.length>0){
+    shopSec.style.display='';
+    const chips=document.getElementById('shop-chips');chips.innerHTML='';
+    const grid=document.createElement('div');grid.className='shop-grid';
+    let cnt=0;
+    needed.forEach(item=>{
+      const bought=getBoughtToday(item.id);if(bought)cnt++;
+      const chip=document.createElement('button');
+      chip.className='shop-chip'+(bought?' bought':'');chip.onclick=()=>toggleBought(item.id);
+      chip.innerHTML=`<span class="chip-chk">${bought?'✓':''}</span><span>${item.text}</span>`;
       grid.appendChild(chip);
     });
-    shopEl.appendChild(grid);
-    document.getElementById('shop-sec-label').textContent = `🛒 買い物リスト`;
-    shopFoot.textContent = `${boughtCnt}/${needed.length} 購入完了`;
-  } else {
-    shopSec.style.display = 'none';
-  }
+    chips.appendChild(grid);
+    document.getElementById('shop-footer').textContent=`${cnt}/${needed.length} 購入完了`;
+  }else{shopSec.style.display='none';}
 
   // 週タスク
-  const weekEl = document.getElementById('weekly-tasks');
-  weekEl.innerHTML = '';
-  WEEKLY.forEach(t => {
-    const done = getWeekDone(t.id);
-    weekEl.appendChild(makeTaskBtn(t.id,t.icon,t.label,t.sub,done,'#b08ac0',()=>toggleWeek(t.id)));
-  });
+  const weekEl=document.getElementById('weekly-tasks');weekEl.innerHTML='';
+  WEEKLY_TASKS.forEach(t=>{weekEl.appendChild(makeBtn(t.icon,t.label,t.sub,getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id)));});
 
   // 進捗リング
-  const trashBit   = trash && getDayDone('trash') ? 1 : 0;
-  const trashTotal = trash ? 1 : 0;
-  const cleanBit   = getDayDone('cleaning') ? 1 : 0;
-  const dailyBit   = DAILY.filter(t=>getDayDone(t.id)).length;
-  const shopBit    = (needed.length > 0 && needed.every(i=>getBoughtToday(i.id))) ? 1 : 0;
-  const shopTotal  = needed.length > 0 ? 1 : 0;
-  const weekBit    = WEEKLY.filter(t=>getWeekDone(t.id)).length;
-
-  const done  = trashBit + cleanBit + dailyBit + shopBit + weekBit;
-  const total = trashTotal + 1 + DAILY.length + shopTotal + WEEKLY.length;
-  const pct   = total > 0 ? Math.round(done/total*100) : 0;
-  const circ  = 2 * Math.PI * 24;
-
-  document.getElementById('ring-arc').style.strokeDashoffset = circ * (1 - pct/100);
-  document.getElementById('ring-pct').textContent = pct + '%';
-  document.getElementById('ring-sub').textContent = done + '/' + total;
+  const dow2=new Date().getDay();
+  const trashTotal=TRASH[dow2]?1:0;const trashBit=TRASH[dow2]&&getDayDone('trash')?1:0;
+  const mealDone=(getMealToday().cooked&&getMealToday().eaten)?1:0;const mealTotal=1;
+  const dailyBit=DAILY_TASKS.filter(t=>getDayDone(t.id)).length;
+  const shopBit=(needed.length>0&&needed.every(i=>getBoughtToday(i.id)))?1:0;
+  const shopTotal=needed.length>0?1:0;
+  const weekBit=WEEKLY_TASKS.filter(t=>getWeekDone(t.id)).length;
+  const done=trashBit+(getDayDone('cleaning')?1:0)+mealDone+dailyBit+shopBit+weekBit;
+  const total=trashTotal+1+mealTotal+DAILY_TASKS.length+shopTotal+WEEKLY_TASKS.length;
+  const pct=total>0?Math.round(done/total*100):0;
+  const circ=2*Math.PI*24;
+  document.getElementById('ring-arc').style.strokeDashoffset=circ*(1-pct/100);
+  document.getElementById('ring-pct').textContent=pct+'%';
+  document.getElementById('ring-sub').textContent=done+'/'+total;
 }
 
-// ─── 買い物ページ描画 ─────────────────────────────────────────
-function renderShopPage() {
-  const items = getShop();
-
-  // 必要チェックタブ
-  const checkEl = document.getElementById('check-list');
-  checkEl.innerHTML = '';
-  if (items.length === 0) {
-    checkEl.innerHTML = '<div class="empty-state"><div class="ei">📝</div><div class="et">リスト管理からアイテムを追加してください</div></div>';
-  } else {
-    items.forEach(item => {
-      const bought = getBoughtToday(item.id);
-      const row = document.createElement('div');
-      row.className = 'check-row' + (item.needed ? ' on' : '');
-      row.innerHTML = `
-        <button class="big-check ${item.needed?'on':''}" onclick="toggleNeeded('${item.id}')">${item.needed?'✓':''}</button>
-        <span class="check-lbl">${item.text}</span>
-        ${item.needed ? `<span class="badge ${bought?'done':''}">${bought?'購入済':'未購入'}</span>` : ''}
-      `;
-      checkEl.appendChild(row);
+// ════════════════════════════════════════════════════
+//  食事ページ描画
+// ════════════════════════════════════════════════════
+function shuffleRecs(){
+  const all=MEALS.map((_,i)=>i);
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  recIndexes=all.slice(0,5);
+  renderMealTab('rec');
+}
+function scoreMeal(meal){
+  let score=0;
+  meal.ings.forEach(ing=>{if(fridgeHas(ing.n))score++;});
+  const hist=Object.values(state.meals||{}).filter(m=>m.menuId===meal.id);
+  score-=hist.length*2;
+  return score;
+}
+function renderMealPage(){renderMealTab(currentMealTab);}
+function renderMealTab(t){
+  if(t==='rec'){
+    if(recIndexes.length===0){
+      const scored=MEALS.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);
+      recIndexes=scored.slice(0,5).map(x=>x.i);
+    }
+    const el=document.getElementById('meal-cards');el.innerHTML='';
+    const todayMeal=getMealToday();
+    recIndexes.forEach(idx=>{
+      const m=MEALS[idx];
+      const selected=todayMeal.menuId===m.id;
+      const avail=m.ings.filter(ing=>fridgeHas(ing.n)).length;
+      const card=document.createElement('button');
+      card.className='meal-card'+(selected?' selected':'');
+      card.onclick=()=>openRecipe(m.id);
+      card.innerHTML=`
+        <div class="mc-top">
+          <div class="mc-emoji">${m.emoji}</div>
+          <div class="mc-info">
+            <div class="mc-name">${m.name}</div>
+            <div class="mc-desc">${m.desc}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="mc-time">⏱ ${m.time}分</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">食材 ${avail}/${m.ings.length}</div>
+          </div>
+        </div>
+        <div class="mc-tags">${m.tags.map(t=>`<span class="mc-tag">${t}</span>`).join('')}</div>
+        <div class="mc-nutr">
+          <div class="mc-n"><span>${m.nutr.cal}</span> kcal</div>
+          <div class="mc-n"><span>${m.nutr.protein}g</span> 蛋白質</div>
+          <div class="mc-n"><span>${m.nutr.fat}g</span> 脂質</div>
+          <div class="mc-n"><span>${m.nutr.carb}g</span> 糖質</div>
+        </div>`;
+      el.appendChild(card);
     });
+  }else if(t==='today'){
+    const el=document.getElementById('today-meal-detail');el.innerHTML='';
+    const todayMeal=getMealToday();
+    if(!todayMeal.menuId){
+      el.innerHTML='<div class="empty-state"><div class="ei">🍳</div><div class="et">「おすすめ」からメニューを選んでください</div></div>';
+    }else{
+      const m=getMealById(todayMeal.menuId);if(!m)return;
+      el.innerHTML=`
+        <div class="recipe-header"><div class="r-emoji">${m.emoji}</div><div class="r-info"><h2>${m.name}</h2><p>${m.desc}・${m.time}分</p></div></div>
+        <div class="recipe-nutr">
+          <div class="rn"><div class="rn-val">${m.nutr.cal}</div><div class="rn-lbl">kcal</div></div>
+          <div class="rn"><div class="rn-val">${m.nutr.protein}g</div><div class="rn-lbl">蛋白質</div></div>
+          <div class="rn"><div class="rn-val">${m.nutr.fat}g</div><div class="rn-lbl">脂質</div></div>
+          <div class="rn"><div class="rn-val">${m.nutr.carb}g</div><div class="rn-lbl">糖質</div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:16px">
+          <button class="task-btn ${todayMeal.cooked?'done':''}" style="flex:1" onclick="toggleMealCooked()">
+            <div class="t-icon" style="background:${todayMeal.cooked?'rgba(111,207,151,0.2)':'rgba(255,255,255,0.05)'}">🍳</div>
+            <div class="t-info"><div class="t-lbl">調理した</div></div>
+            <div class="chk" style="${todayMeal.cooked?'background:#6fcf97;border-color:#6fcf97;color:#111a14':'border-color:rgba(255,255,255,0.18)'}">${todayMeal.cooked?'✓':''}</div>
+          </button>
+          <button class="task-btn ${todayMeal.eaten?'done':''}" style="flex:1" onclick="toggleMealEaten()">
+            <div class="t-icon" style="background:${todayMeal.eaten?'rgba(111,207,151,0.2)':'rgba(255,255,255,0.05)'}">😋</div>
+            <div class="t-info"><div class="t-lbl">食べた</div></div>
+            <div class="chk" style="${todayMeal.eaten?'background:#6fcf97;border-color:#6fcf97;color:#111a14':'border-color:rgba(255,255,255,0.18)'}">${todayMeal.eaten?'✓':''}</div>
+          </button>
+        </div>`;
+    }
+  }else if(t==='nutr'){
+    renderNutrition();
   }
+}
+function renderNutrition(){
+  const el=document.getElementById('nutr-detail');el.innerHTML='';
+  const weekMeals=Array.from({length:7},(_,i)=>{
+    const k=daysAgoStr(i);const m=(state.meals||{})[k];
+    return m?.menuId?getMealById(m.menuId):null;
+  }).filter(Boolean);
+  if(weekMeals.length===0){
+    el.innerHTML='<div class="empty-state"><div class="ei">📊</div><div class="et">まだ食事の記録がありません</div></div>';return;
+  }
+  const avg={cal:0,protein:0,fat:0,carb:0};
+  weekMeals.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});
+  const n=weekMeals.length;
+  el.innerHTML=`
+    <div style="margin-bottom:14px">
+      <div class="sec-label">過去7日間の平均栄養（${n}食分）</div>
+      <div class="recipe-nutr">
+        <div class="rn"><div class="rn-val">${Math.round(avg.cal/n)}</div><div class="rn-lbl">kcal</div></div>
+        <div class="rn"><div class="rn-val">${Math.round(avg.protein/n)}g</div><div class="rn-lbl">蛋白質</div></div>
+        <div class="rn"><div class="rn-val">${Math.round(avg.fat/n)}g</div><div class="rn-lbl">脂質</div></div>
+        <div class="rn"><div class="rn-val">${Math.round(avg.carb/n)}g</div><div class="rn-lbl">糖質</div></div>
+      </div>
+    </div>
+    <div class="sec-label">PFCバランス</div>
+    <div style="margin-bottom:16px">
+      ${[['蛋白質','#6fcf97',avg.protein/n*4],[' 脂質 ','#c4963a',avg.fat/n*9],['糖質  ','#7ab8d4',avg.carb/n*4]].map(([lbl,clr,v])=>{
+        const total=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1;
+        const pct=Math.round(v/total*100);
+        return `<div class="nutr-bar-row">
+          <div class="nutr-bar-label"><span style="color:${clr}">${lbl}</span><span>${pct}%</span></div>
+          <div class="nutr-bar-bg"><div class="nutr-bar" style="width:${pct}%;background:${clr}"></div></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="sec-label">今週の食事履歴</div>
+    ${weekMeals.map(m=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:24px">${m.emoji}</span><span style="font-size:14px;color:white">${m.name}</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">${m.nutr.cal}kcal</span></div>`).join('')}
+  `;
+}
 
-  // リスト管理タブ
-  const manageEl = document.getElementById('manage-list');
-  manageEl.innerHTML = '';
-  if (items.length === 0) {
-    manageEl.innerHTML = '<div class="empty-state"><div class="ei">🛒</div><div class="et">まだアイテムがありません</div></div>';
-  } else {
-    items.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'manage-row';
-      row.innerHTML = `
-        <span class="manage-dot">${item.needed?'🟢':'⚪'}</span>
-        <span class="manage-txt">${item.text}</span>
-        <button class="del-btn" onclick="deleteItem('${item.id}')">✕</button>
-      `;
-      manageEl.appendChild(row);
+// ════════════════════════════════════════════════════
+//  レシピモーダル
+// ════════════════════════════════════════════════════
+function openRecipe(mealId){
+  const m=getMealById(mealId);if(!m)return;
+  const todayMeal=getMealToday();
+  const isSelected=todayMeal.menuId===mealId;
+  document.getElementById('recipe-content').innerHTML=`
+    <div class="recipe-header"><div class="r-emoji">${m.emoji}</div><div class="r-info"><h2>${m.name}</h2><p>${m.desc}・⏱ ${m.time}分</p></div></div>
+    <div class="recipe-nutr">
+      <div class="rn"><div class="rn-val">${m.nutr.cal}</div><div class="rn-lbl">kcal</div></div>
+      <div class="rn"><div class="rn-val">${m.nutr.protein}g</div><div class="rn-lbl">蛋白質</div></div>
+      <div class="rn"><div class="rn-val">${m.nutr.fat}g</div><div class="rn-lbl">脂質</div></div>
+      <div class="rn"><div class="rn-val">${m.nutr.carb}g</div><div class="rn-lbl">糖質</div></div>
+    </div>
+    <div class="recipe-section">
+      <h3>材料</h3>
+      ${m.ings.map(ing=>{
+        const has=fridgeHas(ing.n);
+        return `<div class="ing-row"><span class="${has?'':'missing'}">${has?'✓':''} ${ing.n}</span><span>${ing.a}</span></div>`;
+      }).join('')}
+      ${m.ings.some(i=>!fridgeHas(i.n))?'<p style="font-size:11px;color:var(--orange);margin-top:6px">🟠 赤字の材料は冷蔵庫にありません（選ぶと買い物リストに追加）</p>':''}
+    </div>
+    <div class="recipe-section">
+      <h3>作り方</h3>
+      ${m.steps.map((s,i)=>`<div class="step-row"><div class="step-num">${i+1}</div><div class="step-txt">${s}</div></div>`).join('')}
+    </div>`;
+  document.getElementById('recipe-btns').innerHTML=`
+    <button class="m-btn s" onclick="closeRecipe()">閉じる</button>
+    <button class="m-btn p" onclick="selectMeal('${mealId}')">${isSelected?'✓ 選択済み':'今日のメニューにする'}</button>`;
+  document.getElementById('recipe-modal').classList.add('open');
+}
+function closeRecipe(){document.getElementById('recipe-modal').classList.remove('open');}
+
+// ════════════════════════════════════════════════════
+//  在庫ページ描画
+// ════════════════════════════════════════════════════
+function renderStockPage(){renderStockTab(currentStockTab);}
+function renderStockTab(t){
+  if(t==='fridge'){
+    const el=document.getElementById('fridge-list');el.innerHTML='';
+    const items=getFridge();
+    if(items.length===0){el.innerHTML='<div class="empty-state"><div class="ei">🧊</div><div class="et">冷蔵庫に食材を追加してください</div></div>';return;}
+    items.forEach(f=>{
+      const row=document.createElement('div');row.className='fridge-item';
+      row.innerHTML=`<span class="fi-name">${f.name}</span><span class="fi-amt">${f.amt}</span><button class="fi-del" onclick="deleteFridge('${f.id}')">✕</button>`;
+      el.appendChild(row);
+    });
+  }else{
+    const el=document.getElementById('staples-list');el.innerHTML='';
+    const cats=[...new Set(STAPLES_MASTER.map(m=>m.cat))];
+    cats.forEach(cat=>{
+      const header=document.createElement('div');header.className='cat-header';header.textContent=cat;el.appendChild(header);
+      STAPLES_MASTER.filter(m=>m.cat===cat).forEach(master=>{
+        const stpl=getStaples()[master.id]||{name:master.name,cat:master.cat,status:'ok'};
+        const row=document.createElement('div');row.className='stock-item';
+        row.innerHTML=`
+          <span class="si-name">${master.name}</span>
+          <div class="si-status">
+            <button class="status-btn s-ok${stpl.status==='ok'?' ring':''}" onclick="setStapleStatus('${master.id}','ok')" style="${stpl.status==='ok'?'border:2px solid var(--green)':'border:none'}">在庫あり</button>
+            <button class="status-btn s-low${stpl.status==='low'?' ring':''}" onclick="setStapleStatus('${master.id}','low')" style="${stpl.status==='low'?'border:2px solid var(--gold)':'border:none'}">残り少</button>
+            <button class="status-btn s-out${stpl.status==='out'?' ring':''}" onclick="setStapleStatus('${master.id}','out')" style="${stpl.status==='out'?'border:2px solid var(--red)':'border:none'}">切れ</button>
+          </div>`;
+        el.appendChild(row);
+      });
     });
   }
 }
 
-// ─── 履歴・分析描画 ───────────────────────────────────────────
-function renderHistory() {
-  const dow = new Date().getDay();
-  const trash = TRASH[dow];
+// ════════════════════════════════════════════════════
+//  買い物ページ描画
+// ════════════════════════════════════════════════════
+function renderShopPage(){renderShopTab(currentShopTab);}
+function renderShopTab(t){
+  if(t==='check'){
+    const el=document.getElementById('shop-check-content');el.innerHTML='';
+    const all=state.shopping||[];
+    const cats=['補充品','食材','その他'];
+    let hasAny=false;
+    cats.forEach(cat=>{
+      const items=all.filter(i=>i.needed&&(i.cat||'その他')===cat);
+      if(items.length===0)return;
+      hasAny=true;
+      const lbl=document.createElement('div');lbl.className='shop-cat-label';
+      lbl.textContent={補充品:'📦 補充品',食材:'🍳 食材',その他:'📝 その他'}[cat];
+      el.appendChild(lbl);
+      items.forEach(item=>{
+        const bought=getBoughtToday(item.id);
+        const row=document.createElement('div');row.className='check-row'+(item.needed?' on':'');
+        row.innerHTML=`
+          <button class="big-chk${bought?' on':''}" onclick="toggleBought('${item.id}')">${bought?'✓':''}</button>
+          <span class="cr-lbl">${item.text}</span>
+          <span class="badge${bought?' done':''}">${bought?'購入済':'未購入'}</span>`;
+        el.appendChild(row);
+      });
+    });
+    if(!hasAny)el.innerHTML='<div class="empty-state"><div class="ei">🛒</div><div class="et">買い物リストは空です</div></div>';
+  }else{
+    const el=document.getElementById('manage-list');el.innerHTML='';
+    const all=(state.shopping||[]).filter(i=>!i.id.startsWith('stpl_'));
+    if(all.length===0){el.innerHTML='<div class="empty-state"><div class="ei">📝</div><div class="et">アイテムを追加してください</div></div>';return;}
+    all.forEach(item=>{
+      const row=document.createElement('div');row.className='manage-row';
+      row.innerHTML=`
+        <button class="big-chk${item.needed?' on':''}" onclick="toggleNeeded('${item.id}')">${item.needed?'✓':''}</button>
+        <span class="mr-txt">${item.text}</span>
+        <span style="font-size:11px;color:var(--muted);margin-right:8px">${{補充品:'📦',食材:'🍳',その他:'📝'}[item.cat||'その他']}</span>
+        <button class="del-btn" onclick="deleteItem('${item.id}')">✕</button>`;
+      el.appendChild(row);
+    });
+  }
+}
 
-  // 今日の完了数
-  const todayDone = HIST_IDS.filter(id => {
-    if (id === 'carwash' || id === 'bedding') return getWeekDone(id);
-    if (id === 'trash') return trash && getDayDone('trash');
+// ════════════════════════════════════════════════════
+//  記録ページ描画
+// ════════════════════════════════════════════════════
+function renderHistory(){
+  const dow=new Date().getDay();
+  const todayDone=HIST_IDS.filter(id=>{
+    if(id==='carwash'||id==='bedding')return getWeekDone(id);
+    if(id==='trash')return TRASH[dow]&&getDayDone('trash');
+    if(id==='meal')return getMealToday().cooked&&getMealToday().eaten;
     return getDayDone(id);
   }).length;
-
-  // ストリーク計算（1日前から）
-  let streak = 0;
-  for (let i = 1; i <= 60; i++) {
-    const k = daysAgoStr(i);
-    const d = state.days[k];
-    if (d && HIST_IDS.some(id => d[id])) streak++;
-    else break;
+  let streak=0;
+  for(let i=1;i<=60;i++){
+    const k=daysAgoStr(i);const d=state.days[k];
+    if(d&&HIST_IDS.some(id=>d[id]))streak++;else break;
   }
+  const recordDays=Object.keys(state.days||{}).filter(k=>{const d=state.days[k];return d&&HIST_IDS.some(id=>d[id]);}).length;
+  document.getElementById('st-streak').textContent='🔥 '+streak;
+  document.getElementById('st-today').textContent='✅ '+todayDone;
+  document.getElementById('st-days').textContent='📅 '+recordDays;
 
-  // 記録日数
-  const recordDays = Object.keys(state.days).filter(k => {
-    const d = state.days[k];
-    return d && HIST_IDS.some(id => d[id]);
-  }).length;
-
-  document.getElementById('st-streak').textContent = '🔥 ' + streak;
-  document.getElementById('st-today').textContent  = '✅ ' + todayDone;
-  document.getElementById('st-days').textContent   = '📅 ' + recordDays;
-
-  // 14日間チャート
-  const labels = [], data = [], colors = [];
-  for (let i = 13; i >= 1; i--) {
-    const k = daysAgoStr(i);
-    const d = state.days[k] || {};
-    const cnt = HIST_IDS.filter(id => d[id]).length;
-    const dt = new Date(); dt.setDate(dt.getDate() - i);
+  const labels=[],data=[],colors=[];
+  for(let i=13;i>=1;i--){
+    const k=daysAgoStr(i);const d=state.days[k]||{};
+    const cnt=HIST_IDS.filter(id=>d[id]).length;
+    const dt=new Date();dt.setDate(dt.getDate()-i);
     labels.push(`${dt.getMonth()+1}/${dt.getDate()}`);
-    data.push(cnt);
-    colors.push(cnt >= 7 ? '#6fcf97' : cnt >= 4 ? '#3a8f6a' : cnt >= 1 ? '#1e5a42' : '#152e22');
+    data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');
   }
+  if(histChart)histChart.destroy();
+  const ctx=document.getElementById('hist-chart').getContext('2d');
+  histChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' タスク完了'},backgroundColor:'#1a2b1e',titleColor:'rgba(255,255,255,0.6)',bodyColor:'#6fcf97',borderColor:'rgba(111,207,151,0.2)',borderWidth:1}},
+      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},stepSize:1},beginAtZero:true}}}});
 
-  if (histChart) histChart.destroy();
-  const ctx = document.getElementById('hist-chart').getContext('2d');
-  histChart = new Chart(ctx, {
-    type: 'bar',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderRadius: 6, borderSkipped: false }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend:{ display:false }, tooltip:{
-        callbacks:{ label: ctx => ctx.parsed.y + ' タスク完了' },
-        backgroundColor:'#1a2b1e', titleColor:'rgba(255,255,255,0.6)',
-        bodyColor:'#6fcf97', borderColor:'rgba(111,207,151,0.2)', borderWidth:1,
-      }},
-      scales: {
-        x: { grid:{ display:false }, ticks:{ color:'rgba(255,255,255,0.35)', font:{size:10} } },
-        y: { grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'rgba(255,255,255,0.35)', font:{size:10}, stepSize:1 }, beginAtZero:true },
-      }
-    }
-  });
-
-  // タスク別達成率（過去30日）
-  const daysWithData = Array.from({length:30},(_,i)=>daysAgoStr(i+1))
-    .filter(k => state.days[k] && HIST_IDS.some(id => state.days[k][id])).length;
-
-  const stats = HIST_IDS.map(id => {
-    const done = Array.from({length:30},(_,i)=>daysAgoStr(i+1))
-      .filter(k => state.days[k]?.[id]).length;
-    const pct = daysWithData > 0 ? Math.round(done/daysWithData*100) : 0;
-    return { id, label:TASK_LABELS[id], pct };
-  }).sort((a,b) => b.pct - a.pct);
-
-  const statsEl = document.getElementById('task-stats');
-  statsEl.innerHTML = '';
-  stats.forEach(({ label, pct }) => {
-    const color = pct >= 70 ? '#6fcf97' : pct >= 40 ? '#3a8f6a' : '#1e5a42';
-    const row = document.createElement('div');
-    row.className = 'ts-item';
-    row.innerHTML = `
-      <div class="ts-label">${label}</div>
-      <div class="ts-bar-bg"><div class="ts-bar" style="width:${pct}%;background:${color}"></div></div>
-      <div class="ts-pct">${pct}<span style="font-size:10px">%</span></div>
-    `;
+  const daysWithData=Array.from({length:30},(_,i)=>daysAgoStr(i+1)).filter(k=>state.days[k]&&HIST_IDS.some(id=>state.days[k][id])).length;
+  const statsEl=document.getElementById('task-stats');statsEl.innerHTML='';
+  HIST_IDS.map(id=>{
+    const done=Array.from({length:30},(_,i)=>daysAgoStr(i+1)).filter(k=>state.days[k]?.[id]).length;
+    const pct=daysWithData>0?Math.round(done/daysWithData*100):0;
+    return{id,label:TASK_LABELS[id],pct};
+  }).sort((a,b)=>b.pct-a.pct).forEach(({label,pct})=>{
+    const color=pct>=70?'#6fcf97':pct>=40?'#3a8f6a':'#1e5a42';
+    const row=document.createElement('div');row.className='ts-item';
+    row.innerHTML=`<div class="ts-lbl">${label}</div><div class="ts-bg"><div class="ts-bar" style="width:${pct}%;background:${color}"></div></div><div class="ts-pct" style="color:${color}">${pct}%</div>`;
     statsEl.appendChild(row);
   });
 }
 
-// ─── 全体描画 ────────────────────────────────────────────────
-function renderAll() {
-  renderHome();
-  renderShopPage();
-}
+// ════════════════════════════════════════════════════
+//  全体描画
+// ════════════════════════════════════════════════════
+function renderAll(){renderHome();renderShopPage();renderMealPage();renderStockPage();}
 
-// ─── 起動 ────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════
+//  起動
+// ════════════════════════════════════════════════════
 loadLocal();
 renderAll();
 pullFromCloud();
-setInterval(pullFromCloud, 5 * 60 * 1000); // 5分ごとに同期
+setInterval(pullFromCloud,5*60*1000);
 </script>
 </body>
 </html>
