@@ -475,27 +475,62 @@ function saveLocal(){localStorage.setItem('dts',JSON.stringify(state));}
 function saveCfg(){localStorage.setItem('dtc',JSON.stringify(cfg));}
 
 // JSONBin
+// タイムアウト付きfetch（10秒）
+async function fetchTimeout(url,options){
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),10000);
+  try{
+    const r=await fetch(url,{...options,signal:ctrl.signal});
+    clearTimeout(tid);return r;
+  }catch(e){clearTimeout(tid);throw e;}
+}
+
 async function pushToCloud(){
-  if(!cfg.apiKey)return;
+  if(!cfg.apiKey)return false;
   try{
     if(!cfg.binId){
-      const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},body:JSON.stringify(state)});
+      const r=await fetchTimeout('https://api.jsonbin.io/v3/b',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},
+        body:JSON.stringify(state)
+      });
+      if(!r.ok){const t=await r.text();throw new Error(`HTTP ${r.status} - ${t.slice(0,80)}`);}
       const j=await r.json();
-      if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();document.getElementById('cfg-binid').value=cfg.binId;showSync('✅ 同期開始！Bin ID: '+cfg.binId,true);}
+      if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();
+        const el=document.getElementById('cfg-binid');if(el)el.value=cfg.binId;}
+      return true;
     }else{
-      await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(state)});
+      const r=await fetchTimeout(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{
+        method:'PUT',
+        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
+        body:JSON.stringify(state)
+      });
+      if(!r.ok){const t=await r.text();throw new Error(`HTTP ${r.status} - ${t.slice(0,80)}`);}
+      return true;
     }
-  }catch(e){console.error(e);}
+  }catch(e){
+    console.error('push error',e);
+    return e.name==='AbortError'?'timeout':e.message;
+  }
 }
+
 async function pullFromCloud(){
-  if(!cfg.apiKey||!cfg.binId)return;
+  if(!cfg.apiKey||!cfg.binId)return false;
   try{
-    const r=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{headers:{'X-Master-Key':cfg.apiKey}});
+    const r=await fetchTimeout(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
+      headers:{'X-Master-Key':cfg.apiKey}
+    });
+    if(!r.ok){const t=await r.text();throw new Error(`HTTP ${r.status} - ${t.slice(0,80)}`);}
     const j=await r.json();
     if(j.record){state=j.record;saveLocal();renderAll();}
-  }catch(e){console.error(e);}
+    return true;
+  }catch(e){
+    console.error('pull error',e);
+    return e.name==='AbortError'?'timeout':e.message;
+  }
 }
-function schedulePush(){clearTimeout(syncTimer);syncTimer=setTimeout(pushToCloud,1500);}
+
+function schedulePush(){clearTimeout(syncTimer);syncTimer=setTimeout(async()=>{await pushToCloud();},1500);}
 
 // ════════════════════════════════════════════════════
 //  設定
@@ -507,12 +542,26 @@ function openSettings(){
   document.getElementById('settings-modal').classList.add('open');
 }
 function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
-function showSync(msg,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=msg;}
+function showSync(msg,ok){
+  const el=document.getElementById('sync-status');
+  el.className=ok?'sync-ok':'sync-err';el.textContent=msg;
+}
 async function saveSettings(){
-  cfg.apiKey=document.getElementById('cfg-apikey').value.trim();
-  cfg.binId=document.getElementById('cfg-binid').value.trim();
-  saveCfg();showSync('🔄 接続中...',true);
-  if(cfg.binId)await pullFromCloud();else await pushToCloud();
+  const apiKey=document.getElementById('cfg-apikey').value.trim();
+  const binId=document.getElementById('cfg-binid').value.trim();
+  if(!apiKey){showSync('❌ APIキーを入力してください',false);return;}
+  cfg.apiKey=apiKey;cfg.binId=binId;saveCfg();
+  showSync('🔄 接続中...',true);
+  let result;
+  if(cfg.binId){
+    result=await pullFromCloud();
+    if(result===true){showSync('✅ 同期完了！データを取得しました',true);}
+    else{showSync('❌ エラー: '+(result==='timeout'?'タイムアウト（10秒）。APIキーとBin IDを確認してください':result),false);}
+  }else{
+    result=await pushToCloud();
+    if(result===true){showSync('✅ 新規Bin作成完了！Bin ID: '+cfg.binId,true);}
+    else{showSync('❌ エラー: '+(result==='timeout'?'タイムアウト（10秒）。APIキーを確認してください':result),false);}
+  }
   renderAll();
 }
 
