@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="デイリータスク">
+<title>🌿 デイリータスク</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+:root {
+  --bg: #111a14; --bg2: #1a2b1e; --bg3: #223028;
+  --green: #6fcf97; --green2: #27ae60; --green3: rgba(111,207,151,0.12);
+  --blue: #7ab8d4; --purple: #b08ac0; --orange: #e07b54; --gold: #c4963a;
+  --text: #e8f5e9; --muted: rgba(232,245,233,0.45); --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.07); --radius: 18px; --nav-h: 72px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+body { background: linear-gradient(155deg, #0e1710 0%, #111a14 50%, #131520 100%); min-height: 100vh; font-family: 'Noto Sans JP', sans-serif; color: var(--text); overflow-x: hidden; padding-bottom: var(--nav-h); }
+
+/* ─── PAGES ─── */
+.page { display: none; max-width: 480px; margin: 0 auto; padding: 0 14px; }
+.page.active { display: block; }
+
+/* ─── HEADER ─── */
+.header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0 18px; }
+.h-left .date-small { color: rgba(111,207,151,0.65); font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
+.h-left .date-main { color: white; font-size: 24px; font-weight: 700; }
+.h-right { display: flex; align-items: center; gap: 12px; }
+.gear-btn { background: none; border: none; font-size: 22px; cursor: pointer; opacity: 0.6; padding: 4px; }
+
+/* ─── PROGRESS RING ─── */
+.ring-wrap { display: flex; flex-direction: column; align-items: center; }
+.ring-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── SECTION ─── */
+.sec { margin-bottom: 20px; }
+.sec-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-left: 2px; }
+
+/* ─── TASK BUTTON (large, mobile-friendly) ─── */
+.task-btn {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 16px;
+  min-height: 72px; margin-bottom: 10px; cursor: pointer;
+  transition: all 0.2s ease; text-align: left;
+  -webkit-appearance: none; appearance: none;
+}
+.task-btn:active { transform: scale(0.97); }
+.task-btn.done { background: rgba(111,207,151,0.07); }
+.task-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 26px; transition: background 0.25s; }
+.task-info { flex: 1; }
+.task-label { color: white; font-size: 17px; font-weight: 600; margin-bottom: 3px; }
+.task-btn.done .task-label { color: var(--muted); text-decoration: line-through; }
+.task-sub { color: var(--muted); font-size: 13px; }
+.check-circle {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; transition: all 0.25s ease;
+  border: 2px solid rgba(255,255,255,0.18); background: transparent;
+}
+.task-btn.done .check-circle { color: #111a14; }
+
+/* ─── SHOPPING CHIPS ─── */
+.shop-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.shop-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 30px; padding: 10px 18px; min-height: 44px;
+  cursor: pointer; font-size: 15px; color: white; font-family: inherit;
+  transition: all 0.2s;
+}
+.shop-chip:active { transform: scale(0.95); }
+.shop-chip.bought { background: rgba(111,207,151,0.1); border-color: rgba(111,207,151,0.3); opacity: 0.55; }
+.shop-chip .chip-check { color: var(--green); font-weight: 800; min-width: 14px; font-size: 14px; }
+.shop-chip.bought span:last-child { text-decoration: line-through; color: var(--muted); }
+.shop-footer { font-size: 12px; color: var(--muted); margin-top: 6px; padding-left: 4px; }
+
+/* ─── STAT CARDS ─── */
+.stat-row { display: flex; gap: 10px; margin-bottom: 22px; }
+.stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.stat-num { font-size: 28px; font-weight: 700; }
+.stat-lbl { font-size: 11px; color: var(--muted); text-align: center; }
+
+/* ─── CHART ─── */
+.chart-wrap { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 16px 8px 10px; }
+.chart-wrap canvas { max-height: 180px; }
+
+/* ─── TASK STAT BARS ─── */
+.ts-item { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+.ts-label { font-size: 13px; color: rgba(232,245,233,0.65); width: 108px; flex-shrink: 0; }
+.ts-bar-bg { flex: 1; height: 9px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; }
+.ts-bar { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+.ts-pct { font-size: 14px; font-weight: 700; color: white; width: 38px; text-align: right; }
+
+/* ─── SHOPPING PAGE ─── */
+.tab-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 13px; padding: 12px 8px; color: var(--muted); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; min-height: 48px; }
+.tab-btn.on { background: rgba(111,207,151,0.12); border-color: rgba(111,207,151,0.25); color: var(--green); }
+.hint-txt { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+.check-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 16px; margin-bottom: 9px; min-height: 60px; }
+.big-check { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); background: transparent; display: flex; align-items: center; justify-content: center; color: #111a14; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; font-family: inherit; }
+.big-check.on { background: var(--green); border-color: var(--green); }
+.check-lbl { flex: 1; font-size: 16px; color: var(--muted); }
+.check-row.on .check-lbl { color: white; font-weight: 600; }
+.badge { font-size: 11px; padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+.badge.done { background: rgba(111,207,151,0.15); border-color: rgba(111,207,151,0.3); color: var(--green); }
+.input-row { display: flex; gap: 10px; margin-bottom: 16px; }
+.input-row input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 15px 16px; color: white; font-size: 16px; outline: none; font-family: inherit; min-height: 54px; }
+.input-row input::placeholder { color: var(--muted); }
+.add-btn { background: var(--green); border: none; border-radius: 14px; padding: 15px 20px; color: #111a14; font-weight: 700; font-size: 16px; cursor: pointer; font-family: inherit; min-height: 54px; }
+.manage-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px 16px; margin-bottom: 9px; min-height: 60px; }
+.manage-dot { font-size: 16px; }
+.manage-txt { flex: 1; font-size: 16px; color: white; }
+.del-btn { background: none; border: none; color: rgba(255,80,80,0.5); font-size: 18px; cursor: pointer; padding: 6px; border-radius: 8px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; padding: 50px 20px; gap: 10px; }
+.empty-state .ei { font-size: 44px; }
+.empty-state .et { font-size: 14px; color: var(--muted); }
+
+/* ─── BOTTOM NAV ─── */
+#bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(12,20,14,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.07); display: flex; z-index: 100; }
+.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: none; border: none; color: var(--muted); cursor: pointer; font-family: inherit; padding-bottom: env(safe-area-inset-bottom, 0); position: relative; }
+.nav-btn .nav-icon { font-size: 26px; }
+.nav-btn .nav-lbl { font-size: 11px; }
+.nav-btn.on { color: var(--green); }
+.nav-dot { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0) + 7px); width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+/* ─── SETTINGS MODAL ─── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 200; align-items: flex-end; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: #1a2b1e; border-radius: 24px 24px 0 0; padding: 28px 20px 40px; width: 100%; max-width: 480px; margin: 0 auto; }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.modal-row { margin-bottom: 14px; }
+.modal-row label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: 1px; }
+.modal-row input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 13px 14px; color: white; font-size: 14px; outline: none; font-family: monospace; }
+.modal-btns { display: flex; gap: 10px; margin-top: 18px; }
+.m-btn { flex: 1; padding: 15px; border-radius: 14px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 54px; }
+.m-btn.primary { background: var(--green); color: #111a14; }
+.m-btn.secondary { background: rgba(255,255,255,0.08); color: white; }
+.sync-status { font-size: 12px; margin-top: 10px; padding: 8px 12px; border-radius: 10px; }
+.sync-ok { background: rgba(111,207,151,0.1); color: var(--green); }
+.sync-err { background: rgba(255,80,80,0.1); color: #f87171; }
+
+/* ─── MISC ─── */
+.spacer { height: 16px; }
+</style>
+</head>
+<body>
+
+<!-- ホームページ -->
+<div id="page-home" class="page active">
+  <div class="header">
+    <div class="h-left">
+      <div class="date-small" id="hdr-date"></div>
+      <div class="date-main" id="hdr-day"></div>
+    </div>
+    <div class="h-right">
+      <button class="gear-btn" onclick="openSettings()">⚙️</button>
+      <div class="ring-wrap">
+        <svg id="progress-ring" width="60" height="60" viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+          <circle id="ring-arc" cx="30" cy="30" r="24" fill="none" stroke="#6fcf97" stroke-width="4"
+            stroke-linecap="round" transform="rotate(-90 30 30)"
+            stroke-dasharray="150.8" stroke-dashoffset="150.8"
+            style="transition:stroke-dashoffset 0.6s ease"/>
+          <text x="30" y="35" text-anchor="middle" fill="white" font-size="13" font-weight="700" id="ring-pct">0%</text>
+        </svg>
+        <div class="ring-sub" id="ring-sub">0/0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ゴミ捨て -->
+  <div class="sec" id="sec-trash" style="display:none">
+    <div class="sec-label">🗑️ ゴミ捨て</div>
+    <div id="trash-task"></div>
+  </div>
+
+  <!-- 掃除 -->
+  <div class="sec">
+    <div class="sec-label">🧹 今日の掃除</div>
+    <div id="clean-task"></div>
+  </div>
+
+  <!-- 毎日タスク -->
+  <div class="sec">
+    <div class="sec-label">📋 毎日タスク</div>
+    <div id="daily-tasks"></div>
+  </div>
+
+  <!-- 買い物リスト -->
+  <div class="sec" id="sec-shop" style="display:none">
+    <div class="sec-label" id="shop-sec-label">🛒 買い物リスト</div>
+    <div id="shop-chips"></div>
+    <div class="shop-footer" id="shop-footer"></div>
+  </div>
+
+  <!-- 週タスク -->
+  <div class="sec">
+    <div class="sec-label">📅 今週のタスク</div>
+    <div id="weekly-tasks"></div>
+  </div>
+
+  <div style="height:20px"></div>
+</div>
+
+<!-- 買い物ページ -->
+<div id="page-shop" class="page">
+  <div class="header">
+    <div class="h-left">
+      <div class="date-main">🛒 買い物リスト</div>
+    </div>
+  </div>
+  <div class="tab-row">
+    <button class="tab-btn on" id="tab-check" onclick="setShopTab('check')">✅ 必要チェック</button>
+    <button class="tab-btn" id="tab-manage" onclick="setShopTab('manage')">⚙️ リスト管理</button>
+  </div>
+  <div id="shop-check-view">
+    <p class="hint-txt">必要なものをチェック → ホームのタスクに表示されます</p>
+    <div id="check-list"></div>
+  </div>
+  <div id="shop-manage-view" style="display:none">
+    <div class="input-row">
+      <input type="text" id="new-item-input" placeholder="アイテムを入力..." onkeydown="if(event.key==='Enter')addItem()">
+      <button class="add-btn" onclick="addItem()">追加</button>
+    </div>
+    <div id="manage-list"></div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- 記録ページ -->
+<div id="page-hist" class="page">
+  <div class="header">
+    <div class="h-left">
+      <div class="date-main">📊 記録・分析</div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num" id="st-streak" style="color:#e07b54">🔥 0</div>
+      <div class="stat-lbl">連続達成日</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-today" style="color:#6fcf97">✅ 0</div>
+      <div class="stat-lbl">今日の完了</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="st-days" style="color:#b08ac0">📅 0</div>
+      <div class="stat-lbl">記録日数</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-label">📈 直近14日間（完了タスク数）</div>
+    <div class="chart-wrap">
+      <canvas id="hist-chart"></canvas>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-label">🏅 タスク別達成率（30日間）</div>
+    <div id="task-stats"></div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- ボトムナビ -->
+<nav id="bottom-nav">
+  <button class="nav-btn on" id="nav-home" onclick="setPage('home')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-lbl">ホーム</span>
+    <div class="nav-dot"></div>
+  </button>
+  <button class="nav-btn" id="nav-shop" onclick="setPage('shop')">
+    <span class="nav-icon">🛒</span>
+    <span class="nav-lbl">買い物</span>
+  </button>
+  <button class="nav-btn" id="nav-hist" onclick="setPage('hist')">
+    <span class="nav-icon">📊</span>
+    <span class="nav-lbl">記録</span>
+  </button>
+</nav>
+
+<!-- 設定モーダル -->
+<div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeSettings()">
+  <div class="modal-box">
+    <div class="modal-title">⚙️ クラウド同期設定</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">JSONBin.io（無料）を使用してスマホ・PCのデータを同期します。</p>
+    <div class="modal-row">
+      <label>API KEY（Secret Key）</label>
+      <input type="password" id="cfg-apikey" placeholder="$2b$10$..." autocomplete="off">
+    </div>
+    <div class="modal-row">
+      <label>BIN ID（初回は空白でOK）</label>
+      <input type="text" id="cfg-binid" placeholder="自動生成されます">
+    </div>
+    <div id="sync-status"></div>
+    <div class="modal-btns">
+      <button class="m-btn primary" onclick="saveSettings()">🚀 同期を開始</button>
+      <button class="m-btn secondary" onclick="closeSettings()">閉じる</button>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6">
+      設定手順: <a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → 登録 → API Keys → Secret Key をコピー → ここに貼り付け
+    </p>
+  </div>
+</div>
+
+<script>
+// ─── 定数 ──────────────────────────────────────────────────────
+const DAYS_JP = ['日','月','火','水','木','金','土'];
+
+const TRASH = {
+  1: { label:'燃えるゴミ',  icon:'🔥', color:'#e07b54' },
+  2: { label:'燃えないゴミ',icon:'🚯', color:'#7a8fa6' },
+  3: { label:'ペットボトル', icon:'♻️', color:'#4a9e7f' },
+  4: { label:'燃えるゴミ',  icon:'🔥', color:'#e07b54' },
+  5: { label:'瓶・缶ゴミ',  icon:'🍶', color:'#c4963a' },
+};
+
+const CLEANING = {
+  0: { icon:'🚪', label:'玄関掃除' },
+  1: { icon:'🍳', label:'キッチン掃除' },
+  2: { icon:'🛁', label:'浴室掃除' },
+  3: { icon:'🪥', label:'洗面所掃除' },
+  4: { icon:'🧹', label:'床掃除' },
+  5: { icon:'🛋️', label:'リビング掃除' },
+  6: { icon:'🪟', label:'窓・ベランダ掃除' },
+};
+
+const DAILY = [
+  { id:'meditation', icon:'🧘', label:'瞑想',       sub:'5分' },
+  { id:'reading',    icon:'📖', label:'読書',       sub:'20ページ' },
+  { id:'toilet',     icon:'🚿', label:'トイレ掃除', sub:'' },
+  { id:'walk',       icon:'🚶', label:'散歩',       sub:'' },
+  { id:'hunting',    icon:'🎯', label:'狩猟免許勉強',sub:'' },
+];
+
+const WEEKLY = [
+  { id:'carwash', icon:'🚗', label:'洗車',       sub:'週1回' },
+  { id:'bedding', icon:'🛏️', label:'布団関連洗濯', sub:'週1回' },
+];
+
+const TASK_LABELS = {
+  trash:'ゴミ捨て', cleaning:'掃除',
+  meditation:'瞑想', reading:'読書', toilet:'トイレ掃除',
+  walk:'散歩', hunting:'狩猟免許勉強',
+  carwash:'洗車', bedding:'布団洗濯',
+};
+const HIST_IDS = Object.keys(TASK_LABELS);
+
+// ─── 状態 ──────────────────────────────────────────────────────
+let state = { days:{}, weeks:{}, shopping:[], bought:{} };
+let cfg = { apiKey:'', binId:'' };
+let histChart = null;
+let currentShopTab = 'check';
+let syncTimer = null;
+
+// ─── 日付ユーティリティ ──────────────────────────────────────
+const pad = n => String(n).padStart(2,'0');
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function mondayStr() {
+  const d = new Date(), dow = d.getDay();
+  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function daysAgoStr(n) {
+  const d = new Date(); d.setDate(d.getDate() - n);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function mondayForDate(iso) {
+  const d = new Date(iso), dow = d.getDay();
+  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+
+// ─── ローカルストレージ ───────────────────────────────────────
+function loadLocal() {
+  try {
+    const s = localStorage.getItem('daily_tasks_state');
+    if (s) state = JSON.parse(s);
+    const c = localStorage.getItem('daily_tasks_cfg');
+    if (c) cfg = JSON.parse(c);
+  } catch(e) {}
+}
+function saveLocal() {
+  localStorage.setItem('daily_tasks_state', JSON.stringify(state));
+}
+function saveCfg() {
+  localStorage.setItem('daily_tasks_cfg', JSON.stringify(cfg));
+}
+
+// ─── JSONBin同期 ─────────────────────────────────────────────
+async function pushToCloud() {
+  if (!cfg.apiKey) return;
+  try {
+    if (!cfg.binId) {
+      const r = await fetch('https://api.jsonbin.io/v3/b', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'X-Master-Key':cfg.apiKey, 'X-Bin-Name':'DailyTasks' },
+        body: JSON.stringify(state)
+      });
+      const j = await r.json();
+      if (j.metadata?.id) {
+        cfg.binId = j.metadata.id;
+        saveCfg();
+        document.getElementById('cfg-binid').value = cfg.binId;
+        showSyncStatus('✅ 同期開始！Bin ID: ' + cfg.binId, true);
+      }
+    } else {
+      await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
+        method:'PUT',
+        headers:{ 'Content-Type':'application/json', 'X-Master-Key':cfg.apiKey },
+        body: JSON.stringify(state)
+      });
+    }
+  } catch(e) { console.error('push error', e); }
+}
+
+async function pullFromCloud() {
+  if (!cfg.apiKey || !cfg.binId) return;
+  try {
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
+      headers:{ 'X-Master-Key':cfg.apiKey }
+    });
+    const j = await r.json();
+    if (j.record) {
+      state = j.record;
+      saveLocal();
+      renderAll();
+    }
+  } catch(e) { console.error('pull error', e); }
+}
+
+// ─── 設定モーダル ────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('cfg-apikey').value = cfg.apiKey || '';
+  document.getElementById('cfg-binid').value  = cfg.binId  || '';
+  document.getElementById('sync-status').innerHTML = '';
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+function showSyncStatus(msg, ok) {
+  const el = document.getElementById('sync-status');
+  el.className = 'sync-status ' + (ok ? 'sync-ok' : 'sync-err');
+  el.textContent = msg;
+}
+async function saveSettings() {
+  cfg.apiKey = document.getElementById('cfg-apikey').value.trim();
+  cfg.binId  = document.getElementById('cfg-binid').value.trim();
+  saveCfg();
+  showSyncStatus('🔄 接続中...', true);
+  if (cfg.binId) {
+    await pullFromCloud();
+    showSyncStatus('✅ 同期完了！', true);
+  } else {
+    await pushToCloud();
+  }
+  renderAll();
+}
+
+// ─── ページ切替 ──────────────────────────────────────────────
+function setPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('on');
+    const dot = b.querySelector('.nav-dot');
+    if (dot) dot.remove();
+  });
+  document.getElementById('page-' + id).classList.add('active');
+  const nb = document.getElementById('nav-' + id);
+  nb.classList.add('on');
+  if (!nb.querySelector('.nav-dot')) {
+    const d = document.createElement('div');
+    d.className = 'nav-dot';
+    nb.appendChild(d);
+  }
+  if (id === 'hist') renderHistory();
+}
+
+// ─── 買い物タブ ──────────────────────────────────────────────
+function setShopTab(tab) {
+  currentShopTab = tab;
+  document.getElementById('tab-check').className  = 'tab-btn' + (tab==='check' ? ' on':'');
+  document.getElementById('tab-manage').className = 'tab-btn' + (tab==='manage'? ' on':'');
+  document.getElementById('shop-check-view').style.display  = tab==='check'  ? '' : 'none';
+  document.getElementById('shop-manage-view').style.display = tab==='manage' ? '' : 'none';
+  renderShopPage();
+}
+
+// ─── データ取得ヘルパー ───────────────────────────────────────
+const getDay  = (k) => state.days[k]   || {};
+const getWeek = (k) => state.weeks[k]  || {};
+const getShop = ()  => state.shopping  || [];
+const getBought = (k) => state.bought[k] || {};
+
+function getDayDone(id)   { return !!getDay(todayStr())[id]; }
+function getWeekDone(id)  { return !!getWeek(mondayStr())[id]; }
+function getNeeded()      { return getShop().filter(i => i.needed); }
+function getBoughtToday(id) { return !!getBought(todayStr())[id]; }
+
+// ─── トグル処理 ───────────────────────────────────────────────
+function toggleDay(id) {
+  const k = todayStr();
+  if (!state.days[k]) state.days[k] = {};
+  state.days[k][id] = !state.days[k][id];
+  // 週タスクも今日のスナップショットに含める
+  WEEKLY.forEach(t => { state.days[k][t.id] = getWeekDone(t.id); });
+  saveLocal();
+  schedulePush();
+  renderAll();
+}
+
+function toggleWeek(id) {
+  const k = mondayStr(), dk = todayStr();
+  if (!state.weeks[k]) state.weeks[k] = {};
+  state.weeks[k][id] = !state.weeks[k][id];
+  // 日次スナップショットにも反映
+  if (!state.days[dk]) state.days[dk] = {};
+  state.days[dk][id] = state.weeks[k][id];
+  saveLocal();
+  schedulePush();
+  renderAll();
+}
+
+function toggleBought(id) {
+  const k = todayStr();
+  if (!state.bought[k]) state.bought[k] = {};
+  state.bought[k][id] = !state.bought[k][id];
+  saveLocal();
+  schedulePush();
+  renderHome();
+  if (document.getElementById('page-shop').classList.contains('active')) renderShopPage();
+}
+
+function toggleNeeded(id) {
+  state.shopping = getShop().map(i => i.id === id ? {...i, needed:!i.needed} : i);
+  saveLocal();
+  schedulePush();
+  renderHome();
+  renderShopPage();
+}
+
+function addItem() {
+  const inp = document.getElementById('new-item-input');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  state.shopping = [...getShop(), { id: Date.now().toString(), text:txt, needed:true }];
+  inp.value = '';
+  saveLocal();
+  schedulePush();
+  renderShopPage();
+  renderHome();
+}
+
+function deleteItem(id) {
+  state.shopping = getShop().filter(i => i.id !== id);
+  Object.keys(state.bought).forEach(k => { delete state.bought[k][id]; });
+  saveLocal();
+  schedulePush();
+  renderShopPage();
+  renderHome();
+}
+
+function schedulePush() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushToCloud, 1500);
+}
+
+// ─── タスクボタン生成 ─────────────────────────────────────────
+function makeTaskBtn(id, icon, label, sub, done, accent, onClick) {
+  const btn = document.createElement('button');
+  btn.className = 'task-btn' + (done ? ' done' : '');
+  btn.onclick = onClick;
+
+  const ic = document.createElement('div');
+  ic.className = 'task-icon';
+  ic.style.background = done ? (accent||'#6fcf97') + '28' : 'rgba(255,255,255,0.05)';
+  ic.textContent = icon;
+
+  const info = document.createElement('div');
+  info.className = 'task-info';
+  const lbl = document.createElement('div');
+  lbl.className = 'task-label';
+  lbl.textContent = label;
+  info.appendChild(lbl);
+  if (sub) {
+    const s = document.createElement('div');
+    s.className = 'task-sub';
+    s.textContent = sub;
+    info.appendChild(s);
+  }
+
+  const chk = document.createElement('div');
+  chk.className = 'check-circle';
+  if (done) {
+    chk.textContent = '✓';
+    chk.style.background = accent || '#6fcf97';
+    chk.style.border = '2px solid ' + (accent || '#6fcf97');
+  }
+
+  btn.appendChild(ic);
+  btn.appendChild(info);
+  btn.appendChild(chk);
+  return btn;
+}
+
+// ─── ホーム描画 ───────────────────────────────────────────────
+function renderHome() {
+  const dow = new Date().getDay();
+  const trash = TRASH[dow];
+  const clean = CLEANING[dow];
+  const needed = getNeeded();
+
+  // ヘッダー
+  const d = new Date();
+  document.getElementById('hdr-date').textContent =
+    d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
+  document.getElementById('hdr-day').textContent = DAYS_JP[dow] + '曜日';
+
+  // ゴミ捨て
+  const trashSec = document.getElementById('sec-trash');
+  const trashEl  = document.getElementById('trash-task');
+  if (trash) {
+    trashSec.style.display = '';
+    trashEl.innerHTML = '';
+    const done = getDayDone('trash');
+    const btn = makeTaskBtn('trash','🗑️', trash.icon+' '+trash.label,'今日のゴミ',done,trash.color,()=>toggleDay('trash'));
+    if (done) btn.style.borderColor = trash.color + '50';
+    trashEl.appendChild(btn);
+  } else {
+    trashSec.style.display = 'none';
+  }
+
+  // 掃除
+  const cleanEl = document.getElementById('clean-task');
+  cleanEl.innerHTML = '';
+  const cd = getDayDone('cleaning');
+  cleanEl.appendChild(makeTaskBtn('cleaning',clean.icon,clean.label,'',cd,'#7ab8d4',()=>toggleDay('cleaning')));
+
+  // 毎日タスク
+  const dailyEl = document.getElementById('daily-tasks');
+  dailyEl.innerHTML = '';
+  DAILY.forEach(t => {
+    const done = getDayDone(t.id);
+    dailyEl.appendChild(makeTaskBtn(t.id,t.icon,t.label,t.sub,done,'#6fcf97',()=>toggleDay(t.id)));
+  });
+
+  // 買い物リスト
+  const shopSec  = document.getElementById('sec-shop');
+  const shopEl   = document.getElementById('shop-chips');
+  const shopFoot = document.getElementById('shop-footer');
+  if (needed.length > 0) {
+    shopSec.style.display = '';
+    shopEl.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'shop-grid';
+    let boughtCnt = 0;
+    needed.forEach(item => {
+      const bought = getBoughtToday(item.id);
+      if (bought) boughtCnt++;
+      const chip = document.createElement('button');
+      chip.className = 'shop-chip' + (bought ? ' bought' : '');
+      chip.onclick = () => toggleBought(item.id);
+      chip.innerHTML = `<span class="chip-check">${bought?'✓':''}</span><span>${item.text}</span>`;
+      grid.appendChild(chip);
+    });
+    shopEl.appendChild(grid);
+    document.getElementById('shop-sec-label').textContent = `🛒 買い物リスト`;
+    shopFoot.textContent = `${boughtCnt}/${needed.length} 購入完了`;
+  } else {
+    shopSec.style.display = 'none';
+  }
+
+  // 週タスク
+  const weekEl = document.getElementById('weekly-tasks');
+  weekEl.innerHTML = '';
+  WEEKLY.forEach(t => {
+    const done = getWeekDone(t.id);
+    weekEl.appendChild(makeTaskBtn(t.id,t.icon,t.label,t.sub,done,'#b08ac0',()=>toggleWeek(t.id)));
+  });
+
+  // 進捗リング
+  const trashBit   = trash && getDayDone('trash') ? 1 : 0;
+  const trashTotal = trash ? 1 : 0;
+  const cleanBit   = getDayDone('cleaning') ? 1 : 0;
+  const dailyBit   = DAILY.filter(t=>getDayDone(t.id)).length;
+  const shopBit    = (needed.length > 0 && needed.every(i=>getBoughtToday(i.id))) ? 1 : 0;
+  const shopTotal  = needed.length > 0 ? 1 : 0;
+  const weekBit    = WEEKLY.filter(t=>getWeekDone(t.id)).length;
+
+  const done  = trashBit + cleanBit + dailyBit + shopBit + weekBit;
+  const total = trashTotal + 1 + DAILY.length + shopTotal + WEEKLY.length;
+  const pct   = total > 0 ? Math.round(done/total*100) : 0;
+  const circ  = 2 * Math.PI * 24;
+
+  document.getElementById('ring-arc').style.strokeDashoffset = circ * (1 - pct/100);
+  document.getElementById('ring-pct').textContent = pct + '%';
+  document.getElementById('ring-sub').textContent = done + '/' + total;
+}
+
+// ─── 買い物ページ描画 ─────────────────────────────────────────
+function renderShopPage() {
+  const items = getShop();
+
+  // 必要チェックタブ
+  const checkEl = document.getElementById('check-list');
+  checkEl.innerHTML = '';
+  if (items.length === 0) {
+    checkEl.innerHTML = '<div class="empty-state"><div class="ei">📝</div><div class="et">リスト管理からアイテムを追加してください</div></div>';
+  } else {
+    items.forEach(item => {
+      const bought = getBoughtToday(item.id);
+      const row = document.createElement('div');
+      row.className = 'check-row' + (item.needed ? ' on' : '');
+      row.innerHTML = `
+        <button class="big-check ${item.needed?'on':''}" onclick="toggleNeeded('${item.id}')">${item.needed?'✓':''}</button>
+        <span class="check-lbl">${item.text}</span>
+        ${item.needed ? `<span class="badge ${bought?'done':''}">${bought?'購入済':'未購入'}</span>` : ''}
+      `;
+      checkEl.appendChild(row);
+    });
+  }
+
+  // リスト管理タブ
+  const manageEl = document.getElementById('manage-list');
+  manageEl.innerHTML = '';
+  if (items.length === 0) {
+    manageEl.innerHTML = '<div class="empty-state"><div class="ei">🛒</div><div class="et">まだアイテムがありません</div></div>';
+  } else {
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'manage-row';
+      row.innerHTML = `
+        <span class="manage-dot">${item.needed?'🟢':'⚪'}</span>
+        <span class="manage-txt">${item.text}</span>
+        <button class="del-btn" onclick="deleteItem('${item.id}')">✕</button>
+      `;
+      manageEl.appendChild(row);
+    });
+  }
+}
+
+// ─── 履歴・分析描画 ───────────────────────────────────────────
+function renderHistory() {
+  const dow = new Date().getDay();
+  const trash = TRASH[dow];
+
+  // 今日の完了数
+  const todayDone = HIST_IDS.filter(id => {
+    if (id === 'carwash' || id === 'bedding') return getWeekDone(id);
+    if (id === 'trash') return trash && getDayDone('trash');
+    return getDayDone(id);
+  }).length;
+
+  // ストリーク計算（1日前から）
+  let streak = 0;
+  for (let i = 1; i <= 60; i++) {
+    const k = daysAgoStr(i);
+    const d = state.days[k];
+    if (d && HIST_IDS.some(id => d[id])) streak++;
+    else break;
+  }
+
+  // 記録日数
+  const recordDays = Object.keys(state.days).filter(k => {
+    const d = state.days[k];
+    return d && HIST_IDS.some(id => d[id]);
+  }).length;
+
+  document.getElementById('st-streak').textContent = '🔥 ' + streak;
+  document.getElementById('st-today').textContent  = '✅ ' + todayDone;
+  document.getElementById('st-days').textContent   = '📅 ' + recordDays;
+
+  // 14日間チャート
+  const labels = [], data = [], colors = [];
+  for (let i = 13; i >= 1; i--) {
+    const k = daysAgoStr(i);
+    const d = state.days[k] || {};
+    const cnt = HIST_IDS.filter(id => d[id]).length;
+    const dt = new Date(); dt.setDate(dt.getDate() - i);
+    labels.push(`${dt.getMonth()+1}/${dt.getDate()}`);
+    data.push(cnt);
+    colors.push(cnt >= 7 ? '#6fcf97' : cnt >= 4 ? '#3a8f6a' : cnt >= 1 ? '#1e5a42' : '#152e22');
+  }
+
+  if (histChart) histChart.destroy();
+  const ctx = document.getElementById('hist-chart').getContext('2d');
+  histChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderRadius: 6, borderSkipped: false }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{ display:false }, tooltip:{
+        callbacks:{ label: ctx => ctx.parsed.y + ' タスク完了' },
+        backgroundColor:'#1a2b1e', titleColor:'rgba(255,255,255,0.6)',
+        bodyColor:'#6fcf97', borderColor:'rgba(111,207,151,0.2)', borderWidth:1,
+      }},
+      scales: {
+        x: { grid:{ display:false }, ticks:{ color:'rgba(255,255,255,0.35)', font:{size:10} } },
+        y: { grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'rgba(255,255,255,0.35)', font:{size:10}, stepSize:1 }, beginAtZero:true },
+      }
+    }
+  });
+
+  // タスク別達成率（過去30日）
+  const daysWithData = Array.from({length:30},(_,i)=>daysAgoStr(i+1))
+    .filter(k => state.days[k] && HIST_IDS.some(id => state.days[k][id])).length;
+
+  const stats = HIST_IDS.map(id => {
+    const done = Array.from({length:30},(_,i)=>daysAgoStr(i+1))
+      .filter(k => state.days[k]?.[id]).length;
+    const pct = daysWithData > 0 ? Math.round(done/daysWithData*100) : 0;
+    return { id, label:TASK_LABELS[id], pct };
+  }).sort((a,b) => b.pct - a.pct);
+
+  const statsEl = document.getElementById('task-stats');
+  statsEl.innerHTML = '';
+  stats.forEach(({ label, pct }) => {
+    const color = pct >= 70 ? '#6fcf97' : pct >= 40 ? '#3a8f6a' : '#1e5a42';
+    const row = document.createElement('div');
+    row.className = 'ts-item';
+    row.innerHTML = `
+      <div class="ts-label">${label}</div>
+      <div class="ts-bar-bg"><div class="ts-bar" style="width:${pct}%;background:${color}"></div></div>
+      <div class="ts-pct">${pct}<span style="font-size:10px">%</span></div>
+    `;
+    statsEl.appendChild(row);
+  });
+}
+
+// ─── 全体描画 ────────────────────────────────────────────────
+function renderAll() {
+  renderHome();
+  renderShopPage();
+}
+
+// ─── 起動 ────────────────────────────────────────────────────
+loadLocal();
+renderAll();
+pullFromCloud();
+setInterval(pullFromCloud, 5 * 60 * 1000); // 5分ごとに同期
+</script>
+</body>
+</html>
