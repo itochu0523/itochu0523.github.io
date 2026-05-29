@@ -162,6 +162,32 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .input-row input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;}
 .input-row input::placeholder{color:var(--muted);}
 .pill-btn{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:20px;padding:8px 16px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+
+/* Drink tracking */
+.drink-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.drink-icon{font-size:24px;width:36px;text-align:center;flex-shrink:0;}
+.drink-info{flex:1;}
+.drink-name{font-size:14px;font-weight:600;color:white;margin-bottom:3px;}
+.drink-prog-bg{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+.drink-prog{height:100%;border-radius:3px;transition:width 0.4s ease;}
+.drink-amt{font-size:12px;color:var(--muted);text-align:right;min-width:54px;}
+.drink-btns{display:flex;gap:4px;flex-shrink:0;}
+.drink-add{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.2);border-radius:10px;padding:6px 10px;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;}
+/* Rating stars */
+.star-row{display:flex;gap:6px;margin:10px 0;}
+.star{font-size:32px;cursor:pointer;transition:transform 0.15s;line-height:1;}
+.star:hover{transform:scale(1.2);}
+/* Feedback modal */
+.fb-modal{background:#1a2b1e;border-radius:24px 24px 0 0;padding:22px 18px 36px;width:100%;max-width:480px;margin:0 auto;}
+/* Qty input */
+.qty-row{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:7px;min-height:58px;}
+.qty-name{flex:1;font-size:14px;color:white;}
+.qty-inp{width:52px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 8px;color:white;font-size:15px;text-align:center;outline:none;font-family:inherit;}
+.qty-unit{font-size:12px;color:var(--muted);min-width:24px;}
+.qty-alert{font-size:11px;padding:3px 8px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;}
+.qa-ok{background:rgba(111,207,151,0.12);color:var(--green);}
+.qa-warn{background:rgba(196,150,58,0.15);color:var(--gold);}
+.qa-out{background:rgba(248,113,113,0.15);color:var(--red);}
 </style>
 </head>
 <body>
@@ -184,6 +210,7 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
       </div>
     </div>
   </div>
+  <div class="sec" id="sec-drinks"><div class="sec-label">💧 今日の水分</div><div id="drink-widget"></div></div>
   <div id="sec-trash" class="sec" style="display:none"><div class="sec-label">🗑️ ゴミ捨て</div><div id="trash-task"></div></div>
   <div class="sec"><div class="sec-label">🧹 今日の掃除</div><div id="clean-task"></div></div>
   <div class="sec"><div class="sec-label">🍳 今日の食事</div><div id="meal-task"></div></div>
@@ -202,16 +229,33 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   <div class="header"><div class="h-left"><div class="dm">🍳 食事管理</div></div></div>
   <div class="tab-row">
     <button class="tab-btn on" id="mt-rec" onclick="setMealTab('rec')">おすすめ</button>
-    <button class="tab-btn" id="mt-today" onclick="setMealTab('today')">今日の献立</button>
+    <button class="tab-btn" id="mt-custom" onclick="setMealTab('custom')">➕ 追加</button>
+    <button class="tab-btn" id="mt-eatout" onclick="setMealTab('eatout')">🍽️ 外食</button>
     <button class="tab-btn" id="mt-nutr" onclick="setMealTab('nutr')">栄養</button>
   </div>
   <div id="meal-rec-view">
     <p class="hint-txt">冷蔵庫の在庫と最近の食事履歴をもとにおすすめしています</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <span style="font-size:13px;color:var(--muted)">おすすめメニュー</span>
-      <button class="pill-btn" onclick="shuffleRecs()">🔀 別のメニュー</button>
+      <span style="font-size:13px;color:var(--muted)">おすすめメニュー（全<span id="meal-count">0</span>品）</span>
+      <button class="pill-btn" onclick="shuffleRecs()">🔀 シャッフル</button>
     </div>
     <div id="meal-cards" class="meal-cards"></div>
+  </div>
+  <div id="meal-custom-view" style="display:none">
+    <p class="hint-txt">オリジナルメニューを追加できます。AIレシピ生成はClaudeのAPIキーが必要です（⚙️から設定）</p>
+    <div class="input-row"><input type="text" id="custom-name" placeholder="料理名を入力..."><button class="green-btn" onclick="generateRecipe()" id="ai-gen-btn">🤖 AIで生成</button></div>
+    <div id="ai-result" style="display:none"></div>
+    <div id="custom-list"></div>
+  </div>
+  <div id="meal-eatout-view" style="display:none">
+    <p class="hint-txt">外食した内容を記録します</p>
+    <div id="eatout-today-section"></div>
+    <div class="sec-label" style="margin-top:8px">今日の外食を記録</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="cuisine-btns"></div>
+    <div class="input-row"><input type="text" id="eatout-restaurant" placeholder="店名（例：○○寿司、スタバ）" style="flex:1"></div>
+    <div class="input-row"><input type="text" id="eatout-dish" placeholder="料理名・注文内容（例：マグロ丼、ラテ）" style="flex:1"><button class="green-btn" onclick="logEatOutV2()">記録</button></div>
+    <div class="sec-label" style="margin-top:4px">外食履歴（直近）</div>
+    <div id="eatout-history"></div>
   </div>
   <div id="meal-today-view" style="display:none">
     <div id="today-meal-detail"></div>
@@ -238,7 +282,7 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
     <div id="fridge-list"></div>
   </div>
   <div id="stock-staples-view" style="display:none">
-    <p class="hint-txt">「残り少」「切れ」にすると買い物リストに自動追加されます</p>
+    <p class="hint-txt">個数を入力して管理。設定個数以下になると買い物リストに自動追加されます</p>
     <div id="staples-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -296,10 +340,43 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
       <button class="m-btn p" onclick="saveSettings()">🚀 同期を開始</button>
       <button class="m-btn s" onclick="closeSettings()">閉じる</button>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6"><a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → 登録 → API Keys → Secret Key をコピー → ここに貼り付け</p>
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <div class="modal-title" style="font-size:15px">🤖 AIレシピ生成（任意）</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">Claude APIキーを設定するとカスタムメニュー追加時にAIがレシピを自動生成します</p>
+    <div class="m-row"><label>Anthropic API KEY（任意）</label><input type="password" id="cfg-anthropic" placeholder="sk-ant-..." autocomplete="off"></div>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6"><a href="https://console.anthropic.com" target="_blank" style="color:var(--green)">console.anthropic.com</a> → API Keys → Create Key</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6"><a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → Secret Key をコピー</p>
   </div>
 </div>
 
+<!-- カスタムメニュープレビューモーダル -->
+<div class="modal-ov" id="custom-preview-modal" onclick="if(event.target===this)closeCustomPreview()">
+  <div class="modal-box">
+    <div class="modal-title">✨ 生成されたレシピを確認</div>
+    <div id="custom-preview-content"></div>
+    <div class="m-btns">
+      <button class="m-btn s" onclick="closeCustomPreview()">キャンセル</button>
+      <button class="m-btn p" onclick="saveCustomMeal()">✅ このレシピで保存</button>
+    </div>
+  </div>
+</div>
+<!-- フィードバックモーダル -->
+<div class="modal-ov" id="feedback-modal" onclick="if(event.target===this)closeFeedback()">
+  <div class="fb-modal">
+    <div class="modal-title">⭐ 食事の評価</div>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:8px" id="fb-meal-name"></p>
+    <div class="star-row" id="fb-stars"></div>
+    <div style="margin-bottom:14px">
+      <textarea id="fb-note" placeholder="感想・改善メモ（例：醤油を少し減らすと良い、食感が好き）"
+        style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px"></textarea>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6">★3以下＋コメントあり → Claude APIでレシピ改善ヒントを自動生成（APIキー設定時）</p>
+    <div class="m-btns">
+      <button class="m-btn s" onclick="closeFeedback()">スキップ</button>
+      <button class="m-btn p" onclick="saveFeedback()">✅ 保存</button>
+    </div>
+  </div>
+</div>
 <!-- レシピモーダル -->
 <div class="modal-ov" id="recipe-modal" onclick="if(event.target===this)closeRecipe()">
   <div class="modal-box">
@@ -372,73 +449,88 @@ const STAPLES_MASTER=[
 
 // 食事データベース
 const MEALS=[
-  {id:'m01',emoji:'🍗',name:'鶏の照り焼き',desc:'甘辛ジューシーな定番おかず',tags:['和食','鶏肉'],time:20,
-   nutr:{cal:420,protein:35,fat:18,carb:22},
-   ings:[{n:'鶏もも肉',a:'250g'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ2'},{n:'酒',a:'大さじ1'},{n:'砂糖',a:'小さじ1'}],
-   steps:['鶏もも肉の皮にフォークで穴を開ける','フライパンで皮目から中火で5分焼く','裏返して3分焼く','醤油・みりん・酒・砂糖のタレを加えて絡める','タレが煮詰まったら完成']},
-  {id:'m02',emoji:'🥩',name:'豚の生姜焼き',desc:'ご飯が進む生姜の効いた豚炒め',tags:['和食','豚肉'],time:15,
-   nutr:{cal:380,protein:28,fat:16,carb:24},
-   ings:[{n:'豚ロース薄切り',a:'200g'},{n:'玉ねぎ',a:'1/2個'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ1'},{n:'生姜すりおろし',a:'1かけ'}],
-   steps:['玉ねぎを薄切りにする','豚肉に醤油・みりん・生姜を揉み込む（10分）','油を熱し玉ねぎを炒め、透き通ったら脇に寄せる','豚肉を加え両面焼く','全体を混ぜながらタレを絡めて完成']},
-  {id:'m03',emoji:'🍲',name:'肉じゃが',desc:'ほっこり温まる家庭の味',tags:['和食','牛肉','作り置き'],time:35,
-   nutr:{cal:350,protein:20,fat:10,carb:42},
-   ings:[{n:'牛薄切り肉',a:'150g'},{n:'じゃがいも',a:'3個'},{n:'玉ねぎ',a:'1個'},{n:'にんじん',a:'1本'},{n:'醤油',a:'大さじ3'},{n:'砂糖',a:'大さじ2'},{n:'みりん',a:'大さじ2'}],
-   steps:['じゃがいも・にんじん・玉ねぎを切る','油で牛肉を炒め、野菜を加えて炒める','だし汁・醤油・砂糖・みりんを加える','落し蓋をして中火で20分煮る','じゃがいもが柔らかくなったら完成']},
-  {id:'m04',emoji:'🥚',name:'親子丼',desc:'ふわとろ卵と鶏肉の黄金コンビ',tags:['和食','鶏肉','丼'],time:20,
-   nutr:{cal:480,protein:30,fat:14,carb:54},
-   ings:[{n:'鶏もも肉',a:'150g'},{n:'卵',a:'3個'},{n:'玉ねぎ',a:'1/2個'},{n:'だし汁',a:'150ml'},{n:'醤油',a:'大さじ2'},{n:'みりん',a:'大さじ2'},{n:'ご飯',a:'1人分'}],
-   steps:['鶏肉と玉ねぎを切る','だし・醤油・みりんで煮汁を作る','鶏肉と玉ねぎを煮汁で煮る','溶き卵を2回に分けて加え、半熟で火を止める','ご飯の上に乗せて完成']},
-  {id:'m05',emoji:'🍛',name:'野菜カレー',desc:'具だくさんで栄養満点',tags:['カレー','野菜','作り置き'],time:40,
-   nutr:{cal:520,protein:15,fat:18,carb:70},
-   ings:[{n:'玉ねぎ',a:'2個'},{n:'にんじん',a:'1本'},{n:'じゃがいも',a:'2個'},{n:'カレールー',a:'3かけ'},{n:'トマト缶',a:'1/2缶'}],
-   steps:['野菜を一口大に切る','玉ねぎをあめ色になるまで炒める（15分）','野菜を加えて炒め、水とトマト缶を加える','15分煮てルーを溶かす','さらに10分煮て完成']},
-  {id:'m06',emoji:'🍚',name:'チャーハン',desc:'パラパラ炒めた本格炒飯',tags:['中華','ご飯'],time:15,
-   nutr:{cal:460,protein:18,fat:16,carb:58},
-   ings:[{n:'ご飯',a:'1人分（冷ご飯）'},{n:'卵',a:'2個'},{n:'長ねぎ',a:'1/3本'},{n:'醤油',a:'大さじ1'},{n:'ごま油',a:'小さじ1'},{n:'塩こしょう',a:'適量'}],
-   steps:['ご飯は冷たいものを使う','強火で油を熱し溶き卵を入れる','卵が半熟のうちにご飯を加えてほぐす','長ねぎを加えて炒める','醤油・塩こしょう・ごま油で味を整える']},
-  {id:'m07',emoji:'🐟',name:'鮭の塩焼き定食',desc:'シンプルで体に優しい定食',tags:['和食','魚'],time:15,
-   nutr:{cal:360,protein:32,fat:14,carb:30},
-   ings:[{n:'鮭の切り身',a:'2切れ'},{n:'塩',a:'少量'},{n:'レモン',a:'1/4個'},{n:'ご飯',a:'1人分'},{n:'味噌汁の具',a:'適量'}],
-   steps:['鮭に塩を振り10分置く','水気を拭いてフライパンで中火3分焼く','裏返してさらに3分焼く','レモンを絞って完成','味噌汁・ご飯と一緒に盛り付け']},
-  {id:'m08',emoji:'🍝',name:'ペペロンチーノ',desc:'シンプルなにんにくオイルパスタ',tags:['パスタ','洋食'],time:20,
-   nutr:{cal:440,protein:14,fat:18,carb:56},
-   ings:[{n:'スパゲッティ',a:'100g'},{n:'にんにく',a:'2かけ'},{n:'鷹の爪',a:'1本'},{n:'オリーブオイル',a:'大さじ3'},{n:'塩',a:'適量'},{n:'パスタの茹で汁',a:'50ml'}],
-   steps:['塩を加えたお湯でパスタを表示通り茹でる','フライパンにオリーブオイル・にんにく・鷹の爪を入れ弱火で熱する','にんにくが黄金色になったらパスタの茹で汁を加える','茹で上がったパスタを加え乳化させる','塩で味を整えて完成']},
-  {id:'m09',emoji:'🥡',name:'麻婆豆腐',desc:'ピリ辛でご飯が止まらない',tags:['中華','豆腐'],time:20,
-   nutr:{cal:350,protein:22,fat:18,carb:20},
-   ings:[{n:'木綿豆腐',a:'1丁'},{n:'豚ひき肉',a:'100g'},{n:'長ねぎ',a:'1/2本'},{n:'豆板醤',a:'小さじ1'},{n:'醤油',a:'大さじ1'},{n:'片栗粉',a:'大さじ1'},{n:'ごま油',a:'少量'}],
-   steps:['豆腐を一口大に切り水切りする','ひき肉を炒め豆板醤を加えて香りを出す','水・醤油・ねぎを加えて煮立てる','豆腐を加えて3分煮る','水溶き片栗粉でとろみをつけごま油を垂らす']},
-  {id:'m10',emoji:'🥗',name:'蒸し鶏サラダ',desc:'さっぱりヘルシーな主菜サラダ',tags:['洋食','鶏肉','ヘルシー'],time:25,
-   nutr:{cal:280,protein:30,fat:10,carb:12},
-   ings:[{n:'鶏むね肉',a:'200g'},{n:'レタス',a:'1/4玉'},{n:'きゅうり',a:'1本'},{n:'トマト',a:'1個'},{n:'ポン酢',a:'大さじ2'},{n:'ごま油',a:'小さじ1'}],
-   steps:['鶏肉に塩をすり込む','耐熱容器に入れラップし電子レンジ600Wで4分','そのまま5分置いて余熱で火を通す','粗熱が取れたら手で裂く','野菜を切り盛り付け、ポン酢・ごま油をかける']},
-  {id:'m11',emoji:'🥟',name:'餃子',desc:'カリカリジューシーな手作り餃子',tags:['中華','豚肉'],time:40,
-   nutr:{cal:420,protein:22,fat:20,carb:36},
-   ings:[{n:'餃子の皮',a:'20枚'},{n:'豚ひき肉',a:'150g'},{n:'キャベツ',a:'1/4個'},{n:'にんにく',a:'1かけ'},{n:'生姜',a:'1かけ'},{n:'醤油',a:'大さじ1'},{n:'ごま油',a:'小さじ1'}],
-   steps:['キャベツをみじん切りにし塩もみして絞る','ひき肉・野菜・調味料を混ぜて餡を作る','皮に包んで端を折りたたむ','フライパンに並べて焼き色をつける','水を加えて蓋をし蒸し焼きにして完成']},
-  {id:'m12',emoji:'🍜',name:'豚汁うどん',desc:'具だくさんの豚汁とうどんの組み合わせ',tags:['和食','豚肉'],time:25,
-   nutr:{cal:450,protein:25,fat:14,carb:52},
-   ings:[{n:'豚バラ薄切り',a:'100g'},{n:'うどん',a:'1玉'},{n:'大根',a:'1/4本'},{n:'にんじん',a:'1/2本'},{n:'ごぼう',a:'1/3本'},{n:'味噌',a:'大さじ2'},{n:'だし汁',a:'600ml'}],
-   steps:['野菜を切り豚肉を2cm幅に切る','鍋で豚肉を炒め、野菜を加えて炒める','だし汁を加えて野菜が柔らかくなるまで煮る','味噌を溶く','うどんを加えて温め完成']},
-  {id:'m13',emoji:'🍳',name:'オムライス',desc:'ケチャップご飯をふわとろ卵で包む',tags:['洋食','卵'],time:20,
-   nutr:{cal:520,protein:20,fat:20,carb:60},
-   ings:[{n:'ご飯',a:'1人分'},{n:'卵',a:'3個'},{n:'鶏むね肉',a:'80g'},{n:'玉ねぎ',a:'1/4個'},{n:'ケチャップ',a:'大さじ3'},{n:'バター',a:'10g'}],
-   steps:['鶏肉・玉ねぎを炒め、ご飯を加えてケチャップで炒める','ケチャップライスをラップで楕円形に成形する','溶き卵を薄くのばしバターで焼く','卵でご飯を包んで盛り付ける','ケチャップをかけて完成']},
-  {id:'m14',emoji:'🐄',name:'牛丼',desc:'甘辛牛肉とたまねぎのさっと煮',tags:['和食','牛肉','丼'],time:20,
-   nutr:{cal:580,protein:28,fat:20,carb:66},
-   ings:[{n:'牛バラ薄切り',a:'200g'},{n:'玉ねぎ',a:'1個'},{n:'醤油',a:'大さじ3'},{n:'みりん',a:'大さじ2'},{n:'砂糖',a:'大さじ1'},{n:'だし汁',a:'200ml'},{n:'ご飯',a:'1人分'}],
-   steps:['玉ねぎを薄切りにする','だし・醤油・みりん・砂糖で煮汁を作る','玉ねぎを煮汁で2分煮る','牛肉を加えてさっと煮る（煮過ぎない）','ご飯の上に乗せて完成']},
-  {id:'m15',emoji:'🥦',name:'野菜炒め定食',desc:'色々な野菜をシャキシャキ炒め',tags:['和食','野菜','ヘルシー'],time:15,
-   nutr:{cal:280,protein:12,fat:12,carb:30},
-   ings:[{n:'もやし',a:'1袋'},{n:'キャベツ',a:'1/4個'},{n:'にんじん',a:'1/2本'},{n:'豚バラ',a:'80g'},{n:'醤油',a:'大さじ1'},{n:'オイスターソース',a:'大さじ1'},{n:'ごま油',a:'少量'}],
-   steps:['野菜を食べやすい大きさに切る','強火で豚肉を炒める','にんじん→キャベツ→もやしの順に加える','醤油・オイスターソースで味付け','ごま油を回しかけて完成']},
+  {id:"m01",emoji:"🍗",name:"鶏の照り焼き",desc:"甘辛ジューシーな定番おかず",tags:["和食","鶏肉"],time:20,nutr:{cal:420,protein:35,fat:18,carb:22},ings:[{n:"鶏もも肉",a:"250g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"砂糖",a:"小さじ1"}],steps:["鶏もも肉の皮にフォークで穴を開ける","フライパンで皮目から中火で5分焼く","裏返して3分焼く","タレを加えて絡める","煮詰まったら完成"]},
+  {id:"m02",emoji:"🥩",name:"豚の生姜焼き",desc:"ご飯が進む生姜炒め",tags:["和食","豚肉"],time:15,nutr:{cal:380,protein:28,fat:16,carb:24},ings:[{n:"豚ロース薄切り",a:"200g"},{n:"玉ねぎ",a:"1/2個"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"生姜すりおろし",a:"1かけ"}],steps:["玉ねぎを薄切り","豚肉に醤油・みりん・生姜を揉み込む（10分）","油を熱し玉ねぎを炒める","豚肉を加え両面焼く","タレを絡めて完成"]},
+  {id:"m03",emoji:"🍲",name:"肉じゃが",desc:"ほっこり温まる家庭の味",tags:["和食","牛肉","作り置き"],time:35,nutr:{cal:350,protein:20,fat:10,carb:42},ings:[{n:"牛薄切り肉",a:"150g"},{n:"じゃがいも",a:"3個"},{n:"玉ねぎ",a:"1個"},{n:"にんじん",a:"1本"},{n:"醤油",a:"大さじ3"},{n:"砂糖",a:"大さじ2"},{n:"みりん",a:"大さじ2"}],steps:["野菜を切る","油で牛肉を炒め野菜を加える","だし汁・調味料を加える","落し蓋して中火20分","完成"]},
+  {id:"m04",emoji:"🥚",name:"親子丼",desc:"ふわとろ卵と鶏肉",tags:["和食","鶏肉","丼"],time:20,nutr:{cal:480,protein:30,fat:14,carb:54},ings:[{n:"鶏もも肉",a:"150g"},{n:"卵",a:"3個"},{n:"玉ねぎ",a:"1/2個"},{n:"だし汁",a:"150ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"ご飯",a:"1人分"}],steps:["鶏肉と玉ねぎを切る","煮汁を作る","鶏肉・玉ねぎを煮る","卵を2回に分けて加え半熟で止める","ご飯に乗せて完成"]},
+  {id:"m05",emoji:"🍛",name:"野菜カレー",desc:"具だくさん栄養満点",tags:["カレー","野菜","作り置き"],time:40,nutr:{cal:520,protein:15,fat:18,carb:70},ings:[{n:"玉ねぎ",a:"2個"},{n:"にんじん",a:"1本"},{n:"じゃがいも",a:"2個"},{n:"カレールー",a:"3かけ"},{n:"トマト缶",a:"1/2缶"}],steps:["野菜を切る","玉ねぎをあめ色に炒める","野菜を加え水・トマト缶を加える","15分煮てルーを溶かす","10分煮て完成"]},
+  {id:"m06",emoji:"🍚",name:"チャーハン",desc:"パラパラ本格炒飯",tags:["中華","ご飯"],time:15,nutr:{cal:460,protein:18,fat:16,carb:58},ings:[{n:"冷ご飯",a:"1人分"},{n:"卵",a:"2個"},{n:"長ねぎ",a:"1/3本"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"小さじ1"},{n:"塩こしょう",a:"適量"}],steps:["強火で油を熱し溶き卵を入れる","半熟のうちにご飯を加えほぐす","長ねぎを加える","醤油・塩こしょうで味付け","ごま油で仕上げ"]},
+  {id:"m07",emoji:"🐟",name:"鮭の塩焼き定食",desc:"シンプル定食",tags:["和食","魚"],time:15,nutr:{cal:360,protein:32,fat:14,carb:30},ings:[{n:"鮭の切り身",a:"2切れ"},{n:"塩",a:"少量"},{n:"レモン",a:"1/4個"},{n:"ご飯",a:"1人分"},{n:"味噌汁",a:"適量"}],steps:["鮭に塩を振り10分置く","水気を拭いてフライパンで中火3分","裏返してさらに3分","レモンを添えて完成","味噌汁と盛り付け"]},
+  {id:"m08",emoji:"🍝",name:"ペペロンチーノ",desc:"にんにくオイルパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:440,protein:14,fat:18,carb:56},ings:[{n:"スパゲッティ",a:"100g"},{n:"にんにく",a:"2かけ"},{n:"鷹の爪",a:"1本"},{n:"オリーブオイル",a:"大さじ3"},{n:"塩",a:"適量"},{n:"茹で汁",a:"50ml"}],steps:["パスタを茹でる","オリーブオイルでにんにく・鷹の爪を弱火で熱する","にんにくが黄金色になったら茹で汁を加える","パスタを加えて乳化させる","塩で調整して完成"]},
+  {id:"m09",emoji:"🥡",name:"麻婆豆腐",desc:"ピリ辛豆腐炒め",tags:["中華","豆腐"],time:20,nutr:{cal:350,protein:22,fat:18,carb:20},ings:[{n:"木綿豆腐",a:"1丁"},{n:"豚ひき肉",a:"100g"},{n:"長ねぎ",a:"1/2本"},{n:"豆板醤",a:"小さじ1"},{n:"醤油",a:"大さじ1"},{n:"片栗粉",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["豆腐を水切りし一口大に切る","ひき肉を炒め豆板醤を加える","水・醤油・ねぎを加えて煮立てる","豆腐を加え3分煮る","水溶き片栗粉でとろみをつけごま油で仕上げ"]},
+  {id:"m10",emoji:"🥗",name:"蒸し鶏サラダ",desc:"さっぱりヘルシー",tags:["洋食","鶏肉","ヘルシー"],time:25,nutr:{cal:280,protein:30,fat:10,carb:12},ings:[{n:"鶏むね肉",a:"200g"},{n:"レタス",a:"1/4玉"},{n:"きゅうり",a:"1本"},{n:"トマト",a:"1個"},{n:"ポン酢",a:"大さじ2"},{n:"ごま油",a:"小さじ1"}],steps:["鶏肉に塩をすり込む","耐熱容器でレンジ600W 4分","5分そのまま置く","粗熱後に手で裂く","野菜と盛り付けポン酢をかける"]},
+  {id:"m11",emoji:"🥟",name:"餃子",desc:"カリカリジューシー",tags:["中華","豚肉"],time:40,nutr:{cal:420,protein:22,fat:20,carb:36},ings:[{n:"餃子の皮",a:"20枚"},{n:"豚ひき肉",a:"150g"},{n:"キャベツ",a:"1/4個"},{n:"にんにく",a:"1かけ"},{n:"生姜",a:"1かけ"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"小さじ1"}],steps:["キャベツをみじん切りして塩もみ","ひき肉と野菜・調味料を混ぜる","皮に包む","フライパンで焼き色をつける","水を加えて蒸し焼きにして完成"]},
+  {id:"m12",emoji:"🍜",name:"豚汁うどん",desc:"具だくさんうどん",tags:["和食","豚肉"],time:25,nutr:{cal:450,protein:25,fat:14,carb:52},ings:[{n:"豚バラ薄切り",a:"100g"},{n:"うどん",a:"1玉"},{n:"大根",a:"1/4本"},{n:"にんじん",a:"1/2本"},{n:"味噌",a:"大さじ2"},{n:"だし汁",a:"600ml"}],steps:["野菜を切る","豚肉を炒め野菜を加える","だし汁を加えて煮る","味噌を溶く","うどんを加えて温め完成"]},
+  {id:"m13",emoji:"🍳",name:"オムライス",desc:"ふわとろ卵のケチャップライス",tags:["洋食","卵"],time:20,nutr:{cal:520,protein:20,fat:20,carb:60},ings:[{n:"ご飯",a:"1人分"},{n:"卵",a:"3個"},{n:"鶏むね肉",a:"80g"},{n:"玉ねぎ",a:"1/4個"},{n:"ケチャップ",a:"大さじ3"},{n:"バター",a:"10g"}],steps:["鶏肉・玉ねぎを炒めご飯・ケチャップで炒める","楕円に成形する","薄焼き卵を作る","卵で包む","ケチャップをかけて完成"]},
+  {id:"m14",emoji:"🐄",name:"牛丼",desc:"甘辛牛肉どんぶり",tags:["和食","牛肉","丼"],time:20,nutr:{cal:580,protein:28,fat:20,carb:66},ings:[{n:"牛バラ薄切り",a:"200g"},{n:"玉ねぎ",a:"1個"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"だし汁",a:"200ml"},{n:"ご飯",a:"1人分"}],steps:["玉ねぎを薄切り","煮汁を作る","玉ねぎを2分煮る","牛肉を加えさっと煮る","ご飯に乗せて完成"]},
+  {id:"m15",emoji:"🥦",name:"野菜炒め定食",desc:"シャキシャキ炒め",tags:["和食","野菜","ヘルシー"],time:15,nutr:{cal:280,protein:12,fat:12,carb:30},ings:[{n:"もやし",a:"1袋"},{n:"キャベツ",a:"1/4個"},{n:"にんじん",a:"1/2本"},{n:"豚バラ",a:"80g"},{n:"醤油",a:"大さじ1"},{n:"オイスターソース",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["野菜を切る","強火で豚肉を炒める","野菜を加えて炒める","醤油・オイスターソースで味付け","ごま油で仕上げ"]},
+  {id:"m16",emoji:"🍜",name:"ざるそば",desc:"夏の定番冷たいそば",tags:["和食","そば","ヘルシー"],time:10,nutr:{cal:320,protein:14,fat:2,carb:62},ings:[{n:"そば",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"100ml"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"},{n:"海苔",a:"適量"}],steps:["そばを表示通り茹でる","冷水でしっかり洗ってぬめりを取る","氷水で締める","器に盛り海苔をのせる","つゆにわさび・ねぎを入れて付けて食べる"]},
+  {id:"m17",emoji:"🍜",name:"かけそば",desc:"温かいシンプルなそば",tags:["和食","そば"],time:10,nutr:{cal:330,protein:14,fat:2,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"長ねぎ",a:"適量"},{n:"七味",a:"適量"}],steps:["だし汁・醤油・みりんでつゆを作る","そばを茹でてお湯で洗う","器にそばを盛る","熱いつゆを注ぐ","ねぎ・七味をのせて完成"]},
+  {id:"m18",emoji:"🍜",name:"月見そば",desc:"卵のせ温かいそば",tags:["和食","そば"],time:12,nutr:{cal:380,protein:18,fat:6,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"卵",a:"1個"},{n:"長ねぎ",a:"適量"}],steps:["つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","そっと生卵を落とす","ねぎをのせて完成"]},
+  {id:"m19",emoji:"🍜",name:"天ぷらそば",desc:"えびの天ぷら乗せそば",tags:["和食","そば"],time:20,nutr:{cal:480,protein:20,fat:14,carb:66},ings:[{n:"そば",a:"1玉"},{n:"えび",a:"2尾"},{n:"天ぷら粉",a:"大さじ3"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"}],steps:["えびを天ぷら粉で揚げる","つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","天ぷらをのせて完成"]},
+  {id:"m20",emoji:"🍜",name:"鴨南蛮そば",desc:"鴨肉と長ねぎの贅沢そば",tags:["和食","そば"],time:25,nutr:{cal:440,protein:26,fat:14,carb:52},ings:[{n:"そば",a:"1玉"},{n:"鴨肉（または鶏もも肉）",a:"100g"},{n:"長ねぎ",a:"1本"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["鴨肉を食べやすく切る","ねぎを斜め切りにして焼く","鴨肉を炒めつゆと合わせる","そばを茹でて盛る","鴨肉・ねぎ乗せて完成"]},
+  {id:"m21",emoji:"🍜",name:"冷やしそうめん",desc:"夏の定番細麺",tags:["和食","そうめん","ヘルシー"],time:8,nutr:{cal:290,protein:10,fat:1,carb:60},ings:[{n:"そうめん",a:"2束"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"150ml"},{n:"氷",a:"適量"},{n:"トマト",a:"1個"},{n:"きゅうり",a:"1本"}],steps:["そうめんを茹でる（2分）","冷水でよく洗う","氷水で締める","器に盛る","野菜と氷入りつゆで食べる"]},
+  {id:"m22",emoji:"🍜",name:"にゅうめん",desc:"温かいそうめんスープ",tags:["和食","そうめん"],time:10,nutr:{cal:300,protein:12,fat:2,carb:58},ings:[{n:"そうめん",a:"2束"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"小さじ2"},{n:"塩",a:"少量"},{n:"三つ葉",a:"少量"},{n:"かまぼこ",a:"2切れ"}],steps:["だし汁を沸かし醤油・塩で調える","そうめんを茹でてお湯で洗う","器に盛る","熱いつゆを注ぐ","かまぼこ・三つ葉をのせて完成"]},
+  {id:"m23",emoji:"🍜",name:"そうめんチャンプルー",desc:"沖縄風炒めそうめん",tags:["和食","そうめん"],time:15,nutr:{cal:360,protein:16,fat:10,carb:50},ings:[{n:"そうめん",a:"2束"},{n:"豚バラ薄切り",a:"80g"},{n:"ゴーヤ",a:"1/2本"},{n:"卵",a:"2個"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"小さじ1"}],steps:["そうめんを茹でて水洗い","豚肉を炒めゴーヤを加える","そうめんを加えて炒める","溶き卵を加える","醤油・ごま油で仕上げ"]},
+  {id:"m24",emoji:"🍝",name:"カルボナーラ",desc:"濃厚クリームのローマパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:580,protein:24,fat:28,carb:56},ings:[{n:"スパゲッティ",a:"100g"},{n:"ベーコン",a:"50g"},{n:"卵黄",a:"2個"},{n:"パルメザン",a:"30g"},{n:"黒こしょう",a:"たっぷり"},{n:"にんにく",a:"1かけ"}],steps:["パスタを茹でる（茹で汁を取っておく）","ベーコンをにんにくで炒める","卵黄・パルメザンを混ぜる","火を止めてパスタを和える","卵液を加えて余熱で絡め黒こしょうをかける"]},
+  {id:"m25",emoji:"🍝",name:"ミートソーススパゲッティ",desc:"ボロネーゼ風の定番パスタ",tags:["パスタ","洋食","牛肉"],time:40,nutr:{cal:540,protein:26,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"合いびき肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"50ml"},{n:"ケチャップ",a:"大さじ2"}],steps:["玉ねぎをみじん切りにして炒める","ひき肉を加えて炒める","赤ワインを加え煮立てる","トマト缶・ケチャップを加えて20分煮込む","茹でたパスタに乗せて完成"]},
+  {id:"m26",emoji:"🍝",name:"アラビアータ",desc:"ピリ辛トマトパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:12,fat:12,carb:62},ings:[{n:"スパゲッティ",a:"100g"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"2かけ"},{n:"鷹の爪",a:"2本"},{n:"オリーブオイル",a:"大さじ3"},{n:"バジル",a:"少量"}],steps:["にんにく・鷹の爪をオリーブオイルで炒める","トマト缶を加えてつぶしながら煮る","10分煮詰める","茹でたパスタを加えて絡める","バジルを乗せて完成"]},
+  {id:"m27",emoji:"🍝",name:"ナポリタン",desc:"懐かしい日本のパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:480,protein:16,fat:14,carb:68},ings:[{n:"スパゲッティ",a:"100g"},{n:"玉ねぎ",a:"1/2個"},{n:"ピーマン",a:"1個"},{n:"ウインナー",a:"3本"},{n:"ケチャップ",a:"大さじ4"},{n:"バター",a:"10g"}],steps:["野菜・ウインナーを切る","バターで炒める","ケチャップを加えて炒める","茹でたパスタを加える","よく混ぜて完成"]},
+  {id:"m28",emoji:"🍝",name:"たらこパスタ",desc:"マヨたらこの和風パスタ",tags:["パスタ","和食"],time:15,nutr:{cal:500,protein:18,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"たらこ",a:"1腹"},{n:"バター",a:"10g"},{n:"醤油",a:"小さじ1"},{n:"海苔",a:"適量"},{n:"大葉",a:"適量"}],steps:["パスタを茹でる","バターを溶かしたらこを和える","醤油を加える","茹でたパスタを加えて和える","海苔・大葉をのせて完成"]},
+  {id:"m29",emoji:"🍝",name:"ボンゴレビアンコ",desc:"あさりの旨みパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"スパゲッティ",a:"100g"},{n:"あさり",a:"200g"},{n:"にんにく",a:"2かけ"},{n:"白ワイン",a:"50ml"},{n:"オリーブオイル",a:"大さじ3"},{n:"パセリ",a:"少量"}],steps:["あさりを砂抜きする","にんにくをオリーブオイルで炒める","あさりと白ワインを加えて蓋をして蒸す","口が開いたらパスタを加える","パセリを散らして完成"]},
+  {id:"m30",emoji:"🍜",name:"釜玉うどん",desc:"温かい生卵絡めうどん",tags:["和食","うどん"],time:10,nutr:{cal:400,protein:16,fat:8,carb:64},ings:[{n:"うどん",a:"1玉"},{n:"卵",a:"1個"},{n:"醤油",a:"大さじ1"},{n:"バター",a:"5g"},{n:"長ねぎ",a:"適量"},{n:"かつおぶし",a:"少量"}],steps:["うどんを茹でる","熱いうちに生卵を割り入れる","醤油・バターを加える","よく混ぜる","ねぎ・かつおぶしをのせて完成"]},
+  {id:"m31",emoji:"🍛",name:"カレーうどん",desc:"スパイシーなとろみうどん",tags:["和食","うどん"],time:15,nutr:{cal:480,protein:18,fat:12,carb:72},ings:[{n:"うどん",a:"1玉"},{n:"カレールー",a:"1かけ"},{n:"だし汁",a:"400ml"},{n:"玉ねぎ",a:"1/2個"},{n:"鶏もも肉",a:"80g"},{n:"長ねぎ",a:"適量"}],steps:["鶏肉・玉ねぎを炒める","だし汁を加えてルーを溶かす","うどんを茹でて器に盛る","カレーつゆを注ぐ","ねぎをのせて完成"]},
+  {id:"m32",emoji:"🍜",name:"ざるうどん",desc:"冷たい締めうどん",tags:["和食","うどん","ヘルシー"],time:10,nutr:{cal:340,protein:12,fat:2,carb:68},ings:[{n:"うどん",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"100ml"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"}],steps:["うどんを茹でる","冷水でしっかり洗う","氷水で締める","器に盛る","つゆにつけて食べる"]},
+  {id:"m33",emoji:"🍱",name:"とんかつ定食",desc:"サクサクの揚げたてとんかつ",tags:["和食","豚肉"],time:30,nutr:{cal:620,protein:32,fat:28,carb:54},ings:[{n:"豚ロース肉",a:"200g"},{n:"塩こしょう",a:"適量"},{n:"薄力粉",a:"大さじ2"},{n:"卵",a:"1個"},{n:"パン粉",a:"適量"},{n:"揚げ油",a:"適量"},{n:"ご飯",a:"1人分"}],steps:["豚肉を叩いて塩こしょうする","粉→卵→パン粉の順に衣をつける","170℃の油で4分揚げる","一度取り出し190℃で1分二度揚げ","キャベツ・ご飯と盛り付け"]},
+  {id:"m34",emoji:"🍚",name:"かつ丼",desc:"甘辛卵でとじたとんかつ丼",tags:["和食","豚肉","丼"],time:25,nutr:{cal:660,protein:30,fat:22,carb:76},ings:[{n:"とんかつ",a:"1枚"},{n:"卵",a:"2個"},{n:"玉ねぎ",a:"1/2個"},{n:"だし汁",a:"100ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"ご飯",a:"1人分"}],steps:["とんかつを切る","玉ねぎを煮汁で煮る","とんかつを加える","溶き卵を流し半熟で止める","ご飯に乗せて完成"]},
+  {id:"m35",emoji:"🍚",name:"天丼",desc:"サクサク天ぷらのどんぶり",tags:["和食","丼"],time:25,nutr:{cal:580,protein:22,fat:16,carb:80},ings:[{n:"えび",a:"4尾"},{n:"なす",a:"1本"},{n:"天ぷら粉",a:"大さじ4"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"}],steps:["天ぷら粉を水で溶く","えび・なすを揚げる","醤油・みりん・砂糖でタレを作る","ご飯に天ぷらを乗せる","タレをかけて完成"]},
+  {id:"m36",emoji:"🐠",name:"海鮮丼",desc:"新鮮な刺身のどんぶり",tags:["和食","魚","丼"],time:10,nutr:{cal:420,protein:28,fat:8,carb:58},ings:[{n:"刺身の盛り合わせ",a:"200g"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"わさび",a:"少量"},{n:"海苔",a:"適量"}],steps:["酢飯か普通のご飯を用意する","刺身を切る","ご飯に海苔を敷く","刺身を並べる","わさび醤油で食べる"]},
+  {id:"m37",emoji:"🍚",name:"炊き込みご飯",desc:"だし染みた和風混ぜご飯",tags:["和食","作り置き"],time:40,nutr:{cal:380,protein:14,fat:6,carb:68},ings:[{n:"米",a:"2合"},{n:"鶏もも肉",a:"100g"},{n:"ごぼう",a:"1/3本"},{n:"にんじん",a:"1/2本"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"だし汁",a:"適量"}],steps:["具材を切る","米を研ぐ","調味料とだし汁を加えて混ぜる","具材を乗せて炊く","炊けたら混ぜて完成"]},
+  {id:"m38",emoji:"🍵",name:"お茶漬け",desc:"さらさら食べるご飯",tags:["和食","ヘルシー"],time:5,nutr:{cal:250,protein:10,fat:2,carb:46},ings:[{n:"ご飯",a:"1人分"},{n:"お茶または出汁",a:"200ml"},{n:"鮭フレーク",a:"大さじ2"},{n:"梅干し",a:"1個"},{n:"海苔",a:"適量"},{n:"わさび",a:"少量"}],steps:["ご飯を器に盛る","具材を乗せる","熱いお茶またはだし汁を注ぐ","わさびを添える","よくかき混ぜて食べる"]},
+  {id:"m39",emoji:"🍚",name:"卵かけご飯",desc:"シンプル究極の朝食",tags:["和食","卵","ヘルシー"],time:3,nutr:{cal:320,protein:18,fat:10,carb:42},ings:[{n:"ご飯",a:"1人分"},{n:"卵",a:"1〜2個"},{n:"醤油",a:"小さじ2"},{n:"だし醤油",a:"少量"},{n:"海苔",a:"適量"}],steps:["ご飯を温かく用意する","生卵を割り入れる","醤油を回しかける","よく混ぜる","海苔を添えて完成"]},
+  {id:"m40",emoji:"🐠",name:"サバの味噌煮",desc:"ご飯が進む濃厚な煮魚",tags:["和食","魚","作り置き"],time:25,nutr:{cal:380,protein:28,fat:18,carb:18},ings:[{n:"サバの切り身",a:"2切れ"},{n:"味噌",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"生姜",a:"1かけ"},{n:"水",a:"200ml"}],steps:["サバに熱湯をかけて臭みを取る","水・みりん・砂糖・生姜を煮立てる","サバを入れ落し蓋して10分煮る","味噌を溶き入れる","とろみがついたら完成"]},
+  {id:"m41",emoji:"🥘",name:"豚キムチ炒め",desc:"辛くてご飯が止まらない",tags:["和食","豚肉","韓国"],time:15,nutr:{cal:380,protein:26,fat:20,carb:18},ings:[{n:"豚バラ薄切り",a:"150g"},{n:"キムチ",a:"150g"},{n:"豆腐",a:"1/2丁"},{n:"醤油",a:"小さじ1"},{n:"ごま油",a:"小さじ1"},{n:"長ねぎ",a:"適量"}],steps:["豚肉を炒める","キムチを加えて炒める","豆腐を加えて炒める","醤油で味を調える","ごま油をかけてねぎを散らす"]},
+  {id:"m42",emoji:"🥘",name:"回鍋肉",desc:"四川風キャベツと豚の炒め",tags:["中華","豚肉"],time:20,nutr:{cal:380,protein:22,fat:20,carb:22},ings:[{n:"豚バラブロック",a:"200g"},{n:"キャベツ",a:"1/4個"},{n:"ピーマン",a:"1個"},{n:"豆板醤",a:"小さじ1"},{n:"甜麺醤",a:"大さじ1"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["豚バラを茹でて薄切りにする","キャベツ・ピーマンを切る","豚肉を炒め豆板醤を加える","野菜を加えて炒める","甜麺醤・醤油で味付けごま油で仕上げ"]},
+  {id:"m43",emoji:"🍜",name:"フォー",desc:"ベトナムの牛骨スープ麺",tags:["アジア","ヘルシー"],time:20,nutr:{cal:360,protein:20,fat:6,carb:58},ings:[{n:"フォー（米麺）",a:"100g"},{n:"牛薄切り肉",a:"80g"},{n:"チキンスープ",a:"500ml"},{n:"ナンプラー",a:"大さじ1"},{n:"レモン",a:"1/4個"},{n:"もやし",a:"100g"},{n:"パクチー",a:"適量"}],steps:["スープにナンプラーで味付けする","フォーを茹でる","器にフォーを盛る","熱いスープを注ぐ","牛肉・もやし・パクチーを乗せてレモンを絞る"]},
+  {id:"m44",emoji:"🍜",name:"ガパオライス",desc:"タイの鶏ひき肉バジル炒め",tags:["アジア","鶏肉"],time:20,nutr:{cal:480,protein:28,fat:18,carb:48},ings:[{n:"鶏ひき肉",a:"150g"},{n:"バジル",a:"一握り"},{n:"にんにく",a:"2かけ"},{n:"唐辛子",a:"1本"},{n:"ナンプラー",a:"大さじ1"},{n:"オイスターソース",a:"大さじ1"},{n:"卵",a:"1個"},{n:"ご飯",a:"1人分"}],steps:["にんにく・唐辛子を炒める","ひき肉を加えて炒める","ナンプラー・オイスターソースで味付け","バジルを加えてさっと炒める","ご飯に乗せ目玉焼きを添えて完成"]},
+  {id:"m45",emoji:"🌮",name:"タコス",desc:"メキシカンな手巻きタコス",tags:["洋食","牛肉"],time:25,nutr:{cal:480,protein:26,fat:22,carb:42},ings:[{n:"牛ひき肉",a:"150g"},{n:"タコスシェル",a:"4枚"},{n:"レタス",a:"2枚"},{n:"トマト",a:"1個"},{n:"チーズ",a:"30g"},{n:"タコスシーズニング",a:"適量"},{n:"サルサソース",a:"適量"}],steps:["ひき肉にシーズニングをまぶして炒める","野菜を切る","タコスシェルを温める","具材を盛り付ける","サルサソースをかけて完成"]},
+  {id:"m46",emoji:"🍢",name:"おでん",desc:"冬の具だくさん煮物",tags:["和食","作り置き"],time:60,nutr:{cal:300,protein:18,fat:8,carb:38},ings:[{n:"大根",a:"1/2本"},{n:"こんにゃく",a:"1枚"},{n:"卵",a:"3個"},{n:"ちくわ",a:"3本"},{n:"はんぺん",a:"1枚"},{n:"だし汁",a:"1L"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["大根を下茹でする","卵を固ゆでにして殻をむく","だし汁に醤油・みりんを合わせる","大根・こんにゃくを入れて30分煮る","残りの具材を加えて20分煮込む"]},
+  {id:"m47",emoji:"🦅",name:"鶏の唐揚げ",desc:"サクサクジューシー揚げ物",tags:["和食","鶏肉"],time:30,nutr:{cal:520,protein:35,fat:28,carb:24},ings:[{n:"鶏もも肉",a:"300g"},{n:"醤油",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"生姜",a:"1かけ"},{n:"片栗粉",a:"大さじ4"},{n:"揚げ油",a:"適量"}],steps:["鶏肉を一口大に切る","醤油・酒・にんにく・生姜で15分漬ける","片栗粉をまぶす","170℃で4分揚げる","190℃で1分二度揚げして完成"]},
+  {id:"m48",emoji:"🍖",name:"ハンバーグ",desc:"ジューシーな洋食の王道",tags:["洋食","牛肉"],time:30,nutr:{cal:500,protein:28,fat:30,carb:22},ings:[{n:"合いびき肉",a:"200g"},{n:"玉ねぎ",a:"1/2個"},{n:"卵",a:"1個"},{n:"パン粉",a:"大さじ2"},{n:"牛乳",a:"大さじ2"},{n:"塩こしょう",a:"適量"},{n:"デミグラスソース",a:"適量"}],steps:["玉ねぎを炒めて冷ます","ひき肉・卵・パン粉・牛乳・玉ねぎを混ぜる","空気を抜いて成形する","フライパンで両面焼く","ソースをかけて完成"]},
+  {id:"m49",emoji:"🥘",name:"ビーフシチュー",desc:"とろとろ本格煮込み",tags:["洋食","牛肉","作り置き"],time:90,nutr:{cal:480,protein:28,fat:22,carb:38},ings:[{n:"牛バラ肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんじん",a:"1本"},{n:"じゃがいも",a:"2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"100ml"},{n:"シチューのルー",a:"2かけ"}],steps:["牛肉を切り塩こしょうする","焼き色をつける","野菜を加えて炒め赤ワインを加える","トマト缶と水で60分煮込む","ルーを加えて10分煮て完成"]},
+  {id:"m50",emoji:"🍚",name:"ビビンバ",desc:"コチュジャン混ぜ韓国丼",tags:["韓国","丼"],time:25,nutr:{cal:450,protein:22,fat:12,carb:60},ings:[{n:"ご飯",a:"1人分"},{n:"牛ひき肉",a:"100g"},{n:"ほうれん草",a:"1/2束"},{n:"もやし",a:"100g"},{n:"にんじん",a:"1/2本"},{n:"卵",a:"1個"},{n:"コチュジャン",a:"大さじ1"},{n:"ごま油",a:"適量"}],steps:["野菜を炒め下味をつける","ひき肉を炒め醤油・ごま油で味付け","ご飯の上に盛り付ける","コチュジャンをのせる","よく混ぜて食べる"]},
+  {id:"m51",emoji:"🍜",name:"焼きそば",desc:"ソース香る定番炒め麺",tags:["中華","豚肉"],time:15,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"焼きそば麺",a:"1玉"},{n:"豚バラ",a:"80g"},{n:"キャベツ",a:"1/4個"},{n:"もやし",a:"100g"},{n:"ソース",a:"大さじ2"},{n:"塩こしょう",a:"適量"}],steps:["野菜と豚肉を切る","豚肉を炒め野菜を加える","麺を加えほぐしながら炒める","ソース・塩こしょうで味付け","青のり・紅しょうがを添えて完成"]},
+  {id:"m52",emoji:"🥞",name:"お好み焼き",desc:"大阪のソウルフード",tags:["和食","豚肉"],time:25,nutr:{cal:480,protein:20,fat:18,carb:54},ings:[{n:"薄力粉",a:"100g"},{n:"卵",a:"2個"},{n:"だし汁",a:"150ml"},{n:"キャベツ",a:"1/4個"},{n:"豚バラ",a:"100g"},{n:"ソース",a:"適量"},{n:"マヨネーズ",a:"適量"}],steps:["キャベツをみじん切り","粉・卵・だし汁・キャベツを混ぜる","生地を流し豚肉を乗せて3分焼く","裏返して3分焼く","ソース・マヨ・青のりをかけて完成"]},
+  {id:"m53",emoji:"🍱",name:"鶏そぼろ丼",desc:"ご飯に乗せるだけ簡単丼",tags:["和食","鶏肉","丼"],time:20,nutr:{cal:440,protein:28,fat:10,carb:58},ings:[{n:"鶏ひき肉",a:"200g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"生姜",a:"少量"},{n:"卵",a:"2個"},{n:"ご飯",a:"1人分"}],steps:["ひき肉を炒める","醤油・みりん・砂糖・生姜で炒り煮","別の鍋で卵を甘く炒る","ご飯の上にそぼろ・卵を盛る","絹さやを添えて完成"]},
+  {id:"m54",emoji:"🐠",name:"ぶりの照り焼き",desc:"脂のりよい魚の甘辛焼き",tags:["和食","魚"],time:20,nutr:{cal:390,protein:30,fat:16,carb:22},ings:[{n:"ぶりの切り身",a:"2切れ"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"砂糖",a:"小さじ1"}],steps:["ぶりに塩を振り水気を取る","フライパンで両面焼く","タレを加えて絡める","大根おろしを添えて完成","たれが煮詰まったら仕上げ"]},
+  {id:"m55",emoji:"🥗",name:"ツナアボカドサラダ",desc:"ヘルシーなサラダ",tags:["洋食","ヘルシー"],time:10,nutr:{cal:320,protein:18,fat:22,carb:12},ings:[{n:"ツナ缶",a:"1缶"},{n:"アボカド",a:"1個"},{n:"トマト",a:"1個"},{n:"レモン汁",a:"大さじ1"},{n:"塩こしょう",a:"適量"},{n:"オリーブオイル",a:"大さじ1"}],steps:["アボカドとトマトを切る","ツナ缶の油を切る","全材料をボウルに入れる","レモン汁・オリーブオイル・塩こしょうで和える","器に盛り付けて完成"]},
+  {id:"m56",emoji:"🍝",name:"きのこクリームパスタ",desc:"濃厚クリームソース",tags:["パスタ","洋食"],time:25,nutr:{cal:520,protein:16,fat:24,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"しめじ",a:"1/2パック"},{n:"エリンギ",a:"1本"},{n:"生クリーム",a:"100ml"},{n:"バター",a:"10g"},{n:"にんにく",a:"1かけ"},{n:"塩こしょう",a:"適量"}],steps:["パスタを茹でる","バターでにんにくを炒める","きのこを加えて炒める","生クリームを加えて煮詰める","パスタを加えて絡め塩こしょうで調整"]},
+  {id:"m57",emoji:"🥘",name:"豚バラ大根",desc:"染み染み大根の煮物",tags:["和食","豚肉","作り置き"],time:40,nutr:{cal:380,protein:22,fat:20,carb:24},ings:[{n:"豚バラ肉",a:"200g"},{n:"大根",a:"1/2本"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"だし汁",a:"400ml"}],steps:["豚肉を切る","大根を2cm輪切りにして下茹で","鍋で豚肉を炒め大根を加える","だし汁・調味料を加えて煮立てる","落し蓋して30分煮込む"]},
+  {id:"m58",emoji:"🍲",name:"鶏肉のトマト煮",desc:"イタリアン風煮込み",tags:["洋食","鶏肉","作り置き"],time:40,nutr:{cal:380,protein:32,fat:16,carb:22},ings:[{n:"鶏もも肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんにく",a:"2かけ"},{n:"トマト缶",a:"1缶"},{n:"オリーブオイル",a:"大さじ2"},{n:"塩こしょう",a:"適量"},{n:"バジル",a:"少量"}],steps:["鶏肉に塩こしょうして焼き色をつける","玉ねぎ・にんにくを炒める","トマト缶を加えてつぶす","鶏肉を戻し入れ20分煮込む","バジルをちぎって乗せて完成"]},
+  {id:"m59",emoji:"🥘",name:"グラタン",desc:"とろけるチーズが食欲をそそる",tags:["洋食","作り置き"],time:40,nutr:{cal:480,protein:22,fat:24,carb:42},ings:[{n:"マカロニ",a:"80g"},{n:"鶏むね肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"バター",a:"20g"},{n:"薄力粉",a:"大さじ2"},{n:"牛乳",a:"300ml"},{n:"ピザ用チーズ",a:"50g"}],steps:["マカロニを茹でる","バターで玉ねぎ・鶏肉を炒める","薄力粉を加えて炒め牛乳を少しずつ加える","マカロニを混ぜて耐熱皿に入れる","チーズを乗せて200℃で15分焼く"]},
+  {id:"m60",emoji:"🍣",name:"アボカドサーモン丼",desc:"ヘルシーオシャレ丼",tags:["丼","ヘルシー"],time:10,nutr:{cal:480,protein:26,fat:20,carb:50},ings:[{n:"スモークサーモン",a:"80g"},{n:"アボカド",a:"1個"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ1"},{n:"わさび",a:"少量"},{n:"レモン汁",a:"小さじ1"}],steps:["アボカドを薄切りにしてレモン汁","ご飯を器に盛る","サーモンとアボカドを乗せる","わさび醤油をかける","ごまを振って完成"]},
+  {id:"m61",emoji:"🍱",name:"冷しゃぶ",desc:"夏のさっぱり豚しゃぶ",tags:["和食","豚肉","ヘルシー"],time:20,nutr:{cal:320,protein:26,fat:12,carb:22},ings:[{n:"豚ロース薄切り",a:"200g"},{n:"レタス",a:"1/4玉"},{n:"きゅうり",a:"1本"},{n:"トマト",a:"1個"},{n:"ポン酢",a:"大さじ3"}],steps:["野菜を切り皿に盛る","お湯に酒を加え豚肉をしゃぶしゃぶ","引き上げ冷水に取る","水気を切って野菜の上に乗せる","ポン酢で食べる"]},
+  {id:"m62",emoji:"🥣",name:"茶碗蒸し",desc:"ぷるぷる和風蒸し料理",tags:["和食"],time:30,nutr:{cal:180,protein:14,fat:6,carb:14},ings:[{n:"卵",a:"2個"},{n:"だし汁",a:"300ml"},{n:"鶏肉",a:"50g"},{n:"えび",a:"4尾"},{n:"醤油",a:"小さじ1"},{n:"みりん",a:"小さじ1"},{n:"塩",a:"少量"}],steps:["だし汁に調味料を合わせる","卵を溶き調味しただし汁と混ぜる","具材を器に入れる","卵液を注ぎ蒸し器で弱火15分蒸す","竹串で確認して完成"]},
+  {id:"m63",emoji:"🍱",name:"筑前煮",desc:"根菜たっぷり郷土料理",tags:["和食","作り置き"],time:45,nutr:{cal:280,protein:16,fat:8,carb:36},ings:[{n:"鶏もも肉",a:"150g"},{n:"ごぼう",a:"1/2本"},{n:"れんこん",a:"100g"},{n:"にんじん",a:"1本"},{n:"こんにゃく",a:"1/2枚"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"}],steps:["具材を切りごぼう・れんこんをアク抜き","鍋で鶏肉を炒め野菜を加える","だし汁を加えて10分煮る","調味料を加えて煮る","汁気が少なくなったら完成"]},
+  {id:"m64",emoji:"🍜",name:"きつねうどん",desc:"甘いお揚げの定番うどん",tags:["和食","うどん"],time:15,nutr:{cal:380,protein:14,fat:8,carb:62},ings:[{n:"うどん",a:"1玉"},{n:"油揚げ",a:"1枚"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"長ねぎ",a:"適量"}],steps:["油揚げを甘辛く煮る","つゆを作る","うどんを茹でて器に入れる","つゆを注ぎ油揚げを乗せる","ねぎを散らして完成"]},
+  {id:"m65",emoji:"🥗",name:"豆腐チャンプルー",desc:"沖縄の家庭料理",tags:["和食","豆腐","ヘルシー"],time:20,nutr:{cal:300,protein:20,fat:16,carb:16},ings:[{n:"木綿豆腐",a:"1丁"},{n:"もやし",a:"1袋"},{n:"ランチョンミート",a:"80g"},{n:"卵",a:"2個"},{n:"醤油",a:"大さじ1"},{n:"塩こしょう",a:"適量"},{n:"ごま油",a:"少量"}],steps:["豆腐を水切りし一口大に切る","ランチョンミートを炒める","豆腐を加えて焼き色をつける","もやし・卵を加える","醤油・塩こしょう・ごま油で仕上げ"]},
+  {id:"m66",emoji:"🍱",name:"明太子パスタ",desc:"辛子明太子の和風パスタ",tags:["パスタ","和食"],time:15,nutr:{cal:500,protein:18,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"明太子",a:"1腹"},{n:"バター",a:"10g"},{n:"醤油",a:"小さじ1"},{n:"海苔",a:"適量"},{n:"大葉",a:"適量"},{n:"レモン",a:"少量"}],steps:["パスタを茹でる","バターを溶かし明太子をほぐす","醤油を加える","茹でたパスタを加えて和える","海苔・大葉・レモンを乗せて完成"]},
+  {id:"m67",emoji:"🍲",name:"豆腐の味噌汁定食",desc:"シンプルで栄養バランス◎",tags:["和食","ヘルシー"],time:10,nutr:{cal:260,protein:14,fat:6,carb:36},ings:[{n:"豆腐",a:"1/2丁"},{n:"わかめ",a:"適量"},{n:"だし汁",a:"500ml"},{n:"味噌",a:"大さじ2"},{n:"ご飯",a:"1人分"},{n:"お好みの副菜",a:"適量"}],steps:["だし汁を沸かす","豆腐を切って加える","わかめを加える","味噌を溶く","ご飯と副菜と合わせて盛り付け"]},
+  {id:"m68",emoji:"🥘",name:"パッタイ",desc:"タイ風焼き米麺",tags:["アジア"],time:25,nutr:{cal:460,protein:18,fat:14,carb:60},ings:[{n:"ライスヌードル",a:"80g"},{n:"えび",a:"6尾"},{n:"卵",a:"2個"},{n:"もやし",a:"100g"},{n:"ナンプラー",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"ピーナッツ",a:"大さじ2"},{n:"レモン",a:"1/4個"}],steps:["ライスヌードルを水に浸して柔らかくする","えびを炒める","卵を加えてスクランブル","麺・もやしを加えて炒める","ナンプラー・砂糖で味付けしピーナッツ・レモンを添える"]},
+  {id:"m69",emoji:"🍜",name:"台湾まぜそば",desc:"旨みたっぷりの汁なし麺",tags:["中華"],time:20,nutr:{cal:540,protein:28,fat:20,carb:58},ings:[{n:"中華麺",a:"1玉"},{n:"豚ひき肉",a:"100g"},{n:"醤油",a:"大さじ2"},{n:"豆板醤",a:"小さじ1"},{n:"卵黄",a:"1個"},{n:"にんにく",a:"1かけ"},{n:"長ねぎ",a:"適量"},{n:"海苔",a:"適量"}],steps:["豚ひき肉を調味料で炒める","麺を茹でて器に盛る","ひき肉・卵黄・ねぎ・海苔を乗せる","にんにくを添える","よく混ぜて食べる"]},
+  {id:"m70",emoji:"🍜",name:"ラーメン",desc:"自家製醤油ラーメン",tags:["中華"],time:30,nutr:{cal:520,protein:22,fat:16,carb:68},ings:[{n:"中華麺",a:"1玉"},{n:"鶏がらスープ",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"チャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"長ねぎ",a:"適量"},{n:"煮卵",a:"1個"}],steps:["スープに醤油・みりんで味付けする","麺を茹でる","器にスープを注ぐ","麺を盛り付ける","チャーシュー・メンマ・ねぎ・煮卵を乗せて完成"]},
+  {id:"m71",emoji:"🍜",name:"冷麺",desc:"韓国風さっぱり冷たい麺",tags:["韓国","ヘルシー"],time:15,nutr:{cal:360,protein:14,fat:4,carb:66},ings:[{n:"冷麺麺",a:"1玉"},{n:"牛スープ",a:"400ml"},{n:"コチュジャン",a:"大さじ1"},{n:"酢",a:"大さじ1"},{n:"砂糖",a:"小さじ1"},{n:"きゅうり",a:"1本"},{n:"ゆで卵",a:"1個"}],steps:["スープに調味料を混ぜる","麺を茹でて冷水で締める","器に麺を盛る","冷たいスープを注ぐ","きゅうり・ゆで卵を乗せて完成"]},
+  {id:"m72",emoji:"🍣",name:"マグロの漬け丼",desc:"醤油漬けまぐろのどんぶり",tags:["和食","魚","丼"],time:15,nutr:{cal:420,protein:30,fat:6,carb:56},ings:[{n:"まぐろ刺身",a:"150g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"ごま油",a:"小さじ1"},{n:"ご飯",a:"1人分"},{n:"海苔",a:"適量"},{n:"わさび",a:"少量"}],steps:["醤油・みりん・ごま油でタレを作る","まぐろを30分漬ける","ご飯を器に盛る","海苔を敷く","まぐろを乗せわさびを添える"]},
+  {id:"m73",emoji:"🍝",name:"リゾット",desc:"クリーミーなイタリア米料理",tags:["洋食"],time:30,nutr:{cal:460,protein:14,fat:18,carb:58},ings:[{n:"米",a:"1/2合"},{n:"玉ねぎ",a:"1/4個"},{n:"チキンスープ",a:"400ml"},{n:"白ワイン",a:"50ml"},{n:"バター",a:"15g"},{n:"パルメザン",a:"20g"},{n:"塩こしょう",a:"適量"}],steps:["玉ねぎをバターで炒める","米を加えて炒める","白ワインを加えて蒸発させる","スープを少しずつ加えながら炊く","パルメザン・バターを加えて仕上げ"]},
+  {id:"m74",emoji:"🥣",name:"豆腐ステーキ",desc:"ヘルシーな和風豆腐料理",tags:["和食","豆腐","ヘルシー"],time:15,nutr:{cal:240,protein:16,fat:12,carb:12},ings:[{n:"木綿豆腐",a:"1丁"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"バター",a:"10g"},{n:"長ねぎ",a:"適量"}],steps:["豆腐を水切りして厚めに切る","フライパンでバターを熱する","豆腐を両面焼く","醤油・みりん・にんにくのソースを作る","ソースをかけてねぎを散らす"]},
+  {id:"m75",emoji:"🍜",name:"つけ麺",desc:"濃厚つけ汁で食べる麺",tags:["中華"],time:30,nutr:{cal:560,protein:28,fat:16,carb:72},ings:[{n:"中華麺",a:"1玉"},{n:"豚骨スープ",a:"200ml"},{n:"醤油",a:"大さじ3"},{n:"豚バラチャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"長ねぎ",a:"適量"},{n:"卵",a:"1個"}],steps:["スープに醤油でタレを作る","麺を固めに茹でる","冷水で締める","つけ汁を温める","麺・具材を盛り付け、つけ汁につけて食べる"]}
 ];
 
 // ════════════════════════════════════════════════════
 //  状態
 // ════════════════════════════════════════════════════
 let state={days:{},weeks:{},shopping:[],bought:{},fridge:[],staples:{},meals:{}};
-let cfg={apiKey:'',binId:''};
+let cfg={apiKey:'',binId:'',anthropicKey:''};
 let histChart=null;
 let syncTimer=null;
 let recIndexes=[];
@@ -457,7 +549,7 @@ function getFridge(){return state.fridge||[];}
 function getStaples(){return state.staples||{};}
 function getMealToday(){return (state.meals||{})[todayStr()]||{menuId:null,cooked:false,eaten:false};}
 function fridgeHas(ingName){return getFridge().some(f=>f.name.includes(ingName)||ingName.includes(f.name));}
-function getMealById(id){return MEALS.find(m=>m.id===id);}
+function getMealById(id){return getAllMeals().find(m=>m.id===id);}
 
 // ════════════════════════════════════════════════════
 //  ストレージ
@@ -465,6 +557,7 @@ function getMealById(id){return MEALS.find(m=>m.id===id);}
 function loadLocal(){
   try{const s=localStorage.getItem('dts');if(s)state=JSON.parse(s);}catch(e){}
   try{const c=localStorage.getItem('dtc');if(c)cfg=JSON.parse(c);}catch(e){}
+  if(!state.customMeals)state.customMeals=[];
   // 常備品初期化
   if(!state.staples||Object.keys(state.staples).length===0){
     state.staples={};
@@ -538,6 +631,7 @@ function schedulePush(){clearTimeout(syncTimer);syncTimer=setTimeout(async()=>{a
 function openSettings(){
   document.getElementById('cfg-apikey').value=cfg.apiKey||'';
   document.getElementById('cfg-binid').value=cfg.binId||'';
+  const el=document.getElementById('cfg-anthropic');if(el)el.value=cfg.anthropicKey||'';
   document.getElementById('sync-status').innerHTML='';
   document.getElementById('settings-modal').classList.add('open');
 }
@@ -549,8 +643,9 @@ function showSync(msg,ok){
 async function saveSettings(){
   const apiKey=document.getElementById('cfg-apikey').value.trim();
   const binId=document.getElementById('cfg-binid').value.trim();
+  const anthropicKey=document.getElementById('cfg-anthropic').value.trim();
   if(!apiKey){showSync('❌ APIキーを入力してください',false);return;}
-  cfg.apiKey=apiKey;cfg.binId=binId;saveCfg();
+  cfg.apiKey=apiKey;cfg.binId=binId;if(anthropicKey)cfg.anthropicKey=anthropicKey;saveCfg();
   showSync('🔄 接続中...',true);
   let result;
   if(cfg.binId){
@@ -581,9 +676,9 @@ function setPage(id){
 }
 function setMealTab(t){
   currentMealTab=t;
-  ['rec','today','nutr'].forEach(k=>{
-    document.getElementById('mt-'+k).className='tab-btn'+(t===k?' on':'');
-    document.getElementById('meal-'+k+'-view').style.display=t===k?'':'none';
+  ['rec','custom','eatout','today','nutr'].forEach(k=>{
+    const el=document.getElementById('mt-'+k);if(el)el.className='tab-btn'+(t===k?' on':'');
+    const vEl=document.getElementById('meal-'+k+'-view');if(vEl)vEl.style.display=t===k?'':'none';
   });
   renderMealTab(t);
 }
@@ -763,12 +858,21 @@ function renderHome(){
   const mealEl=document.getElementById('meal-task');mealEl.innerHTML='';
   const todayMeal=getMealToday();
   const meal=todayMeal.menuId?getMealById(todayMeal.menuId):null;
-  if(!todayMeal.menuId){
-    const btn=document.createElement('button');
-    btn.className='task-btn';btn.style.justifyContent='center';
-    btn.innerHTML='<span style="font-size:15px;color:var(--green);font-weight:600">＋ メニューを選ぶ</span>';
-    btn.onclick=()=>setPage('meal');
-    mealEl.appendChild(btn);
+  if(todayMeal.type==='eatout'){
+    if(!todayMeal.eaten){
+      mealEl.appendChild(makeBtn(todayMeal.emoji||'🍽️','外食: '+todayMeal.eatOutName,'食べたらタップ',false,'#c4963a',toggleMealEaten));
+    }else{
+      mealEl.appendChild(makeBtn(todayMeal.emoji||'🍽️','外食: '+todayMeal.eatOutName,'食事完了',true,'#6fcf97',()=>{}));
+    }
+  }else if(!todayMeal.menuId){
+    const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px';
+    const b1=document.createElement('button');b1.className='task-btn';b1.style.flex='1';
+    b1.innerHTML='<div class="t-icon" style="background:rgba(255,255,255,0.05)">🍳</div><div class="t-info"><div class="t-lbl">メニューを選ぶ</div></div>';
+    b1.onclick=()=>setPage('meal');
+    const b2=document.createElement('button');b2.className='task-btn';b2.style.flex='1';
+    b2.innerHTML='<div class="t-icon" style="background:rgba(196,150,58,0.1)">🍽️</div><div class="t-info"><div class="t-lbl">外食する</div></div>';
+    b2.onclick=()=>{setPage('meal');setMealTab('eatout');};
+    wrap.appendChild(b1);wrap.appendChild(b2);mealEl.appendChild(wrap);
   }else{
     const allDone=todayMeal.cooked&&todayMeal.eaten;
     if(!todayMeal.cooked){
@@ -828,31 +932,35 @@ function renderHome(){
 //  食事ページ描画
 // ════════════════════════════════════════════════════
 function shuffleRecs(){
-  const all=MEALS.map((_,i)=>i);
+  const all=getAllMeals().map((_,i)=>i);
   for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
-  recIndexes=all.slice(0,5);
+  recIndexes=all.slice(0,6);
   renderMealTab('rec');
 }
 function scoreMeal(meal){
   let score=0;
-  meal.ings.forEach(ing=>{if(fridgeHas(ing.n))score++;});
+  (meal.ings||[]).forEach(ing=>{if(fridgeHas(ing.n))score++;});
   const hist=Object.values(state.meals||{}).filter(m=>m.menuId===meal.id);
   score-=hist.length*2;
   return score;
 }
 function renderMealPage(){renderMealTab(currentMealTab);}
+function getAllMeals(){return [...MEALS,...(state.customMeals||[])];}
 function renderMealTab(t){
   if(t==='rec'){
+    const all=getAllMeals();
+    const cntEl=document.getElementById('meal-count');if(cntEl)cntEl.textContent=all.length;
     if(recIndexes.length===0){
-      const scored=MEALS.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);
-      recIndexes=scored.slice(0,5).map(x=>x.i);
+      const scored=all.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);
+      recIndexes=scored.slice(0,6).map(x=>x.i);
     }
     const el=document.getElementById('meal-cards');el.innerHTML='';
     const todayMeal=getMealToday();
     recIndexes.forEach(idx=>{
-      const m=MEALS[idx];
+      const m=getAllMeals()[idx];
       const selected=todayMeal.menuId===m.id;
       const avail=m.ings.filter(ing=>fridgeHas(ing.n)).length;
+      const stars=getStars(m.id);
       const card=document.createElement('button');
       card.className='meal-card'+(selected?' selected':'');
       card.onclick=()=>openRecipe(m.id);
@@ -868,7 +976,8 @@ function renderMealTab(t){
             <div style="font-size:11px;color:var(--muted);margin-top:4px">食材 ${avail}/${m.ings.length}</div>
           </div>
         </div>
-        <div class="mc-tags">${m.tags.map(t=>`<span class="mc-tag">${t}</span>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div class="mc-tags">${m.tags.map(t=>`<span class="mc-tag">${t}</span>`).join('')}</div><div>${stars}</div></div>
+        <div style="display:none"</div>
         <div class="mc-nutr">
           <div class="mc-n"><span>${m.nutr.cal}</span> kcal</div>
           <div class="mc-n"><span>${m.nutr.protein}g</span> 蛋白質</div>
@@ -877,7 +986,7 @@ function renderMealTab(t){
         </div>`;
       el.appendChild(card);
     });
-  }else if(t==='today'){
+  }else if(t==='custom'){renderCustomTab();}else if(t==='eatout'){renderEatOutTab();}else if(t==='today'){
     const el=document.getElementById('today-meal-detail');el.innerHTML='';
     const todayMeal=getMealToday();
     if(!todayMeal.menuId){
@@ -954,6 +1063,8 @@ function openRecipe(mealId){
   const m=getMealById(mealId);if(!m)return;
   const todayMeal=getMealToday();
   const isSelected=todayMeal.menuId===mealId;
+  const fb=(state.mealFeedback||{})[mealId]||{};
+  const tips=fb.recipeTips||[];
   document.getElementById('recipe-content').innerHTML=`
     <div class="recipe-header"><div class="r-emoji">${m.emoji}</div><div class="r-info"><h2>${m.name}</h2><p>${m.desc}・⏱ ${m.time}分</p></div></div>
     <div class="recipe-nutr">
@@ -1110,15 +1221,373 @@ function renderHistory(){
   });
 }
 
+
+// ════ カスタムメニュー ════════════════════════════════════════════
+let pendingCustomMeal=null;
+async function generateRecipe(){
+  const name=document.getElementById('custom-name').value.trim();
+  if(!name){alert('料理名を入力してください');return;}
+  if(!cfg.anthropicKey){
+    // APIキーなし → 手動入力フォームを表示
+    showManualForm(name);return;
+  }
+  const btn=document.getElementById('ai-gen-btn');
+  btn.textContent='🔄 生成中...';btn.disabled=true;
+  try{
+    const prompt=`以下の料理名のレシピ情報をJSONのみで返してください。他のテキストや説明は一切不要です。
+料理名: ${name}
+{
+  "emoji": "絵文字1文字",
+  "desc": "料理の簡単な説明20文字以内",
+  "tags": ["タグ1","タグ2"],
+  "time": 調理時間（数値・分）,
+  "nutr": {"cal": カロリー数値,"protein": タンパク質g数値,"fat": 脂質g数値,"carb": 炭水化物g数値},
+  "ings": [{"n":"食材名","a":"量"}],
+  "steps": ["手順1","手順2","手順3","手順4","手順5"]
+}`;
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'';
+    const cleaned=text.replace(/```json|```/g,'').trim();
+    const recipe=JSON.parse(cleaned);
+    pendingCustomMeal={id:'c'+Date.now(),name,...recipe,isCustom:true};
+    showPreviewModal(pendingCustomMeal);
+  }catch(e){
+    alert('AI生成に失敗しました: '+e.message+'
+手動で入力してください');
+    showManualForm(name);
+  }
+  btn.textContent='🤖 AIで生成';btn.disabled=false;
+}
+function showManualForm(name){
+  const el=document.getElementById('ai-result');el.style.display='';
+  el.innerHTML=`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px">
+      <div class="sec-label" style="margin-bottom:10px">手動入力</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <input id="m-emoji" placeholder="絵文字" style="width:60px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:10px;color:white;font-size:18px;text-align:center;outline:none">
+        <input id="m-desc" placeholder="料理の説明" style="flex:1;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:10px;color:white;font-size:14px;outline:none;font-family:inherit">
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="m-time" type="number" placeholder="時間(分)" style="width:90px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:10px;color:white;outline:none;font-family:inherit">
+        <input id="m-cal" type="number" placeholder="kcal" style="width:80px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:10px;color:white;outline:none;font-family:inherit">
+      </div>
+      <button class="green-btn" style="width:100%" onclick="saveManualMeal('${name}')">✅ このメニューを保存</button>
+    </div>`;
+}
+function saveManualMeal(name){
+  const emoji=document.getElementById('m-emoji').value||'🍽️';
+  const desc=document.getElementById('m-desc').value||'';
+  const time=parseInt(document.getElementById('m-time').value)||20;
+  const cal=parseInt(document.getElementById('m-cal').value)||400;
+  const meal={id:'c'+Date.now(),name,emoji,desc,tags:['カスタム'],time,nutr:{cal,protein:20,fat:12,carb:40},ings:[],steps:[],isCustom:true};
+  state.customMeals=[...(state.customMeals||[]),meal];
+  saveLocal();schedulePush();
+  document.getElementById('custom-name').value='';
+  document.getElementById('ai-result').style.display='none';
+  renderMealTab('custom');alert('✅ 保存しました！');
+}
+function showPreviewModal(meal){
+  document.getElementById('custom-preview-content').innerHTML=`
+    <div class="recipe-header"><div class="r-emoji">${meal.emoji||'🍽️'}</div><div class="r-info"><h2>${meal.name}</h2><p>${meal.desc}・⏱ ${meal.time}分</p></div></div>
+    <div class="recipe-nutr">
+      <div class="rn"><div class="rn-val">${meal.nutr?.cal||'?'}</div><div class="rn-lbl">kcal</div></div>
+      <div class="rn"><div class="rn-val">${meal.nutr?.protein||'?'}g</div><div class="rn-lbl">蛋白質</div></div>
+      <div class="rn"><div class="rn-val">${meal.nutr?.fat||'?'}g</div><div class="rn-lbl">脂質</div></div>
+      <div class="rn"><div class="rn-val">${meal.nutr?.carb||'?'}g</div><div class="rn-lbl">糖質</div></div>
+    </div>
+    ${(meal.ings||[]).length?`<div class="recipe-section"><h3>材料</h3>${meal.ings.map(i=>`<div class="ing-row"><span>${i.n}</span><span>${i.a}</span></div>`).join('')}</div>`:''}
+    ${(meal.steps||[]).length?`<div class="recipe-section"><h3>作り方</h3>${meal.steps.map((s,i)=>`<div class="step-row"><div class="step-num">${i+1}</div><div class="step-txt">${s}</div></div>`).join('')}</div>`:''}
+    ${tips.length?`<div class="recipe-section"><h3 style="color:var(--gold)">🤖 AIレシピ改善ヒント</h3>${tips.map(t=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;color:rgba(232,245,233,0.8)">💡 ${t}</div>`).join('')}</div>`:''}
+    ${fb.notes?.length?`<div class="recipe-section"><h3 style="color:var(--purple)">📝 あなたのメモ</h3>${fb.notes.slice(-3).map(n=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:${n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)'}">★${n.rating}</span> <span style="color:rgba(232,245,233,0.7)">${n.text}</span><span style="float:right;font-size:11px;color:var(--muted)">${n.date}</span></div>`).join('')}</div>`:''}`;
+  document.getElementById('custom-preview-modal').classList.add('open');
+}
+function closeCustomPreview(){document.getElementById('custom-preview-modal').classList.remove('open');}
+function saveCustomMeal(){
+  if(!pendingCustomMeal)return;
+  state.customMeals=[...(state.customMeals||[]),pendingCustomMeal];
+  saveLocal();schedulePush();
+  closeCustomPreview();
+  document.getElementById('custom-name').value='';
+  document.getElementById('ai-result').style.display='none';
+  pendingCustomMeal=null;
+  recIndexes=[];
+  renderMealTab('custom');
+  alert('✅ カスタムメニューを保存しました！');
+}
+function deleteCustomMeal(id){
+  if(!confirm('このメニューを削除しますか？'))return;
+  state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);
+  saveLocal();schedulePush();renderMealTab('custom');renderMealPage();
+}
+function renderCustomTab(){
+  const el=document.getElementById('custom-list');if(!el)return;el.innerHTML='';
+  const customs=state.customMeals||[];
+  if(customs.length===0){el.innerHTML='<div class="empty-state"><div class="ei">✨</div><div class="et">カスタムメニューはまだありません</div></div>';return;}
+  const sec=document.createElement('div');sec.className='sec-label';sec.style.marginTop='16px';sec.textContent='保存済みカスタムメニュー';el.appendChild(sec);
+  customs.forEach(m=>{
+    const card=document.createElement('div');card.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px';
+    card.innerHTML=`<span style="font-size:26px">${m.emoji||'🍽️'}</span><div style="flex:1"><div style="color:white;font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--muted)">${m.desc||''} ・ ${m.time||'?'}分・${m.nutr?.cal||'?'}kcal</div></div><button class="pill-btn" onclick="openRecipe('${m.id}')">詳細</button><button onclick="deleteCustomMeal('${m.id}')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>`;
+    el.appendChild(card);
+  });
+}
+
+// ════ 外食 ═══════════════════════════════════════════════════════
+const CUISINES=[
+  {e:'🍣',l:'寿司・刺身'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ・イタリアン'},
+  {e:'🍔',l:'バーガー'},{e:'🥩',l:'肉料理'},{e:'🍱',l:'定食・和食'},
+  {e:'🌮',l:'エスニック'},{e:'🍣',l:'回転寿司'},{e:'🍢',l:'居酒屋'},
+  {e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'},{e:'🥗',l:'サラダ・ヘルシー'},
+];
+let selectedCuisine='🍽️';
+function renderEatOutTab(){
+  // 今日の外食状況
+  const todayMeal=getMealToday();
+  const secEl=document.getElementById('eatout-today-section');if(!secEl)return;secEl.innerHTML='';
+  if(todayMeal.type==='eatout'){
+    secEl.innerHTML=`
+      <div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:14px 16px;margin-bottom:14px">
+        <div style="font-size:12px;color:var(--gold);margin-bottom:6px">📍 今日の外食</div>
+        <div style="font-size:16px;font-weight:600;color:white;margin-bottom:10px">${todayMeal.emoji||'🍽️'} ${todayMeal.eatOutName||''}</div>
+        <button class="task-btn ${todayMeal.eaten?'done':''}" style="margin-bottom:0" onclick="toggleMealEaten()">
+          <div class="t-icon" style="background:${todayMeal.eaten?'rgba(111,207,151,0.2)':'rgba(255,255,255,0.05)'}">😋</div>
+          <div class="t-info"><div class="t-lbl">食べた</div></div>
+          <div class="chk" style="${todayMeal.eaten?'background:#6fcf97;border-color:#6fcf97;color:#111a14':'border-color:rgba(255,255,255,0.18)'}">${todayMeal.eaten?'✓':''}</div>
+        </button>
+      </div>`;
+  }
+  // 絵文字ボタン
+  const btnEl=document.getElementById('cuisine-btns');if(!btnEl)return;btnEl.innerHTML='';
+  CUISINES.forEach(c=>{
+    const b=document.createElement('button');
+    b.style.cssText='background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;padding:8px 12px;color:white;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.2s;display:flex;align-items:center;gap:4px;min-height:40px';
+    b.innerHTML=`${c.e} ${c.l}`;
+    b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('#cuisine-btns button').forEach(x=>x.style.borderColor='var(--border)');b.style.borderColor='var(--green)';};
+    btnEl.appendChild(b);
+  });
+  // 外食履歴
+  const histEl=document.getElementById('eatout-history');if(!histEl)return;histEl.innerHTML='';
+  const eatouts=Object.entries(state.meals||{}).filter(([,v])=>v.type==='eatout').sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10);
+  if(eatouts.length===0){histEl.innerHTML='<div class="empty-state" style="padding:20px"><div class="et">外食の記録がまだありません</div></div>';return;}
+  eatouts.forEach(([date,m])=>{
+    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)';
+    row.innerHTML=`<span style="font-size:22px">${m.emoji||'🍽️'}</span><div style="flex:1"><div style="font-size:14px;color:white">${m.eatOutName||''}</div><div style="font-size:11px;color:var(--muted)">${date}</div></div><span style="font-size:12px;color:${m.eaten?'var(--green)':'var(--muted)'}">${m.eaten?'✅食べた':'⬜未食'}</span>`;
+    histEl.appendChild(row);
+  });
+}
+function logEatOut_OLD(){
+  const name=document.getElementById('eatout-name').value.trim();
+  if(!name){alert('店名・料理名を入力してください');return;}
+  const k=todayStr();if(!state.meals)state.meals={};
+  state.meals[k]={type:'eatout',eatOutName:name,emoji:selectedCuisine,eaten:false,cooked:true};
+  if(!state.days[k])state.days[k]={};
+  state.days[k].meal=false;
+  document.getElementById('eatout-name').value='';
+  saveLocal();schedulePush();renderHome();renderMealPage();renderEatOutTab();
+}
+
+
+// ════ 水分トラッキング ════════════════════════════════════════
+const DRINKS=[
+  {id:'water',  icon:'💧', name:'水',    unit:'ml', goal:2000, color:'#7ab8d4', steps:[150,350,500]},
+  {id:'soymilk',icon:'🥛', name:'豆乳',  unit:'ml', goal:400,  color:'#c4963a', steps:[200,400]},
+  {id:'alcohol', icon:'🍺', name:'お酒',  unit:'ml', goal:350,  color:'#b08ac0', steps:[150,350,500]},
+];
+function getDrinks(){return state.drinks||{};}
+function getTodayDrinks(){return (state.drinks||{})[todayStr()]||{};}
+function addDrink(id,ml){
+  if(!state.drinks)state.drinks={};
+  const k=todayStr();
+  if(!state.drinks[k])state.drinks[k]={};
+  state.drinks[k][id]=(state.drinks[k][id]||0)+ml;
+  saveLocal();schedulePush();renderDrinkWidget();
+}
+function renderDrinkWidget(){
+  const el=document.getElementById('drink-widget');if(!el)return;
+  const today=getTodayDrinks();
+  el.innerHTML='';
+  DRINKS.forEach(d=>{
+    const amt=today[d.id]||0;
+    const pct=Math.min(100,Math.round(amt/d.goal*100));
+    const row=document.createElement('div');row.className='drink-row';
+    row.innerHTML=`
+      <div class="drink-icon">${d.icon}</div>
+      <div class="drink-info">
+        <div class="drink-name">${d.name}</div>
+        <div class="drink-prog-bg"><div class="drink-prog" style="width:${pct}%;background:${d.color}"></div></div>
+      </div>
+      <div class="drink-amt">${amt<1000?amt+'ml':(amt/1000).toFixed(1)+'L'}<br><span style="font-size:10px;color:var(--muted)">${pct}%</span></div>
+      <div class="drink-btns">${d.steps.map(s=>`<button class="drink-add" onclick="addDrink('${d.id}',${s})">+${s>=1000?s/1000+'L':s}</button>`).join('')}</div>`;
+    el.appendChild(row);
+  });
+}
+
+// ════ 食事フィードバック（学習）════════════════════════════════
+let pendingFeedbackMealId=null;
+function openFeedback(mealId){
+  pendingFeedbackMealId=mealId;
+  const fb=(state.mealFeedback||{})[mealId]||{};
+  const avg=fb.avgRating||0;
+  document.getElementById('fb-stars').innerHTML=
+    [1,2,3,4,5].map(n=>`<span class="star" onclick="setRating(${n})" data-v="${n}">${n<=Math.round(avg)?'⭐':'☆'}</span>`).join('');
+  document.getElementById('fb-note').value='';
+  document.getElementById('fb-meal-name').textContent=(getMealById(mealId)||{}).name||'';
+  document.getElementById('feedback-modal').classList.add('open');
+}
+function closeFeedback(){document.getElementById('feedback-modal').classList.remove('open');pendingFeedbackMealId=null;}
+let selectedRating=0;
+function setRating(n){
+  selectedRating=n;
+  document.querySelectorAll('.star').forEach(s=>{
+    s.textContent=parseInt(s.dataset.v)<=n?'⭐':'☆';
+  });
+}
+async function saveFeedback(){
+  if(!pendingFeedbackMealId||!selectedRating)return;
+  if(!state.mealFeedback)state.mealFeedback={};
+  const id=pendingFeedbackMealId;
+  const note=document.getElementById('fb-note').value.trim();
+  if(!state.mealFeedback[id])state.mealFeedback[id]={ratings:[],notes:[],avgRating:0};
+  state.mealFeedback[id].ratings.push(selectedRating);
+  if(note)state.mealFeedback[id].notes.push({date:todayStr(),text:note,rating:selectedRating});
+  const ratings=state.mealFeedback[id].ratings;
+  state.mealFeedback[id].avgRating=ratings.reduce((a,b)=>a+b,0)/ratings.length;
+  // レシピ改善（Claude API）
+  if(note&&cfg.anthropicKey&&selectedRating<=3){
+    await improveRecipeWithFeedback(id,note,selectedRating);
+  }
+  saveLocal();schedulePush();closeFeedback();renderHome();recIndexes=[];
+}
+async function improveRecipeWithFeedback(mealId,feedback,rating){
+  const meal=getMealById(mealId);if(!meal)return;
+  try{
+    const prompt=`料理「${meal.name}」について次のフィードバックがありました：「${feedback}」（評価：${rating}/5）
+このフィードバックを元に、次回より美味しく作るための改善ポイントを3つ以内で日本語で教えてください。
+JSON形式のみで返してください：{"tips":["改善1","改善2","改善3"]}`;
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'{}';
+    const cleaned=text.replace(/```json|```/g,'').trim();
+    const result=JSON.parse(cleaned);
+    if(result.tips&&result.tips.length){
+      if(!state.mealFeedback[mealId].recipeTips)state.mealFeedback[mealId].recipeTips=[];
+      state.mealFeedback[mealId].recipeTips=[...result.tips,...state.mealFeedback[mealId].recipeTips].slice(0,6);
+    }
+  }catch(e){console.error('recipe improve error',e);}
+}
+function getRating(mealId){return (state.mealFeedback||{})?.[mealId]?.avgRating||0;}
+function getStars(mealId){
+  const r=getRating(mealId);
+  if(!r)return '';
+  const cnt=(state.mealFeedback||{})?.[mealId]?.ratings?.length||0;
+  return `<span style="font-size:12px;color:#c4963a">★${r.toFixed(1)}</span><span style="font-size:10px;color:var(--muted)"> (${cnt}件)</span>`;
+}
+
+// ════ スコアにレーティング反映 ════════════════════════════════
+function scoreMealV2(meal){
+  let score=0;
+  (meal.ings||[]).forEach(ing=>{if(fridgeHas(ing.n))score+=2;});
+  const hist=Object.values(state.meals||{}).filter(m=>m.menuId===meal.id);
+  score-=hist.length*3;
+  const r=getRating(meal.id);
+  if(r>0)score+=r*2;
+  return score;
+}
+
+// ════ 常備品の個数管理 ════════════════════════════════════════
+function initStaplesQty(){
+  if(!state.staplesQty)state.staplesQty={};
+  STAPLES_MASTER.forEach(m=>{
+    if(!state.staplesQty[m.id]){
+      state.staplesQty[m.id]={qty:1,unit:'個',alertAt:1};
+    }
+  });
+}
+function updateStapleQty(id,qty){
+  initStaplesQty();
+  state.staplesQty[id].qty=qty;
+  checkStapleAlert(id);
+  saveLocal();schedulePush();
+}
+function checkStapleAlert(id){
+  const sq=state.staplesQty[id];
+  const master=STAPLES_MASTER.find(m=>m.id===id);
+  if(!master||!sq)return;
+  const name=master.name;
+  if(sq.qty<=sq.alertAt){
+    if(!(state.shopping||[]).find(s=>s.id==='stpl_'+id)){
+      state.shopping=[...(state.shopping||[]),{id:'stpl_'+id,text:name+'（補充）',needed:true,cat:'補充品'}];
+    }
+  }else{
+    state.shopping=(state.shopping||[]).filter(s=>s.id!=='stpl_'+id);
+  }
+}
+function setAlertAt(id,val){
+  initStaplesQty();
+  state.staplesQty[id].alertAt=val;
+  checkStapleAlert(id);
+  saveLocal();schedulePush();renderStockPage();
+}
+function renderStaplesQty(){
+  initStaplesQty();
+  const el=document.getElementById('staples-list');if(!el)return;el.innerHTML='';
+  const cats=[...new Set(STAPLES_MASTER.map(m=>m.cat))];
+  cats.forEach(cat=>{
+    const header=document.createElement('div');header.className='cat-header';header.textContent=cat;el.appendChild(header);
+    STAPLES_MASTER.filter(m=>m.cat===cat).forEach(master=>{
+      const sq=state.staplesQty[master.id]||{qty:1,unit:'個',alertAt:1};
+      const isLow=sq.qty<=sq.alertAt;
+      const isOut=sq.qty===0;
+      const color=isOut?'var(--red)':isLow?'var(--gold)':'white';
+      const row=document.createElement('div');row.className='qty-row';
+      row.style.borderColor=isOut?'rgba(248,113,113,0.25)':isLow?'rgba(196,150,58,0.25)':'var(--border)';
+      row.innerHTML=`
+        <span class="qty-name" style="color:${color}">${master.name}</span>
+        <input type="number" class="qty-inp" min="0" value="${sq.qty}"
+          onchange="updateStapleQty('${master.id}',parseInt(this.value)||0)"
+          style="border-color:${isOut?'rgba(248,113,113,0.4)':isLow?'rgba(196,150,58,0.4)':'rgba(255,255,255,0.12)'}">
+        <span class="qty-unit">${sq.unit}</span>
+        <button class="qty-alert ${isOut?'qa-out':isLow?'qa-warn':'qa-ok'}"
+          onclick="setAlertAt('${master.id}',${sq.alertAt<=0?1:0})" title="アラート閾値: ${sq.alertAt}以下で通知">
+          ${isOut?'切れ':isLow?'残り少':'在庫あり'}
+        </button>`;
+      el.appendChild(row);
+    });
+  });
+}
+
+// ════ 外食（詳細版）─────────────────────────────────────────
+function logEatOutV2(){
+  const restaurant=document.getElementById('eatout-restaurant').value.trim();
+  const dish=document.getElementById('eatout-dish').value.trim();
+  if(!dish){alert('料理名を入力してください');return;}
+  const k=todayStr();if(!state.meals)state.meals={};
+  const name=restaurant?`${restaurant} / ${dish}`:dish;
+  state.meals[k]={type:'eatout',eatOutName:name,restaurant,dish,emoji:selectedCuisine,eaten:false,cooked:true};
+  if(!state.days[k])state.days[k]={};
+  state.days[k].meal=false;
+  document.getElementById('eatout-restaurant').value='';
+  document.getElementById('eatout-dish').value='';
+  saveLocal();schedulePush();renderHome();renderMealPage();renderEatOutTab();
+}
+
 // ════════════════════════════════════════════════════
 //  全体描画
 // ════════════════════════════════════════════════════
-function renderAll(){renderHome();renderShopPage();renderMealPage();renderStockPage();}
+function renderAll(){renderHome();renderShopPage();renderMealPage();renderStockPage();renderDrinkWidget();}
 
 // ════════════════════════════════════════════════════
 //  起動
 // ════════════════════════════════════════════════════
-loadLocal();
+loadLocal();initStaplesQty();
 renderAll();
 pullFromCloud();
 setInterval(pullFromCloud,5*60*1000);
