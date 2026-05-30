@@ -7,7 +7,7 @@
 ## 📱 アプリ一覧
 
 ### 🚶 散歩メモ — 音声メモ × AI整理 × Suunto連携
-**URL:** https://itochu0523.github.io/sanpo-memo.html
+**URL:** https://itochu0523.github.io/sanpo/sanpo-memo.html
 
 散歩中にボタンを長押しするだけで音声をテキスト化。後でClaude AIがまとめ・カテゴリ分け・インサイト抽出・アクション化してくれる思考整理アプリ。SuuntoのワークアウトデータとAIメモを掛け合わせた「運動×思考」相関分析も可能。
 
