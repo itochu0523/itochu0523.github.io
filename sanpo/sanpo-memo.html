@@ -11,17 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0f1e;
-  --surface: #111827;
-  --surface2: #1a2535;
-  --accent: #00d4aa;
-  --accent2: #7c3aed;
-  --accent3: #f59e0b;
-  --text: #e8eaf0;
-  --text-dim: #6b7a99;
-  --border: rgba(255,255,255,0.08);
-  --rec: #ff4757;
-  --suunto: #e8650a;
+  --bg:#0a0f1e; --surface:#111827; --surface2:#1a2535;
+  --accent:#00d4aa; --accent2:#7c3aed; --accent3:#f59e0b;
+  --text:#e8eaf0; --text-dim:#6b7a99; --border:rgba(255,255,255,0.08);
+  --rec:#ff4757; --suunto:#e8650a;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Kaku Gothic New',sans-serif;overflow:hidden;position:fixed;width:100%;}
@@ -32,9 +25,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .header-title{font-size:18px;font-weight:900;letter-spacing:.05em;color:var(--accent);display:flex;align-items:center;gap:8px;}
 .header-title .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease-in-out infinite;}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
-.header-actions{display:flex;gap:8px;}
+.header-actions{display:flex;gap:8px;align-items:center;}
 .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .icon-btn:active{transform:scale(.93);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text-dim);transition:background .3s;}
+.sync-dot.ok{background:#22c55e;}
+.sync-dot.err{background:var(--rec);}
+.sync-dot.syncing{background:var(--accent3);animation:pulse-dot .8s ease-in-out infinite;}
 
 /* NAV */
 .nav{display:flex;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
@@ -53,26 +50,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .waveform-wrap{width:100%;height:70px;display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden;}
 .wave-bar{width:3px;border-radius:10px;background:var(--accent);opacity:.25;transition:height .1s ease;flex-shrink:0;}
 .recording .wave-bar{opacity:1;}
-
-.live-transcript{width:100%;min-height:72px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;font-size:15px;line-height:1.7;color:var(--text);position:relative;}
+.live-transcript{width:100%;min-height:72px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;font-size:15px;line-height:1.7;color:var(--text);}
 .live-transcript .placeholder{color:var(--text-dim);font-size:13px;}
 .live-transcript.active-text{border-color:rgba(0,212,170,.3);}
 .interim{color:var(--text-dim);font-style:italic;}
-
 .rec-btn-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
 .rec-btn{width:110px;height:110px;border-radius:50%;border:3px solid var(--rec);background:rgba(255,71,87,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;user-select:none;-webkit-user-select:none;touch-action:none;}
 .rec-btn::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(255,71,87,.2);animation:ring-pulse 2s ease-out infinite;}
 @keyframes ring-pulse{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.4);opacity:0;}}
-.rec-btn.pressed{background:rgba(255,71,87,.25);border-color:var(--rec);transform:scale(.95);box-shadow:0 0 40px rgba(255,71,87,.5);}
+.rec-btn.pressed{background:rgba(255,71,87,.25);transform:scale(.95);box-shadow:0 0 40px rgba(255,71,87,.5);}
 .rec-icon{width:38px;height:38px;background:var(--rec);border-radius:50%;transition:border-radius .15s;}
 .rec-btn.pressed .rec-icon{border-radius:7px;width:34px;height:34px;}
 .rec-label{font-size:12px;color:var(--text-dim);text-align:center;letter-spacing:.08em;}
-
 .save-area{width:100%;display:flex;flex-direction:column;gap:10px;}
 .tag-row{display:flex;gap:8px;flex-wrap:wrap;}
 .tag-chip{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:12px;color:var(--text-dim);cursor:pointer;transition:all .15s;user-select:none;}
 .tag-chip.selected{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.1);}
-.save-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent) 0%,#00a887 100%);color:#0a0f1e;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;letter-spacing:.05em;}
+.save-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent) 0%,#00a887 100%);color:#0a0f1e;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;}
 .save-btn:disabled{opacity:.35;cursor:not-allowed;}
 .save-btn:not(:disabled):active{transform:scale(.97);}
 
@@ -81,16 +75,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .memo-filters::-webkit-scrollbar{display:none;}
 .filter-chip{padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:12px;color:var(--text-dim);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0;font-family:inherit;}
 .filter-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.1);}
-.memo-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.memo-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
 .memo-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:3px 0 0 3px;}
-.memo-card:active{transform:scale(.98);}
 .memo-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
 .memo-date{font-size:11px;color:var(--text-dim);font-family:'Space Mono',monospace;}
 .memo-tags{display:flex;gap:4px;flex-wrap:wrap;}
 .memo-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(124,58,237,.2);color:#a78bfa;border:1px solid rgba(124,58,237,.3);}
 .memo-text{font-size:14px;line-height:1.6;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .memo-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
-.memo-action-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.memo-action-btn{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;font-family:inherit;}
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-dim);}
 .empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
 .empty-state p{font-size:14px;line-height:1.7;}
@@ -103,7 +96,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .ai-mode-btn{padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:12px;font-family:inherit;cursor:pointer;text-align:center;transition:all .2s;line-height:1.5;}
 .ai-mode-btn .mode-icon{font-size:22px;display:block;margin-bottom:5px;}
 .ai-mode-btn.selected{border-color:var(--accent2);color:#a78bfa;background:rgba(124,58,237,.1);}
-.ai-run-btn{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent2) 0%,#5b21b6 100%);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;letter-spacing:.05em;margin-bottom:18px;}
+.ai-run-btn{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent2) 0%,#5b21b6 100%);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;margin-bottom:18px;}
 .ai-run-btn:disabled{opacity:.4;cursor:not-allowed;}
 .ai-run-btn:not(:disabled):active{transform:scale(.97);}
 .ai-result{background:var(--surface);border:1px solid rgba(124,58,237,.2);border-radius:16px;padding:16px;font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
@@ -116,11 +109,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .suunto-hero{background:linear-gradient(135deg,rgba(232,101,10,.15) 0%,rgba(255,71,87,.05) 100%);border:1px solid rgba(232,101,10,.25);border-radius:20px;padding:18px;margin-bottom:16px;}
 .suunto-hero h2{font-size:15px;font-weight:700;margin-bottom:5px;color:#fb923c;}
 .suunto-hero p{font-size:13px;color:var(--text-dim);line-height:1.6;}
-
-.suunto-connect-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--suunto) 0%,#c2410c 100%);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.suunto-connect-btn:active{transform:scale(.97);}
+.suunto-connect-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--suunto) 0%,#c2410c 100%);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;margin-bottom:14px;}
 .suunto-connect-btn.connected{background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);}
-
 .workout-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
 .workout-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--suunto);border-radius:3px 0 0 3px;}
 .workout-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
@@ -130,8 +120,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .stat-item{text-align:center;background:var(--surface2);border-radius:10px;padding:8px 6px;}
 .stat-val{font-size:16px;font-weight:700;color:var(--text);font-family:'Space Mono',monospace;}
 .stat-unit{font-size:9px;color:var(--text-dim);letter-spacing:.05em;margin-top:1px;}
-
-/* Correlation card */
 .correlation-card{background:var(--surface);border:1px solid rgba(0,212,170,.2);border-radius:16px;padding:16px;margin-bottom:12px;}
 .correlation-card h3{font-size:13px;color:var(--accent);margin-bottom:12px;font-weight:700;}
 .correlation-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;}
@@ -139,15 +127,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .corr-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .6s ease;}
 .corr-label{min-width:60px;color:var(--text-dim);font-size:12px;}
 .corr-val{min-width:45px;text-align:right;font-size:12px;font-family:'Space Mono',monospace;color:var(--text);}
-
-/* Summary stats */
 .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .summary-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;}
 .summary-card .s-val{font-size:22px;font-weight:700;font-family:'Space Mono',monospace;color:var(--accent);}
 .summary-card .s-label{font-size:11px;color:var(--text-dim);margin-top:4px;letter-spacing:.05em;}
-.summary-card .s-sub{font-size:10px;color:var(--text-dim);margin-top:2px;}
-
-/* Idea map */
 .idea-section{margin-bottom:18px;}
 .idea-section-title{font-size:12px;letter-spacing:.1em;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
 .idea-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
@@ -166,15 +149,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 .modal-close{width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:14px;font-family:inherit;cursor:pointer;margin-top:8px;}
 
 /* SETTINGS */
-.settings-row{margin-bottom:16px;}
-.settings-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;display:block;letter-spacing:.05em;}
+.settings-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.settings-section:last-of-type{border-bottom:none;}
+.settings-section-title{font-size:11px;letter-spacing:.1em;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;}
+.settings-row{margin-bottom:12px;}
+.settings-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;display:block;}
 .settings-input{width:100%;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:'Space Mono',monospace;outline:none;transition:border-color .2s;}
 .settings-input:focus{border-color:var(--accent);}
-.settings-save{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent) 0%,#00a887 100%);color:#0a0f1e;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;}
 .settings-hint{font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.5;}
+.settings-save{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent) 0%,#00a887 100%);color:#0a0f1e;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;}
+.sync-status-box{border-radius:10px;padding:10px 14px;font-size:12px;margin-top:10px;line-height:1.5;}
+.sync-status-box.ok{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.sync-status-box.err{background:rgba(255,71,87,.1);color:var(--rec);border:1px solid rgba(255,71,87,.2);}
+.sync-test-btn{width:100%;padding:11px;border-radius:12px;border:1px solid rgba(0,212,170,.3);background:rgba(0,212,170,.05);color:var(--accent);font-size:13px;font-family:inherit;cursor:pointer;margin-top:8px;}
 
 /* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--accent);border-radius:50px;padding:10px 20px;font-size:13px;color:var(--accent);opacity:0;transition:all .3s ease;z-index:300;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--accent);border-radius:50px;padding:10px 20px;font-size:13px;color:var(--accent);opacity:0;transition:all .3s;z-index:300;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .count-badge{display:inline-block;min-width:18px;height:18px;background:var(--accent);color:#0a0f1e;border-radius:9px;font-size:10px;font-weight:700;line-height:18px;text-align:center;padding:0 5px;margin-left:4px;}
 .section-label{font-size:11px;letter-spacing:.1em;color:var(--text-dim);margin:16px 0 8px;text-transform:uppercase;}
@@ -186,6 +176,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
   <div class="header">
     <div class="header-title"><span class="dot"></span>散歩メモ</div>
     <div class="header-actions">
+      <span class="sync-dot" id="sync-dot" title="同期状態"></span>
+      <button class="icon-btn" id="btn-sync" title="今すぐ同期">🔄</button>
       <button class="icon-btn" id="btn-settings">⚙️</button>
     </div>
   </div>
@@ -245,7 +237,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
     <div class="scroll-area">
       <div class="ai-hero">
         <h2>🤖 Claude AI で整理</h2>
-        <p>保存したメモをまとめて分析します。Suuntoデータと組み合わせるとさらに深い分析が可能です。</p>
+        <p>保存したメモをまとめて分析。Suuntoデータと組み合わせるとさらに深い分析が可能です。</p>
       </div>
       <div class="ai-mode-select">
         <button class="ai-mode-btn selected" data-mode="summary"><span class="mode-icon">📋</span>まとめ・要約</button>
@@ -263,100 +255,49 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
     <div class="scroll-area">
       <div class="suunto-hero">
         <h2>🏃 Suunto 連携</h2>
-        <p>散歩データ（時間・距離・心拍数）を取り込み、メモとの相関を分析します。</p>
+        <p>散歩データ（時間・距離・心拍数）とメモの相関を分析します。</p>
       </div>
-
-      <!-- 接続状態 -->
-      <div id="suunto-auth-area">
-        <div class="settings-row">
-          <label class="settings-label">SUUNTO API キー（Subscription Key）</label>
-          <input type="password" class="settings-input" id="suunto-key-input" placeholder="設定 ⚙️ から入力してください">
-          <div class="settings-hint">Suunto Developer Portal で取得できます。<br>APIキーはこのデバイスのみに保存されます。</div>
-        </div>
-        <div class="settings-row">
-          <label class="settings-label">アクセストークン（OAuth）</label>
-          <input type="password" class="settings-input" id="suunto-token-input" placeholder="OAuth アクセストークン">
-        </div>
-        <button class="suunto-connect-btn" id="suunto-fetch-btn">🔄 ワークアウトを取得</button>
-      </div>
-
-      <!-- FITファイルアップロード（代替手段） -->
       <div style="margin-bottom:16px;">
-        <div class="settings-label" style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
-          <span>📁 FITファイルで取り込む（手動）</span>
-        </div>
-        <div style="background:var(--surface);border:1px dashed rgba(232,101,10,.4);border-radius:14px;padding:18px;text-align:center;cursor:pointer;" id="fit-drop-zone">
+        <div class="section-label">📁 FITファイルで取り込む</div>
+        <div style="background:var(--surface);border:1px dashed rgba(232,101,10,.4);border-radius:14px;padding:18px;text-align:center;">
           <div style="font-size:28px;margin-bottom:8px;">📂</div>
-          <div style="font-size:13px;color:var(--text-dim);line-height:1.6;">Suunto AppからエクスポートしたFITファイル<br>をここに読み込む</div>
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.6;">Suunto AppからエクスポートしたFIT/JSON/CSVファイル</div>
           <input type="file" id="fit-file-input" accept=".fit,.json,.csv" style="display:none" multiple>
           <button style="margin-top:12px;padding:8px 20px;border-radius:10px;border:1px solid rgba(232,101,10,.4);background:rgba(232,101,10,.1);color:#fb923c;font-size:13px;font-family:inherit;cursor:pointer;" onclick="document.getElementById('fit-file-input').click()">ファイルを選択</button>
         </div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5;">
-          📱 Suunto App → アクティビティ → 共有 → FIT形式でエクスポート<br>
-          ※ JSONで手入力も可
-        </div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5;">📱 Suunto App → アクティビティ → 共有 → JSON形式でエクスポート</div>
       </div>
-
-      <!-- 手動入力 -->
-      <div class="settings-label" style="margin-bottom:10px;">✏️ 手動でワークアウトを入力</div>
+      <div class="section-label">✏️ 手動で追加</div>
       <div id="manual-workout-form" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div>
-            <div class="settings-label">日付</div>
-            <input type="date" class="settings-input" id="wo-date" style="font-family:inherit;">
-          </div>
-          <div>
-            <div class="settings-label">時間 (分)</div>
-            <input type="number" class="settings-input" id="wo-duration" placeholder="45" min="1">
-          </div>
-          <div>
-            <div class="settings-label">距離 (km)</div>
-            <input type="number" class="settings-input" id="wo-distance" placeholder="4.2" step="0.1" min="0">
-          </div>
-          <div>
-            <div class="settings-label">平均心拍 (bpm)</div>
-            <input type="number" class="settings-input" id="wo-hr" placeholder="120" min="40" max="220">
-          </div>
+          <div><div class="settings-label">日付</div><input type="date" class="settings-input" id="wo-date" style="font-family:inherit;"></div>
+          <div><div class="settings-label">時間 (分)</div><input type="number" class="settings-input" id="wo-duration" placeholder="45" min="1"></div>
+          <div><div class="settings-label">距離 (km)</div><input type="number" class="settings-input" id="wo-distance" placeholder="4.2" step="0.1" min="0"></div>
+          <div><div class="settings-label">平均心拍</div><input type="number" class="settings-input" id="wo-hr" placeholder="120" min="40" max="220"></div>
         </div>
-        <div style="margin-bottom:10px;">
-          <div class="settings-label">アクティビティ種別</div>
-          <select class="settings-input" id="wo-type" style="font-family:inherit;">
-            <option value="WALKING">🚶 ウォーキング</option>
-            <option value="RUNNING">🏃 ランニング</option>
-            <option value="HIKING">🥾 ハイキング</option>
-            <option value="CYCLING">🚴 サイクリング</option>
-            <option value="OTHER">📍 その他</option>
-          </select>
-        </div>
+        <select class="settings-input" id="wo-type" style="font-family:inherit;margin-bottom:10px;">
+          <option value="WALKING">🚶 ウォーキング</option>
+          <option value="RUNNING">🏃 ランニング</option>
+          <option value="HIKING">🥾 ハイキング</option>
+          <option value="CYCLING">🚴 サイクリング</option>
+          <option value="OTHER">📍 その他</option>
+        </select>
         <button class="save-btn" id="add-workout-btn">ワークアウトを追加</button>
       </div>
-
-      <!-- ワークアウト一覧 -->
       <div id="workout-list-area">
         <div class="empty-state" id="empty-workouts">
           <div class="empty-icon">⌚</div>
-          <p>ワークアウトデータがありません<br>FITファイルを読み込むか<br>手動で入力してください</p>
+          <p>ワークアウトデータがありません<br>FITファイルを読み込むか手動で入力</p>
         </div>
       </div>
-
-      <!-- 相関分析 -->
-      <div id="correlation-area" style="display:none;">
-        <div class="section-label">📊 散歩 × メモ 相関分析</div>
-        <div class="correlation-card">
-          <h3>同日のメモ数と運動量</h3>
-          <div id="correlation-content"></div>
-        </div>
-      </div>
+      <div id="correlation-area" style="display:none;"></div>
     </div>
   </div>
 
   <!-- アイデアマップ PAGE -->
   <div class="page" id="page-map">
     <div class="scroll-area" id="idea-map-area">
-      <div class="empty-state">
-        <div class="empty-icon">🗺️</div>
-        <p>AI整理を実行すると<br>ここにアイデアが整理されます</p>
-      </div>
+      <div class="empty-state"><div class="empty-icon">🗺️</div><p>AI整理を実行するとここにアイデアが整理されます</p></div>
     </div>
   </div>
 </div>
@@ -377,25 +318,57 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
   <div class="modal">
     <div class="modal-handle"></div>
     <h3>⚙️ 設定</h3>
-    <div class="settings-row">
-      <label class="settings-label">ANTHROPIC API KEY</label>
-      <input type="password" class="settings-input" id="api-key-input" placeholder="sk-ant-...">
-      <div class="settings-hint">AI整理機能に必要。このブラウザのみに保存。</div>
+
+    <!-- SYNC SECTION -->
+    <div class="settings-section">
+      <div class="settings-section-title">☁️ クラウド同期 (JSONBin.io)</div>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.6;">
+        PCとモバイル間でメモ・ワークアウトデータを自動同期します。<br>
+        <a href="https://jsonbin.io" target="_blank" style="color:var(--accent);">jsonbin.io</a> で無料アカウントを作成し、Secret Keyをコピーしてください。
+      </p>
+      <div class="settings-row">
+        <label class="settings-label">JSONBin Secret Key</label>
+        <input type="password" class="settings-input" id="cfg-sync-key" placeholder="$2b$10$...">
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Bin ID <span style="color:var(--text-dim);font-size:10px;">（初回保存後に自動取得）</span></label>
+        <input type="text" class="settings-input" id="cfg-bin-id" placeholder="自動入力されます">
+      </div>
+      <button class="sync-test-btn" id="sync-test-btn">🔄 接続テスト &amp; 同期</button>
+      <div id="sync-status-box"></div>
     </div>
-    <div class="settings-row">
-      <label class="settings-label">SUUNTO Subscription Key</label>
-      <input type="password" class="settings-input" id="suunto-key-setting" placeholder="xxxxxxxx-xxxx-...">
+
+    <!-- API KEYS SECTION -->
+    <div class="settings-section">
+      <div class="settings-section-title">🤖 AI設定</div>
+      <div class="settings-row">
+        <label class="settings-label">Anthropic API Key</label>
+        <input type="password" class="settings-input" id="cfg-anthropic-key" placeholder="sk-ant-...">
+        <div class="settings-hint">AI整理機能に必要。このデバイスのみに保存。</div>
+      </div>
     </div>
-    <div class="settings-row">
-      <label class="settings-label">SUUNTO Access Token</label>
-      <input type="password" class="settings-input" id="suunto-token-setting" placeholder="Bearer トークン">
+
+    <!-- SUUNTO SECTION -->
+    <div class="settings-section">
+      <div class="settings-section-title">🏃 Suunto API (オプション)</div>
+      <div class="settings-row">
+        <label class="settings-label">Subscription Key</label>
+        <input type="password" class="settings-input" id="cfg-suunto-key" placeholder="xxxxxxxx-xxxx-...">
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Access Token</label>
+        <input type="password" class="settings-input" id="cfg-suunto-token" placeholder="Bearer トークン">
+      </div>
     </div>
-    <div class="settings-row">
-      <label class="settings-label">データ管理</label>
-      <button class="memo-action-btn" id="export-btn" style="width:100%;padding:12px;margin-bottom:8px;font-size:13px;">📤 メモをエクスポート (JSON)</button>
-      <button class="memo-action-btn" id="clear-btn" style="width:100%;padding:12px;font-size:13px;color:var(--rec)">🗑️ 全データを削除</button>
+
+    <!-- DATA SECTION -->
+    <div class="settings-section">
+      <div class="settings-section-title">📦 データ管理</div>
+      <button class="memo-action-btn" id="export-btn" style="width:100%;padding:12px;margin-bottom:8px;font-size:13px;border-radius:12px;">📤 データをエクスポート (JSON)</button>
+      <button class="memo-action-btn" id="clear-btn" style="width:100%;padding:12px;font-size:13px;border-radius:12px;color:var(--rec);">🗑️ 全データを削除</button>
     </div>
-    <button class="settings-save" id="settings-save">保存</button>
+
+    <button class="settings-save" id="settings-save">設定を保存</button>
     <button class="modal-close" id="settings-close" style="margin-top:8px;">キャンセル</button>
   </div>
 </div>
@@ -403,575 +376,510 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Zen Ka
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
-let memos = JSON.parse(localStorage.getItem('sanpo_memos') || '[]');
-let workouts = JSON.parse(localStorage.getItem('sanpo_workouts') || '[]');
-let apiKey = localStorage.getItem('sanpo_apikey') || '';
+// ═══════════════════════════════════════════════════════════════
+// CONFIG & STATE
+// ═══════════════════════════════════════════════════════════════
+const CFG_KEY = 'sanpo_cfg';
+const STATE_KEY = 'sanpo_state';
+
+let cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+// cfg: { syncKey, binId, anthropicKey, suuntoKey, suuntoToken }
+
+let state = JSON.parse(localStorage.getItem(STATE_KEY) || '{"memos":[],"workouts":[]}');
+// state: { memos:[], workouts:[] }
+
+function saveCfg() { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
+function saveLocal() { localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+
 let currentFilter = 'all';
 let currentAiMode = 'summary';
 let recognition = null;
 let isRecording = false;
 let finalText = '';
 let selectedTags = [];
+let syncTimer = null;
 
-function saveState() {
-  localStorage.setItem('sanpo_memos', JSON.stringify(memos));
-  localStorage.setItem('sanpo_workouts', JSON.stringify(workouts));
-}
-
-function showToast(msg, duration = 2200) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
-}
-
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function formatDate(iso) {
   const d = new Date(iso);
   return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
 function dateOnly(iso) { return new Date(iso).toISOString().slice(0,10); }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function fmtDuration(sec) {
-  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60);
-  return h > 0 ? `${h}h${String(m).padStart(2,'0')}m` : `${m}分`;
+function fmtDur(sec) { const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60); return h>0?`${h}h${String(m).padStart(2,'0')}m`:`${m}分`; }
+
+function showToast(msg, dur=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
-// ═══════════════════════════════════════
-// WAVEFORM
-// ═══════════════════════════════════════
-const waveWrap = document.getElementById('waveform');
-for (let i = 0; i < 40; i++) {
-  const b = document.createElement('div');
-  b.className = 'wave-bar';
-  b.style.height = '4px';
-  b.style.animationDelay = `${(i * 0.5 / 40).toFixed(2)}s`;
-  waveWrap.appendChild(b);
-}
-let waveInterval = null;
-function startWave() {
-  waveWrap.classList.add('recording');
-  waveInterval = setInterval(() => {
-    waveWrap.querySelectorAll('.wave-bar').forEach(b => { b.style.height = (4 + Math.random() * 60) + 'px'; });
-  }, 90);
-}
-function stopWave() {
-  clearInterval(waveInterval);
-  waveWrap.classList.remove('recording');
-  waveWrap.querySelectorAll('.wave-bar').forEach(b => b.style.height = '4px');
+// ═══════════════════════════════════════════════════════════════
+// CLOUD SYNC (JSONBin.io) — same pattern as daily-tasks
+// ═══════════════════════════════════════════════════════════════
+function setSyncDot(status) {
+  // status: 'ok' | 'err' | 'syncing' | 'off'
+  const dot = document.getElementById('sync-dot');
+  dot.className = 'sync-dot ' + (status === 'off' ? '' : status);
 }
 
-// ═══════════════════════════════════════
-// SPEECH
-// ═══════════════════════════════════════
-function initSpeech() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showToast('⚠️ このブラウザは音声認識非対応です'); return null; }
-  const r = new SR();
-  r.lang = 'ja-JP'; r.continuous = true; r.interimResults = true;
-  r.onresult = (e) => {
-    let interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      const t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalText += t;
-      else interim = t;
+async function fetchWithTimeout(url, opts, ms=10000) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), ms);
+  try {
+    const r = await fetch(url, {...opts, signal: ctrl.signal});
+    clearTimeout(tid); return r;
+  } catch(e) { clearTimeout(tid); throw e; }
+}
+
+async function pushCloud() {
+  if (!cfg.syncKey) return false;
+  setSyncDot('syncing');
+  try {
+    if (!cfg.binId) {
+      // Create new bin
+      const r = await fetchWithTimeout('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'X-Master-Key':cfg.syncKey, 'X-Bin-Name':'SanpoMemo' },
+        body: JSON.stringify(state)
+      });
+      if (!r.ok) { const t=await r.text(); throw new Error('HTTP '+r.status+': '+t.slice(0,80)); }
+      const j = await r.json();
+      if (j.metadata?.id) {
+        cfg.binId = j.metadata.id; saveCfg();
+        const el = document.getElementById('cfg-bin-id'); if (el) el.value = cfg.binId;
+      }
+    } else {
+      // Update existing bin
+      const r = await fetchWithTimeout(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type':'application/json', 'X-Master-Key':cfg.syncKey },
+        body: JSON.stringify(state)
+      });
+      if (!r.ok) { const t=await r.text(); throw new Error('HTTP '+r.status+': '+t.slice(0,80)); }
     }
-    updateTranscript(interim);
-  };
-  r.onerror = (e) => { if (e.error !== 'aborted') showToast('音声認識エラー: ' + e.error); stopRecording(); };
-  r.onend = () => { if (isRecording) { try { r.start(); } catch(e) {} } };
-  return r;
-}
-function updateTranscript(interim) {
-  const ph = document.getElementById('transcript-placeholder');
-  const ft = document.getElementById('final-text');
-  const it = document.getElementById('interim-text');
-  const area = document.getElementById('live-transcript');
-  const has = finalText || interim;
-  ph.style.display = has ? 'none' : 'block';
-  ft.textContent = finalText;
-  it.textContent = interim;
-  has ? area.classList.add('active-text') : area.classList.remove('active-text');
-  document.getElementById('save-btn').disabled = !finalText.trim();
-}
-function startRecording() {
-  if (isRecording) return;
-  isRecording = true;
-  if (!recognition) recognition = initSpeech();
-  if (!recognition) { isRecording = false; return; }
-  try { recognition.start(); } catch(e) {}
-  document.getElementById('rec-btn').classList.add('pressed');
-  document.getElementById('rec-label').innerHTML = '<strong style="color:var(--rec)">録音中...</strong> 離すと停止';
-  startWave();
-}
-function stopRecording() {
-  if (!isRecording) return;
-  isRecording = false;
-  if (recognition) { try { recognition.stop(); } catch(e) {} }
-  document.getElementById('rec-btn').classList.remove('pressed');
-  document.getElementById('rec-label').innerHTML = '<strong>長押し</strong>で録音';
-  stopWave();
-  updateTranscript('');
+    setSyncDot('ok');
+    return true;
+  } catch(e) {
+    setSyncDot('err');
+    console.error('push:', e);
+    return e.name === 'AbortError' ? 'timeout' : e.message;
+  }
 }
 
-const recBtn = document.getElementById('rec-btn');
-recBtn.addEventListener('mousedown', e => { e.preventDefault(); startRecording(); });
-recBtn.addEventListener('mouseup', stopRecording);
-recBtn.addEventListener('mouseleave', () => { if (isRecording) stopRecording(); });
-recBtn.addEventListener('touchstart', e => { e.preventDefault(); startRecording(); }, { passive: false });
-recBtn.addEventListener('touchend', e => { e.preventDefault(); stopRecording(); }, { passive: false });
-recBtn.addEventListener('touchcancel', stopRecording);
+async function pullCloud() {
+  if (!cfg.syncKey || !cfg.binId) return false;
+  setSyncDot('syncing');
+  try {
+    const r = await fetchWithTimeout(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`, {
+      headers: { 'X-Master-Key': cfg.syncKey }
+    });
+    if (!r.ok) { const t=await r.text(); throw new Error('HTTP '+r.status+': '+t.slice(0,80)); }
+    const j = await r.json();
+    if (j.record && j.record.memos) {
+      // Merge: take server data as base, then apply any local-only items
+      const serverMemoIds = new Set((j.record.memos||[]).map(m=>m.id));
+      const localOnly = state.memos.filter(m => !serverMemoIds.has(m.id));
+      state = j.record;
+      if (!state.memos) state.memos = [];
+      if (!state.workouts) state.workouts = [];
+      // prepend local-only memos
+      if (localOnly.length) { state.memos = [...localOnly, ...state.memos]; }
+      saveLocal();
+      renderMemoList(); renderWorkouts(); renderCorrelation(); updateNavBadge();
+    }
+    setSyncDot('ok');
+    return true;
+  } catch(e) {
+    setSyncDot('err');
+    console.error('pull:', e);
+    return e.name === 'AbortError' ? 'timeout' : e.message;
+  }
+}
 
-// ═══════════════════════════════════════
-// TAGS
-// ═══════════════════════════════════════
-document.getElementById('tag-row').addEventListener('click', e => {
-  const chip = e.target.closest('.tag-chip'); if (!chip) return;
-  const tag = chip.dataset.tag;
-  if (selectedTags.includes(tag)) { selectedTags = selectedTags.filter(t => t !== tag); chip.classList.remove('selected'); }
-  else { selectedTags.push(tag); chip.classList.add('selected'); }
+// Schedule auto-push 1.5s after any change
+function schedSync() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushCloud, 1500);
+}
+
+// Pull on load if configured
+window.addEventListener('load', () => {
+  if (cfg.syncKey && cfg.binId) {
+    pullCloud().then(() => {
+      // then schedule periodic pull every 5min (for multi-device)
+      setInterval(pullCloud, 5 * 60 * 1000);
+    });
+  } else { setSyncDot('off'); }
 });
 
-// ═══════════════════════════════════════
+document.getElementById('btn-sync').addEventListener('click', async () => {
+  if (!cfg.syncKey) { showToast('⚠️ 設定からJSONBinキーを入力してください'); document.getElementById('settings-overlay').classList.add('open'); return; }
+  const res = cfg.binId ? await pullCloud() : await pushCloud();
+  showToast(res === true ? '✅ 同期完了！' : '❌ 同期失敗: ' + res);
+});
+
+// ═══════════════════════════════════════════════════════════════
+// WAVEFORM
+// ═══════════════════════════════════════════════════════════════
+const waveWrap = document.getElementById('waveform');
+for (let i=0;i<40;i++){const b=document.createElement('div');b.className='wave-bar';b.style.height='4px';waveWrap.appendChild(b);}
+let waveInterval=null;
+function startWave(){waveWrap.classList.add('recording');waveInterval=setInterval(()=>{waveWrap.querySelectorAll('.wave-bar').forEach(b=>{b.style.height=(4+Math.random()*60)+'px';});},90);}
+function stopWave(){clearInterval(waveInterval);waveWrap.classList.remove('recording');waveWrap.querySelectorAll('.wave-bar').forEach(b=>b.style.height='4px');}
+
+// ═══════════════════════════════════════════════════════════════
+// SPEECH
+// ═══════════════════════════════════════════════════════════════
+function initSpeech(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showToast('⚠️ このブラウザは音声認識非対応');return null;}
+  const r=new SR(); r.lang='ja-JP'; r.continuous=true; r.interimResults=true;
+  r.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=t;else interim=t;}updateTranscript(interim);};
+  r.onerror=e=>{if(e.error!=='aborted')showToast('音声認識エラー: '+e.error);stopRecording();};
+  r.onend=()=>{if(isRecording){try{r.start();}catch(e){}}};
+  return r;
+}
+function updateTranscript(interim){
+  const ph=document.getElementById('transcript-placeholder');
+  const ft=document.getElementById('final-text');
+  const it=document.getElementById('interim-text');
+  const area=document.getElementById('live-transcript');
+  const has=finalText||interim;
+  ph.style.display=has?'none':'block'; ft.textContent=finalText; it.textContent=interim;
+  has?area.classList.add('active-text'):area.classList.remove('active-text');
+  document.getElementById('save-btn').disabled=!finalText.trim();
+}
+function startRecording(){
+  if(isRecording)return; isRecording=true;
+  if(!recognition)recognition=initSpeech();
+  if(!recognition){isRecording=false;return;}
+  try{recognition.start();}catch(e){}
+  document.getElementById('rec-btn').classList.add('pressed');
+  document.getElementById('rec-label').innerHTML='<strong style="color:var(--rec)">録音中...</strong> 離すと停止';
+  startWave();
+}
+function stopRecording(){
+  if(!isRecording)return; isRecording=false;
+  if(recognition){try{recognition.stop();}catch(e){}}
+  document.getElementById('rec-btn').classList.remove('pressed');
+  document.getElementById('rec-label').innerHTML='<strong>長押し</strong>で録音';
+  stopWave(); updateTranscript('');
+}
+const recBtn=document.getElementById('rec-btn');
+recBtn.addEventListener('mousedown',e=>{e.preventDefault();startRecording();});
+recBtn.addEventListener('mouseup',stopRecording);
+recBtn.addEventListener('mouseleave',()=>{if(isRecording)stopRecording();});
+recBtn.addEventListener('touchstart',e=>{e.preventDefault();startRecording();},{passive:false});
+recBtn.addEventListener('touchend',e=>{e.preventDefault();stopRecording();},{passive:false});
+recBtn.addEventListener('touchcancel',stopRecording);
+
+// ═══════════════════════════════════════════════════════════════
+// TAGS
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('tag-row').addEventListener('click',e=>{
+  const chip=e.target.closest('.tag-chip');if(!chip)return;
+  const tag=chip.dataset.tag;
+  if(selectedTags.includes(tag)){selectedTags=selectedTags.filter(t=>t!==tag);chip.classList.remove('selected');}
+  else{selectedTags.push(tag);chip.classList.add('selected');}
+});
+
+// ═══════════════════════════════════════════════════════════════
 // SAVE MEMO
-// ═══════════════════════════════════════
-document.getElementById('save-btn').addEventListener('click', () => {
-  const text = finalText.trim(); if (!text) return;
-  memos.unshift({ id: Date.now(), text, tags: [...selectedTags], createdAt: new Date().toISOString() });
-  saveState();
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('save-btn').addEventListener('click',()=>{
+  const text=finalText.trim();if(!text)return;
+  state.memos.unshift({id:Date.now(),text,tags:[...selectedTags],createdAt:new Date().toISOString()});
+  saveLocal(); schedSync();
   showToast('✅ メモを保存しました！');
-  finalText = ''; selectedTags = [];
-  ['final-text','interim-text'].forEach(id => document.getElementById(id).textContent = '');
-  document.getElementById('transcript-placeholder').style.display = 'block';
+  finalText=''; selectedTags=[];
+  ['final-text','interim-text'].forEach(id=>document.getElementById(id).textContent='');
+  document.getElementById('transcript-placeholder').style.display='block';
   document.getElementById('live-transcript').classList.remove('active-text');
-  document.getElementById('save-btn').disabled = true;
-  document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('selected'));
+  document.getElementById('save-btn').disabled=true;
+  document.querySelectorAll('.tag-chip').forEach(c=>c.classList.remove('selected'));
   renderMemoList(); updateNavBadge();
 });
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // MEMO LIST
-// ═══════════════════════════════════════
-function renderMemoList() {
-  const area = document.getElementById('memo-list-area');
-  const empty = document.getElementById('empty-memos');
-  area.querySelectorAll('.memo-card').forEach(el => el.remove());
-  const filtered = currentFilter === 'all' ? memos : memos.filter(m => m.tags?.includes(currentFilter));
-  empty.style.display = filtered.length === 0 ? 'block' : 'none';
-  filtered.forEach(memo => {
-    const card = document.createElement('div');
-    card.className = 'memo-card';
-    const tagsHtml = (memo.tags||[]).map(t => `<span class="memo-tag">${t}</span>`).join('');
-    card.innerHTML = `<div class="memo-meta"><span class="memo-date">${formatDate(memo.createdAt)}</span><div class="memo-tags">${tagsHtml}</div></div><div class="memo-text">${escHtml(memo.text)}</div><div class="memo-actions"><button class="memo-action-btn" data-del="${memo.id}" style="color:var(--rec)">削除</button><button class="memo-action-btn" data-view="${memo.id}">全文</button></div>`;
+// ═══════════════════════════════════════════════════════════════
+function renderMemoList(){
+  const area=document.getElementById('memo-list-area');
+  const empty=document.getElementById('empty-memos');
+  area.querySelectorAll('.memo-card').forEach(el=>el.remove());
+  const filtered=currentFilter==='all'?state.memos:state.memos.filter(m=>m.tags?.includes(currentFilter));
+  empty.style.display=filtered.length===0?'block':'none';
+  filtered.forEach(memo=>{
+    const card=document.createElement('div'); card.className='memo-card';
+    const tagsHtml=(memo.tags||[]).map(t=>`<span class="memo-tag">${t}</span>`).join('');
+    card.innerHTML=`<div class="memo-meta"><span class="memo-date">${formatDate(memo.createdAt)}</span><div class="memo-tags">${tagsHtml}</div></div><div class="memo-text">${escHtml(memo.text)}</div><div class="memo-actions"><button class="memo-action-btn" data-del="${memo.id}" style="color:var(--rec)">削除</button><button class="memo-action-btn" data-view="${memo.id}">全文</button></div>`;
     area.appendChild(card);
   });
 }
-
-document.getElementById('memo-filters').addEventListener('click', e => {
-  const chip = e.target.closest('.filter-chip'); if (!chip) return;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active'); currentFilter = chip.dataset.filter; renderMemoList();
+document.getElementById('memo-filters').addEventListener('click',e=>{
+  const chip=e.target.closest('.filter-chip');if(!chip)return;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active'); currentFilter=chip.dataset.filter; renderMemoList();
 });
-document.getElementById('memo-list-area').addEventListener('click', e => {
-  const del = e.target.closest('[data-del]'), view = e.target.closest('[data-view]');
-  if (del) {
-    if (!confirm('このメモを削除しますか？')) return;
-    memos = memos.filter(m => m.id !== parseInt(del.dataset.del)); saveState(); renderMemoList(); updateNavBadge(); showToast('🗑️ 削除しました');
+document.getElementById('memo-list-area').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del]'),view=e.target.closest('[data-view]');
+  if(del){
+    if(!confirm('このメモを削除しますか？'))return;
+    state.memos=state.memos.filter(m=>m.id!==parseInt(del.dataset.del));
+    saveLocal(); schedSync(); renderMemoList(); updateNavBadge(); showToast('🗑️ 削除しました');
   }
-  if (view) {
-    const memo = memos.find(m => m.id === parseInt(view.dataset.view)); if (!memo) return;
-    document.getElementById('modal-text').textContent = memo.text;
-    document.getElementById('modal-meta').textContent = formatDate(memo.createdAt) + (memo.tags?.length ? '  ·  ' + memo.tags.join(', ') : '');
+  if(view){
+    const memo=state.memos.find(m=>m.id===parseInt(view.dataset.view));if(!memo)return;
+    document.getElementById('modal-text').textContent=memo.text;
+    document.getElementById('modal-meta').textContent=formatDate(memo.createdAt)+(memo.tags?.length?'  ·  '+memo.tags.join(', '):'');
     document.getElementById('modal-overlay').classList.add('open');
   }
 });
-document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal-overlay').classList.remove('open'));
-document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open'); });
+document.getElementById('modal-close').addEventListener('click',()=>document.getElementById('modal-overlay').classList.remove('open'));
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.remove('open');});
 
-function updateNavBadge() {
-  document.querySelectorAll('.count-badge').forEach(b => b.remove());
-  if (memos.length > 0) {
-    const badge = document.createElement('span'); badge.className = 'count-badge'; badge.textContent = memos.length;
-    document.querySelector('.nav-tab[data-page="list"]').appendChild(badge);
-  }
+function updateNavBadge(){
+  document.querySelectorAll('.count-badge').forEach(b=>b.remove());
+  if(state.memos.length>0){const badge=document.createElement('span');badge.className='count-badge';badge.textContent=state.memos.length;document.querySelector('.nav-tab[data-page="list"]').appendChild(badge);}
 }
 
-// ═══════════════════════════════════════
-// AI MODES
-// ═══════════════════════════════════════
-document.querySelectorAll('.ai-mode-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.ai-mode-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected'); currentAiMode = btn.dataset.mode;
-  });
+// ═══════════════════════════════════════════════════════════════
+// AI
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('.ai-mode-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{document.querySelectorAll('.ai-mode-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');currentAiMode=btn.dataset.mode;});
 });
+document.getElementById('ai-run-btn').addEventListener('click',runAI);
 
-document.getElementById('ai-run-btn').addEventListener('click', runAI);
+async function runAI(){
+  if(state.memos.length===0){showToast('⚠️ メモが1件もありません');return;}
+  const key=cfg.anthropicKey;
+  if(!key){showToast('⚠️ 設定からAPIキーを入力してください');document.getElementById('settings-overlay').classList.add('open');return;}
+  const btn=document.getElementById('ai-run-btn'); btn.disabled=true;
+  const area=document.getElementById('ai-result-area');
+  area.innerHTML=`<div class="ai-loading"><div class="ai-spinner"></div><span>Claude AIが分析中...</span></div>`;
+  const memosText=state.memos.map((m,i)=>`[メモ${i+1}] ${formatDate(m.createdAt)}${m.tags?.length?` (${m.tags.join(',')})`:''}
+${m.text}`).join('\n\n---\n\n');
+  const woCtx=state.workouts.length>0?'\n\n【Suuntoデータ】\n'+state.workouts.map(w=>`${w.date}: ${w.type} ${fmtDur(w.duration)} / ${w.distance}km${w.hr?` / HR${w.hr}`:''}`).join('\n'):'';
+  const prompts={
+    summary:`以下は散歩中に音声で記録したメモです。全体を要約し重要なポイントを箇条書き・見出しで構造化してください。${woCtx?'Suunto運動データも参照し、どんな状況でアイデアが出たかも考察してください。':''}
 
-async function runAI() {
-  if (memos.length === 0) { showToast('⚠️ メモが1件もありません'); return; }
-  const key = localStorage.getItem('sanpo_apikey');
-  if (!key) { showToast('⚠️ 設定からAPIキーを入力してください'); document.getElementById('settings-overlay').classList.add('open'); return; }
+${memosText}${woCtx}`,
+    categorize:`以下のメモをテーマ・カテゴリ別に整理してください。
 
-  const btn = document.getElementById('ai-run-btn');
-  btn.disabled = true;
-  const area = document.getElementById('ai-result-area');
-  area.innerHTML = `<div class="ai-loading"><div class="ai-spinner"></div><span>Claude AIが分析中...</span></div>`;
+${memosText}${woCtx}`,
+    insights:`以下のメモと運動データから重要なインサイト・パターンを抽出してください。${woCtx?'運動強度とアイデアの質・量の関係も分析してください。':''}
 
-  const memosText = memos.map((m, i) =>
-    `[メモ${i+1}] ${formatDate(m.createdAt)}${m.tags?.length ? ` (${m.tags.join(',')})` : ''}\n${m.text}`
-  ).join('\n\n---\n\n');
+${memosText}${woCtx}`,
+    action:`以下のメモを実際のアクションに変換し、具体的なステップで示してください。
 
-  const workoutContext = workouts.length > 0 ? `\n\n【Suuntoワークアウトデータ】\n` + workouts.map(w =>
-    `${w.date}: ${w.type} ${fmtDuration(w.duration)} / ${w.distance}km${w.hr ? ` / 心拍${w.hr}bpm` : ''}`
-  ).join('\n') : '';
-
-  const prompts = {
-    summary: `以下は散歩中に音声で記録したメモです。全体を読んで重要なポイントをわかりやすく要約してください。${workoutContext ? 'なお、当日のSuunto運動データも参照して、どんな状況でそのアイデアが出たかも考察してください。' : ''}箇条書きや見出しを使って構造化してください。\n\n${memosText}${workoutContext}`,
-    categorize: `以下は散歩中に音声で記録したメモです。内容をテーマ・カテゴリ別に整理してください。\n\n${memosText}${workoutContext}`,
-    insights: `以下は散歩中に音声で記録したメモと運動データです。重要なインサイト・パターン・繰り返し現れるテーマを抽出してください。${workoutContext ? '運動強度やタイミングとアイデアの質・量の関係についても分析してください。' : ''}\n\n${memosText}${workoutContext}`,
-    action: `以下は散歩中に音声で記録したメモです。これらの考えやアイデアを実際のアクションに変換し、「何をすべきか」「どう実行するか」を具体的なステップで示してください。\n\n${memosText}${workoutContext}`
+${memosText}${woCtx}`
   };
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompts[currentAiMode] }] })
-    });
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error.message);
-    const result = data.content?.[0]?.text || '結果を取得できませんでした';
-    const labels = { summary: '📋 まとめ・要約', categorize: '🗂️ カテゴリ分け', insights: '💡 インサイト', action: '🎯 アクション化' };
-    area.innerHTML = `<div class="ai-result"><h3>${labels[currentAiMode]}</h3>${escHtml(result).replace(/\n/g, '<br>')}</div>`;
-    updateIdeaMap(result);
-    showToast('✨ AI整理完了！');
-  } catch(err) {
-    area.innerHTML = `<div class="ai-result" style="border-color:rgba(255,71,87,.3);color:var(--rec)">エラー: ${escHtml(err.message)}</div>`;
-  } finally { btn.disabled = false; }
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompts[currentAiMode]}]})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const result=data.content?.[0]?.text||'結果を取得できませんでした';
+    const labels={summary:'📋 まとめ・要約',categorize:'🗂️ カテゴリ分け',insights:'💡 インサイト',action:'🎯 アクション化'};
+    area.innerHTML=`<div class="ai-result"><h3>${labels[currentAiMode]}</h3>${escHtml(result).replace(/\n/g,'<br>')}</div>`;
+    updateIdeaMap(result); showToast('✨ AI整理完了！');
+  }catch(err){area.innerHTML=`<div class="ai-result" style="border-color:rgba(255,71,87,.3);color:var(--rec)">エラー: ${escHtml(err.message)}</div>`;}
+  finally{btn.disabled=false;}
 }
 
-// ═══════════════════════════════════════
-// IDEA MAP
-// ═══════════════════════════════════════
-function updateIdeaMap(text) {
-  const area = document.getElementById('idea-map-area');
-  const lines = text.split('\n').filter(l => l.trim());
-  const sections = [];
-  let cur = null;
-  lines.forEach(line => {
-    const clean = line.replace(/^#+\s*/,'').replace(/^\*+\s*/,'').replace(/^-\s*/,'').trim();
-    if (!clean) return;
-    if (line.match(/^#{1,3}\s/) || (clean.length < 35 && !line.match(/^\d+\./))) {
-      cur = { title: clean, items: [] }; sections.push(cur);
-    } else {
-      if (!cur) { cur = { title: 'メモ', items: [] }; sections.push(cur); }
-      cur.items.push(clean);
-    }
+function updateIdeaMap(text){
+  const area=document.getElementById('idea-map-area');
+  const lines=text.split('\n').filter(l=>l.trim());
+  const sections=[]; let cur=null;
+  lines.forEach(line=>{
+    const clean=line.replace(/^#+\s*/,'').replace(/^\*+\s*/,'').replace(/^-\s*/,'').trim();
+    if(!clean)return;
+    if(line.match(/^#{1,3}\s/)||(clean.length<35&&!line.match(/^\d+\./))){cur={title:clean,items:[]};sections.push(cur);}
+    else{if(!cur){cur={title:'メモ',items:[]};sections.push(cur);}cur.items.push(clean);}
   });
-  if (!sections.length) { area.innerHTML = `<div class="ai-result">${escHtml(text).replace(/\n/g,'<br>')}</div>`; return; }
-  area.innerHTML = sections.filter(s => s.items.length).map(sec =>
-    `<div class="idea-section"><div class="idea-section-title">${escHtml(sec.title)}</div><div class="idea-cards">${
-      sec.items.map((item,i) => `<div class="idea-card"><div class="idea-card-num">${String(i+1).padStart(2,'0')}</div><div class="idea-card-text">${escHtml(item)}</div></div>`).join('')
-    }</div></div>`
-  ).join('') || `<div class="ai-result">${escHtml(text).replace(/\n/g,'<br>')}</div>`;
+  if(!sections.length){area.innerHTML=`<div class="ai-result">${escHtml(text).replace(/\n/g,'<br>')}</div>`;return;}
+  area.innerHTML=sections.filter(s=>s.items.length).map(sec=>
+    `<div class="idea-section"><div class="idea-section-title">${escHtml(sec.title)}</div>${sec.items.map((item,i)=>`<div class="idea-card"><div class="idea-card-num">${String(i+1).padStart(2,'0')}</div><div class="idea-card-text">${escHtml(item)}</div></div>`).join('')}</div>`
+  ).join('')||`<div class="ai-result">${escHtml(text).replace(/\n/g,'<br>')}</div>`;
 }
 
-// ═══════════════════════════════════════
-// SUUNTO — 手動入力
-// ═══════════════════════════════════════
-document.getElementById('add-workout-btn').addEventListener('click', () => {
-  const date = document.getElementById('wo-date').value;
-  const dur = parseInt(document.getElementById('wo-duration').value) * 60;
-  const dist = parseFloat(document.getElementById('wo-distance').value) || 0;
-  const hr = parseInt(document.getElementById('wo-hr').value) || 0;
-  const type = document.getElementById('wo-type').value;
-  if (!date || !dur) { showToast('⚠️ 日付と時間は必須です'); return; }
-  workouts.unshift({ id: Date.now(), date, duration: dur, distance: dist, hr: hr || null, type, source: 'manual' });
-  saveState();
-  renderWorkouts(); renderCorrelation();
-  showToast('⌚ ワークアウトを追加しました');
-  document.getElementById('wo-date').value = '';
-  document.getElementById('wo-duration').value = '';
-  document.getElementById('wo-distance').value = '';
-  document.getElementById('wo-hr').value = '';
-});
+// ═══════════════════════════════════════════════════════════════
+// SUUNTO
+// ═══════════════════════════════════════════════════════════════
+const typeIcons={WALKING:'🚶',RUNNING:'🏃',HIKING:'🥾',CYCLING:'🚴',OTHER:'📍'};
 
-// ═══════════════════════════════════════
-// SUUNTO — FITファイル（簡易パース）
-// ═══════════════════════════════════════
-document.getElementById('fit-file-input').addEventListener('change', e => {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
-    const ext = file.name.split('.').pop().toLowerCase();
-    if (ext === 'json') {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        try {
-          const data = JSON.parse(ev.target.result);
-          // Support Suunto JSON export format
-          const w = parseSuuntoJson(data, file.name);
-          if (w) { workouts.unshift(w); saveState(); renderWorkouts(); renderCorrelation(); showToast(`✅ ${file.name} を読み込みました`); }
+document.getElementById('fit-file-input').addEventListener('change',e=>{
+  Array.from(e.target.files).forEach(file=>{
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(ext==='json'){
+      const reader=new FileReader(); reader.onload=ev=>{
+        try{
+          const data=JSON.parse(ev.target.result); const w=parseSuuntoJson(data);
+          if(w){state.workouts.unshift(w);saveLocal();schedSync();renderWorkouts();renderCorrelation();showToast(`✅ ${file.name} を読み込みました`);}
           else showToast(`⚠️ ${file.name}: 対応フォーマットではありません`);
-        } catch { showToast(`⚠️ ${file.name}: JSONパースエラー`); }
-      };
-      reader.readAsText(file);
-    } else if (ext === 'csv') {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const w = parseCsv(ev.target.result, file.name);
-        if (w) { workouts.unshift(w); saveState(); renderWorkouts(); renderCorrelation(); showToast(`✅ ${file.name} を読み込みました`); }
-        else showToast(`⚠️ ${file.name}: CSVフォーマットが不明です`);
-      };
-      reader.readAsText(file);
-    } else {
-      showToast(`⚠️ ${file.name}: FITファイルはブラウザで直接読めません。SuuntoアプリからJSONかCSVでエクスポートしてください`);
-    }
-  });
-  e.target.value = '';
+        }catch{showToast(`⚠️ ${file.name}: JSONパースエラー`);}
+      }; reader.readAsText(file);
+    } else if(ext==='csv'){
+      const reader=new FileReader(); reader.onload=ev=>{
+        const w=parseCsv(ev.target.result);
+        if(w){state.workouts.unshift(w);saveLocal();schedSync();renderWorkouts();renderCorrelation();showToast(`✅ ${file.name} を読み込みました`);}
+        else showToast(`⚠️ ${file.name}: CSVフォーマット不明`);
+      }; reader.readAsText(file);
+    } else showToast(`⚠️ FITは直接読めません。SuuntoアプリからJSONでエクスポートしてください`);
+  }); e.target.value='';
 });
 
-function parseSuuntoJson(data, fname) {
-  // Suunto API workout format
-  if (data.startTime && data.totalTime) {
-    return {
-      id: Date.now() + Math.random(),
-      date: new Date(data.startTime).toISOString().slice(0,10),
-      duration: data.totalTime,
-      distance: data.totalDistance ? data.totalDistance / 1000 : 0,
-      hr: data.hrdata?.workoutAvgHR || null,
-      type: data.activityId ? activityName(data.activityId) : 'WALKING',
-      source: 'suunto-api'
-    };
-  }
-  // Generic format
-  if (data.date && data.duration) {
-    return { id: Date.now() + Math.random(), date: data.date, duration: data.duration, distance: data.distance || 0, hr: data.hr || data.avgHR || null, type: data.type || 'WALKING', source: 'json' };
-  }
+function parseSuuntoJson(data){
+  if(data.startTime&&data.totalTime)return{id:Date.now()+Math.random(),date:new Date(data.startTime).toISOString().slice(0,10),duration:data.totalTime,distance:data.totalDistance?data.totalDistance/1000:0,hr:data.hrdata?.workoutAvgHR||null,type:'WALKING',source:'suunto'};
+  if(data.date&&data.duration)return{id:Date.now()+Math.random(),...data,source:'json'};
   return null;
 }
-
-function parseCsv(text, fname) {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-  if (lines.length < 2) return null;
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-  const vals = lines[1].split(',').map(v => v.trim());
-  const get = (keys) => { for (const k of keys) { const i = headers.findIndex(h => h.includes(k)); if (i !== -1) return vals[i]; } return null; };
-  const dateVal = get(['date','day','日付']);
-  const durVal = get(['duration','time','時間','分']);
-  if (!dateVal) return null;
-  return {
-    id: Date.now() + Math.random(),
-    date: dateVal.slice(0,10),
-    duration: (parseFloat(durVal || '0') * 60) || 0,
-    distance: parseFloat(get(['distance','距離']) || '0') || 0,
-    hr: parseInt(get(['heart','hr','心拍']) || '0') || null,
-    type: get(['type','activity','種別']) || 'WALKING',
-    source: 'csv'
-  };
+function parseCsv(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2)return null;
+  const headers=lines[0].split(',').map(h=>h.trim().toLowerCase());
+  const vals=lines[1].split(',').map(v=>v.trim());
+  const get=keys=>{for(const k of keys){const i=headers.findIndex(h=>h.includes(k));if(i!==-1)return vals[i];}return null;};
+  const dateVal=get(['date','day','日付']); if(!dateVal)return null;
+  return{id:Date.now()+Math.random(),date:dateVal.slice(0,10),duration:(parseFloat(get(['duration','time','分'])||'0')*60)||0,distance:parseFloat(get(['distance','距離'])||'0')||0,hr:parseInt(get(['heart','hr','心拍'])||'0')||null,type:'WALKING',source:'csv'};
 }
 
-function activityName(id) {
-  const map = { 3:'RUNNING', 1:'WALKING', 58:'HIKING', 2:'CYCLING' };
-  return map[id] || 'WALKING';
-}
-
-// ═══════════════════════════════════════
-// SUUNTO — API取得
-// ═══════════════════════════════════════
-document.getElementById('suunto-fetch-btn').addEventListener('click', async () => {
-  const key = document.getElementById('suunto-key-input').value || localStorage.getItem('sanpo_suunto_key') || '';
-  const token = document.getElementById('suunto-token-input').value || localStorage.getItem('sanpo_suunto_token') || '';
-  if (!key || !token) { showToast('⚠️ APIキーとアクセストークンが必要です'); return; }
-  const btn = document.getElementById('suunto-fetch-btn');
-  btn.textContent = '🔄 取得中...'; btn.disabled = true;
-  try {
-    const resp = await fetch('https://cloudapi.suunto.com/v2/workouts?limit=20', {
-      headers: { 'Authorization': `Bearer ${token}`, 'Ocp-Apim-Subscription-Key': key }
-    });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const data = await resp.json();
-    const newWorkouts = (data.payload || []).map(w => ({
-      id: w.workoutKey || Date.now() + Math.random(),
-      date: new Date(w.startTime).toISOString().slice(0,10),
-      duration: w.totalTime || 0,
-      distance: w.totalDistance ? w.totalDistance / 1000 : 0,
-      hr: w.hrdata?.workoutAvgHR || null,
-      type: activityName(w.activityId),
-      source: 'suunto-api'
-    }));
-    // Merge (no duplicates by date+type)
-    newWorkouts.forEach(nw => {
-      if (!workouts.find(w => w.date === nw.date && w.type === nw.type)) workouts.unshift(nw);
-    });
-    saveState(); renderWorkouts(); renderCorrelation();
-    showToast(`✅ ${newWorkouts.length}件のワークアウトを取得しました`);
-    btn.classList.add('connected'); btn.textContent = `✅ 接続済み (${newWorkouts.length}件)`;
-  } catch(err) {
-    showToast('⚠️ Suunto API エラー: ' + err.message);
-    btn.textContent = '🔄 ワークアウトを取得';
-  } finally { btn.disabled = false; }
+document.getElementById('add-workout-btn').addEventListener('click',()=>{
+  const date=document.getElementById('wo-date').value;
+  const dur=parseInt(document.getElementById('wo-duration').value)*60;
+  const dist=parseFloat(document.getElementById('wo-distance').value)||0;
+  const hr=parseInt(document.getElementById('wo-hr').value)||null;
+  const type=document.getElementById('wo-type').value;
+  if(!date||!dur){showToast('⚠️ 日付と時間は必須です');return;}
+  state.workouts.unshift({id:Date.now(),date,duration:dur,distance:dist,hr,type,source:'manual'});
+  saveLocal(); schedSync(); renderWorkouts(); renderCorrelation(); showToast('⌚ ワークアウトを追加しました');
+  document.getElementById('wo-date').value=new Date().toISOString().slice(0,10);
+  ['wo-duration','wo-distance','wo-hr'].forEach(id=>document.getElementById(id).value='');
 });
 
-// ═══════════════════════════════════════
-// RENDER WORKOUTS
-// ═══════════════════════════════════════
-const typeIcons = { WALKING:'🚶', RUNNING:'🏃', HIKING:'🥾', CYCLING:'🚴', OTHER:'📍' };
-
-function renderWorkouts() {
-  const area = document.getElementById('workout-list-area');
-  const empty = document.getElementById('empty-workouts');
-  area.querySelectorAll('.workout-card').forEach(e => e.remove());
-  empty.style.display = workouts.length === 0 ? 'block' : 'none';
-
-  // Summary if multiple
-  if (workouts.length > 1) {
-    const totalDist = workouts.reduce((s,w) => s + w.distance, 0);
-    const totalDur = workouts.reduce((s,w) => s + w.duration, 0);
-    const avgHR = workouts.filter(w=>w.hr).reduce((s,w,_,a) => s + w.hr/a.length, 0);
-    const summary = document.createElement('div');
-    summary.innerHTML = `<div class="section-label">📊 サマリー (全${workouts.length}件)</div>
-    <div class="summary-grid">
-      <div class="summary-card"><div class="s-val">${workouts.length}</div><div class="s-label">TOTAL WALKS</div></div>
-      <div class="summary-card"><div class="s-val">${totalDist.toFixed(1)}</div><div class="s-label">TOTAL KM</div></div>
-      <div class="summary-card"><div class="s-val">${fmtDuration(totalDur)}</div><div class="s-label">TOTAL TIME</div></div>
-      <div class="summary-card"><div class="s-val">${avgHR ? Math.round(avgHR) : '--'}</div><div class="s-label">AVG HR (bpm)</div></div>
-    </div>`;
-    area.appendChild(summary);
+function renderWorkouts(){
+  const area=document.getElementById('workout-list-area');
+  const empty=document.getElementById('empty-workouts');
+  area.querySelectorAll('.workout-card,.summary-grid,.section-label').forEach(e=>e.remove());
+  empty.style.display=state.workouts.length===0?'block':'none';
+  if(state.workouts.length>1){
+    const totalDist=state.workouts.reduce((s,w)=>s+w.distance,0);
+    const totalDur=state.workouts.reduce((s,w)=>s+w.duration,0);
+    const hrs=state.workouts.filter(w=>w.hr); const avgHR=hrs.length?Math.round(hrs.reduce((s,w)=>s+w.hr,0)/hrs.length):null;
+    const sum=document.createElement('div');
+    sum.innerHTML=`<div class="section-label">📊 サマリー (${state.workouts.length}件)</div><div class="summary-grid"><div class="summary-card"><div class="s-val">${state.workouts.length}</div><div class="s-label">TOTAL WALKS</div></div><div class="summary-card"><div class="s-val">${totalDist.toFixed(1)}</div><div class="s-label">TOTAL KM</div></div><div class="summary-card"><div class="s-val">${fmtDur(totalDur)}</div><div class="s-label">TOTAL TIME</div></div><div class="summary-card"><div class="s-val">${avgHR||'--'}</div><div class="s-label">AVG HR</div></div></div>`;
+    area.insertBefore(sum,empty);
   }
-
-  workouts.slice(0, 20).forEach(w => {
-    const card = document.createElement('div');
-    card.className = 'workout-card';
-    const memoCount = memos.filter(m => dateOnly(m.createdAt) === w.date).length;
-    card.innerHTML = `
-      <div class="workout-card-header">
-        <span class="workout-date">${w.date}</span>
-        <span class="workout-type">${typeIcons[w.type]||'📍'} ${w.type}</span>
-      </div>
-      <div class="workout-stats">
-        <div class="stat-item"><div class="stat-val">${fmtDuration(w.duration)}</div><div class="stat-unit">TIME</div></div>
-        <div class="stat-item"><div class="stat-val">${w.distance ? w.distance.toFixed(1) : '--'}</div><div class="stat-unit">KM</div></div>
-        <div class="stat-item"><div class="stat-val">${w.hr || '--'}</div><div class="stat-unit">AVG HR</div></div>
-      </div>
-      ${memoCount > 0 ? `<div style="margin-top:8px;font-size:12px;color:var(--accent)">📝 この日のメモ: ${memoCount}件</div>` : ''}
-      <button style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;" data-del-wo="${w.id}">×</button>
-    `;
+  state.workouts.slice(0,20).forEach(w=>{
+    const card=document.createElement('div'); card.className='workout-card';
+    const memoCnt=state.memos.filter(m=>dateOnly(m.createdAt)===w.date).length;
+    card.innerHTML=`<div class="workout-card-header"><span class="workout-date">${w.date}</span><span class="workout-type">${typeIcons[w.type]||'📍'} ${w.type}</span></div><div class="workout-stats"><div class="stat-item"><div class="stat-val">${fmtDur(w.duration)}</div><div class="stat-unit">TIME</div></div><div class="stat-item"><div class="stat-val">${w.distance?w.distance.toFixed(1):'--'}</div><div class="stat-unit">KM</div></div><div class="stat-item"><div class="stat-val">${w.hr||'--'}</div><div class="stat-unit">AVG HR</div></div></div>${memoCnt>0?`<div style="margin-top:8px;font-size:12px;color:var(--accent)">📝 この日のメモ: ${memoCnt}件</div>`:''}<button style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer;" data-del-wo="${w.id}">×</button>`;
     area.appendChild(card);
   });
 }
-
-document.getElementById('workout-list-area').addEventListener('click', e => {
-  const del = e.target.closest('[data-del-wo]');
-  if (del && confirm('このワークアウトを削除しますか？')) {
-    const id = del.dataset.delWo;
-    workouts = workouts.filter(w => String(w.id) !== id);
-    saveState(); renderWorkouts(); renderCorrelation(); showToast('🗑️ 削除しました');
+document.getElementById('workout-list-area').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del-wo]');
+  if(del&&confirm('このワークアウトを削除しますか？')){
+    state.workouts=state.workouts.filter(w=>String(w.id)!==del.dataset.delWo);
+    saveLocal(); schedSync(); renderWorkouts(); renderCorrelation(); showToast('🗑️ 削除しました');
   }
 });
 
-// ═══════════════════════════════════════
-// CORRELATION ANALYSIS
-// ═══════════════════════════════════════
-function renderCorrelation() {
-  const area = document.getElementById('correlation-area');
-  const content = document.getElementById('correlation-content');
-  if (workouts.length === 0 || memos.length === 0) { area.style.display = 'none'; return; }
-
-  area.style.display = 'block';
-
-  // Group memos by date
-  const memosByDate = {};
-  memos.forEach(m => {
-    const d = dateOnly(m.createdAt);
-    memosByDate[d] = (memosByDate[d] || 0) + 1;
-  });
-
-  // Correlate with workouts
-  const pairs = workouts
-    .map(w => ({ date: w.date, duration: w.duration, distance: w.distance, memos: memosByDate[w.date] || 0 }))
-    .filter(p => p.memos > 0);
-
-  const noMemoDays = workouts.filter(w => !memosByDate[w.date]).length;
-  const memoDays = pairs.length;
-  const avgMemosOnWalkDay = memoDays > 0 ? (pairs.reduce((s,p)=>s+p.memos,0)/memoDays).toFixed(1) : 0;
-
-  // Sort by most memos
-  const sorted = [...pairs].sort((a,b) => b.memos - a.memos);
-  const maxMemos = sorted[0]?.memos || 1;
-
-  content.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-      <div class="summary-card" style="background:var(--surface2)"><div class="s-val" style="color:#fb923c">${memoDays}</div><div class="s-label">メモあり散歩日</div></div>
-      <div class="summary-card" style="background:var(--surface2)"><div class="s-val" style="color:var(--accent)">${avgMemosOnWalkDay}</div><div class="s-label">平均メモ数/日</div></div>
-    </div>
-    ${sorted.slice(0,6).map(p => `
-      <div class="correlation-row">
-        <span class="corr-label">${p.date.slice(5)}</span>
-        <div class="corr-bar-bg"><div class="corr-bar" style="width:${(p.memos/maxMemos*100).toFixed(0)}%"></div></div>
-        <span class="corr-val">${p.memos}件 · ${p.distance.toFixed(1)}km</span>
-      </div>
-    `).join('')}
-    ${noMemoDays > 0 ? `<div style="margin-top:10px;font-size:12px;color:var(--text-dim)">💡 メモなし散歩日: ${noMemoDays}日</div>` : ''}
-  `;
+function renderCorrelation(){
+  const area=document.getElementById('correlation-area');
+  if(state.workouts.length===0||state.memos.length===0){area.style.display='none';return;}
+  area.style.display='block';
+  const memosByDate={};
+  state.memos.forEach(m=>{const d=dateOnly(m.createdAt);memosByDate[d]=(memosByDate[d]||0)+1;});
+  const pairs=state.workouts.map(w=>({date:w.date,duration:w.duration,distance:w.distance,memos:memosByDate[w.date]||0})).filter(p=>p.memos>0);
+  const noMemo=state.workouts.filter(w=>!memosByDate[w.date]).length;
+  if(!pairs.length){area.innerHTML=`<div class="correlation-card"><h3>📊 散歩 × メモ 相関分析</h3><p style="font-size:13px;color:var(--text-dim);">まだ同じ日のデータがありません。散歩した日にメモを記録するとここに相関が表示されます。</p></div>`;return;}
+  const sorted=[...pairs].sort((a,b)=>b.memos-a.memos);
+  const maxMemos=sorted[0]?.memos||1;
+  const avgMemos=(pairs.reduce((s,p)=>s+p.memos,0)/pairs.length).toFixed(1);
+  area.innerHTML=`<div class="section-label">📊 散歩 × メモ 相関分析</div><div class="correlation-card"><h3>メモが多かった散歩日 TOP</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;"><div class="summary-card" style="background:var(--surface2)"><div class="s-val" style="color:#fb923c">${pairs.length}</div><div class="s-label">メモあり散歩日</div></div><div class="summary-card" style="background:var(--surface2)"><div class="s-val" style="color:var(--accent)">${avgMemos}</div><div class="s-label">平均メモ数/日</div></div></div>${sorted.slice(0,6).map(p=>`<div class="correlation-row"><span class="corr-label">${p.date.slice(5)}</span><div class="corr-bar-bg"><div class="corr-bar" style="width:${(p.memos/maxMemos*100).toFixed(0)}%"></div></div><span class="corr-val">${p.memos}件 · ${p.distance.toFixed(1)}km</span></div>`).join('')}${noMemo>0?`<div style="margin-top:10px;font-size:12px;color:var(--text-dim)">💡 メモなし散歩日: ${noMemo}日</div>`:''}</div>`;
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVIGATION
-// ═══════════════════════════════════════
-document.querySelectorAll('.nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    const pageId = 'page-' + tab.dataset.page;
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(pageId).classList.add('active');
-    if (tab.dataset.page === 'list') renderMemoList();
-    if (tab.dataset.page === 'suunto') { renderWorkouts(); renderCorrelation(); }
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const pageId='page-'+tab.dataset.page;
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active'); document.getElementById(pageId).classList.add('active');
+    if(tab.dataset.page==='list')renderMemoList();
+    if(tab.dataset.page==='suunto'){renderWorkouts();renderCorrelation();}
   });
 });
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // SETTINGS
-// ═══════════════════════════════════════
-document.getElementById('btn-settings').addEventListener('click', () => {
-  document.getElementById('api-key-input').value = localStorage.getItem('sanpo_apikey') || '';
-  document.getElementById('suunto-key-setting').value = localStorage.getItem('sanpo_suunto_key') || '';
-  document.getElementById('suunto-token-setting').value = localStorage.getItem('sanpo_suunto_token') || '';
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-settings').addEventListener('click',()=>{
+  document.getElementById('cfg-sync-key').value=cfg.syncKey||'';
+  document.getElementById('cfg-bin-id').value=cfg.binId||'';
+  document.getElementById('cfg-anthropic-key').value=cfg.anthropicKey||'';
+  document.getElementById('cfg-suunto-key').value=cfg.suuntoKey||'';
+  document.getElementById('cfg-suunto-token').value=cfg.suuntoToken||'';
+  document.getElementById('sync-status-box').innerHTML='';
   document.getElementById('settings-overlay').classList.add('open');
 });
-document.getElementById('settings-save').addEventListener('click', () => {
-  localStorage.setItem('sanpo_apikey', document.getElementById('api-key-input').value.trim());
-  localStorage.setItem('sanpo_suunto_key', document.getElementById('suunto-key-setting').value.trim());
-  localStorage.setItem('sanpo_suunto_token', document.getElementById('suunto-token-setting').value.trim());
+
+document.getElementById('settings-save').addEventListener('click',()=>{
+  cfg.syncKey=document.getElementById('cfg-sync-key').value.trim();
+  cfg.binId=document.getElementById('cfg-bin-id').value.trim();
+  cfg.anthropicKey=document.getElementById('cfg-anthropic-key').value.trim();
+  cfg.suuntoKey=document.getElementById('cfg-suunto-key').value.trim();
+  cfg.suuntoToken=document.getElementById('cfg-suunto-token').value.trim();
+  saveCfg();
   document.getElementById('settings-overlay').classList.remove('open');
   showToast('✅ 設定を保存しました');
+  setSyncDot(cfg.syncKey ? 'ok' : 'off');
 });
-document.getElementById('settings-close').addEventListener('click', () => document.getElementById('settings-overlay').classList.remove('open'));
-document.getElementById('settings-overlay').addEventListener('click', e => { if (e.target === document.getElementById('settings-overlay')) document.getElementById('settings-overlay').classList.remove('open'); });
-document.getElementById('export-btn').addEventListener('click', () => {
-  const data = JSON.stringify({ memos, workouts }, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `sanpo-memo-${new Date().toISOString().slice(0,10)}.json` });
-  a.click(); URL.revokeObjectURL(a.href); showToast('📤 エクスポートしました');
-});
-document.getElementById('clear-btn').addEventListener('click', () => {
-  if (confirm('⚠️ 全データ（メモ・ワークアウト）を削除しますか？')) {
-    memos = []; workouts = []; saveState();
-    renderMemoList(); renderWorkouts(); renderCorrelation(); updateNavBadge();
-    document.getElementById('settings-overlay').classList.remove('open');
-    showToast('🗑️ 全データを削除しました');
+
+document.getElementById('settings-close').addEventListener('click',()=>document.getElementById('settings-overlay').classList.remove('open'));
+document.getElementById('settings-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('settings-overlay'))document.getElementById('settings-overlay').classList.remove('open');});
+
+document.getElementById('sync-test-btn').addEventListener('click',async()=>{
+  const key=document.getElementById('cfg-sync-key').value.trim();
+  const binId=document.getElementById('cfg-bin-id').value.trim();
+  const box=document.getElementById('sync-status-box');
+  if(!key){box.className='sync-status-box err';box.textContent='❌ Secret Keyを入力してください';return;}
+  // save temporarily
+  cfg.syncKey=key; cfg.binId=binId; cfg.anthropicKey=document.getElementById('cfg-anthropic-key').value.trim(); saveCfg();
+  box.className='sync-status-box ok'; box.textContent='🔄 接続中...';
+  let res;
+  if(binId){res=await pullCloud();}else{res=await pushCloud();}
+  if(res===true){
+    document.getElementById('cfg-bin-id').value=cfg.binId||'';
+    box.className='sync-status-box ok'; box.textContent=`✅ 接続成功！Bin ID: ${cfg.binId||'新規作成'}`;
+  }else{
+    box.className='sync-status-box err'; box.textContent='❌ '+(res==='timeout'?'タイムアウト。キーを確認してください':res);
   }
 });
 
-// ═══════════════════════════════════════
+document.getElementById('export-btn').addEventListener('click',()=>{
+  const data=JSON.stringify(state,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`sanpo-memo-${new Date().toISOString().slice(0,10)}.json`});
+  a.click(); URL.revokeObjectURL(a.href); showToast('📤 エクスポートしました');
+});
+document.getElementById('clear-btn').addEventListener('click',()=>{
+  if(!confirm('⚠️ 全データを削除しますか？この操作は元に戻せません。'))return;
+  state={memos:[],workouts:[]}; saveLocal(); schedSync();
+  renderMemoList(); renderWorkouts(); renderCorrelation(); updateNavBadge();
+  document.getElementById('settings-overlay').classList.remove('open');
+  showToast('🗑️ 全データを削除しました');
+});
+
+// ═══════════════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════
-// Set today's date as default for workout form
-document.getElementById('wo-date').value = new Date().toISOString().slice(0,10);
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('wo-date').value=new Date().toISOString().slice(0,10);
 renderMemoList(); updateNavBadge();
+if(!cfg.syncKey) setSyncDot('off');
 </script>
 </body>
 </html>
