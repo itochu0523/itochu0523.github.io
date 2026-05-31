@@ -591,10 +591,158 @@ body {
   <div class="logo">itochu0523-claude-configuration</div>
 </div>
 
+<!-- ========== スライド 10: MCPサーバー図解 ========== -->
+<div class="slide" id="s10">
+  <div class="slide-num">09 — MCP サーバー</div>
+  <div class="accent-line"></div>
+  <h2>MCP サーバーとは何か</h2>
+  <div style="display:flex; gap:24px; flex:1; margin-top:12px;">
+    <!-- 左: 説明 -->
+    <div style="flex:0 0 300px; display:flex; flex-direction:column; gap:12px;">
+      <div class="card" style="border-color:rgba(139,124,248,0.3);">
+        <div class="c-title" style="color:var(--purple);">MCP とは</div>
+        <div class="c-body">Model Context Protocol。Claude が外部サービスに直接アクセスするための接続規格。APIキーを毎回渡す必要がない。</div>
+      </div>
+      <div class="card accent-teal">
+        <div class="c-title">できること</div>
+        <div class="c-body">Slack に投稿・Google Drive を検索・Gmail を読む・Calendar に予定を作る、を Claude が直接実行。</div>
+      </div>
+      <div class="card accent-amber">
+        <div class="c-title">設定場所</div>
+        <div class="c-body"><code style="font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);">claude-configuration/mcp.json</code><br>を編集して make deploy するだけ。</div>
+      </div>
+    </div>
+    <!-- 右: フロー図 -->
+    <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+      <svg width="100%" viewBox="0 0 400 320" role="img">
+        <title>MCP サーバー接続フロー</title>
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- Claude -->
+        <rect x="130" y="10" width="140" height="52" rx="10" fill="rgba(139,124,248,0.15)" stroke="rgba(139,124,248,0.5)" stroke-width="0.8"/>
+        <text x="200" y="30" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="13" font-weight="500" fill="#c4bafc">Claude / Claude Code</text>
+        <text x="200" y="48" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="11" fill="#7a7f94">mcp.json を読み込む</text>
+        <!-- 矢印 下へ -->
+        <line x1="200" y1="62" x2="200" y2="96" stroke="rgba(139,124,248,0.5)" stroke-width="1" marker-end="url(#ar2)"/>
+        <!-- MCP Protocol -->
+        <rect x="100" y="96" width="200" height="40" rx="8" fill="rgba(30,34,48,0.9)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="200" y="120" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7f94">MCP Protocol (SSE/HTTP)</text>
+        <!-- 矢印4方向 -->
+        <line x1="200" y1="136" x2="60" y2="178" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" marker-end="url(#ar2)"/>
+        <line x1="200" y1="136" x2="147" y2="178" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" marker-end="url(#ar2)"/>
+        <line x1="200" y1="136" x2="254" y2="178" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" marker-end="url(#ar2)"/>
+        <line x1="200" y1="136" x2="342" y2="178" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" marker-end="url(#ar2)"/>
+        <!-- Slack -->
+        <rect x="20" y="178" width="80" height="52" rx="8" fill="rgba(45,212,191,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="0.8"/>
+        <text x="60" y="200" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#2dd4bf">Slack</text>
+        <text x="60" y="216" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">投稿・検索</text>
+        <!-- Drive -->
+        <rect x="108" y="178" width="80" height="52" rx="8" fill="rgba(45,212,191,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="0.8"/>
+        <text x="148" y="200" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#2dd4bf">Drive</text>
+        <text x="148" y="216" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">読み書き</text>
+        <!-- Gmail -->
+        <rect x="214" y="178" width="80" height="52" rx="8" fill="rgba(45,212,191,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="0.8"/>
+        <text x="254" y="200" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#2dd4bf">Gmail</text>
+        <text x="254" y="216" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">送受信・検索</text>
+        <!-- Calendar -->
+        <rect x="302" y="178" width="80" height="52" rx="8" fill="rgba(45,212,191,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="0.8"/>
+        <text x="342" y="200" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#2dd4bf">Calendar</text>
+        <text x="342" y="216" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">予定作成</text>
+        <!-- 設定の流れ -->
+        <rect x="60" y="262" width="280" height="36" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.3)" stroke-width="0.5"/>
+        <text x="200" y="274" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#f59e0b">mcp.json  →  make deploy  →  ~/.claude/mcp.json</text>
+        <text x="200" y="288" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">設定はここで一元管理・全環境に自動配布</text>
+      </svg>
+    </div>
+  </div>
+  <div class="logo">itochu0523-claude-configuration</div>
+</div>
+
+<!-- ========== スライド 11: Obsidian図解 ========== -->
+<div class="slide" id="s11">
+  <div class="slide-num">10 — Obsidian 連携</div>
+  <div class="accent-line"></div>
+  <h2>Obsidian × GitHub 同期フロー</h2>
+  <div style="display:flex; gap:20px; flex:1; margin-top:10px;">
+    <!-- 左: フロー図 -->
+    <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+      <svg width="100%" viewBox="0 0 360 340" role="img">
+        <title>Obsidian GitHub 同期フロー</title>
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- GitHub (上中央) -->
+        <rect x="100" y="10" width="160" height="52" rx="10" fill="rgba(139,124,248,0.15)" stroke="rgba(139,124,248,0.5)" stroke-width="0.8"/>
+        <text x="180" y="30" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="13" font-weight="500" fill="#c4bafc">GitHub</text>
+        <text x="180" y="48" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">claude-configuration repo</text>
+        <!-- 双方向矢印: GitHub ↔ Obsidian (左) -->
+        <path d="M118 62 L68 140" fill="none" stroke="rgba(45,212,191,0.6)" stroke-width="1" marker-end="url(#ar3)"/>
+        <path d="M58 140 L108 62" fill="none" stroke="rgba(45,212,191,0.4)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#ar3)"/>
+        <text x="64" y="104" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#2dd4bf" text-anchor="middle">push/pull</text>
+        <!-- 矢印: GitHub → Mac Claude Code (右) -->
+        <path d="M242 62 L294 140" fill="none" stroke="rgba(139,124,248,0.5)" stroke-width="1" marker-end="url(#ar3)"/>
+        <text x="286" y="100" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#8b7cf8" text-anchor="middle">git clone</text>
+        <!-- Obsidian Vault (左) -->
+        <rect x="10" y="140" width="120" height="60" rx="10" fill="rgba(45,212,191,0.12)" stroke="rgba(45,212,191,0.4)" stroke-width="0.8"/>
+        <text x="70" y="162" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#2dd4bf">Obsidian Vault</text>
+        <text x="70" y="178" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">claude/ フォルダ</text>
+        <text x="70" y="192" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#4a5568">CLAUDE.md · prompts/</text>
+        <!-- Claude Code / Mac (右) -->
+        <rect x="228" y="140" width="120" height="60" rx="10" fill="rgba(139,124,248,0.12)" stroke="rgba(139,124,248,0.4)" stroke-width="0.8"/>
+        <text x="288" y="162" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#c4bafc">Claude Code</text>
+        <text x="288" y="178" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">Mac ローカル</text>
+        <text x="288" y="192" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#4a5568">make deploy</text>
+        <!-- 矢印: Obsidian → iPhone (下左) -->
+        <path d="M70 200 L70 256" fill="none" stroke="rgba(45,212,191,0.5)" stroke-width="1" marker-end="url(#ar3)"/>
+        <text x="84" y="232" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#7a7f94">iCloud sync</text>
+        <!-- 矢印: Claude Code → 各repo (下右) -->
+        <path d="M288 200 L288 256" fill="none" stroke="rgba(139,124,248,0.5)" stroke-width="1" marker-end="url(#ar3)"/>
+        <!-- iPhone -->
+        <rect x="10" y="256" width="120" height="52" rx="10" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="0.8"/>
+        <text x="70" y="276" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#34d399">iPhone / iPad</text>
+        <text x="70" y="292" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">Obsidian モバイル版</text>
+        <!-- 各リポジトリ -->
+        <rect x="228" y="256" width="120" height="52" rx="10" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.3)" stroke-width="0.8"/>
+        <text x="288" y="276" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="12" font-weight="500" fill="#f59e0b">各 Repo</text>
+        <text x="288" y="292" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#7a7f94">CLAUDE.md 自動配布</text>
+        <!-- 中央ラベル -->
+        <text x="180" y="175" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="9" fill="#4a5568">sync-obsidian.sh</text>
+        <line x1="130" y1="170" x2="228" y2="170" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" stroke-dasharray="3 3"/>
+      </svg>
+    </div>
+    <!-- 右: 使い方ステップ -->
+    <div style="flex:0 0 300px; display:flex; flex-direction:column; gap:10px;">
+      <div style="font-size:13px; color:var(--muted); margin-bottom:4px; letter-spacing:.05em;">STEP BY STEP</div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px; padding:14px 16px;">
+        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--purple-dim); border:1px solid rgba(139,124,248,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--purple);">1</div>
+        <div><div class="c-title">Obsidian をインストール</div><div class="c-body" style="margin-top:2px;">obsidian.md からDL。Vault を <code style="font-size:10px;font-family:'DM Mono',monospace;">~/ObsidianVault</code> に作成。</div></div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px; padding:14px 16px;">
+        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--teal-dim); border:1px solid rgba(45,212,191,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--teal);">2</div>
+        <div><div class="c-title">初回書き出し</div><div class="c-body" style="margin-top:2px;"><code style="font-size:10px;font-family:'DM Mono',monospace;">make obsidian-push</code> で Vault へ設定を同期。</div></div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px; padding:14px 16px;">
+        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--amber-dim); border:1px solid rgba(245,158,11,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--amber);">3</div>
+        <div><div class="c-title">Obsidian Git プラグイン</div><div class="c-body" style="margin-top:2px;">Auto pull 10分・Auto push ON で GitHub と自動同期。</div></div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px; padding:14px 16px;">
+        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.4); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--green);">4</div>
+        <div><div class="c-title">どこでも編集・即反映</div><div class="c-body" style="margin-top:2px;">Obsidian で編集 → <code style="font-size:10px;font-family:'DM Mono',monospace;">make obsidian-pull && make deploy</code> で全リポジトリへ。</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="logo">itochu0523-claude-configuration</div>
+</div>
+
 <!-- ========== ナビゲーション ========== -->
 <nav class="nav">
   <button id="btn-prev" onclick="go(-1)" disabled>← 前へ</button>
-  <span class="slide-counter" id="counter">1 / 9</span>
+  <span class="slide-counter" id="counter">1 / 11</span>
   <button id="btn-next" onclick="go(1)">次へ →</button>
 </nav>
 
