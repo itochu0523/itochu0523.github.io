@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商品マッピング サンプルデータ評価ツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmc:#0F7673;--dmc-lt:#E0F5F4;
+  --brand:#6B41C8;--brand-lt:#F0EAFF;
+  --jan:#B91C1C;--jan-lt:#FEF2F2;
+  --cat:#0F4C81;--cat-lt:#E8F1FB;
+  --llm:#0369A1;--llm-lt:#E0F2FE;
+  --ok:#065F46;--ok-lt:#ECFDF5;
+  --warn:#92400E;--warn-lt:#FEF3C7;
+  --err:#991B1B;--err-lt:#FEF2F2;
+  --gray-900:#111827;--gray-700:#374151;--gray-500:#6B7280;
+  --gray-300:#D1D5DB;--gray-200:#E5E7EB;--gray-100:#F9FAFB;
+  --white:#fff;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans JP',sans-serif;
+}
+body{font-family:var(--sans);background:#EEF1F7;color:var(--gray-900);padding:32px 16px 64px;font-size:14px}
+.page{max-width:1060px;margin:0 auto}
+
+/* Header */
+.hd{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--gray-300)}
+.hd-eye{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray-500);margin-bottom:6px}
+.hd-title{font-size:24px;font-weight:700;line-height:1.25;margin-bottom:6px}
+.hd-sub{font-size:13px;color:var(--gray-500);line-height:1.7}
+
+/* Tab nav */
+.tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid var(--gray-200)}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;border-radius:6px 6px 0 0;color:var(--gray-500);border:none;background:none;transition:all .15s}
+.tab:hover{background:var(--gray-100);color:var(--gray-700)}
+.tab.active{background:var(--white);color:var(--gray-900);border:1.5px solid var(--gray-200);border-bottom:2px solid var(--white);margin-bottom:-2px}
+.panel{display:none}.panel.active{display:block}
+
+/* Section labels */
+.sec-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gray-500);margin-bottom:10px}
+.sec-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.sec-body{font-size:13px;color:var(--gray-700);line-height:1.8;margin-bottom:16px}
+
+/* Card */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+.card-sm{background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:14px 18px;margin-bottom:12px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--gray-100);padding:8px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.05em;border-bottom:1.5px solid var(--gray-300);white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid var(--gray-200);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAFA}
+code{font-family:var(--mono);font-size:10.5px;background:var(--gray-100);border:1px solid var(--gray-200);padding:1px 5px;border-radius:4px;white-space:nowrap}
+
+/* Status badges */
+.st{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;white-space:nowrap}
+.st-ok  {background:var(--ok-lt);color:var(--ok);border:1px solid #6EE7B7}
+.st-warn{background:var(--warn-lt);color:var(--warn);border:1px solid #FDE68A}
+.st-err {background:var(--err-lt);color:var(--err);border:1px solid #FECACA}
+.st-llm {background:var(--llm-lt);color:var(--llm);border:1px solid #7DD3FC}
+.st-gray{background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-300)}
+
+/* maker chip */
+.maker-chip{display:inline-block;background:var(--dmc-lt);border:1px solid var(--dmc);color:#064E4B;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:6px}
+.brand-chip{display:inline-block;background:var(--brand-lt);border:1px solid #C4B5FD;color:#5B21B6;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:6px}
+.cat-chip{display:inline-block;background:var(--cat-lt);border:1px solid #93C5FD;color:var(--cat);font-size:10.5px;padding:2px 8px;border-radius:6px}
+
+/* Discussion point */
+.disc{background:var(--warn-lt);border:1.5px dashed #F59E0B;border-radius:10px;padding:14px 18px;margin-top:12px}
+.disc-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--warn);margin-bottom:6px}
+.disc-body{font-size:12.5px;color:#78350F;line-height:1.8}
+.disc-item{display:flex;gap:8px;margin-top:6px;font-size:12.5px;color:#78350F;line-height:1.65}
+
+/* Note box */
+.note{background:var(--llm-lt);border:1px solid #7DD3FC;border-radius:10px;padding:14px 18px;margin-top:12px;font-size:12.5px;color:#0C4A6E;line-height:1.8}
+.note-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--llm);margin-bottom:6px}
+
+/* JAN diagram */
+.jan-bar{display:flex;font-family:var(--mono);font-size:13px;margin:10px 0}
+.jan-seg{padding:10px 0;text-align:center;border:1px solid var(--gray-300);border-right:none;font-weight:700}
+.jan-seg:last-child{border-right:1px solid var(--gray-300)}
+.jan-sub{font-size:9px;font-weight:400;color:var(--gray-500);display:block;margin-top:3px;font-family:var(--sans)}
+.j-red{background:var(--jan-lt);border-color:#FECACA;color:var(--jan)}
+.j-gray{background:var(--gray-100);color:var(--gray-500)}
+.j-green{background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok)}
+
+/* Issue tag */
+.issue{display:inline-flex;align-items:center;gap:4px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;margin:2px}
+
+/* Grid 2 */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+
+/* Highlight row */
+.row-issue td{background:#FFFBEB}
+.row-err td{background:#FEF2F2}
+.row-ok td{background:#F0FDF4}
+
+/* Summary stat */
+.stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.stat{background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:12px 18px;min-width:120px}
+.stat-num{font-size:24px;font-weight:700;line-height:1}
+.stat-label{font-size:11px;color:var(--gray-500);margin-top:4px}
+
+/* Toggle */
+.toggle-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tog{padding:5px 14px;border-radius:20px;border:1.5px solid var(--gray-300);background:var(--white);font-size:12px;font-weight:600;cursor:pointer;color:var(--gray-500);transition:all .15s}
+.tog:hover{border-color:var(--gray-700);color:var(--gray-700)}
+.tog.on{border-color:var(--dmc);background:var(--dmc-lt);color:#064E4B}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div style="margin-bottom:16px;">
+  <a href="dmc_product_master_pipeline.html" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#6B7280;text-decoration:none;padding:5px 12px;border:1px solid #D1D5DB;border-radius:20px;background:#fff;" onmouseover="this.style.borderColor='#0F7673';this.style.color='#0F7673'" onmouseout="this.style.borderColor='#D1D5DB';this.style.color='#6B7280'">← パイプライン設計書に戻る</a>
+</div>
+<div class="hd">
+  <p class="hd-eye">Sample Data Evaluator · 商品マッピング</p>
+  <h1 class="hd-title">未決定事項 評価ツール</h1>
+  <p class="hd-sub">実際のサンプルデータを使って、各未決定事項の課題を可視化・議論するためのリファレンス。<br>森井カテゴリマスタ（実データ）+ 模擬JAN・メーカー・商品データを使用。</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('tab-maker')">① JAN × maker_code</button>
+  <button class="tab" onclick="showTab('tab-brand')">② ブランド判定（LLM）</button>
+  <button class="tab" onclick="showTab('tab-brand-master')">③ maker_brand_master スキーマ</button>
+  <button class="tab" onclick="showTab('tab-cat')">④ カテゴリーマッピング</button>
+  <button class="tab" onclick="showTab('tab-goal')">⑤ 統合マッピングイメージ</button>
+</div>
+
+
+<!-- ════════════════════════════
+  TAB 1 : JAN × maker_code
+═════════════════════════════ -->
+<div id="tab-maker" class="panel active">
+  <div class="card">
+    <p class="sec-label">Phase 1-C — 未決定事項①</p>
+    <p class="sec-title">JAN 先頭 XX → maker_code マッチング</p>
+    <p class="sec-body">JAN コードの先頭桁数でメーカーが特定できるが、<strong>GS1 の prefix 長は 7〜9 桁と可変</strong>。先頭「XX」だけでは一意にならないケースがある。サンプルで確認する。</p>
+
+    <div class="jan-bar">
+      <div class="jan-seg j-red" style="width:30%;border-radius:6px 0 0 6px;">4901085<span class="jan-sub">メーカーPFX（7桁）<br>← maker_code でマッチ</span></div>
+      <div class="jan-seg j-green" style="width:52%;">123456<span class="jan-sub">商品コード（6桁）</span></div>
+      <div class="jan-seg j-gray" style="width:18%;border-radius:0 6px 6px 0;">C<span class="jan-sub">チェックD</span></div>
+    </div>
+    <p style="font-size:12px;color:#B91C1C;font-weight:600;">※ GS1 Japan の prefix 長は 7〜9 桁。「先頭XX」の XX が何桁かは maker_code_master の定義次第。</p>
+  </div>
+
+  <div class="card">
+    <p class="sec-label">サンプル：同一メーカーコードで複数商品</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>JAN コード</th><th>maker_code（先頭）</th><th>商品名</th><th>メーカー名（GS1）</th><th>マッチング結果</th></tr></thead>
+      <tbody>
+        <tr class="row-ok"><td><code>4901085123456</code></td><td><code>4901085</code></td><td>サントリー 伊右衛門 緑茶 500ml</td><td>サントリー食品インターナショナル</td><td><span class="st st-ok">✓ maker 確定</span></td></tr>
+        <tr class="row-ok"><td><code>4901085234567</code></td><td><code>4901085</code></td><td>サントリー BOSS 缶コーヒー 185g</td><td>サントリー食品インターナショナル</td><td><span class="st st-ok">✓ maker 確定</span></td></tr>
+        <tr class="row-ok"><td><code>4901085345678</code></td><td><code>4901085</code></td><td>サントリー 天然水 550ml</td><td>サントリー食品インターナショナル</td><td><span class="st st-ok">✓ maker 確定</span></td></tr>
+        <tr class="row-issue"><td><code>4901777456789</code></td><td><code>4901777</code></td><td>キリン 生茶 500ml</td><td>キリンビバレッジ</td><td><span class="st st-ok">✓ maker 確定</span></td></tr>
+        <tr class="row-issue"><td><code>4901777567890</code></td><td><code>4901777</code></td><td>キリン 午後の紅茶 350ml</td><td>キリンビバレッジ</td><td><span class="st st-ok">✓ maker 確定</span></td></tr>
+        <tr class="row-err"><td><code>4987244678901</code></td><td><code>4987244</code></td><td>（メーカー不明商品）</td><td>— GS1 未登録 —</td><td><span class="st st-err">✗ 未マッチ</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="disc">
+      <p class="disc-label">💬 議論ポイント</p>
+      <div class="disc-item"><span>Q1</span><div>GS1 未登録の JAN コード（海外品・古い商品など）はどう扱うか？ → <strong>unknown_maker として扱うか、手動補完するか</strong></div></div>
+      <div class="disc-item"><span>Q2</span><div>maker_code の prefix 桁数は固定か可変か？ → <strong>maker_code_master に prefix_length カラムを持たせるべきか</strong></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+  TAB 2 : ブランド判定（LLM）
+═════════════════════════════ -->
+<div id="tab-brand" class="panel">
+  <div class="card">
+    <p class="sec-label">Phase 1-C — 未決定事項②</p>
+    <p class="sec-title">maker_code だけではブランドは一意にならない → LLM で商品名から判定</p>
+    <p class="sec-body">同一 maker_code でも複数ブランドが存在する。JAN コード + 商品名を LLM に入力してブランドを推察・一意化する。以下はそのサンプルと想定課題。</p>
+  </div>
+
+  <div class="card">
+    <p class="sec-label">サンプル：サントリー（maker_code: 4901085）</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>商品名</th><th>LLM 推察ブランド名</th><th>正規化後 brand_name</th><th>信頼度</th><th>課題</th></tr></thead>
+      <tbody>
+        <tr class="row-ok"><td>サントリー 伊右衛門 緑茶 500ml</td><td>伊右衛門</td><td><span class="brand-chip">伊右衛門</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-ok"><td>サントリー BOSS 缶コーヒー 185g</td><td>BOSS</td><td><span class="brand-chip">BOSS</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-ok"><td>サントリー 天然水 550ml</td><td>サントリー天然水</td><td><span class="brand-chip">サントリー天然水</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-issue"><td>サントリー オールフリー 350ml</td><td>オールフリー / All-Free</td><td><span class="brand-chip">オールフリー</span></td><td><span class="st st-warn">中</span></td><td><span class="issue">表記揺れ</span></td></tr>
+        <tr class="row-issue"><td>サントリー ほろよい 白いサワー 350ml</td><td>ほろよい</td><td><span class="brand-chip">ほろよい</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-err"><td>サントリー 金麦〈糖質75%オフ〉 350ml</td><td>金麦 / KINMUGI</td><td><span class="brand-chip">金麦</span></td><td><span class="st st-warn">中</span></td><td><span class="issue">日英表記</span></td></tr>
+        <tr class="row-err"><td>サントリー 角瓶 700ml</td><td>サントリーウイスキー / 角</td><td>?</td><td><span class="st st-err">低</span></td><td><span class="issue">ブランド曖昧</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="sec-label">サンプル：キリン（maker_code: 4901777）</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>商品名</th><th>LLM 推察ブランド名</th><th>正規化後 brand_name</th><th>信頼度</th><th>課題</th></tr></thead>
+      <tbody>
+        <tr class="row-ok"><td>キリン 生茶 ほうじ煎茶 600ml</td><td>生茶</td><td><span class="brand-chip">生茶</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-ok"><td>キリン 午後の紅茶 ストレートティー 500ml</td><td>午後の紅茶</td><td><span class="brand-chip">午後の紅茶</span></td><td><span class="st st-ok">高</span></td><td>—</td></tr>
+        <tr class="row-issue"><td>キリン iMUSE 免疫ケア 500ml</td><td>iMUSE / アイミューズ</td><td><span class="brand-chip">iMUSE</span></td><td><span class="st st-warn">中</span></td><td><span class="issue">英語ブランド</span></td></tr>
+        <tr class="row-err"><td>キリン 一番搾り とれたてホップ生ビール 350ml</td><td>一番搾り / キリン一番搾り</td><td>?</td><td><span class="st st-warn">中</span></td><td><span class="issue">メーカー名混入</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="disc">
+      <p class="disc-label">💬 議論ポイント — ブランド正規化ルール（未決定）</p>
+      <div class="g2">
+        <div>
+          <p style="font-size:11px;font-weight:700;color:var(--warn);margin-bottom:6px;">課題パターン</p>
+          <div class="disc-item"><span>①</span><div>日本語 / 英語混在：「オールフリー」vs「All-Free」</div></div>
+          <div class="disc-item"><span>②</span><div>メーカー名がブランド名に混入：「キリン一番搾り」→「一番搾り」？</div></div>
+          <div class="disc-item"><span>③</span><div>サブブランド：「生茶 ほうじ煎茶」→「生茶」まで？</div></div>
+          <div class="disc-item"><span>④</span><div>LLM が複数候補を返す場合（角瓶 → 「角」「角瓶」「サントリーウイスキー」）</div></div>
+        </div>
+        <div>
+          <p style="font-size:11px;font-weight:700;color:var(--warn);margin-bottom:6px;">決めるべきルール</p>
+          <div class="disc-item"><span>→</span><div>英語ブランドは英語表記を正とする（例：iMUSE, BOSS）</div></div>
+          <div class="disc-item"><span>→</span><div>メーカー名を含む場合は除去する（「キリン一番搾り」→「一番搾り」）</div></div>
+          <div class="disc-item"><span>→</span><div>サブブランドは L1 ブランドに統一（「生茶 ほうじ煎茶」→「生茶」）</div></div>
+          <div class="disc-item"><span>→</span><div>信頼度が低い場合は NULL or DMC 確認フラグを立てる</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="note-label">💡 LLM プロンプト例（Haiku 向け）</p>
+      <div style="font-family:var(--mono);font-size:11.5px;background:var(--white);border:1px solid #BAE6FD;border-radius:8px;padding:12px 14px;margin-top:8px;line-height:1.9;color:#0C4A6E;">
+        System: あなたは日本の飲料・食品のブランドを正規化するエキスパートです。<br>
+        ルール: メーカー名は除去する。英語ブランドは英語表記を正とする。サブブランドはL1ブランドに統一する。JSONのみ返す。<br><br>
+        User: 以下の商品名からブランド名を抽出してください。<br>
+        [{"jan":"4901085123456","product_name":"サントリー 伊右衛門 緑茶 500ml"},<br>
+        &nbsp;{"jan":"4901085234567","product_name":"サントリー BOSS 缶コーヒー 185g"},<br>
+        &nbsp;{"jan":"4901777678901","product_name":"キリン iMUSE 免疫ケア 500ml"}]<br><br>
+        Expected output:<br>
+        [{"jan":"4901085123456","brand_name":"伊右衛門","confidence":"high"},<br>
+        &nbsp;{"jan":"4901085234567","brand_name":"BOSS","confidence":"high"},<br>
+        &nbsp;{"jan":"4901777678901","brand_name":"iMUSE","confidence":"medium"}]
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+  TAB 3 : maker_brand_master スキーマ
+═════════════════════════════ -->
+<div id="tab-brand-master" class="panel">
+  <div class="card">
+    <p class="sec-label">Phase 1-B — 未決定事項③</p>
+    <p class="sec-title">maker_brand_master の複合ユニークキー — どちらを主にするか</p>
+    <p class="sec-body">PK 候補が 2 つある。サンプルデータで両パターンを比較する。</p>
+
+    <div class="g2">
+      <div class="card-sm" style="border-left:3px solid var(--dmc);">
+        <p style="font-size:12px;font-weight:700;color:var(--dmc);margin-bottom:6px;">UK① (maker_code, brand_name) — 推奨候補</p>
+        <p style="font-size:12px;color:var(--gray-700);line-height:1.7;">GS1 の standard_gs1_company_code を軸にする。コードベースのため表記揺れに強い。maker_name が変わっても影響なし。</p>
+        <p style="font-size:11px;color:var(--ok);font-weight:600;margin-top:6px;">✓ 機械処理向き / 安定</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--brand);">
+        <p style="font-size:12px;font-weight:700;color:var(--brand);margin-bottom:6px;">UK② (maker_name, brand_name) — 代替候補</p>
+        <p style="font-size:12px;color:var(--gray-700);line-height:1.7;">名前ベースのため人間が見てわかりやすい。ただし maker_name の表記揺れが問題になる。</p>
+        <p style="font-size:11px;color:var(--warn);font-weight:600;margin-top:6px;">⚠️ 名寄せ精度に依存</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="sec-label">サンプルデータ — maker_brand_master 想定レコード</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>maker_code (UK①)</th><th>brand_name (UK①②)</th><th>maker_name (UK②)</th><th>brand_site_url</th><th>crawl_attributes (JSON)</th><th>備考</th></tr></thead>
+      <tbody>
+        <tr><td><code>4901085</code></td><td><span class="brand-chip">伊右衛門</span></td><td>サントリー食品インターナショナル</td><td><code>https://www.suntory.co.jp/softdrink/iyemon/</code></td><td><code>{"type":"tea","target":"all"}</code></td><td><span class="st st-ok">正常</span></td></tr>
+        <tr><td><code>4901085</code></td><td><span class="brand-chip">BOSS</span></td><td>サントリー食品インターナショナル</td><td><code>https://www.suntory.co.jp/softdrink/boss/</code></td><td><code>{"type":"coffee","target":"adult"}</code></td><td><span class="st st-ok">正常</span></td></tr>
+        <tr><td><code>4901085</code></td><td><span class="brand-chip">サントリー天然水</span></td><td>サントリー食品インターナショナル</td><td><code>https://www.suntory.co.jp/water/tennensui/</code></td><td><code>{"type":"water"}</code></td><td><span class="st st-ok">正常</span></td></tr>
+        <tr class="row-issue"><td><code>4901085</code></td><td><span class="brand-chip">角瓶</span></td><td>サントリー食品インターナショナル</td><td><code>https://www.suntory.co.jp/whisky/kakubin/</code></td><td><code>{}</code></td><td><span class="st st-warn">LLM確認要</span></td></tr>
+        <tr><td><code>4901777</code></td><td><span class="brand-chip">生茶</span></td><td>キリンビバレッジ</td><td><code>https://www.kirin.co.jp/products/softdrink/namacha/</code></td><td><code>{"type":"tea"}</code></td><td><span class="st st-ok">正常</span></td></tr>
+        <tr><td><code>4901777</code></td><td><span class="brand-chip">午後の紅茶</span></td><td>キリンビバレッジ</td><td><code>https://www.kirin.co.jp/products/softdrink/gogotea/</code></td><td><code>{"type":"tea","target":"female"}</code></td><td><span class="st st-ok">正常</span></td></tr>
+        <tr class="row-issue"><td><code>4901777</code></td><td><span class="brand-chip">iMUSE</span></td><td>キリンビバレッジ</td><td><code>https://www.kirin.co.jp/products/imuse/</code></td><td><code>{"type":"functional"}</code></td><td><span class="st st-warn">英語表記確認</span></td></tr>
+        <tr class="row-err"><td><code>4987244</code></td><td><span class="brand-chip">—</span></td><td>— 未登録メーカー —</td><td>—</td><td>—</td><td><span class="st st-err">要追加</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="disc">
+      <p class="disc-label">💬 議論ポイント</p>
+      <div class="disc-item"><span>Q1</span><div>UK① を正式採用する場合、<code>maker_code</code> は GS1 の prefix 長（7〜9桁）そのままで良いか？ 正規化が必要か？</div></div>
+      <div class="disc-item"><span>Q2</span><div><code>crawl_attributes</code> JSON に最低限入れる属性は何か？（type / target / ...）→ スキーマドラフトを決める</div></div>
+      <div class="disc-item"><span>Q3</span><div>同一ブランドの別表記（「サントリー天然水」vs「SUNTORY天然水」）が来た場合のマージルール</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+  TAB 4 : カテゴリーマッピング
+═════════════════════════════ -->
+<div id="tab-cat" class="panel">
+  <div class="card">
+    <p class="sec-label">Phase 2 — カテゴリーマッピング（森井カテゴリマスタ 実データ使用）</p>
+    <p class="sec-title">商品名 → L5 カテゴリー マッピングのサンプル</p>
+    <p class="sec-body">森井カテゴリマスタ（実データ・L5: 2,735件）を使って、商品名から L5 へのマッピングパターンと課題を可視化する。</p>
+  </div>
+
+  <div class="card">
+    <p style="font-size:13px;font-weight:700;margin-bottom:10px;">カテゴリーマスター構造（実データ抜粋）</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5（最小分類）</th><th>L5コード</th></tr></thead>
+      <tbody>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>お茶</td><td><span class="cat-chip">緑茶</span></td><td><code>1-5-2-2-1</code></td></tr>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>お茶</td><td><span class="cat-chip">ほうじ茶</span></td><td><code>1-5-2-2-2</code></td></tr>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>コーヒー</td><td><span class="cat-chip">缶コーヒー</span></td><td><code>1-5-2-3-1</code></td></tr>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>コーヒー</td><td><span class="cat-chip">PETボトルコーヒー</span></td><td><code>1-5-2-3-4</code></td></tr>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>炭酸飲料</td><td><span class="cat-chip">コーラ</span></td><td><code>1-5-2-1-1</code></td></tr>
+        <tr><td>食品・飲料</td><td>ソフトドリンク</td><td>ソフトドリンク</td><td>ジュース・機能飲料</td><td><span class="cat-chip">野菜ジュース</span></td><td><code>1-5-2-4-3</code></td></tr>
+        <tr><td>食品・飲料</td><td>スナック菓子</td><td>スナック菓子</td><td>ポテト・揚げ菓子</td><td><span class="cat-chip">ポテトチップス</span></td><td><code>1-4-1-1-1</code></td></tr>
+        <tr><td>食品・飲料</td><td>チョコレート</td><td>チョコレート</td><td>板チョコ・個包装</td><td><span class="cat-chip">ミルクチョコレート</span></td><td><code>1-4-2-1-1</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:13px;font-weight:700;margin-bottom:4px;">マッピング試行サンプル（3アプローチ比較）</p>
+    <p style="font-size:12px;color:var(--gray-500);margin-bottom:12px;">同じ商品に対してルールベース・LLM・手動の3アプローチがどう変わるかを比較する。</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>商品名（JAN）</th><th>ルールベース結果</th><th>LLM 結果</th><th>正解（手動）</th><th>課題</th></tr></thead>
+      <tbody>
+        <tr class="row-ok">
+          <td>サントリー 伊右衛門 緑茶 500ml<br><code style="font-size:10px;">4901085123456</code></td>
+          <td><span class="cat-chip">緑茶</span><br><code>1-5-2-2-1</code></td>
+          <td><span class="cat-chip">緑茶</span><br><code>1-5-2-2-1</code></td>
+          <td><span class="cat-chip">緑茶</span><br><code>1-5-2-2-1</code></td>
+          <td><span class="st st-ok">一致</span></td>
+        </tr>
+        <tr class="row-ok">
+          <td>サントリー BOSS 缶コーヒー 185g<br><code style="font-size:10px;">4901085234567</code></td>
+          <td><span class="cat-chip">缶コーヒー</span><br><code>1-5-2-3-1</code></td>
+          <td><span class="cat-chip">缶コーヒー</span><br><code>1-5-2-3-1</code></td>
+          <td><span class="cat-chip">缶コーヒー</span><br><code>1-5-2-3-1</code></td>
+          <td><span class="st st-ok">一致</span></td>
+        </tr>
+        <tr class="row-issue">
+          <td>キリン iMUSE 免疫ケア プラズマ乳酸菌 500ml<br><code style="font-size:10px;">4901777456789</code></td>
+          <td><span class="cat-chip">ジュース・機能飲料</span><br><code>1-5-2-4-3</code></td>
+          <td><span class="cat-chip">ジュース・機能飲料</span><br><code>1-5-2-4-X</code> ※L5未定</td>
+          <td>— <span class="st st-warn">L5 該当なし</span> —</td>
+          <td><span class="issue">L5不足</span></td>
+        </tr>
+        <tr class="row-issue">
+          <td>カルビー ポテトチップス うすしお味 60g<br><code style="font-size:10px;">4901330456789</code></td>
+          <td><span class="cat-chip">ポテトチップス</span><br><code>1-4-1-1-1</code></td>
+          <td><span class="cat-chip">ポテトチップス</span><br><code>1-4-1-1-1</code></td>
+          <td><span class="cat-chip">ポテトチップス</span><br><code>1-4-1-1-1</code></td>
+          <td><span class="st st-ok">一致</span></td>
+        </tr>
+        <tr class="row-err">
+          <td>明治 チョコレート効果 カカオ72% 75g<br><code style="font-size:10px;">4902777234567</code></td>
+          <td><span class="cat-chip">ミルクチョコレート</span><br><code>1-4-2-1-1</code></td>
+          <td><span class="cat-chip">ダークチョコレート</span><br><code>1-4-2-1-2</code></td>
+          <td><span class="cat-chip">ダークチョコレート</span><br><code>1-4-2-1-2</code></td>
+          <td><span class="issue">ルール誤判定</span></td>
+        </tr>
+        <tr class="row-err">
+          <td>サントリー 角瓶 ウイスキー 700ml<br><code style="font-size:10px;">4901085678901</code></td>
+          <td><span class="cat-chip">ウイスキー</span> <span class="st st-err">L5なし</span></td>
+          <td><span class="cat-chip">ウイスキー</span> <span class="st st-err">L5なし</span></td>
+          <td>— <span class="st st-err">カテゴリ未整備</span> —</td>
+          <td><span class="issue">L5追加必要</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="disc">
+      <p class="disc-label">💬 議論ポイント — カテゴリーマッピングの設計</p>
+      <div class="g2">
+        <div>
+          <div class="disc-item"><span>Q1</span><div><strong>L5 カテゴリーが存在しない商品</strong>（iMUSE・ウイスキー等）をどう扱うか？<br>→ L4 止まりを許容するか、L5 を追加するか</div></div>
+          <div class="disc-item"><span>Q2</span><div><strong>ルールベース vs LLM の使い分け</strong>をどう設計するか？<br>→ 明確なキーワードがある商品はルールベース優先が安定</div></div>
+        </div>
+        <div>
+          <div class="disc-item"><span>Q3</span><div><strong>マッピング精度をどう測定するか</strong>？<br>→ 正解ラベル付きサンプルを何件用意するか</div></div>
+          <div class="disc-item"><span>Q4</span><div><strong>カテゴリーを「継続的に追加」する運用フロー</strong>は？<br>→ 追加申請 → 承認 → マスター更新 の仕組みが必要</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════
+  TAB 5 : 統合マッピングイメージ
+═════════════════════════════ -->
+<div id="tab-goal" class="panel">
+  <div class="card">
+    <p class="sec-label">最終ゴール — 商品マッピングマスター（統合イメージ）</p>
+    <p class="sec-title">フロー A（メーカー・ブランド）× フロー B（カテゴリー）統合サンプル</p>
+    <p class="sec-body">以下は理想の最終状態のサンプル。各列のステータスで、どこが確定済みでどこが未決定かを確認できる。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" style="color:var(--ok);">4</div><div class="stat-label">完全マッピング済み</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--warn);">2</div><div class="stat-label">ブランド要確認</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--err);">2</div><div class="stat-label">カテゴリL5 未整備</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--gray-500);">1</div><div class="stat-label">メーカー未マッチ</div></div>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>JAN コード</th>
+        <th>商品名</th>
+        <th>maker_name</th>
+        <th>brand_name</th>
+        <th>category L4</th>
+        <th>category L5</th>
+        <th>総合ステータス</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-ok">
+        <td><code>4901085123456</code></td>
+        <td>サントリー 伊右衛門 緑茶 500ml</td>
+        <td><span class="maker-chip">サントリー食品</span></td>
+        <td><span class="brand-chip">伊右衛門</span></td>
+        <td>お茶</td>
+        <td><span class="cat-chip">緑茶 1-5-2-2-1</span></td>
+        <td><span class="st st-ok">✓ 完全</span></td>
+      </tr>
+      <tr class="row-ok">
+        <td><code>4901085234567</code></td>
+        <td>サントリー BOSS 缶コーヒー 185g</td>
+        <td><span class="maker-chip">サントリー食品</span></td>
+        <td><span class="brand-chip">BOSS</span></td>
+        <td>コーヒー</td>
+        <td><span class="cat-chip">缶コーヒー 1-5-2-3-1</span></td>
+        <td><span class="st st-ok">✓ 完全</span></td>
+      </tr>
+      <tr class="row-ok">
+        <td><code>4901777456789</code></td>
+        <td>キリン 生茶 ほうじ煎茶 600ml</td>
+        <td><span class="maker-chip">キリンビバレッジ</span></td>
+        <td><span class="brand-chip">生茶</span></td>
+        <td>お茶</td>
+        <td><span class="cat-chip">ほうじ茶 1-5-2-2-2</span></td>
+        <td><span class="st st-ok">✓ 完全</span></td>
+      </tr>
+      <tr class="row-ok">
+        <td><code>4901330456789</code></td>
+        <td>カルビー ポテトチップス うすしお 60g</td>
+        <td><span class="maker-chip">カルビー</span></td>
+        <td><span class="brand-chip">カルビー</span></td>
+        <td>ポテト・揚げ菓子</td>
+        <td><span class="cat-chip">ポテトチップス 1-4-1-1-1</span></td>
+        <td><span class="st st-ok">✓ 完全</span></td>
+      </tr>
+      <tr class="row-issue">
+        <td><code>4901085678901</code></td>
+        <td>サントリー 角瓶 700ml</td>
+        <td><span class="maker-chip">サントリー食品</span></td>
+        <td><span class="brand-chip" style="border-color:#FDE68A;background:#FFFBEB;color:#92400E;">角瓶?</span></td>
+        <td>ウイスキー</td>
+        <td><span class="st st-err">L5 未整備</span></td>
+        <td><span class="st st-warn">⚠️ 要確認</span></td>
+      </tr>
+      <tr class="row-issue">
+        <td><code>4901777567890</code></td>
+        <td>キリン iMUSE 免疫ケア 500ml</td>
+        <td><span class="maker-chip">キリンビバレッジ</span></td>
+        <td><span class="brand-chip">iMUSE</span></td>
+        <td>ジュース・機能飲料</td>
+        <td><span class="st st-warn">L5 要追加</span></td>
+        <td><span class="st st-warn">⚠️ 要確認</span></td>
+      </tr>
+      <tr class="row-err">
+        <td><code>4902777234567</code></td>
+        <td>明治 チョコレート効果 カカオ72%</td>
+        <td><span class="maker-chip">明治</span></td>
+        <td><span class="brand-chip">チョコレート効果</span></td>
+        <td>板チョコ・個包装</td>
+        <td><span class="cat-chip" style="border-color:#FED7AA;background:#FFF7ED;color:#9A3412;">ダークチョコ? ルール誤判定</span></td>
+        <td><span class="st st-err">✗ 要修正</span></td>
+      </tr>
+      <tr class="row-err">
+        <td><code>4987244678901</code></td>
+        <td>（GS1未登録メーカー商品）</td>
+        <td><span class="st st-err">未マッチ</span></td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td><span class="st st-err">✗ maker未特定</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="disc" style="margin-top:16px;">
+    <p class="disc-label">💬 このサンプルから見えてくる優先議題</p>
+    <div class="g2">
+      <div>
+        <div class="disc-item"><span>🔴</span><div><strong>L5 カテゴリー不足問題</strong>：ウイスキー・機能飲料など既存 L5 に入らない商品が一定数存在する。L5 追加フローの設計が急務。</div></div>
+        <div class="disc-item"><span>🟡</span><div><strong>ブランド名の曖昧さ</strong>：「角瓶」「角」「サントリーウイスキー」など LLM の判定がぶれる商品への対処ルールが必要。</div></div>
+      </div>
+      <div>
+        <div class="disc-item"><span>🟡</span><div><strong>GS1 未登録メーカー対応</strong>：海外 JAN・古い商品は maker_code が取れない。unknown_maker テーブルを別管理するか検討。</div></div>
+        <div class="disc-item"><span>🟢</span><div><strong>明確なキーワードの商品は精度高い</strong>：緑茶・缶コーヒー・ポテトチップス等は 3 アプローチ全一致。ルールベースで十分なカテゴリが多い。</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
