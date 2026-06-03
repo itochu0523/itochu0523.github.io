@@ -3,786 +3,524 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>商品マスター整備 パイプライン設計</title>
+<title>商品マスター整備 パイプライン設計書 v3</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --gs1:        #1A56DB;
-  --gs1-lt:     #EBF1FF;
-  --gcp:        #E37400;
-  --gcp-lt:     #FFF3CD;
-  --dmc:        #0F7673;
-  --dmc-lt:     #E0F5F4;
-  --brand:      #6B41C8;
-  --brand-lt:   #F0EAFF;
-  --jan:        #B91C1C;
-  --jan-lt:     #FEF2F2;
-  --cat:        #374151;
-  --cat-lt:     #F3F4F6;
-  --done:       #065F46;
-  --done-lt:    #ECFDF5;
-  --gray-900:   #111827;
-  --gray-700:   #374151;
-  --gray-500:   #6B7280;
-  --gray-300:   #D1D5DB;
-  --gray-200:   #E5E7EB;
-  --gray-100:   #F9FAFB;
-  --white:      #FFFFFF;
-  --mono:       'IBM Plex Mono', monospace;
-  --sans:       'Noto Sans JP', sans-serif;
+  --gs1:#1A56DB; --gs1-lt:#EBF1FF;
+  --gcp:#E37400; --gcp-lt:#FFF3CD;
+  --dmc:#0F7673; --dmc-lt:#E0F5F4;
+  --brand:#6B41C8; --brand-lt:#F0EAFF;
+  --jan:#B91C1C; --jan-lt:#FEF2F2;
+  --llm:#0369A1; --llm-lt:#E0F2FE;
+  --undecided:#92400E; --undecided-lt:#FEF3C7;
+  --done:#065F46; --done-lt:#ECFDF5;
+  --gray-900:#111827; --gray-700:#374151; --gray-500:#6B7280;
+  --gray-300:#D1D5DB; --gray-200:#E5E7EB; --gray-100:#F9FAFB;
+  --white:#FFFFFF;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans JP',sans-serif;
 }
-body {
-  font-family: var(--sans);
-  background: #EEF1F7;
-  color: var(--gray-900);
-  min-height: 100vh;
-  padding: 48px 20px 64px;
-}
-.page { max-width: 980px; margin: 0 auto; }
+body { font-family:var(--sans); background:#EEF1F7; color:var(--gray-900); padding:48px 20px 72px; }
+.page { max-width:1000px; margin:0 auto; }
 
-/* ─── Doc Header ─── */
-.doc-header {
-  margin-bottom: 44px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--gray-300);
-}
-.doc-eyebrow {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--gray-500);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.doc-title {
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--gray-900);
-  margin-bottom: 10px;
-}
-.doc-subtitle {
-  font-size: 14px;
-  color: var(--gray-500);
-  line-height: 1.7;
-  max-width: 560px;
-}
-.doc-badges {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-.badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 11px;
-  border-radius: 20px;
-  letter-spacing: 0.06em;
-}
-.badge-blue   { background: var(--gs1); color: #fff; }
-.badge-green  { background: var(--done); color: #fff; }
-.badge-gray   { background: var(--gray-300); color: var(--gray-700); }
-.badge-wip    { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+/* ── Doc Header ── */
+.doc-header { margin-bottom:40px; padding-bottom:28px; border-bottom:1px solid var(--gray-300); }
+.doc-eyebrow { font-size:10.5px; font-weight:700; letter-spacing:0.18em; color:var(--gray-500); text-transform:uppercase; margin-bottom:8px; }
+.doc-title { font-size:30px; font-weight:700; line-height:1.2; margin-bottom:10px; }
+.doc-subtitle { font-size:14px; color:var(--gray-500); line-height:1.75; max-width:580px; }
+.doc-badges { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+.badge { font-size:11px; font-weight:600; padding:3px 11px; border-radius:20px; letter-spacing:0.05em; }
+.badge-dark   { background:var(--gray-900); color:#fff; }
+.badge-green  { background:var(--done); color:#fff; }
+.badge-wip    { background:var(--undecided-lt); color:var(--undecided); border:1px solid #FDE68A; }
+.badge-undec  { background:#FEE2E2; color:#991B1B; border:1px solid #FECACA; }
 
-/* ─── Purpose Box ─── */
-.purpose-box {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-left: 4px solid var(--gray-900);
-  border-radius: 10px;
-  padding: 18px 22px;
-  margin-bottom: 40px;
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-.purpose-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-.purpose-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--gray-500); text-transform: uppercase; margin-bottom: 4px; }
-.purpose-text { font-size: 14px; line-height: 1.8; color: var(--gray-700); }
-.purpose-text strong { color: var(--gray-900); }
+/* ── Purpose ── */
+.purpose-box { background:var(--white); border:1px solid var(--gray-200); border-left:4px solid var(--gray-900); border-radius:10px; padding:18px 22px; margin-bottom:40px; display:flex; gap:16px; }
+.purpose-label { font-size:10.5px; font-weight:700; letter-spacing:0.1em; color:var(--gray-500); text-transform:uppercase; margin-bottom:4px; }
+.purpose-text { font-size:14px; line-height:1.8; color:var(--gray-700); }
 
-/* ─── Phase headers ─── */
-.phase-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 40px 0 16px;
-}
-.phase-pill {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-.phase-line { flex: 1; height: 1px; background: var(--gray-300); }
-.phase-title { font-size: 16px; font-weight: 700; }
+/* ── Phase header ── */
+.phase-header { display:flex; align-items:center; gap:12px; margin:44px 0 16px; }
+.phase-pill { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+.phase-line { flex:1; height:1px; background:var(--gray-300); }
+.phase-title { font-size:16px; font-weight:700; }
 
-/* ─── Flow ─── */
-.flow { display: flex; flex-direction: column; }
-.section { display: flex; gap: 20px; align-items: stretch; }
-.step-col { display: flex; flex-direction: column; align-items: center; width: 44px; flex-shrink: 0; }
-.step-num {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; flex-shrink: 0; z-index: 1;
-  position: relative;
-}
-.step-line { width: 2px; flex: 1; min-height: 20px; }
-.card {
-  flex: 1;
-  border-radius: 12px;
-  padding: 18px 22px;
-  margin-bottom: 6px;
-  border: 1px solid var(--gray-200);
-  background: var(--white);
-}
-.card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
-.card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
-.card-body  { font-size: 13px; color: var(--gray-700); line-height: 1.75; }
+/* ── Flow ── */
+.flow { display:flex; flex-direction:column; }
+.section { display:flex; gap:20px; align-items:stretch; }
+.step-col { display:flex; flex-direction:column; align-items:center; width:44px; flex-shrink:0; }
+.step-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; z-index:1; }
+.step-line { width:2px; flex:1; min-height:20px; }
+.card { flex:1; border-radius:12px; padding:18px 22px; margin-bottom:6px; border:1px solid var(--gray-200); background:var(--white); }
+.card-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px; }
+.card-title { font-size:15px; font-weight:700; margin-bottom:8px; line-height:1.35; }
+.card-body  { font-size:13px; color:var(--gray-700); line-height:1.8; }
 
-code {
-  font-family: var(--mono);
-  font-size: 11px;
-  background: var(--gray-100);
-  border: 1px solid var(--gray-200);
-  padding: 1px 6px;
-  border-radius: 4px;
-  color: var(--gray-900);
-  white-space: nowrap;
-}
-.arrow-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 4px 0 4px 22px;
-  color: var(--gray-500);
-  font-size: 12px; font-weight: 500;
-}
-.arrow-row .icon { font-size: 16px; }
+code { font-family:var(--mono); font-size:11px; background:var(--gray-100); border:1px solid var(--gray-200); padding:1px 6px; border-radius:4px; color:var(--gray-900); white-space:nowrap; }
+.arrow-row { display:flex; align-items:center; gap:8px; padding:4px 0 4px 22px; color:var(--gray-500); font-size:12px; font-weight:500; }
 
-/* col-tag strip */
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.tag {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  padding: 3px 9px;
-  border-radius: 6px;
-  border: 1px solid;
-  white-space: nowrap;
-}
-.tag-key    { background: #FEF3C7; border-color: #FDE68A; color: #92400E; }
-.tag-col    { background: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
-.tag-json   { background: #F0FDF4; border-color: #BBF7D0; color: #166534; }
-.tag-fk     { background: #FEF2F2; border-color: #FECACA; color: #991B1B; }
+/* tags */
+.tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.tag { font-family:var(--mono); font-size:10.5px; padding:3px 9px; border-radius:6px; border:1px solid; white-space:nowrap; }
+.tag-key   { background:#FEF3C7; border-color:#FDE68A; color:#92400E; }
+.tag-uk    { background:#FFF7ED; border-color:#FDBA74; color:#9A3412; font-weight:700; }
+.tag-col   { background:#EFF6FF; border-color:#BFDBFE; color:#1E40AF; }
+.tag-json  { background:#F0FDF4; border-color:#BBF7D0; color:#166534; }
+.tag-undec { background:#FEE2E2; border-color:#FECACA; color:#991B1B; }
 
 /* table chip */
-.tbl { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 8px; border-radius: 8px; font-size: 11px; font-weight: 500; font-family: var(--mono); margin: 3px 4px 0 0; border: 1px solid transparent; }
-.tbl-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.tbl-gcp  { background: var(--gcp-lt); border-color: #F59E0B; color: #92400E; }
-.tbl-gcp  .tbl-dot { background: var(--gcp); }
-.tbl-dmc  { background: var(--dmc-lt); border-color: var(--dmc); color: #064E4B; }
-.tbl-dmc  .tbl-dot { background: var(--dmc); }
-.tbl-jan  { background: var(--jan-lt); border-color: #FECACA; color: #991B1B; }
-.tbl-jan  .tbl-dot { background: var(--jan); }
+.tbl { display:inline-flex; align-items:center; gap:6px; padding:5px 12px 5px 8px; border-radius:8px; font-size:11px; font-weight:500; font-family:var(--mono); margin:3px 4px 0 0; border:1px solid transparent; }
+.tbl-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.tbl-gcp { background:var(--gcp-lt); border-color:#F59E0B; color:#92400E; }
+.tbl-gcp .tbl-dot { background:var(--gcp); }
+.tbl-dmc { background:var(--dmc-lt); border-color:var(--dmc); color:#064E4B; }
+.tbl-dmc .tbl-dot { background:var(--dmc); }
+.tbl-jan { background:var(--jan-lt); border-color:#FECACA; color:#991B1B; }
+.tbl-jan .tbl-dot { background:var(--jan); }
 
-/* trunc / daily pill */
-.pill-trunc {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #FFF7ED; border: 1px solid #FED7AA;
-  border-radius: 8px; padding: 6px 12px;
-  font-size: 12px; color: #9A3412; font-weight: 500;
-  margin-top: 10px;
-}
-.pill-daily {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: #ECFDF5; border: 1px solid #6EE7B7;
-  color: #065F46; font-size: 11px; font-weight: 600;
-  padding: 3px 10px; border-radius: 20px; margin-bottom: 8px;
-}
-.pulse { width: 7px; height: 7px; border-radius: 50%; background: #10B981; animation: pulse 2s infinite; }
+.pill-trunc { display:inline-flex; align-items:center; gap:6px; background:#FFF7ED; border:1px solid #FED7AA; border-radius:8px; padding:6px 12px; font-size:12px; color:#9A3412; font-weight:500; margin-top:10px; }
+.pill-daily { display:inline-flex; align-items:center; gap:5px; background:#ECFDF5; border:1px solid #6EE7B7; color:#065F46; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+.pulse { width:7px; height:7px; border-radius:50%; background:#10B981; animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
 /* 2-col grid */
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-.inner-card { border-radius: 10px; padding: 14px 16px; border: 1px solid; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+.inner-card { border-radius:10px; padding:14px 16px; border:1px solid; }
 
-/* Schema box: maker_brand_master */
-.schema-box {
-  background: var(--gray-100);
-  border: 1px solid var(--gray-300);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 12px;
-  font-family: var(--mono);
-  font-size: 11.5px;
-}
-.schema-header {
-  background: var(--gray-200);
-  padding: 7px 14px;
-  font-weight: 600;
-  font-size: 11px;
-  color: var(--gray-700);
-  letter-spacing: 0.06em;
-}
-.schema-row {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 6px 14px;
-  border-top: 1px solid var(--gray-200);
-}
-.schema-row:first-of-type { border-top: none; }
-.schema-pk   { color: #92400E; font-weight: 700; min-width: 30px; }
-.schema-col  { color: var(--gray-900); flex: 1; }
-.schema-type { color: var(--gray-500); font-size: 10.5px; min-width: 100px; text-align: right; }
-.schema-note { color: #1D4ED8; font-size: 10px; margin-left: 10px; }
+/* schema */
+.schema-box { background:var(--gray-100); border:1px solid var(--gray-300); border-radius:10px; overflow:hidden; margin-top:12px; font-family:var(--mono); font-size:11.5px; }
+.schema-header { background:var(--gray-200); padding:7px 14px; font-weight:600; font-size:11px; color:var(--gray-700); letter-spacing:0.06em; }
+.schema-row { display:flex; align-items:center; padding:6px 14px; border-top:1px solid var(--gray-200); }
+.schema-pk   { color:#92400E; font-weight:700; min-width:36px; }
+.schema-uk   { color:#9A3412; font-weight:700; min-width:36px; font-size:10px; }
+.schema-col  { color:var(--gray-900); flex:1; }
+.schema-type { color:var(--gray-500); font-size:10.5px; min-width:110px; text-align:right; }
+.schema-note { color:#1D4ED8; font-size:10px; margin-left:10px; }
+.schema-note-warn { color:#D97706; font-size:10px; margin-left:10px; }
 
-/* JAN mapping visual */
-.jan-visual {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  margin: 14px 0 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-}
-.jan-seg {
-  padding: 8px 0;
-  text-align: center;
-  border: 1px solid var(--gray-300);
-  border-right: none;
-  font-weight: 600;
-}
-.jan-seg:last-child { border-right: 1px solid var(--gray-300); }
-.jan-seg-label { font-size: 9px; color: var(--gray-500); font-weight: 400; display: block; margin-top: 2px; font-family: var(--sans); }
-.jan-match { background: #FEF2F2; border-color: #FECACA !important; color: var(--jan); }
-.jan-rest  { background: var(--gray-100); color: var(--gray-500); }
+/* undecided box */
+.undecided-box { background:var(--undecided-lt); border:1.5px dashed #F59E0B; border-radius:10px; padding:14px 18px; margin-top:10px; }
+.undecided-label { font-size:10px; font-weight:700; color:var(--undecided); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
+.undecided-body { font-size:12.5px; color:#78350F; line-height:1.75; }
 
-/* outcome box */
-.outcome-box {
-  background: var(--done-lt);
-  border: 1.5px solid #6EE7B7;
-  border-radius: 12px;
-  padding: 18px 22px;
-  margin-top: 0;
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-.outcome-icon { font-size: 24px; flex-shrink: 0; }
-.outcome-title { font-size: 14px; font-weight: 700; color: var(--done); margin-bottom: 6px; }
-.outcome-body  { font-size: 13px; color: #065F46; line-height: 1.7; }
-.outcome-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.outcome-tag {
-  background: #fff;
-  border: 1px solid #6EE7B7;
-  border-radius: 6px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--done);
-}
+/* LLM tip box */
+.llm-box { background:var(--llm-lt); border:1px solid #7DD3FC; border-radius:10px; padding:16px 18px; margin-top:12px; }
+.llm-label { font-size:10px; font-weight:700; color:var(--llm); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:5px; }
+.llm-body { font-size:12.5px; color:#0C4A6E; line-height:1.8; }
+.llm-tip-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
+.llm-tip { display:flex; gap:10px; background:#fff; border:1px solid #BAE6FD; border-radius:8px; padding:9px 12px; font-size:12px; color:#0C4A6E; line-height:1.65; }
+.llm-tip-icon { flex-shrink:0; font-size:14px; margin-top:1px; }
+
+/* JAN visual */
+.jan-visual { display:flex; margin:14px 0 6px; font-family:var(--mono); font-size:12px; }
+.jan-seg { padding:8px 0; text-align:center; border:1px solid var(--gray-300); border-right:none; font-weight:600; }
+.jan-seg:last-child { border-right:1px solid var(--gray-300); }
+.jan-seg-label { font-size:9px; color:var(--gray-500); font-weight:400; display:block; margin-top:2px; font-family:var(--sans); }
+.jan-match { background:#FEF2F2; border-color:#FECACA !important; color:var(--jan); }
+.jan-rest  { background:var(--gray-100); color:var(--gray-500); }
+
+/* feedback callout */
+.feedback-box { background:#F0F9FF; border:1px solid #BAE6FD; border-left:4px solid #0EA5E9; border-radius:10px; padding:14px 18px; margin-top:10px; }
+.feedback-label { font-size:10px; font-weight:700; color:#0369A1; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+.feedback-body { font-size:12.5px; color:#0C4A6E; line-height:1.8; }
+
+/* outcome */
+.outcome-box { background:var(--done-lt); border:1.5px solid #6EE7B7; border-radius:12px; padding:18px 22px; display:flex; gap:14px; }
+.outcome-title { font-size:14px; font-weight:700; color:var(--done); margin-bottom:6px; }
+.outcome-body  { font-size:13px; color:#065F46; line-height:1.7; }
+.outcome-tags  { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.outcome-tag   { background:#fff; border:1px solid #6EE7B7; border-radius:6px; padding:3px 10px; font-size:12px; font-weight:600; color:var(--done); }
 
 /* WIP Phase */
-.wip-box {
-  border: 1.5px dashed var(--gray-300);
-  border-radius: 12px;
-  padding: 22px 24px;
-  background: var(--white);
-  position: relative;
-}
-.wip-stamp {
-  position: absolute;
-  top: 14px; right: 16px;
-  background: #FEF3C7;
-  border: 1px solid #FDE68A;
-  color: #92400E;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: 20px;
-}
-.wip-title { font-size: 15px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
-.wip-body  { font-size: 13px; color: var(--gray-500); line-height: 1.8; }
-.wip-slots { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-.wip-slot {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--gray-100);
-  border: 1px dashed var(--gray-300);
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 13px;
-  color: var(--gray-500);
-}
-.wip-num {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--gray-200);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--gray-500);
-  flex-shrink: 0;
-}
+.wip-box { border:1.5px dashed var(--gray-300); border-radius:12px; padding:22px 24px; background:var(--white); position:relative; }
+.wip-stamp { position:absolute; top:14px; right:16px; background:var(--undecided-lt); border:1px solid #FDE68A; color:var(--undecided); font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:20px; }
+.wip-title { font-size:15px; font-weight:700; color:var(--gray-700); margin-bottom:8px; }
+.wip-body  { font-size:13px; color:var(--gray-500); line-height:1.8; }
+.wip-slots { display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+.wip-slot { display:flex; align-items:flex-start; gap:10px; background:var(--gray-100); border:1px dashed var(--gray-300); border-radius:8px; padding:10px 16px; font-size:13px; color:var(--gray-500); line-height:1.65; }
+.wip-num { width:22px; height:22px; border-radius:50%; background:var(--gray-200); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--gray-500); flex-shrink:0; margin-top:1px; }
 
-/* Color themes */
-.t-gs1  .step-num { background: var(--gs1);   color: #fff; }
-.t-gs1  .step-line{ background: linear-gradient(var(--gs1), var(--gcp)); }
-.t-gs1  .card-label{ color: var(--gs1); }
-.t-gs1  .card { border-left: 3px solid var(--gs1); }
+/* color themes */
+.t-gs1  .step-num  { background:var(--gs1); color:#fff; }
+.t-gs1  .step-line { background:linear-gradient(var(--gs1),var(--gcp)); }
+.t-gs1  .card-label{ color:var(--gs1); }
+.t-gs1  .card      { border-left:3px solid var(--gs1); }
 
-.t-gcp  .step-num { background: var(--gcp);   color: #fff; }
-.t-gcp  .step-line{ background: linear-gradient(var(--gcp), var(--dmc)); }
-.t-gcp  .card-label{ color: var(--gcp); }
-.t-gcp  .card { border-left: 3px solid var(--gcp); }
+.t-gcp  .step-num  { background:var(--gcp); color:#fff; }
+.t-gcp  .step-line { background:linear-gradient(var(--gcp),var(--dmc)); }
+.t-gcp  .card-label{ color:var(--gcp); }
+.t-gcp  .card      { border-left:3px solid var(--gcp); }
 
-.t-dmc  .step-num { background: var(--dmc);   color: #fff; }
-.t-dmc  .step-line{ background: linear-gradient(var(--dmc), var(--dmc)); }
-.t-dmc  .card-label{ color: var(--dmc); }
-.t-dmc  .card { border-left: 3px solid var(--dmc); }
+.t-dmc  .step-num  { background:var(--dmc); color:#fff; }
+.t-dmc  .step-line { background:var(--dmc); }
+.t-dmc  .card-label{ color:var(--dmc); }
+.t-dmc  .card      { border-left:3px solid var(--dmc); }
 
-.t-brand .step-num { background: var(--brand); color: #fff; }
-.t-brand .step-line{ background: linear-gradient(var(--brand), var(--jan)); }
-.t-brand .card-label{ color: var(--brand); }
-.t-brand .card { border-left: 3px solid var(--brand); }
+.t-brand .step-num  { background:var(--brand); color:#fff; }
+.t-brand .step-line { background:linear-gradient(var(--brand),var(--jan)); }
+.t-brand .card-label{ color:var(--brand); }
+.t-brand .card      { border-left:3px solid var(--brand); }
 
-.t-jan  .step-num { background: var(--jan);   color: #fff; }
-.t-jan  .step-line{ display:none; }
-.t-jan  .card-label{ color: var(--jan); }
-.t-jan  .card { border-left: 3px solid var(--jan); }
+.t-jan  .step-num  { background:var(--jan); color:#fff; }
+.t-jan  .step-line { display:none; }
+.t-jan  .card-label{ color:var(--jan); }
+.t-jan  .card      { border-left:3px solid var(--jan); }
 
-/* Footer */
-.footer {
-  margin-top: 52px;
-  padding-top: 20px;
-  border-top: 1px solid var(--gray-300);
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--gray-500);
-}
+/* footer */
+.footer { margin-top:52px; padding-top:20px; border-top:1px solid var(--gray-300); display:flex; justify-content:space-between; font-size:11px; color:var(--gray-500); }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- ═══ DOC HEADER ═══ -->
-  <div class="doc-header">
-    <p class="doc-eyebrow">Data Architecture · Draft v2</p>
-    <h1 class="doc-title">商品マスター整備<br>パイプライン設計書</h1>
-    <p class="doc-subtitle">
-      GS1 データを起点に、商品1件ずつに対して<strong>メーカー・ブランド・カテゴリー</strong>を正確にマッピングするための
-      データフロー全体設計。
-    </p>
-    <div class="doc-badges">
-      <span class="badge badge-green">Phase 1：メーカー／ブランド — 設計確定</span>
-      <span class="badge badge-wip">Phase 2：カテゴリー — 検討中</span>
+<!-- ═══ HEADER ═══ -->
+<div class="doc-header">
+  <p class="doc-eyebrow">Data Architecture · Draft v3</p>
+  <h1 class="doc-title">商品マスター整備<br>パイプライン設計書</h1>
+  <p class="doc-subtitle">GS1 データを起点に、商品 1 件ずつに対して<strong>メーカー・ブランド・カテゴリー</strong>を正確にマッピングするためのデータフロー全体設計。</p>
+  <div class="doc-badges">
+    <span class="badge badge-green">Phase 1-A/C：メーカー — 設計確定</span>
+    <span class="badge badge-wip">Phase 1-B：ブランド — 一部未決定</span>
+    <span class="badge badge-undec">Phase 2：カテゴリー — 検討中</span>
+  </div>
+</div>
+
+<!-- ═══ PURPOSE ═══ -->
+<div class="purpose-box">
+  <div style="font-size:22px;flex-shrink:0;margin-top:2px;">🎯</div>
+  <div>
+    <p class="purpose-label">最終目的</p>
+    <p class="purpose-text"><strong>すべての商品（JAN コード）に対して、メーカー・ブランド・カテゴリーを正確に付与する。</strong><br>各属性は独立したフローで整備し、最終的に商品テーブルへ JOIN してマッピングを完成させる。</p>
+  </div>
+</div>
+
+
+<!-- ═══ PHASE 1-A ═══ -->
+<div class="phase-header">
+  <span class="phase-pill" style="background:var(--gs1);color:#fff;">Phase 1-A</span>
+  <span class="phase-title">GS1 データ取込 → メーカーマスター整備</span>
+  <span class="phase-line"></span>
+  <span class="badge badge-green">設計確定</span>
+</div>
+<div class="flow">
+
+  <!-- S1 -->
+  <div class="section t-gs1">
+    <div class="step-col"><div class="step-num">1</div><div class="step-line"></div></div>
+    <div class="card">
+      <div class="pill-daily"><span class="pulse"></span>Daily 定期取得</div>
+      <p class="card-label">GS1 — データソース</p>
+      <p class="card-title">GS1 から定期データを取得</p>
+      <p class="card-body">GS1 が毎日用意するメーカー名標準情報を Lazuli バッチで定期取得。取り込むカラムは <code>standard_gs1_company_code</code> と <code>company_name</code> の 2 つのみ。</p>
     </div>
   </div>
+  <div class="arrow-row"><span>↓</span><span>BigQuery へ格納（grandline-dev）</span></div>
 
-  <!-- ═══ PURPOSE ═══ -->
-  <div class="purpose-box">
-    <div class="purpose-icon">🎯</div>
-    <div>
-      <p class="purpose-label">最終目的</p>
-      <p class="purpose-text">
-        <strong>すべての商品（JAN コード）に対して、メーカー・ブランド・カテゴリーを正確に付与する。</strong><br>
-        各属性は独立したフローで整備し、最終的に商品テーブルへ JOIN してマッピングを完成させる。
-      </p>
+  <!-- S2 -->
+  <div class="section t-gcp">
+    <div class="step-col"><div class="step-num">2</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">GCP — grandline-dev</p>
+      <p class="card-title">BigQuery へ取り込み</p>
+      <div class="tags" style="margin-top:8px;"><span class="tbl tbl-gcp"><span class="tbl-dot"></span>grandline-dev.gs1.gs1_maker_name_standard_info</span></div>
     </div>
   </div>
+  <div class="arrow-row"><span>↓</span><span>dmc-ops プロジェクトへコピー</span></div>
 
-
-  <!-- ═══════════════════════════════════════
-       PHASE 1A : GS1 → マスター整備
-  ═══════════════════════════════════════ -->
-  <div class="phase-header">
-    <span class="phase-pill" style="background:var(--gs1);color:#fff;">Phase 1-A</span>
-    <span class="phase-title">GS1 データ取込 → メーカーマスター整備</span>
-    <span class="phase-line"></span>
-  </div>
-
-  <div class="flow">
-
-    <!-- STEP 1 -->
-    <div class="section t-gs1">
-      <div class="step-col">
-        <div class="step-num">1</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <div class="pill-daily"><span class="pulse"></span>Daily 定期取得</div>
-        <p class="card-label">GS1 — データソース</p>
-        <p class="card-title">GS1 から定期データを取得</p>
-        <p class="card-body">GS1 が毎日用意するメーカー名標準情報を Lazuli バッチで定期取得。</p>
-      </div>
+  <!-- S3 -->
+  <div class="section t-dmc">
+    <div class="step-col"><div class="step-num">3</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">GCP — dmc-ops.master</p>
+      <p class="card-title">temp テーブルへコピー（洗い替え）</p>
+      <div class="tags" style="margin-top:8px;"><span class="tbl tbl-dmc"><span class="tbl-dot"></span>dmc-ops.master.temp_gs1_maker_name_standard_info</span></div>
+      <div class="pill-trunc">↻ 毎日 TRUNCATE → 全件 INSERT</div>
+      <div class="tags"><span class="tag tag-key">standard_gs1_company_code</span><span class="tag tag-col">company_name</span></div>
     </div>
+  </div>
+  <div class="arrow-row"><span>↓</span><span>差分抽出 → 正規化マスター 2 テーブルへ即時反映</span></div>
 
-    <div class="arrow-row"><span class="icon">↓</span><span>BigQuery へ格納（grandline-dev）</span></div>
-
-    <!-- STEP 2 -->
-    <div class="section t-gcp">
-      <div class="step-col">
-        <div class="step-num">2</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">GCP — grandline-dev</p>
-        <p class="card-title">BigQuery へ取り込み</p>
-        <p class="card-body">GCP プロジェクト <code>grandline-dev</code>、データセット <code>gs1</code> に格納。</p>
-        <div class="tags" style="margin-top:10px;">
-          <span class="tbl tbl-gcp"><span class="tbl-dot"></span>grandline-dev.gs1.gs1_maker_name_standard_info</span>
+  <!-- S4 -->
+  <div class="section t-dmc">
+    <div class="step-col"><div class="step-num">4</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">dmc-ops.master — 正規化マスター</p>
+      <p class="card-title">メーカーコード・メーカー名を正規化（N 対 1）</p>
+      <p class="card-body">メーカーコードとメーカー名は <strong>N 対 1</strong> の関係。それぞれをユニークキーとした正規化テーブルを作成。</p>
+      <div class="grid2">
+        <div class="inner-card" style="background:var(--dmc-lt);border-color:var(--dmc);">
+          <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px;">maker_code_master</p>
+          <p style="font-size:12px;color:#064E4B;line-height:1.65;"><strong>メーカーコード</strong> がユニーク<br>PK: <code>standard_gs1_company_code</code></p>
+        </div>
+        <div class="inner-card" style="background:var(--dmc-lt);border-color:var(--dmc);">
+          <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px;">maker_name_master</p>
+          <p style="font-size:12px;color:#064E4B;line-height:1.65;"><strong>メーカー名</strong> がユニーク<br>PK: <code>company_name</code>（名寄せ済み）</p>
         </div>
       </div>
     </div>
-
-    <div class="arrow-row"><span class="icon">↓</span><span>dmc-ops プロジェクトへコピー</span></div>
-
-    <!-- STEP 3 -->
-    <div class="section t-dmc">
-      <div class="step-col">
-        <div class="step-num">3</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">GCP — dmc-ops.master</p>
-        <p class="card-title">temp テーブルへコピー（洗い替え）</p>
-        <p class="card-body">毎日 TRUNCATE → 全件 INSERT で最新状態を維持。</p>
-        <div class="tags" style="margin-top:10px;">
-          <span class="tbl tbl-dmc"><span class="tbl-dot"></span>dmc-ops.master.temp_gs1_maker_name_standard_info</span>
-        </div>
-        <div class="pill-trunc" style="margin-top:10px;">↻ 毎日 TRUNCATE → 全件 INSERT</div>
-        <div class="tags" style="margin-top:10px;">
-          <span class="tag tag-key">standard_gs1_company_code</span>
-          <span class="tag tag-col">company_name</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="arrow-row"><span class="icon">↓</span><span>差分抽出 → 正規化マスター 2 テーブルへ即時反映</span></div>
-
-    <!-- STEP 4 -->
-    <div class="section t-dmc">
-      <div class="step-col">
-        <div class="step-num">4</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">dmc-ops.master — 正規化マスター</p>
-        <p class="card-title">メーカーコード・メーカー名を正規化（N 対 1）</p>
-        <p class="card-body">
-          メーカーコードとメーカー名は <strong>N 対 1</strong> の関係。それぞれをユニークキーとした正規化テーブルを作成。
-        </p>
-        <div class="grid2">
-          <div class="inner-card" style="background:var(--dmc-lt);border-color:var(--dmc);">
-            <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:6px;">maker_code_master</p>
-            <p style="font-size:12px;color:#064E4B;line-height:1.65;">
-              <strong>メーカーコード</strong> がユニーク<br>
-              PK: <code>standard_gs1_company_code</code>
-            </p>
-          </div>
-          <div class="inner-card" style="background:var(--dmc-lt);border-color:var(--dmc);">
-            <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:6px;">maker_name_master</p>
-            <p style="font-size:12px;color:#064E4B;line-height:1.65;">
-              <strong>メーカー名</strong> がユニーク<br>
-              PK: <code>company_name</code>（名寄せ済み）
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-
-  <!-- ═══════════════════════════════════════
-       PHASE 1B : ブランドマスター
-  ═══════════════════════════════════════ -->
-  <div class="phase-header">
-    <span class="phase-pill" style="background:var(--brand);color:#fff;">Phase 1-B</span>
-    <span class="phase-title">ブランドマスター整備 → 非正規化テーブル構築</span>
-    <span class="phase-line"></span>
-  </div>
-
-  <div class="flow">
-
-    <!-- STEP 5 -->
-    <div class="section t-brand">
-      <div class="step-col">
-        <div class="step-num">5</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">dmc-ops.master — ブランド付与</p>
-        <p class="card-title">maker_name_master にブランド情報を付加</p>
-        <p class="card-body">
-          メーカー名に対してブランド名が <strong>N 対 1</strong>。
-          <code>maker_name_master</code> を起点にブランドサイト URL を登録し、
-          DMC 手動作業またはクローリングによりブランド名を生成・紐づける。
-        </p>
-        <div class="grid2" style="margin-top:12px;">
-          <div class="inner-card" style="background:var(--brand-lt);border-color:#C4B5FD;">
-            <p style="font-size:12px;font-weight:700;color:#5B21B6;margin-bottom:5px;">ブランドサイト登録</p>
-            <p style="font-size:12px;color:#5B21B6;line-height:1.6;">各メーカーのブランドサイト URL を手動で登録</p>
-          </div>
-          <div class="inner-card" style="background:var(--brand-lt);border-color:#C4B5FD;">
-            <p style="font-size:12px;font-weight:700;color:#5B21B6;margin-bottom:5px;">ブランド名生成</p>
-            <p style="font-size:12px;color:#5B21B6;line-height:1.6;">DMC 作業 または クローリング でブランド名を取得・付与</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="arrow-row"><span class="icon">↓</span><span>maker_code を KEY に非正規化テーブルを生成</span></div>
-
-    <!-- STEP 6 : maker_brand_master -->
-    <div class="section t-brand">
-      <div class="step-col">
-        <div class="step-num">6</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">dmc-ops.master — 非正規化テーブル</p>
-        <p class="card-title">maker_brand_master を作成</p>
-        <p class="card-body">
-          メーカーコードを PK とし、メーカー名・ブランド名・クローリング属性を一本化した非正規化テーブル。
-          JANコードとのマッチング処理の基盤となる。
-        </p>
-
-        <div class="schema-box">
-          <div class="schema-header">dmc-ops.master.maker_brand_master</div>
-          <div class="schema-row">
-            <span class="schema-pk">PK</span>
-            <span class="schema-col">maker_code</span>
-            <span class="schema-type">STRING</span>
-            <span class="schema-note">≒ standard_gs1_company_code</span>
-          </div>
-          <div class="schema-row">
-            <span class="schema-pk"></span>
-            <span class="schema-col">maker_name</span>
-            <span class="schema-type">STRING</span>
-            <span class="schema-note">メーカー名（名寄せ済み）</span>
-          </div>
-          <div class="schema-row">
-            <span class="schema-pk"></span>
-            <span class="schema-col">brand_name</span>
-            <span class="schema-type">STRING</span>
-            <span class="schema-note">ブランド名</span>
-          </div>
-          <div class="schema-row">
-            <span class="schema-pk"></span>
-            <span class="schema-col">brand_site_url</span>
-            <span class="schema-type">STRING</span>
-            <span class="schema-note">ブランドサイト URL</span>
-          </div>
-          <div class="schema-row">
-            <span class="schema-pk"></span>
-            <span class="schema-col">crawl_attributes</span>
-            <span class="schema-type">JSON</span>
-            <span class="schema-note">クローリング取得属性（拡張用）</span>
-          </div>
-          <div class="schema-row">
-            <span class="schema-pk"></span>
-            <span class="schema-col">created_at / updated_at</span>
-            <span class="schema-type">TIMESTAMP</span>
-            <span class="schema-note"></span>
-          </div>
-        </div>
-
-        <div class="tags" style="margin-top:12px;">
-          <span class="tag tag-key">PK: maker_code</span>
-          <span class="tag tag-col">maker_name</span>
-          <span class="tag tag-col">brand_name</span>
-          <span class="tag tag-col">brand_site_url</span>
-          <span class="tag tag-json">crawl_attributes (JSON)</span>
-        </div>
-        <p style="font-size:12px;color:var(--gray-500);margin-top:8px;line-height:1.6;">
-          ※ クローリングで取得できた属性は <code>crawl_attributes</code> JSON カラムに格納。将来的な拡張に対応。
-        </p>
-      </div>
-    </div>
-
-  </div>
+</div><!-- /flow -->
 
 
-  <!-- ═══════════════════════════════════════
-       PHASE 1C : JAN マッチング
-  ═══════════════════════════════════════ -->
-  <div class="phase-header">
-    <span class="phase-pill" style="background:var(--jan);color:#fff;">Phase 1-C</span>
-    <span class="phase-title">JAN コード × maker_code マッチング</span>
-    <span class="phase-line"></span>
-  </div>
+<!-- ═══ PHASE 1-B ═══ -->
+<div class="phase-header">
+  <span class="phase-pill" style="background:var(--brand);color:#fff;">Phase 1-B</span>
+  <span class="phase-title">ブランドマスター整備 → 非正規化テーブル構築</span>
+  <span class="phase-line"></span>
+  <span class="badge badge-wip">一部未決定</span>
+</div>
+<div class="flow">
 
-  <div class="flow">
+  <!-- S5 ブランドサイト・ブランド名取得 -->
+  <div class="section t-brand">
+    <div class="step-col"><div class="step-num">5</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">dmc-ops.master — ブランド情報取得</p>
+      <p class="card-title">メーカー（事業者）に対してブランドサイトを 1 対 1 で取得</p>
+      <p class="card-body">極力 <strong>メーカー 1 件 = ブランドサイト 1 件</strong> を目標とする。クローリングは極力行わず、<strong>LLM（Claude）へのプロンプトによるブランドリスト生成</strong>を主軸とする。</p>
 
-    <!-- STEP 7 -->
-    <div class="section t-jan">
-      <div class="step-col">
-        <div class="step-num">7</div>
-        <div class="step-line"></div>
-      </div>
-      <div class="card">
-        <p class="card-label">JAN コード — メーカー特定</p>
-        <p class="card-title">JAN 先頭 XX に maker_code をマッチング</p>
-        <p class="card-body">
-          JAN コード先頭の <strong>メーカープレフィックス（XX）</strong> を <code>maker_brand_master.maker_code</code> に対してマッチングさせる。
-          これによりメーカーおよびブランドが一意に決定する。
-        </p>
-
-        <!-- JAN visual -->
-        <div style="margin-top:14px;">
-          <p style="font-size:11px;color:var(--gray-500);margin-bottom:6px;font-weight:600;letter-spacing:0.08em;">JAN コード構造（13桁）</p>
-          <div class="jan-visual">
-            <div class="jan-seg jan-match" style="width:22%;border-radius:6px 0 0 6px;">
-              XX
-              <span class="jan-seg-label">メーカーPFX<br>← maker_code でマッチ</span>
-            </div>
-            <div class="jan-seg jan-rest" style="width:62%;">
-              XXXXXXXXX
-              <span class="jan-seg-label">商品コード</span>
-            </div>
-            <div class="jan-seg jan-rest" style="width:16%;border-radius:0 6px 6px 0;">
-              C
-              <span class="jan-seg-label">チェックD</span>
-            </div>
-          </div>
-          <p style="font-size:11px;color:var(--jan);margin-top:6px;font-weight:600;">
-            ↳ maker_code が一致 → maker_name + brand_name が確定
+      <div class="grid2" style="margin-top:12px;">
+        <div class="inner-card" style="background:var(--brand-lt);border-color:#C4B5FD;">
+          <p style="font-size:12px;font-weight:700;color:#5B21B6;margin-bottom:5px;">ブランドサイト取得</p>
+          <p style="font-size:12px;color:#5B21B6;line-height:1.65;">
+            LLM に「このメーカーのブランドサイト候補を出して」と質問。<br>
+            <span style="color:#7C3AED;font-weight:600;">目標：メーカー 1 件 → サイト 1〜2 件</span>
           </p>
         </div>
-
-        <div class="tags" style="margin-top:12px;">
-          <span class="tbl tbl-jan"><span class="tbl-dot"></span>products.jan_code (先頭XX)</span>
-          <span style="font-size:13px;color:var(--gray-500);align-self:center;padding:0 6px;">×</span>
-          <span class="tbl tbl-dmc"><span class="tbl-dot"></span>maker_brand_master.maker_code</span>
+        <div class="inner-card" style="background:var(--brand-lt);border-color:#C4B5FD;">
+          <p style="font-size:12px;font-weight:700;color:#5B21B6;margin-bottom:5px;">ブランド名生成</p>
+          <p style="font-size:12px;color:#5B21B6;line-height:1.65;">
+            ブランドサイトが特定できたら LLM にブランドリストを生成させる。<br>結果を DMC でチェック・精度確認。
+          </p>
         </div>
       </div>
-    </div>
 
-  </div>
+      <!-- LLM コスト最適化 Tips -->
+      <div class="llm-box">
+        <p class="llm-label">💡 Claude コスト最適化 — プロンプト設計のポイント</p>
+        <p class="llm-body">大量のメーカーを一括処理する際は、以下の設計でトークンコストを大幅に削減できる。</p>
+        <div class="llm-tip-list">
+          <div class="llm-tip">
+            <span class="llm-tip-icon">①</span>
+            <div><strong>バッチ処理（一問多答）</strong>：1 リクエストに複数メーカーをまとめて質問する。<br>例：「以下のメーカーリストに対して、ブランドサイト URL とブランド名を JSON 形式で返してください。\n{メーカーリスト}」<br>→ 1 件ずつ質問するより <strong>入力トークンを 50〜70% 削減</strong>できる。</div>
+          </div>
+          <div class="llm-tip">
+            <span class="llm-tip-icon">②</span>
+            <div><strong>出力フォーマット指定（JSON のみ）</strong>：自然文ではなく JSON のみ返すよう指示することで、出力トークンを最小化する。<br>例：「余分な説明は不要。JSON 配列のみ返してください。<br><code>[{"maker":"xxx","brand_site":"https://...","brands":["A","B"]}]</code>」</div>
+          </div>
+          <div class="llm-tip">
+            <span class="llm-tip-icon">③</span>
+            <div><strong>Haiku モデルを使う</strong>：ブランドリスト生成のような構造化タスクは <code>claude-haiku-4-5</code> で十分な精度が出るケースが多い。Sonnet 比で約 <strong>1/5 のコスト</strong>。精度が不十分な場合のみ Sonnet にフォールバック。</div>
+          </div>
+          <div class="llm-tip">
+            <span class="llm-tip-icon">④</span>
+            <div><strong>キャッシュ活用（Prompt Caching）</strong>：システムプロンプトや共通の指示部分を Anthropic の Prompt Cache に乗せると、繰り返し処理で <strong>入力コストを最大 90% 削減</strong>。</div>
+          </div>
+          <div class="llm-tip">
+            <span class="llm-tip-icon">⑤</span>
+            <div><strong>2 段階処理</strong>：① まず Haiku でブランドサイト候補を大量生成 → ② 信頼度スコアが低いものだけ Sonnet で再確認。全件を高コストモデルに流さない。</div>
+          </div>
+        </div>
+      </div>
 
-  <!-- ─── 達成 ─── -->
-  <div style="margin-top:8px;margin-bottom:0;padding-left:64px;">
-    <div class="outcome-box">
-      <div class="outcome-icon">✅</div>
-      <div>
-        <p class="outcome-title">Phase 1 完了 — メーカー・ブランドが商品に確定</p>
-        <p class="outcome-body">
-          JAN コードを持つすべての商品に対し、<strong>メーカー</strong> と <strong>ブランド</strong> が正確にマッピングされた状態になる。
+      <!-- 未決定事項 -->
+      <div class="undecided-box" style="margin-top:12px;">
+        <p class="undecided-label">⚠️ 未決定</p>
+        <p class="undecided-body">
+          ・1 メーカーあたり何サイトまで許容するか（1 サイト固定 or 最大 2 サイト）<br>
+          ・LLM 生成結果の品質チェックを DMC 手動にするか自動バリデーションにするか<br>
+          ・ブランドサイトの URL 正規化ルール（サブドメイン含むかどうか等）
         </p>
-        <div class="outcome-tags">
-          <span class="outcome-tag">商品.maker_name ✓</span>
-          <span class="outcome-tag">商品.brand_name ✓</span>
-          <span class="outcome-tag">商品.brand_site_url ✓</span>
-          <span class="outcome-tag">商品.crawl_attributes ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-row"><span>↓</span><span>maker_code を軸に非正規化テーブルを生成</span></div>
+
+  <!-- S6 maker_brand_master -->
+  <div class="section t-brand">
+    <div class="step-col"><div class="step-num">6</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">dmc-ops.master — 非正規化テーブル</p>
+      <p class="card-title">maker_brand_master を作成（brand_name 正規化済み）</p>
+      <p class="card-body">
+        <strong>PK は maker_code 単体ではなく、<code>(maker_code, brand_name)</code> または <code>(maker_name, brand_name)</code> の複合ユニークキー。</strong><br>
+        brand_name は正規化（表記揺れ統一・重複排除）した上で格納する。
+      </p>
+
+      <!-- フィードバック引用 -->
+      <div class="feedback-box">
+        <p class="feedback-label">📌 設計フィードバック（Seigen）</p>
+        <p class="feedback-body">
+          maker_code と JAN コードだけではブランドは一意にならない。同一 maker_code でも商品名から「伊右衛門」「BOSS」のように複数ブランドが存在する。<br>
+          → <strong>「LLM でブランド名を推察して一意にする」処理が必要。</strong> JAN コード + 商品名を入力として LLM にブランド名を判定させる。
+        </p>
+      </div>
+
+      <div class="schema-box">
+        <div class="schema-header">dmc-ops.master.maker_brand_master</div>
+        <div class="schema-row"><span class="schema-uk">UK①</span><span class="schema-col">maker_code</span><span class="schema-type">STRING</span><span class="schema-note">≒ standard_gs1_company_code</span></div>
+        <div class="schema-row"><span class="schema-uk">UK①②</span><span class="schema-col">brand_name</span><span class="schema-type">STRING</span><span class="schema-note">正規化済みブランド名（必須）</span></div>
+        <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">maker_name</span><span class="schema-type">STRING</span><span class="schema-note">UK② の候補にもなる</span></div>
+        <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">brand_site_url</span><span class="schema-type">STRING</span><span class="schema-note">LLM 生成 or 手動登録</span></div>
+        <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">crawl_attributes</span><span class="schema-type">JSON</span><span class="schema-note">拡張属性（クローリング最小化）</span></div>
+        <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">created_at / updated_at</span><span class="schema-type">TIMESTAMP</span><span class="schema-note"></span></div>
+      </div>
+
+      <div class="tags" style="margin-top:12px;">
+        <span class="tag tag-uk">UK①: (maker_code, brand_name)</span>
+        <span class="tag tag-uk">UK②候補: (maker_name, brand_name)</span>
+        <span class="tag tag-col">brand_site_url</span>
+        <span class="tag tag-json">crawl_attributes (JSON)</span>
+      </div>
+
+      <div class="undecided-box" style="margin-top:12px;">
+        <p class="undecided-label">⚠️ 未決定</p>
+        <p class="undecided-body">
+          ・複合 UK を <code>(maker_code, brand_name)</code> と <code>(maker_name, brand_name)</code> のどちらを主にするか確定が必要<br>
+          ・brand_name 正規化ルールの定義（表記揺れ・英語/日本語混在の扱い）<br>
+          ・LLM によるブランド名推察処理をどのタイミング・どのテーブルに組み込むか
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flow -->
+
+
+<!-- ═══ PHASE 1-C ═══ -->
+<div class="phase-header">
+  <span class="phase-pill" style="background:var(--jan);color:#fff;">Phase 1-C</span>
+  <span class="phase-title">JAN コード × maker_code マッチング + LLM ブランド判定</span>
+  <span class="phase-line"></span>
+  <span class="badge badge-wip">LLM処理 未決定</span>
+</div>
+<div class="flow">
+
+  <!-- S7 -->
+  <div class="section t-jan">
+    <div class="step-col"><div class="step-num">7</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">JAN コード — メーカー特定</p>
+      <p class="card-title">JAN 先頭 XX → maker_code マッチング</p>
+      <p class="card-body">JAN コード先頭の <strong>メーカープレフィックス（XX）</strong> を <code>maker_brand_master.maker_code</code> に照合。メーカーが確定する。</p>
+
+      <div style="margin-top:14px;">
+        <p style="font-size:11px;color:var(--gray-500);margin-bottom:6px;font-weight:600;letter-spacing:0.08em;">JAN コード構造（13桁）</p>
+        <div class="jan-visual">
+          <div class="jan-seg jan-match" style="width:22%;border-radius:6px 0 0 6px;">XX<span class="jan-seg-label">メーカーPFX<br>maker_code でマッチ</span></div>
+          <div class="jan-seg jan-rest" style="width:62%;">XXXXXXXXX<span class="jan-seg-label">商品コード</span></div>
+          <div class="jan-seg jan-rest" style="width:16%;border-radius:0 6px 6px 0;">C<span class="jan-seg-label">チェックD</span></div>
         </div>
       </div>
+
+      <!-- フィードバック：maker_codeだけではブランド一意にならない -->
+      <div class="feedback-box" style="margin-top:12px;">
+        <p class="feedback-label">📌 重要：maker_code だけではブランドは一意にならない</p>
+        <p class="feedback-body">
+          同一 maker_code 配下に複数ブランドが存在するケースがある。<br>
+          例）maker_code: <code>45454545</code> → 「サントリー伊右衛門 hogehoge」「サントリーBOSS hogehoge」<br>
+          → <strong>JAN コード + 商品名を LLM に渡して、ブランド名を推察・一意化する処理が追加で必要。</strong>
+        </p>
+      </div>
+
+      <div class="undecided-box" style="margin-top:10px;">
+        <p class="undecided-label">⚠️ 未決定</p>
+        <p class="undecided-body">
+          ・LLM ブランド推察処理の実装タイミング（バッチ or リアルタイム）<br>
+          ・入力フォーマット：JAN コード + 商品名 → ブランド名 の具体的なプロンプト設計<br>
+          ・推察結果の信頼度スコアリングと人手確認フローの設計
+        </p>
+      </div>
+
+      <div class="tags" style="margin-top:12px;">
+        <span class="tbl tbl-jan"><span class="tbl-dot"></span>products.jan_code (先頭XX)</span>
+        <span style="font-size:13px;color:var(--gray-500);padding:0 4px;align-self:center;">×</span>
+        <span class="tbl tbl-dmc"><span class="tbl-dot"></span>maker_brand_master.maker_code</span>
+      </div>
     </div>
   </div>
 
+</div><!-- /flow -->
 
-  <!-- ═══════════════════════════════════════
-       PHASE 2 : カテゴリー（WIP）
-  ═══════════════════════════════════════ -->
-  <div class="phase-header">
-    <span class="phase-pill" style="background:var(--gray-500);color:#fff;">Phase 2</span>
-    <span class="phase-title">カテゴリーマッピング</span>
-    <span class="phase-line"></span>
-    <span class="badge badge-wip">検討中</span>
+<!-- Phase 1 DONE -->
+<div style="padding-left:64px;margin-top:8px;margin-bottom:0;">
+  <div class="outcome-box">
+    <div style="font-size:24px;flex-shrink:0;">✅</div>
+    <div>
+      <p class="outcome-title">Phase 1 完了 — メーカー・ブランドが商品に確定</p>
+      <p class="outcome-body">JAN コードを持つすべての商品に対し、メーカーと（LLM 確定後）ブランドが正確にマッピングされる。</p>
+      <div class="outcome-tags">
+        <span class="outcome-tag">商品.maker_name ✓</span>
+        <span class="outcome-tag">商品.brand_name ✓（LLM確定後）</span>
+        <span class="outcome-tag">商品.brand_site_url ✓</span>
+        <span class="outcome-tag">商品.crawl_attributes ✓</span>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="wip-box">
-    <span class="wip-stamp">🔧 Work In Progress</span>
-    <p class="wip-title">カテゴリーフロー — 現在設計中</p>
-    <p class="wip-body">
-      カテゴリーはメーカー・ブランドとは<strong>独立したフロー</strong>として設計する。<br>
-      森井カテゴリマスタ（L1〜L5 階層）を活用し、商品に対して最小分類（L5）を付与することが目標。
-      具体的なマッピングロジックは現在検討中。
+
+<!-- ═══ PHASE 2 ═══ -->
+<div class="phase-header">
+  <span class="phase-pill" style="background:var(--gray-500);color:#fff;">Phase 2</span>
+  <span class="phase-title">カテゴリーマッピング</span>
+  <span class="phase-line"></span>
+  <span class="badge badge-undec">検討中</span>
+</div>
+<div class="wip-box">
+  <span class="wip-stamp">🔧 Work In Progress</span>
+  <p class="wip-title">カテゴリーフロー — 現在設計中</p>
+  <p class="wip-body">
+    カテゴリーはメーカー・ブランドとは<strong>独立したフロー</strong>として設計する。<br>
+    森井カテゴリマスタ（L1〜L5 階層、計 2,735 件）を活用し、商品に対して最小分類（L5）を付与することが目標。マッピングロジックは現在検討中。
+  </p>
+  <div style="margin-top:12px;background:var(--undecided-lt);border:1px solid #FDE68A;border-radius:8px;padding:10px 14px;">
+    <p style="font-size:11px;font-weight:700;color:var(--undecided);margin-bottom:6px;letter-spacing:0.08em;">議論ポイント（Seigen / ito）</p>
+    <p style="font-size:12.5px;color:#78350F;line-height:1.8;">
+      ・カテゴリー構造は何に繋がり、どのように追加・精度向上していくか<br>
+      ・森井カテゴリマスタの L4 別カラムセット（29,222 件）をどう活用するか<br>
+      ・ルールベース / ML / LLM のどのアプローチでマッピングするか
     </p>
-    <div class="wip-slots">
-      <div class="wip-slot">
-        <span class="wip-num">A</span>
-        カテゴリーマスター整備（森井カテゴリマスタ L1〜L5 階層の確定）
-      </div>
-      <div class="wip-slot">
-        <span class="wip-num">B</span>
-        商品 → カテゴリーのマッピングロジック設計（ルールベース / ML / 手動）
-      </div>
-      <div class="wip-slot">
-        <span class="wip-num">C</span>
-        マッピング結果の格納先テーブル設計
-      </div>
-      <div class="wip-slot">
-        <span class="wip-num">D</span>
-        メーカー・ブランドとカテゴリーの統合マッピングテーブル設計
-      </div>
-    </div>
   </div>
+  <div class="wip-slots">
+    <div class="wip-slot"><span class="wip-num">A</span>カテゴリーマスター確定（森井カテゴリマスタ L1〜L5 の採用範囲を決める）</div>
+    <div class="wip-slot"><span class="wip-num">B</span>商品 → カテゴリー のマッピングロジック設計（ルールベース / LLM / 手動の組み合わせ）</div>
+    <div class="wip-slot"><span class="wip-num">C</span>マッピング結果の格納先テーブル設計（<code>dmc-ops.master</code> 内）</div>
+    <div class="wip-slot"><span class="wip-num">D</span>メーカー・ブランド・カテゴリーの統合マッピングテーブル設計</div>
+  </div>
+</div>
 
 
-  <!-- ═══════════════════════════════════════
-       FINAL GOAL
-  ═══════════════════════════════════════ -->
-  <div class="phase-header" style="margin-top:40px;">
-    <span class="phase-pill" style="background:var(--gray-900);color:#fff;">Goal</span>
-    <span class="phase-title">最終アウトプット</span>
-    <span class="phase-line"></span>
+<!-- ═══ GOAL ═══ -->
+<div class="phase-header" style="margin-top:40px;">
+  <span class="phase-pill" style="background:var(--gray-900);color:#fff;">Goal</span>
+  <span class="phase-title">最終アウトプット — products テーブルイメージ</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:14px;color:var(--gray-700);line-height:1.8;margin-bottom:14px;">Phase 1（メーカー・ブランド）と Phase 2（カテゴリー）完了時点で、<strong>商品 1 件ごとに以下が正確にマッピングされた状態</strong>を実現する。</p>
+  <div class="schema-box">
+    <div class="schema-header">products テーブル — 最終マッピングイメージ</div>
+    <div class="schema-row"><span class="schema-pk">PK</span><span class="schema-col">jan_code</span><span class="schema-type">STRING</span><span class="schema-note">商品識別子</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">maker_code</span><span class="schema-type">STRING FK</span><span class="schema-note" style="color:#059669;">✅ Phase 1-A 確定</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">maker_name</span><span class="schema-type">STRING</span><span class="schema-note" style="color:#059669;">✅ Phase 1-A 確定</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">brand_name</span><span class="schema-type">STRING</span><span class="schema-note" style="color:#D97706;">🔧 Phase 1-C LLM処理 未確定</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">brand_site_url</span><span class="schema-type">STRING</span><span class="schema-note" style="color:#059669;">✅ Phase 1-B 確定</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">category_l5_code</span><span class="schema-type">STRING FK</span><span class="schema-note" style="color:#DC2626;">❌ Phase 2 検討中</span></div>
+    <div class="schema-row"><span class="schema-pk"></span><span class="schema-col">category_name</span><span class="schema-type">STRING</span><span class="schema-note" style="color:#DC2626;">❌ Phase 2 検討中</span></div>
   </div>
+</div>
 
-  <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
-    <p style="font-size:14px;color:var(--gray-700);line-height:1.8;margin-bottom:14px;">
-      Phase 1（メーカー・ブランド）と Phase 2（カテゴリー）が完了した時点で、
-      <strong>商品 1 件ごとに以下の属性が正確にマッピングされた状態</strong> を実現する。
-    </p>
-    <div class="schema-box">
-      <div class="schema-header">products テーブル — 最終マッピングイメージ</div>
-      <div class="schema-row">
-        <span class="schema-pk">PK</span>
-        <span class="schema-col">jan_code</span>
-        <span class="schema-type">STRING</span>
-        <span class="schema-note">商品識別子</span>
-      </div>
-      <div class="schema-row">
-        <span class="schema-pk"></span>
-        <span class="schema-col">maker_code</span>
-        <span class="schema-type">STRING FK</span>
-        <span class="schema-note" style="color:#059669;">✅ Phase 1 完了</span>
-      </div>
-      <div class="schema-row">
-        <span class="schema-pk"></span>
-        <span class="schema-col">maker_name</span>
-        <span class="schema-type">STRING</span>
-        <span class="schema-note" style="color:#059669;">✅ Phase 1 完了</span>
-      </div>
-      <div class="schema-row">
-        <span class="schema-pk"></span>
-        <span class="schema-col">brand_name</span>
-        <span class="schema-type">STRING</span>
-        <span class="schema-note" style="color:#059669;">✅ Phase 1 完了</span>
-      </div>
-      <div class="schema-row">
-        <span class="schema-pk"></span>
-        <span class="schema-col">category_l5_code</span>
-        <span class="schema-type">STRING FK</span>
-        <span class="schema-note" style="color:#D97706;">🔧 Phase 2 検討中</span>
-      </div>
-      <div class="schema-row">
-        <span class="schema-pk"></span>
-        <span class="schema-col">category_name</span>
-        <span class="schema-type">STRING</span>
-        <span class="schema-note" style="color:#D97706;">🔧 Phase 2 検討中</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <span>商品マスター整備 パイプライン設計書 — Draft v2</span>
-    <span>dmc-ops.master · 作成日: 2026-06</span>
-  </div>
+<!-- Footer -->
+<div class="footer">
+  <span>商品マスター整備 パイプライン設計書 — Draft v3</span>
+  <span>dmc-ops.master · 2026-06</span>
+</div>
 
 </div>
 </body>
