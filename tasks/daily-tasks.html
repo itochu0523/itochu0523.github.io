@@ -30,8 +30,7 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   transition:transform 0.15s,background 0.2s;text-align:left;-webkit-appearance:none;font-family:inherit;}
 .task-btn:active{transform:scale(0.97);}
 .task-btn.done{background:rgba(111,207,151,0.07);}
-.t-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:26px;transition:background 0.25s;}
+.t-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;}
 .t-info{flex:1;}
 .t-lbl{color:white;font-size:17px;font-weight:600;margin-bottom:3px;}
 .task-btn.done .t-lbl{color:var(--muted);text-decoration:line-through;}
@@ -45,15 +44,43 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   padding:10px 14px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
   transition:all 0.2s;min-height:46px;white-space:nowrap;}
 .tab-btn.on{background:rgba(111,207,151,0.12);border-color:rgba(111,207,151,0.25);color:var(--green);}
-/* Shopping chips */
+/* Shopping chips on home - larger, easier to tap */
 .shop-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border);
-  border-radius:30px;padding:10px 16px;min-height:44px;cursor:pointer;font-size:15px;color:white;
-  font-family:inherit;transition:all 0.2s;}
+.chip{display:flex;align-items:center;gap:8px;border-radius:30px;padding:11px 18px;min-height:48px;
+  cursor:pointer;font-size:15px;font-family:inherit;transition:all 0.2s;border:1px solid;}
 .chip:active{transform:scale(0.95);}
-.chip.bought{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);opacity:0.55;}
-.chip .ck{color:var(--green);font-weight:800;min-width:14px;font-size:14px;}
-.chip.bought span:last-child{text-decoration:line-through;color:var(--muted);}
+.chip-need{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);color:white;}
+.chip-manual{background:rgba(255,255,255,0.06);border-color:var(--border);color:white;}
+/* Staples checklist */
+.staple-cat{font-size:12px;font-weight:700;color:var(--muted);padding:10px 0 6px;letter-spacing:1px;}
+.staple-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:60px;cursor:pointer;transition:all 0.2s;}
+.staple-row.needed{background:rgba(111,207,151,0.07);border-color:rgba(111,207,151,0.25);}
+.staple-row:active{transform:scale(0.98);}
+.staple-chk{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#111a14;flex-shrink:0;transition:all 0.2s;}
+.staple-row.needed .staple-chk{background:var(--green);border-color:var(--green);}
+.staple-name{flex:1;font-size:15px;color:white;}
+.staple-row.needed .staple-name{font-weight:600;}
+.need-badge{font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(111,207,151,0.15);
+  border:1px solid rgba(111,207,151,0.3);color:var(--green);white-space:nowrap;}
+/* Fridge */
+.fi-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:13px 15px;margin-bottom:8px;min-height:56px;}
+.fi-name{flex:1;font-size:15px;color:white;}
+.fi-amt{font-size:13px;color:var(--muted);}
+.fi-del{background:none;border:none;color:rgba(255,80,80,0.5);font-size:20px;cursor:pointer;padding:4px 8px;}
+/* Shopping page */
+.shop-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:15px 16px;margin-bottom:8px;min-height:62px;}
+.shop-item.active{background:rgba(111,207,151,0.06);border-color:rgba(111,207,151,0.2);}
+.shop-item-name{flex:1;font-size:16px;color:white;}
+.shop-cat-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);margin:12px 0 7px;padding-left:2px;text-transform:uppercase;}
+.big-chk{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
+  display:flex;align-items:center;justify-content:center;color:#111a14;font-weight:800;font-size:15px;
+  cursor:pointer;transition:all 0.2s;flex-shrink:0;font-family:inherit;}
+.big-chk.on{background:var(--green);border-color:var(--green);}
+.del-btn{background:none;border:none;color:rgba(255,80,80,0.45);font-size:20px;cursor:pointer;padding:4px 8px;}
 /* Drink tracking */
 .drink-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
   border-radius:14px;padding:12px 14px;margin-bottom:8px;}
@@ -79,12 +106,10 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .mc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
 .mc-tags{display:flex;gap:4px;flex-wrap:wrap;}
 .mc-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(255,255,255,0.06);color:var(--muted);}
-.mc-right{text-align:right;flex-shrink:0;}
-.mc-time{font-size:11px;color:var(--muted);}
 .mc-nutr{display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--border);}
 .mc-n{font-size:11px;color:var(--muted);}
 .mc-n span{color:white;font-weight:600;}
-/* Recipe modal */
+/* Recipe */
 .r-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .r-emoji{font-size:44px;}
 .r-info h2{font-size:20px;font-weight:700;}
@@ -101,16 +126,16 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .step-num{width:26px;height:26px;border-radius:50%;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.2);
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--green);flex-shrink:0;margin-top:1px;}
 .step-txt{font-size:14px;line-height:1.6;flex:1;}
-/* Star rating */
+/* Stars */
 .stars{display:flex;gap:8px;margin:10px 0;justify-content:center;}
 .star{font-size:36px;cursor:pointer;transition:transform 0.15s;line-height:1;}
 .star:hover{transform:scale(1.15);}
-/* Nutrition bars */
+/* Nutrition */
 .nb-row{margin-bottom:10px;}
 .nb-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
 .nb-bg{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
 .nb-bar{height:100%;border-radius:4px;}
-/* Stat cards */
+/* Stats */
 .stat-row{display:flex;gap:10px;margin-bottom:20px;}
 .stat-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;
   display:flex;flex-direction:column;align-items:center;gap:4px;}
@@ -123,45 +148,17 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .ts-bg{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
 .ts-bar{height:100%;border-radius:4px;transition:width 0.6s;}
 .ts-pct{font-size:13px;font-weight:700;width:36px;text-align:right;}
-/* Fridge/Staple */
-.fi-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:13px 15px;margin-bottom:8px;min-height:56px;}
-.fi-name{flex:1;font-size:15px;color:white;}
-.fi-amt{font-size:13px;color:var(--muted);margin-right:6px;}
-.fi-del{background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px;border-radius:8px;}
-.cat-hdr{font-size:12px;font-weight:700;color:var(--muted);padding:10px 0 6px;letter-spacing:1px;}
-.qty-row{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);
-  border-radius:13px;padding:11px 13px;margin-bottom:7px;min-height:54px;}
-.qty-name{flex:1;font-size:14px;color:white;}
-.qty-inp{width:50px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;
-  padding:6px 8px;color:white;font-size:15px;text-align:center;outline:none;font-family:inherit;}
-.qty-unit{font-size:11px;color:var(--muted);min-width:22px;}
-.qty-badge{font-size:11px;padding:3px 9px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;}
-.qb-ok{background:rgba(111,207,151,0.12);color:var(--green);}
-.qb-low{background:rgba(196,150,58,0.15);color:var(--gold);}
-.qb-out{background:rgba(248,113,113,0.15);color:var(--red);}
-/* Shopping */
-.shop-cat-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--muted);margin:12px 0 7px;padding-left:2px;}
-.check-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:14px 15px;margin-bottom:8px;min-height:58px;}
-.big-chk{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
-  display:flex;align-items:center;justify-content:center;color:#111a14;font-weight:800;font-size:15px;
-  cursor:pointer;transition:all 0.2s;flex-shrink:0;font-family:inherit;}
-.big-chk.on{background:var(--green);border-color:var(--green);}
-.cr-lbl{flex:1;font-size:15px;color:var(--muted);}
-.check-row.on .cr-lbl{color:white;font-weight:600;}
-.badge{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
-.badge.done{background:rgba(111,207,151,0.15);border-color:rgba(111,207,151,0.3);color:var(--green);}
-.manage-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:13px 15px;margin-bottom:8px;min-height:56px;}
-.mr-txt{flex:1;font-size:15px;color:white;}
-.del-btn{background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px;border-radius:8px;}
+/* Eatout */
+.cuisine-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.cu-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;
+  padding:7px 12px;color:white;font-size:13px;cursor:pointer;font-family:inherit;min-height:38px;}
+.cu-btn.on{border-color:var(--green);color:var(--green);}
+.eo-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 /* Forms */
 .add-form{display:flex;gap:8px;margin-bottom:14px;}
-.add-form input,.input-box{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+.add-form input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
   border-radius:14px;padding:14px 15px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;}
-.add-form input::placeholder,.input-box::placeholder{color:var(--muted);}
+.add-form input::placeholder{color:var(--muted);}
 .green-btn{background:var(--green);border:none;border-radius:14px;padding:14px 18px;color:#111a14;
   font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;min-height:52px;white-space:nowrap;}
 .pill-btn{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:20px;
@@ -185,14 +182,6 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .m-btn.s{background:rgba(255,255,255,0.08);color:white;}
 .sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
 .sync-err{background:rgba(255,80,80,0.1);color:var(--red);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
-/* Eatout cuisine */
-.cuisine-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.cu-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;
-  padding:7px 12px;color:white;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.2s;min-height:38px;}
-.cu-btn.on{border-color:var(--green);color:var(--green);}
-/* Tips */
-.tip-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;color:rgba(232,245,233,0.8);}
-.note-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
 /* Nav */
 #nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:rgba(10,18,12,0.96);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);
@@ -204,8 +193,6 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .nb .nl{font-size:10px;}
 .nb.on{color:var(--green);}
 .nb-dot{position:absolute;bottom:calc(env(safe-area-inset-bottom,0)+6px);width:4px;height:4px;border-radius:50%;background:var(--green);}
-/* Eatout history */
-.eo-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 </style>
 </head>
 <body>
@@ -228,14 +215,16 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
       </div>
     </div>
   </div>
-  <div class="sec" id="sec-drink"><div class="sec-label">💧 今日の水分</div><div id="drink-widget"></div></div>
+  <div class="sec"><div class="sec-label">💧 今日の水分</div><div id="drink-widget"></div></div>
   <div class="sec" id="sec-trash" style="display:none"><div class="sec-label">🗑️ ゴミ捨て</div><div id="trash-task"></div></div>
   <div class="sec"><div class="sec-label">🧹 今日の掃除</div><div id="clean-task"></div></div>
   <div class="sec"><div class="sec-label">🍳 今日の食事</div><div id="meal-task"></div></div>
   <div class="sec"><div class="sec-label">📋 毎日タスク</div><div id="daily-tasks"></div></div>
   <div class="sec" id="sec-shop" style="display:none">
-    <div class="sec-label">🛒 買い物リスト</div><div id="shop-chips"></div>
-    <div style="font-size:12px;color:var(--muted);margin-top:5px" id="shop-footer"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span class="sec-label" style="margin-bottom:0">🛒 買い物リスト</span>
+    </div>
+    <div id="shop-chips"></div>
   </div>
   <div class="sec"><div class="sec-label">📅 今週のタスク</div><div id="weekly-tasks"></div></div>
   <div style="height:20px"></div>
@@ -253,13 +242,13 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   </div>
   <div id="mv-rec">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <span style="font-size:13px;color:var(--muted)">全<span id="meal-cnt">0</span>品から選択</span>
+      <span style="font-size:13px;color:var(--muted)">全<span id="meal-cnt">0</span>品</span>
       <button class="pill-btn" onclick="shuffleRec()">🔀 シャッフル</button>
     </div>
     <div id="meal-cards"></div>
   </div>
   <div id="mv-custom" style="display:none">
-    <p class="hint">料理名を入力してAIでレシピ自動生成（⚙️でAPIキー設定）、またはカスタム保存</p>
+    <p class="hint">料理名を入力してAIでレシピ自動生成（⚙️でClaude APIキー設定）</p>
     <div class="add-form">
       <input type="text" id="custom-name" placeholder="料理名を入力...">
       <button class="green-btn" id="ai-btn" onclick="genRecipe()">🤖 AI生成</button>
@@ -270,9 +259,9 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
     <div id="eo-today"></div>
     <div class="sec-label">ジャンルを選ぶ</div>
     <div class="cuisine-btns" id="cuisine-btns"></div>
-    <div class="add-form"><input type="text" id="eo-rest" placeholder="店名（例：○○寿司）" style="flex:1"></div>
+    <div class="add-form"><input type="text" id="eo-rest" placeholder="店名（任意）"></div>
     <div class="add-form">
-      <input type="text" id="eo-dish" placeholder="料理・注文内容（例：マグロ丼）">
+      <input type="text" id="eo-dish" placeholder="料理・注文内容">
       <button class="green-btn" onclick="logEatOut()">記録</button>
     </div>
     <div class="sec-label" style="margin-top:4px">外食履歴</div>
@@ -299,7 +288,7 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
     <div id="fridge-list"></div>
   </div>
   <div id="sv-staples" style="display:none">
-    <p class="hint">個数を入力。設定個数以下になると買い物リストに自動追加されます</p>
+    <p class="hint">✅ チェックすると買い物リストに追加、もう一度チェックで削除（完了）</p>
     <div id="staples-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -309,11 +298,17 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 <div id="pg-shop" class="page">
   <div class="header"><div><div class="h-title">🛒 買い物リスト</div></div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="sh-check" onclick="shTab('check')">✅ 今日買うもの</button>
-    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">⚙️ リスト管理</button>
+    <button class="tab-btn on" id="sh-today" onclick="shTab('today')">✅ 今日買うもの</button>
+    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">📝 メモリスト</button>
   </div>
-  <div id="shv-check"><div id="sh-check-content"></div></div>
+  <!-- 今日買うもの -->
+  <div id="shv-today">
+    <p class="hint">タップで購入完了（ホームからも消えます）。常備品は在庫ページでチェック管理。</p>
+    <div id="sh-today-content"></div>
+  </div>
+  <!-- メモリスト管理 -->
   <div id="shv-manage" style="display:none">
+    <p class="hint">いつでも使えるメモリスト。チェックで今日の買い物リストに出す・外す。</p>
     <div class="add-form">
       <input type="text" id="new-item" placeholder="アイテムを追加..." onkeydown="if(event.key==='Enter')addItem()">
       <button class="green-btn" onclick="addItem()">追加</button>
@@ -328,10 +323,10 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   <div class="header"><div><div class="h-title">📊 記録・分析</div></div></div>
   <div class="stat-row">
     <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">🔥 0</div><div class="stat-lbl">連続達成日</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-today" style="color:#6fcf97">✅ 0</div><div class="stat-lbl">今日の完了</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-today-cnt" style="color:#6fcf97">✅ 0</div><div class="stat-lbl">今日の完了</div></div>
     <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">📅 0</div><div class="stat-lbl">記録日数</div></div>
   </div>
-  <div class="sec"><div class="sec-label">📈 直近14日間（完了タスク数）</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
+  <div class="sec"><div class="sec-label">📈 直近14日間</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
   <div class="sec"><div class="sec-label">🏅 タスク別達成率（30日間）</div><div id="task-stats"></div></div>
   <div style="height:20px"></div>
 </div>
@@ -345,15 +340,14 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   <button class="nb" id="nav-hist" onclick="setPage('hist')"><span class="ni">📊</span><span class="nl">記録</span></button>
 </nav>
 
-<!-- MODALS -->
+<!-- 設定モーダル -->
 <div class="ov" id="settings-ov" onclick="if(event.target===this)closeSettings()">
   <div class="mbox">
     <div class="m-title">⚙️ 設定・クラウド同期</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">JSONBin.io（無料）でスマホ・PC間のデータを同期します</p>
     <div class="m-row"><label>JSONBin Secret Key</label><input type="password" id="cfg-key" placeholder="$2b$10$..." autocomplete="off"></div>
     <div class="m-row"><label>Bin ID（初回は空欄でOK）</label><input type="text" id="cfg-bin" placeholder="自動生成されます"></div>
     <div id="sync-status"></div>
-    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <hr style="border:none;border-top:1px solid var(--border);margin:14px 0">
     <div class="m-row"><label>Anthropic API Key（AIレシピ生成・任意）</label><input type="password" id="cfg-ant" placeholder="sk-ant-..." autocomplete="off"></div>
     <div class="m-btns">
       <button class="m-btn p" onclick="saveSettings()">🚀 同期を開始</button>
@@ -366,13 +360,12 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   </div>
 </div>
 
+<!-- レシピモーダル -->
 <div class="ov" id="recipe-ov" onclick="if(event.target===this)closeRecipe()">
-  <div class="mbox">
-    <div id="recipe-content"></div>
-    <div class="m-btns" id="recipe-btns"></div>
-  </div>
+  <div class="mbox"><div id="recipe-content"></div><div class="m-btns" id="recipe-btns"></div></div>
 </div>
 
+<!-- AIプレビューモーダル -->
 <div class="ov" id="preview-ov" onclick="if(event.target===this)closePreview()">
   <div class="mbox">
     <div class="m-title">✨ 生成されたレシピを確認</div>
@@ -384,6 +377,7 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
   </div>
 </div>
 
+<!-- フィードバックモーダル -->
 <div class="ov" id="fb-ov" onclick="if(event.target===this)closeFb()">
   <div class="mbox">
     <div class="m-title">⭐ 食事の評価</div>
@@ -392,7 +386,6 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
     <textarea id="fb-note" placeholder="感想・改善メモ（例：醤油を減らすと美味しい）"
       style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;
       padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6">★3以下＋コメントでClaudeがレシピ改善ヒントを自動生成（APIキー設定時）</p>
     <div class="m-btns">
       <button class="m-btn s" onclick="closeFb()">スキップ</button>
       <button class="m-btn p" onclick="saveFb()">✅ 保存</button>
@@ -479,7 +472,7 @@ const MEALS=[
 {id:"m75",emoji:"🥗",name:"ニョッキのトマトソース",desc:"もちもちのイタリア団子",tags:["洋食"],time:35,nutr:{cal:420,protein:12,fat:10,carb:70},ings:[{n:"じゃがいも",a:"2個"},{n:"薄力粉",a:"80g"},{n:"卵",a:"1個"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"1かけ"},{n:"バジル",a:"少量"},{n:"オリーブオイル",a:"大さじ2"}],steps:["じゃがいもを茹でてつぶす","薄力粉と卵を加えてこねる","棒状にして2cmに切る","フォークで模様をつける","沸騰したお湯で茹でトマトソースで和える"]}
 ];
 
-// ─── 常備品マスター ─────────────────────────────────────────────
+// ─── 定数 ──────────────────────────────────────────────────────
 const STAPLES=[
   {id:'s01',n:'無料1',c:'水関連'},{id:'s02',n:'無料2',c:'水関連'},{id:'s03',n:'飲料1',c:'水関連'},
   {id:'s04',n:'湧水タンク',c:'水関連'},{id:'s05',n:'豆乳',c:'水関連'},{id:'s06',n:'氷結',c:'水関連'},
@@ -505,8 +498,16 @@ const STAPLES=[
 ];
 const TRASH={1:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},2:{l:'燃えないゴミ',i:'🚯',c:'#7a8fa6'},
   3:{l:'ペットボトル',i:'♻️',c:'#4a9e7f'},4:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},5:{l:'瓶・缶ゴミ',i:'🍶',c:'#c4963a'}};
-const CLEANING={0:{i:'🚪',l:'玄関掃除'},1:{i:'🍳',l:'キッチン掃除'},2:{i:'🛁',l:'浴室掃除'},
-  3:{i:'🪥',l:'洗面所掃除'},4:{i:'🧹',l:'床掃除'},5:{i:'🛋️',l:'リビング掃除'},6:{i:'🪟',l:'窓・ベランダ掃除'}};
+// 掃除スケジュール: 月(1)・木(4)はゴミ捨て日 → 玄関・マンション階段掃除（固定）
+const CLEANING={
+  0:{i:'🛁',l:'バスルーム掃除'},
+  1:{i:'🚪',l:'玄関・マンション階段掃除',note:'ゴミ捨て日の掃除（固定）'},
+  2:{i:'🍳',l:'キッチン掃除'},
+  3:{i:'🪥',l:'洗面所・トイレ掃除'},
+  4:{i:'🚪',l:'玄関・マンション階段掃除',note:'ゴミ捨て日の掃除（固定）'},
+  5:{i:'🏠',l:'リビング・床掃除'},
+  6:{i:'🪟',l:'窓・ベランダ掃除'},
+};
 const DAILY=[
   {id:'meditation',e:'🧘',l:'瞑想',s:'5分'},{id:'reading',e:'📖',l:'読書',s:'20ページ'},
   {id:'toilet',e:'🚿',l:'トイレ掃除',s:''},{id:'walk',e:'🚶',l:'散歩',s:''},
@@ -517,91 +518,93 @@ const TLABELS={trash:'ゴミ捨て',cleaning:'掃除',meal:'食事',meditation:'
   toilet:'トイレ掃除',walk:'散歩',hunting:'狩猟免許勉強',carwash:'洗車',bedding:'布団洗濯'};
 const HIDS=Object.keys(TLABELS);
 const DRINKS=[
-  {id:'water',i:'💧',n:'水',unit:'ml',goal:2000,color:'#7ab8d4',steps:[150,350,500]},
-  {id:'soymilk',i:'🥛',n:'豆乳',unit:'ml',goal:400,color:'#c4963a',steps:[200,400]},
-  {id:'alcohol',i:'🍺',n:'お酒',unit:'ml',goal:350,color:'#b08ac0',steps:[150,350]},
+  {id:'water',i:'💧',n:'水',goal:2000,color:'#7ab8d4',steps:[150,350,500]},
+  {id:'soymilk',i:'🥛',n:'豆乳',goal:400,color:'#c4963a',steps:[200,400]},
+  {id:'alcohol',i:'🍺',n:'お酒',goal:350,color:'#b08ac0',steps:[150,350]},
 ];
 const CUISINES=[{e:'🍣',l:'寿司'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ'},{e:'🍔',l:'バーガー'},
-  {e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},
-  {e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
+  {e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},{e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
 
-// ─── 状態 ───────────────────────────────────────────────────────
-let state={days:{},weeks:{},shopping:[],bought:{},fridge:[],staplesQty:{},customMeals:[],meals:{},drinks:{},mealFeedback:{}};
+// ─── 状態 ──────────────────────────────────────────────────────
+let state={
+  days:{},weeks:{},
+  // 買い物 - シンプル設計
+  // staplesNeeded: { stapleId: true/false } チェック = 買い物リストに出す
+  // shopMemo: [{ id, text, active }] - メモリスト（active=今日の買い物リストに出す）
+  // boughtToday: { date: { itemId: true } } - 今日購入済み（ホームから消す）
+  staplesNeeded:{}, shopMemo:[], boughtToday:{},
+  fridge:[], customMeals:[], meals:{}, drinks:{}, mealFeedback:{}
+};
 let cfg={apiKey:'',binId:'',anthropicKey:''};
-let histChart=null;
-let syncTimer=null;
-let recIdxs=[];
-let selectedCuisine='🍽️';
-let pendingCustom=null;
-let pendingFbId=null;
-let selectedRating=0;
-let curMealTab='rec';
-let curStockTab='fridge';
-let curShopTab='check';
+let histChart=null, syncTimer=null, recIdxs=[];
+let selectedCuisine='🍽️', pendingCustom=null, pendingFbId=null, selectedRating=0;
+let curMealTab='rec', curStockTab='fridge', curShopTab='today';
 
-// ─── ユーティリティ ─────────────────────────────────────────────
+// ─── ユーティリティ ────────────────────────────────────────────
 const pad=n=>String(n).padStart(2,'0');
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function mondayStr(){const d=new Date(),dw=d.getDay();d.setDate(d.getDate()-(dw===0?6:dw-1));return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
-function fmtDate(iso){return iso.slice(5).replace('-','/');}
 function allMeals(){return [...MEALS,...(state.customMeals||[])];}
 function mealById(id){return allMeals().find(m=>m.id===id);}
 function fridgeHas(name){return (state.fridge||[]).some(f=>f.name.includes(name)||name.includes(f.name));}
 function getDayDone(id){return !!((state.days||{})[todayStr()]||{})[id];}
 function getWeekDone(id){return !!((state.weeks||{})[mondayStr()]||{})[id];}
 function getTodayMeal(){return ((state.meals||{})[todayStr()])||{menuId:null,cooked:false,eaten:false};}
-function getNeeded(){return (state.shopping||[]).filter(i=>i.needed);}
-function getBought(id){return !!((state.bought||{})[todayStr()]||{})[id];}
 function getTodayDrink(id){return ((state.drinks||{})[todayStr()]||{})[id]||0;}
-function getRating(id){const fb=(state.mealFeedback||{})[id];return fb?fb.avgRating:0;}
+function getRating(id){return (state.mealFeedback||{})[id]?.avgRating||0;}
 function starStr(id){const r=getRating(id);if(!r)return '';const cnt=(state.mealFeedback||{})[id]?.ratings?.length||0;return '<span style="font-size:12px;color:#c4963a">★'+r.toFixed(1)+'</span><span style="font-size:10px;color:var(--muted)"> ('+cnt+'件)</span>';}
+// 買い物関連
+function isStapleNeeded(id){return !!(state.staplesNeeded||{})[id];}
+function isBoughtToday(id){return !!((state.boughtToday||{})[todayStr()]||{})[id];}
+function getActiveShopItems(){return (state.shopMemo||[]).filter(i=>i.active&&!isBoughtToday(i.id));}
+function getNeededStaples(){return STAPLES.filter(s=>isStapleNeeded(s.id)&&!isBoughtToday('st_'+s.id));}
 
-// ─── ローカルストレージ ─────────────────────────────────────────
+// ─── ストレージ ────────────────────────────────────────────────
 function loadLocal(){
-  try{const s=localStorage.getItem('dts');if(s)state=JSON.parse(s);}catch(e){}
+  try{const s=localStorage.getItem('dts');if(s){const parsed=JSON.parse(s);
+    // 旧データからマイグレーション
+    if(parsed.shopping&&!parsed.shopMemo){
+      parsed.shopMemo=(parsed.shopping||[]).map(i=>({id:i.id,text:i.text,active:i.needed||false}));
+    }
+    state=parsed;
+  }}catch(e){}
   try{const c=localStorage.getItem('dtc');if(c)cfg=JSON.parse(c);}catch(e){}
   if(!state.days)state.days={};
   if(!state.weeks)state.weeks={};
-  if(!state.shopping)state.shopping=[];
-  if(!state.bought)state.bought={};
+  if(!state.staplesNeeded)state.staplesNeeded={};
+  if(!state.shopMemo)state.shopMemo=[];
+  if(!state.boughtToday)state.boughtToday={};
   if(!state.fridge)state.fridge=[];
-  if(!state.staplesQty)state.staplesQty={};
   if(!state.customMeals)state.customMeals=[];
   if(!state.meals)state.meals={};
   if(!state.drinks)state.drinks={};
   if(!state.mealFeedback)state.mealFeedback={};
-  // 常備品初期化
-  STAPLES.forEach(s=>{if(!state.staplesQty[s.id])state.staplesQty[s.id]={qty:1,unit:'個',alertAt:1};});
 }
 function saveLocal(){localStorage.setItem('dts',JSON.stringify(state));}
 function saveCfg(){localStorage.setItem('dtc',JSON.stringify(cfg));}
 
-// ─── JSONBin同期 ─────────────────────────────────────────────────
+// ─── JSONBin ──────────────────────────────────────────────────
 async function fetchT(url,opts){
   const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);
-  try{const r=await fetch(url,{...opts,signal:ctrl.signal});clearTimeout(tid);return r;}
-  catch(e){clearTimeout(tid);throw e;}
+  try{const r=await fetch(url,{...opts,signal:ctrl.signal});clearTimeout(tid);return r;}catch(e){clearTimeout(tid);throw e;}
 }
 async function pushCloud(){
   if(!cfg.apiKey)return false;
   try{
     if(!cfg.binId){
       const r=await fetchT('https://api.jsonbin.io/v3/b',{method:'POST',
-        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},
-        body:JSON.stringify(state)});
+        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},body:JSON.stringify(state)});
       if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
-      const j=await r.json();
-      if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();const el=document.getElementById('cfg-bin');if(el)el.value=cfg.binId;}
+      const j=await r.json();if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();const el=document.getElementById('cfg-bin');if(el)el.value=cfg.binId;}
       return true;
     }else{
       const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId,{method:'PUT',
-        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
-        body:JSON.stringify(state)});
+        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(state)});
       if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
       return true;
     }
-  }catch(e){console.error('push',e);return e.name==='AbortError'?'timeout':e.message;}
+  }catch(e){return e.name==='AbortError'?'timeout':e.message;}
 }
 async function pullCloud(){
   if(!cfg.apiKey||!cfg.binId)return false;
@@ -609,15 +612,17 @@ async function pullCloud(){
     const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId+'/latest',{headers:{'X-Master-Key':cfg.apiKey}});
     if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
     const j=await r.json();
-    if(j.record){state=j.record;if(!state.staplesQty)state.staplesQty={};
-      STAPLES.forEach(s=>{if(!state.staplesQty[s.id])state.staplesQty[s.id]={qty:1,unit:'個',alertAt:1};});
+    if(j.record){state=j.record;
+      if(!state.staplesNeeded)state.staplesNeeded={};
+      if(!state.shopMemo)state.shopMemo=[];
+      if(!state.boughtToday)state.boughtToday={};
       saveLocal();renderAll();}
     return true;
-  }catch(e){console.error('pull',e);return e.name==='AbortError'?'timeout':e.message;}
+  }catch(e){return e.name==='AbortError'?'timeout':e.message;}
 }
 function sched(){clearTimeout(syncTimer);syncTimer=setTimeout(pushCloud,1500);}
 
-// ─── 設定 ───────────────────────────────────────────────────────
+// ─── 設定 ─────────────────────────────────────────────────────
 function openSettings(){
   document.getElementById('cfg-key').value=cfg.apiKey||'';
   document.getElementById('cfg-bin').value=cfg.binId||'';
@@ -628,20 +633,16 @@ function openSettings(){
 function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
 function showSync(msg,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=msg;}
 async function saveSettings(){
-  const k=document.getElementById('cfg-key').value.trim();
-  const b=document.getElementById('cfg-bin').value.trim();
-  const a=document.getElementById('cfg-ant').value.trim();
+  const k=document.getElementById('cfg-key').value.trim();const b=document.getElementById('cfg-bin').value.trim();const a=document.getElementById('cfg-ant').value.trim();
   if(!k){showSync('❌ APIキーを入力してください',false);return;}
-  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();
-  showSync('🔄 接続中...',true);
-  let res;
-  if(cfg.binId){res=await pullCloud();}else{res=await pushCloud();}
-  if(res===true){showSync('✅ '+(cfg.binId?'同期完了！':'Bin ID: '+cfg.binId+' 作成完了！'),true);}
-  else{showSync('❌ エラー: '+(res==='timeout'?'タイムアウト。APIキーを確認してください':res),false);}
+  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('🔄 接続中...',true);
+  const res=cfg.binId?await pullCloud():await pushCloud();
+  if(res===true)showSync('✅ '+(cfg.binId?'同期完了！':'新規Bin作成完了！ Bin ID: '+cfg.binId),true);
+  else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト。APIキーを確認してください':res),false);
   renderAll();
 }
 
-// ─── ページ切替 ─────────────────────────────────────────────────
+// ─── ページ切替 ───────────────────────────────────────────────
 function setPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>{b.classList.remove('on');const d=b.querySelector('.nb-dot');if(d)d.remove();});
@@ -649,38 +650,15 @@ function setPage(id){
   const nb=document.getElementById('nav-'+id);nb.classList.add('on');
   if(!nb.querySelector('.nb-dot')){const d=document.createElement('div');d.className='nb-dot';nb.appendChild(d);}
   if(id==='hist')renderHist();
-  if(id==='meal'){renderMealTab(curMealTab);}
-  if(id==='stock'){renderStockTab(curStockTab);}
-  if(id==='shop'){renderShopTab(curShopTab);}
+  if(id==='meal')renderMealTab(curMealTab);
+  if(id==='stock')renderStockTab(curStockTab);
+  if(id==='shop')renderShopTab(curShopTab);
 }
+function mTab(t){curMealTab=t;['rec','custom','eatout','today','nutr'].forEach(k=>{const b=document.getElementById('mt-'+k);if(b)b.className='tab-btn'+(t===k?' on':'');const v=document.getElementById('mv-'+k);if(v)v.style.display=t===k?'':'none';});renderMealTab(t);}
+function sTab(t){curStockTab=t;document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');document.getElementById('sv-fridge').style.display=t==='fridge'?'':'none';document.getElementById('sv-staples').style.display=t==='staples'?'':'none';renderStockTab(t);}
+function shTab(t){curShopTab=t;document.getElementById('sh-today').className='tab-btn'+(t==='today'?' on':'');document.getElementById('sh-manage').className='tab-btn'+(t==='manage'?' on':'');document.getElementById('shv-today').style.display=t==='today'?'':'none';document.getElementById('shv-manage').style.display=t==='manage'?'':'none';renderShopTab(t);}
 
-// ─── タブ切替 ───────────────────────────────────────────────────
-function mTab(t){
-  curMealTab=t;
-  ['rec','custom','eatout','today','nutr'].forEach(k=>{
-    const b=document.getElementById('mt-'+k);if(b)b.className='tab-btn'+(t===k?' on':'');
-    const v=document.getElementById('mv-'+k);if(v)v.style.display=t===k?'':'none';
-  });
-  renderMealTab(t);
-}
-function sTab(t){
-  curStockTab=t;
-  document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');
-  document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');
-  document.getElementById('sv-fridge').style.display=t==='fridge'?'':'none';
-  document.getElementById('sv-staples').style.display=t==='staples'?'':'none';
-  renderStockTab(t);
-}
-function shTab(t){
-  curShopTab=t;
-  document.getElementById('sh-check').className='tab-btn'+(t==='check'?' on':'');
-  document.getElementById('sh-manage').className='tab-btn'+(t==='manage'?' on':'');
-  document.getElementById('shv-check').style.display=t==='check'?'':'none';
-  document.getElementById('shv-manage').style.display=t==='manage'?'':'none';
-  renderShopTab(t);
-}
-
-// ─── データ操作 ─────────────────────────────────────────────────
+// ─── データ操作 ───────────────────────────────────────────────
 function toggleDay(id){
   const k=todayStr();if(!state.days[k])state.days[k]={};
   state.days[k][id]=!state.days[k][id];
@@ -690,246 +668,165 @@ function toggleDay(id){
 }
 function toggleWeek(id){
   const k=mondayStr(),dk=todayStr();
-  if(!state.weeks[k])state.weeks[k]={};
-  state.weeks[k][id]=!state.weeks[k][id];
-  if(!state.days[dk])state.days[dk]={};
-  state.days[dk][id]=state.weeks[k][id];
+  if(!state.weeks[k])state.weeks[k]={};state.weeks[k][id]=!state.weeks[k][id];
+  if(!state.days[dk])state.days[dk]={};state.days[dk][id]=state.weeks[k][id];
   saveLocal();sched();renderHome();
 }
-function toggleBought(id){
-  const k=todayStr();if(!state.bought[k])state.bought[k]={};
-  state.bought[k][id]=!state.bought[k][id];
+// 常備品チェック: ON=買い物リスト追加、OFF=買い物完了
+function toggleStaple(id){
+  if(!state.staplesNeeded)state.staplesNeeded={};
+  state.staplesNeeded[id]=!state.staplesNeeded[id];
+  // もしOFFにした場合、購入済みにする（ホームからも消える）
+  if(!state.staplesNeeded[id]){
+    const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};
+    state.boughtToday[k]['st_'+id]=true;
+  }
+  saveLocal();sched();renderHome();renderStockTab('staples');renderShopTab(curShopTab);
+}
+// メモリスト: active切替（今日の買い物リストに出す・外す）
+function toggleMemoActive(id){
+  state.shopMemo=(state.shopMemo||[]).map(i=>i.id===id?{...i,active:!i.active}:i);
   saveLocal();sched();renderHome();renderShopTab(curShopTab);
 }
-function toggleNeeded(id){
-  state.shopping=(state.shopping||[]).map(i=>i.id===id?{...i,needed:!i.needed}:i);
+// 手動追加アイテムを購入済みに（ホームから消えるがメモに残る）
+function buyMemoItem(id){
+  const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};
+  state.boughtToday[k][id]=true;
   saveLocal();sched();renderHome();renderShopTab(curShopTab);
 }
+// メモリストに追加
 function addItem(){
   const inp=document.getElementById('new-item');const txt=inp.value.trim();if(!txt)return;
-  state.shopping=[...(state.shopping||[]),{id:Date.now().toString(),text:txt,needed:true,cat:'その他'}];
-  inp.value='';saveLocal();sched();renderShopTab(curShopTab);renderHome();
+  state.shopMemo=[...(state.shopMemo||[]),{id:Date.now().toString(),text:txt,active:true}];
+  inp.value='';saveLocal();sched();renderHome();renderShopTab(curShopTab);
 }
-function deleteItem(id){
-  state.shopping=(state.shopping||[]).filter(i=>i.id!==id);
-  Object.keys(state.bought||{}).forEach(k=>{if(state.bought[k])delete state.bought[k][id];});
-  saveLocal();sched();renderShopTab(curShopTab);renderHome();
+// メモリストから削除
+function deleteMemo(id){
+  state.shopMemo=(state.shopMemo||[]).filter(i=>i.id!==id);
+  const k=todayStr();if(state.boughtToday[k])delete state.boughtToday[k][id];
+  saveLocal();sched();renderHome();renderShopTab(curShopTab);
 }
+// 冷蔵庫
 function addFridge(){
-  const name=document.getElementById('fi-name').value.trim();
-  const amt=document.getElementById('fi-amt').value.trim();
-  if(!name)return;
+  const name=document.getElementById('fi-name').value.trim();const amt=document.getElementById('fi-amt').value.trim();if(!name)return;
   state.fridge=[...(state.fridge||[]),{id:Date.now().toString(),name,amt:amt||'適量'}];
   document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';
   saveLocal();sched();renderStockTab('fridge');
 }
-function delFridge(id){
-  state.fridge=(state.fridge||[]).filter(f=>f.id!==id);
-  saveLocal();sched();renderStockTab('fridge');
-}
-function updateQty(id,qty){
-  if(!state.staplesQty[id])state.staplesQty[id]={qty:1,unit:'個',alertAt:1};
-  state.staplesQty[id].qty=qty;
-  checkAlert(id);saveLocal();sched();
-}
-function checkAlert(id){
-  const sq=state.staplesQty[id];const master=STAPLES.find(s=>s.id===id);if(!master||!sq)return;
-  const shId='stpl_'+id;
-  if(sq.qty<=sq.alertAt){
-    if(!(state.shopping||[]).find(s=>s.id===shId)){
-      state.shopping=[...(state.shopping||[]),{id:shId,text:master.n+'（補充）',needed:true,cat:'補充品'}];
-    }
-  }else{
-    state.shopping=(state.shopping||[]).filter(s=>s.id!==shId);
-  }
-}
-function setAlertAt(id,val){
-  if(!state.staplesQty[id])state.staplesQty[id]={qty:1,unit:'個',alertAt:1};
-  state.staplesQty[id].alertAt=val;
-  checkAlert(id);saveLocal();sched();renderStockTab('staples');
-}
+function delFridge(id){state.fridge=(state.fridge||[]).filter(f=>f.id!==id);saveLocal();sched();renderStockTab('fridge');}
 // 水分
 function addDrink(id,ml){
-  if(!state.drinks)state.drinks={};
-  const k=todayStr();if(!state.drinks[k])state.drinks[k]={};
-  state.drinks[k][id]=(state.drinks[k][id]||0)+ml;
-  saveLocal();sched();renderDrink();
+  if(!state.drinks)state.drinks={};const k=todayStr();if(!state.drinks[k])state.drinks[k]={};
+  state.drinks[k][id]=(state.drinks[k][id]||0)+ml;saveLocal();sched();renderDrink();
 }
 // 食事選択
 function selectMeal(mealId){
-  const k=todayStr();if(!state.meals)state.meals={};
-  state.meals[k]={menuId:mealId,cooked:false,eaten:false};
+  const k=todayStr();if(!state.meals)state.meals={};state.meals[k]={menuId:mealId,cooked:false,eaten:false};
   const meal=mealById(mealId);
-  if(meal){
-    (meal.ings||[]).forEach(ing=>{
-      if(!fridgeHas(ing.n)&&!(state.shopping||[]).find(s=>s.text===ing.n)){
-        state.shopping=[...(state.shopping||[]),{id:'ing_'+Date.now()+'_'+Math.random(),text:ing.n,needed:true,cat:'食材'}];
-      }
-    });
-  }
+  if(meal){(meal.ings||[]).forEach(ing=>{if(!fridgeHas(ing.n)&&!(state.shopMemo||[]).find(s=>s.text===ing.n)){state.shopMemo=[...(state.shopMemo||[]),{id:'ing_'+Date.now()+'_'+Math.random().toString(36).slice(2),text:ing.n,active:true}];}});}
   saveLocal();sched();renderHome();renderMealTab(curMealTab);closeRecipe();
 }
 function toggleCooked(){
-  const k=todayStr();if(!state.meals)state.meals={};
-  if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
+  const k=todayStr();if(!state.meals)state.meals={};if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
   state.meals[k].cooked=!state.meals[k].cooked;
-  if(!state.days[k])state.days[k]={};
-  state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
+  if(!state.days[k])state.days[k]={};state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
   saveLocal();sched();renderHome();renderMealTab(curMealTab);
 }
 function toggleEaten(){
-  const k=todayStr();if(!state.meals)state.meals={};
-  if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
-  const wasEaten=state.meals[k].eaten;
-  state.meals[k].eaten=!state.meals[k].eaten;
-  if(!state.days[k])state.days[k]={};
-  state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
+  const k=todayStr();if(!state.meals)state.meals={};if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
+  const was=state.meals[k].eaten;state.meals[k].eaten=!state.meals[k].eaten;
+  if(!state.days[k])state.days[k]={};state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
   saveLocal();sched();renderHome();renderMealTab(curMealTab);
-  if(!wasEaten&&state.meals[k].eaten&&state.meals[k].menuId){
-    setTimeout(()=>openFb(state.meals[k].menuId),400);
-  }
+  if(!was&&state.meals[k].eaten&&state.meals[k].menuId)setTimeout(()=>openFb(state.meals[k].menuId),400);
 }
 function logEatOut(){
-  const rest=document.getElementById('eo-rest').value.trim();
-  const dish=document.getElementById('eo-dish').value.trim();
+  const rest=document.getElementById('eo-rest').value.trim();const dish=document.getElementById('eo-dish').value.trim();
   if(!dish){alert('料理名を入力してください');return;}
   const k=todayStr();if(!state.meals)state.meals={};
-  const name=rest?rest+' / '+dish:dish;
-  state.meals[k]={type:'eatout',eatOutName:name,restaurant:rest,dish,emoji:selectedCuisine,eaten:false,cooked:true};
+  state.meals[k]={type:'eatout',eatOutName:rest?rest+' / '+dish:dish,restaurant:rest,dish,emoji:selectedCuisine,eaten:false,cooked:true};
   if(!state.days[k])state.days[k]={};state.days[k].meal=false;
   document.getElementById('eo-rest').value='';document.getElementById('eo-dish').value='';
   saveLocal();sched();renderHome();renderEatOut();
 }
 
-// ─── フィードバック ─────────────────────────────────────────────
+// ─── フィードバック ────────────────────────────────────────────
 function openFb(id){
-  pendingFbId=id;selectedRating=0;
-  const fb=(state.mealFeedback||{})[id]||{};
-  const avg=fb.avgRating||0;
+  pendingFbId=id;selectedRating=0;const fb=(state.mealFeedback||{})[id]||{};const avg=fb.avgRating||0;
   document.getElementById('fb-name').textContent=(mealById(id)||{}).name||'';
   document.getElementById('fb-stars').innerHTML=[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating('+n+')" data-v="'+n+'">'+(n<=Math.round(avg)?'⭐':'☆')+'</span>').join('');
-  document.getElementById('fb-note').value='';
-  document.getElementById('fb-ov').classList.add('open');
+  document.getElementById('fb-note').value='';document.getElementById('fb-ov').classList.add('open');
 }
 function closeFb(){document.getElementById('fb-ov').classList.remove('open');pendingFbId=null;}
 function setRating(n){selectedRating=n;document.querySelectorAll('.star').forEach(s=>{s.textContent=parseInt(s.dataset.v)<=n?'⭐':'☆';});}
 async function saveFb(){
   if(!pendingFbId||!selectedRating)return;
-  if(!state.mealFeedback)state.mealFeedback={};
-  const id=pendingFbId;const note=document.getElementById('fb-note').value.trim();
+  if(!state.mealFeedback)state.mealFeedback={};const id=pendingFbId;const note=document.getElementById('fb-note').value.trim();
   if(!state.mealFeedback[id])state.mealFeedback[id]={ratings:[],notes:[],avgRating:0};
   state.mealFeedback[id].ratings.push(selectedRating);
   if(note)state.mealFeedback[id].notes.push({date:todayStr(),text:note,rating:selectedRating});
-  const rs=state.mealFeedback[id].ratings;
-  state.mealFeedback[id].avgRating=rs.reduce((a,b)=>a+b,0)/rs.length;
-  if(note&&cfg.anthropicKey&&selectedRating<=3){await improveRecipe(id,note,selectedRating);}
+  const rs=state.mealFeedback[id].ratings;state.mealFeedback[id].avgRating=rs.reduce((a,b)=>a+b,0)/rs.length;
+  if(note&&cfg.anthropicKey&&selectedRating<=3)await improveRecipe(id,note,selectedRating);
   saveLocal();sched();closeFb();renderHome();recIdxs=[];
 }
 async function improveRecipe(mealId,feedback,rating){
   const meal=mealById(mealId);if(!meal)return;
   try{
-    const prompt='料理「'+meal.name+'」についてフィードバック：「'+feedback+'」（評価：'+rating+'/5）\nより美味しく作るための改善ポイントを3つ以内で日本語で教えてください。\nJSONのみで返してください：{"tips":["改善1","改善2","改善3"]}';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const text=(data.content||[])[0]?.text||'{}';
+    const prompt='料理「'+meal.name+'」のフィードバック：「'+feedback+'」（評価：'+rating+'/5）\n改善ポイントを3つ以内でJSONのみで：{"tips":["改善1","改善2","改善3"]}';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();const text=(data.content||[])[0]?.text||'{}';
     const r=JSON.parse(text.replace(/```json|```/g,'').trim());
-    if(r.tips&&r.tips.length){
-      if(!state.mealFeedback[mealId].recipeTips)state.mealFeedback[mealId].recipeTips=[];
-      state.mealFeedback[mealId].recipeTips=[...r.tips,...(state.mealFeedback[mealId].recipeTips||[])].slice(0,6);
-    }
+    if(r.tips&&r.tips.length){if(!state.mealFeedback[mealId].recipeTips)state.mealFeedback[mealId].recipeTips=[];state.mealFeedback[mealId].recipeTips=[...r.tips,...(state.mealFeedback[mealId].recipeTips||[])].slice(0,6);}
   }catch(e){console.error('improve',e);}
 }
 
-// ─── カスタムメニュー ───────────────────────────────────────────
+// ─── カスタムメニュー ──────────────────────────────────────────
 async function genRecipe(){
-  const name=document.getElementById('custom-name').value.trim();
-  if(!name){alert('料理名を入力してください');return;}
-  if(!cfg.anthropicKey){showManualForm(name);return;}
+  const name=document.getElementById('custom-name').value.trim();if(!name){alert('料理名を入力してください');return;}
+  if(!cfg.anthropicKey){alert('⚙️からClaude APIキーを設定するとAI生成が使えます');return;}
   const btn=document.getElementById('ai-btn');btn.textContent='🔄 生成中...';btn.disabled=true;
   try{
-    const prompt='料理名「'+name+'」のレシピをJSONのみで返してください。\n{"emoji":"絵文字","desc":"説明20文字以内","tags":["タグ"],"time":分数,"nutr":{"cal":数値,"protein":数値,"fat":数値,"carb":数値},"ings":[{"n":"食材","a":"量"}],"steps":["手順1","手順2","手順3","手順4","手順5"]}';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const text=(data.content||[])[0]?.text||'{}';
-    const recipe=JSON.parse(text.replace(/```json|```/g,'').trim());
-    pendingCustom={id:'c'+Date.now(),name,...recipe,isCustom:true};
+    const prompt='料理名「'+name+'」のレシピをJSONのみで：\n{"emoji":"絵文字","desc":"説明20文字以内","tags":["タグ"],"time":分数,"nutr":{"cal":数値,"protein":数値,"fat":数値,"carb":数値},"ings":[{"n":"食材","a":"量"}],"steps":["手順1","手順2","手順3","手順4","手順5"]}';
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();const text=(data.content||[])[0]?.text||'{}';
+    pendingCustom={id:'c'+Date.now(),name,...JSON.parse(text.replace(/```json|```/g,'').trim()),isCustom:true};
     showPreview(pendingCustom);
-  }catch(e){alert('AI生成失敗: '+e.message);showManualForm(name);}
+  }catch(e){alert('AI生成失敗: '+e.message);}
   btn.textContent='🤖 AI生成';btn.disabled=false;
 }
-function showManualForm(name){
-  alert('APIキーが未設定のため手動入力してください。\n⚙️設定からClaude APIキーを設定するとAI生成が使えます。');
-  const meal={id:'c'+Date.now(),name,emoji:'🍽️',desc:'',tags:['カスタム'],time:20,nutr:{cal:400,protein:20,fat:12,carb:40},ings:[],steps:[],isCustom:true};
-  state.customMeals=[...(state.customMeals||[]),meal];
-  document.getElementById('custom-name').value='';
-  saveLocal();sched();renderMealTab('custom');
-}
-function showPreview(meal){
-  document.getElementById('preview-content').innerHTML=recipeHTML(meal,false);
-  document.getElementById('preview-ov').classList.add('open');
-}
+function showPreview(meal){document.getElementById('preview-content').innerHTML=recipeHTML(meal,false);document.getElementById('preview-ov').classList.add('open');}
 function closePreview(){document.getElementById('preview-ov').classList.remove('open');}
 function saveCustom(){
-  if(!pendingCustom)return;
-  state.customMeals=[...(state.customMeals||[]),pendingCustom];
-  saveLocal();sched();closePreview();
-  document.getElementById('custom-name').value='';
-  pendingCustom=null;recIdxs=[];
-  renderMealTab('custom');
+  if(!pendingCustom)return;state.customMeals=[...(state.customMeals||[]),pendingCustom];
+  saveLocal();sched();closePreview();document.getElementById('custom-name').value='';pendingCustom=null;recIdxs=[];renderMealTab('custom');
 }
-function delCustom(id){
-  if(!confirm('このメニューを削除しますか？'))return;
-  state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);
-  saveLocal();sched();renderMealTab('custom');recIdxs=[];
-}
+function delCustom(id){if(!confirm('削除しますか？'))return;state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);saveLocal();sched();renderMealTab('custom');recIdxs=[];}
 
-// ─── レシピモーダル ─────────────────────────────────────────────
+// ─── レシピ ────────────────────────────────────────────────────
 function openRecipe(mealId){
-  const m=mealById(mealId);if(!m)return;
-  const sel=getTodayMeal().menuId===mealId;
+  const m=mealById(mealId);if(!m)return;const sel=getTodayMeal().menuId===mealId;
   document.getElementById('recipe-content').innerHTML=recipeHTML(m,true);
   document.getElementById('recipe-btns').innerHTML='<button class="m-btn s" onclick="closeRecipe()">閉じる</button><button class="m-btn p" onclick="selectMeal(\''+mealId+'\')">'+(sel?'✓ 選択済み':'今日のメニューにする')+'</button>';
   document.getElementById('recipe-ov').classList.add('open');
 }
 function closeRecipe(){document.getElementById('recipe-ov').classList.remove('open');}
 function recipeHTML(m,showFb){
-  const fb=showFb?(state.mealFeedback||{})[m.id]||{}:{};
-  const tips=fb.recipeTips||[];const notes=fb.notes||[];
-  const ingsHTML=(m.ings||[]).map(ing=>{
-    const miss=showFb&&!fridgeHas(ing.n);
-    return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'✓ ')+ing.n+'</span><span>'+ing.a+'</span></div>';
-  }).join('');
+  const fb=showFb?(state.mealFeedback||{})[m.id]||{}:{};const tips=fb.recipeTips||[];const notes=fb.notes||[];
+  const ingsHTML=(m.ings||[]).map(ing=>{const miss=showFb&&!fridgeHas(ing.n);return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'✓ ')+ing.n+'</span><span>'+ing.a+'</span></div>';}).join('');
   const stepsHTML=(m.steps||[]).map((s,i)=>'<div class="step-row"><div class="step-num">'+(i+1)+'</div><div class="step-txt">'+s+'</div></div>').join('');
-  const tipsHTML=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">🤖 AIレシピ改善ヒント</h3>'+tips.map(t=>'<div class="tip-row">💡 '+t+'</div>').join('')+'</div>':'';
-  const notesHTML=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">📝 あなたのメモ</h3>'+notes.slice(-3).map(n=>'<div class="note-row"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">★'+n.rating+'</span> <span style="color:rgba(232,245,233,0.7)">'+n.text+'</span><span style="float:right;font-size:11px;color:var(--muted)">'+n.date+'</span></div>').join('')+'</div>':'';
-  const missNote=(m.ings||[]).some(ing=>!fridgeHas(ing.n))&&showFb?'<p style="font-size:11px;color:var(--orange);margin-top:6px">🟠 チェックなし＝冷蔵庫に不足（選ぶと買い物リストに追加）</p>':'';
-  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'🍽️')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・⏱ '+m.time+'分</p></div></div>'
-    +'<div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?.cal||'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?.protein||'?')+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.fat||'?')+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.carb||'?')+'g</div><div class="l">糖質</div></div></div>'
-    +(ingsHTML?'<div class="r-sec"><h3>材料</h3>'+ingsHTML+missNote+'</div>':'')
-    +(stepsHTML?'<div class="r-sec"><h3>作り方</h3>'+stepsHTML+'</div>':'')
-    +tipsHTML+notesHTML;
+  const tipsHTML=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">🤖 AIレシピ改善ヒント</h3>'+tips.map(t=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">💡 '+t+'</div>').join('')+'</div>':'';
+  const notesHTML=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">📝 あなたのメモ</h3>'+notes.slice(-3).map(n=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">★'+n.rating+'</span> <span style="color:rgba(232,245,233,0.7)">'+n.text+'</span></div>').join('')+'</div>':'';
+  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'🍽️')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・⏱ '+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?.cal||'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?.protein||'?')+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.fat||'?')+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.carb||'?')+'g</div><div class="l">糖質</div></div></div>'+(ingsHTML?'<div class="r-sec"><h3>材料</h3>'+ingsHTML+'</div>':'')+(stepsHTML?'<div class="r-sec"><h3>作り方</h3>'+stepsHTML+'</div>':'')+tipsHTML+notesHTML;
 }
-
-// ─── スコア計算 ─────────────────────────────────────────────────
 function scoreMeal(m){
-  let s=0;
-  (m.ings||[]).forEach(ing=>{if(fridgeHas(ing.n))s+=2;});
-  const hist=Object.values(state.meals||{}).filter(v=>v.menuId===m.id);
-  s-=hist.length*3;
-  const r=getRating(m.id);if(r>0)s+=r*2;
-  return s;
+  let s=0;(m.ings||[]).forEach(ing=>{if(fridgeHas(ing.n))s+=2;});
+  const hist=Object.values(state.meals||{}).filter(v=>v.menuId===m.id);s-=hist.length*3;
+  const r=getRating(m.id);if(r>0)s+=r*2;return s;
 }
 
-// ─── HOME描画 ───────────────────────────────────────────────────
+// ─── HOME ─────────────────────────────────────────────────────
 function mkBtn(icon,label,sub,done,accent,onClick){
-  const btn=document.createElement('button');
-  btn.className='task-btn'+(done?' done':'');btn.onclick=onClick;
-  const ic=document.createElement('div');ic.className='t-icon';
-  ic.style.background=done?(accent||'#6fcf97')+'28':'rgba(255,255,255,0.05)';ic.textContent=icon;
+  const btn=document.createElement('button');btn.className='task-btn'+(done?' done':'');btn.onclick=onClick;
+  const ic=document.createElement('div');ic.className='t-icon';ic.style.background=done?(accent||'#6fcf97')+'28':'rgba(255,255,255,0.05)';ic.textContent=icon;
   const info=document.createElement('div');info.className='t-info';
   const lbl=document.createElement('div');lbl.className='t-lbl';lbl.textContent=label;info.appendChild(lbl);
   if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;info.appendChild(s);}
@@ -943,62 +840,63 @@ function renderHome(){
   document.getElementById('hdr-day').textContent=['日','月','火','水','木','金','土'][dow]+'曜日';
   // ゴミ
   const tr=TRASH[dow];const sec=document.getElementById('sec-trash');const tel=document.getElementById('trash-task');
-  if(tr){sec.style.display='';tel.innerHTML='';
-    const done=getDayDone('trash');
-    const b=mkBtn('🗑️',tr.i+' '+tr.l,'今日のゴミ',done,tr.c,()=>toggleDay('trash'));
-    if(done)b.style.borderColor=tr.c+'50';tel.appendChild(b);
-  }else{sec.style.display='none';}
+  if(tr){sec.style.display='';tel.innerHTML='';const done=getDayDone('trash');const b=mkBtn('🗑️',tr.i+' '+tr.l,'今日のゴミ',done,tr.c,()=>toggleDay('trash'));if(done)b.style.borderColor=tr.c+'50';tel.appendChild(b);}
+  else sec.style.display='none';
   // 掃除
   const cl=CLEANING[dow];const ce=document.getElementById('clean-task');ce.innerHTML='';
-  ce.appendChild(mkBtn(cl.i,cl.l,'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning')));
-  // 食事タスク
-  const me=document.getElementById('meal-task');me.innerHTML='';
-  const tm=getTodayMeal();const meal=tm.menuId?mealById(tm.menuId):null;
+  const cb=mkBtn(cl.i,cl.l,cl.note||'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning'));
+  if(cl.note){cb.style.borderColor='rgba(122,184,212,0.25)';}ce.appendChild(cb);
+  // 食事
+  const me=document.getElementById('meal-task');me.innerHTML='';const tm=getTodayMeal();const meal=tm.menuId?mealById(tm.menuId):null;
   if(tm.type==='eatout'){
-    if(!tm.eaten){me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食べたらタップ',false,'#c4963a',toggleEaten));}
-    else{me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食事完了',true,'#6fcf97',()=>{}));}
+    if(!tm.eaten)me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食べたらタップ',false,'#c4963a',toggleEaten));
+    else me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食事完了',true,'#6fcf97',()=>{}));
   }else if(!tm.menuId){
     const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px';
     const b1=mkBtn('🍳','メニューを選ぶ','',false,'#6fcf97',()=>setPage('meal'));b1.style.flex='1';
     const b2=mkBtn('🍽️','外食する','',false,'#c4963a',()=>{setPage('meal');mTab('eatout');});b2.style.flex='1';
     wrap.appendChild(b1);wrap.appendChild(b2);me.appendChild(wrap);
   }else{
-    if(!tm.cooked){me.appendChild(mkBtn(meal.emoji,meal.name+'を調理する','材料は準備OK？',false,'#e07b54',toggleCooked));}
-    else if(!tm.eaten){me.appendChild(mkBtn(meal.emoji,meal.name+'を食べる','調理完了！',false,'#c4963a',toggleEaten));}
-    else{me.appendChild(mkBtn(meal.emoji,meal.name,'調理・食事完了',true,'#6fcf97',()=>{}));}
+    if(!tm.cooked)me.appendChild(mkBtn(meal.emoji,meal.name+'を調理する','',false,'#e07b54',toggleCooked));
+    else if(!tm.eaten)me.appendChild(mkBtn(meal.emoji,meal.name+'を食べる','調理完了！',false,'#c4963a',toggleEaten));
+    else me.appendChild(mkBtn(meal.emoji,meal.name,'調理・食事完了',true,'#6fcf97',()=>{}));
   }
   // 毎日タスク
   const de=document.getElementById('daily-tasks');de.innerHTML='';
   DAILY.forEach(t=>de.appendChild(mkBtn(t.e,t.l,t.s,getDayDone(t.id),'#6fcf97',()=>toggleDay(t.id))));
-  // 買い物
-  const needed=getNeeded();const ss=document.getElementById('sec-shop');
-  if(needed.length>0){
-    ss.style.display='';
-    const chips=document.getElementById('shop-chips');chips.innerHTML='';
+  // 買い物リスト（ホーム）: 未購入の常備品 + アクティブなメモアイテム
+  const needStaples=getNeededStaples();const needMemo=getActiveShopItems();
+  const ss=document.getElementById('sec-shop');
+  if(needStaples.length>0||needMemo.length>0){
+    ss.style.display='';const chips=document.getElementById('shop-chips');chips.innerHTML='';
     const grid=document.createElement('div');grid.className='shop-grid';
-    let cnt=0;
-    needed.forEach(item=>{
-      const bought=getBought(item.id);if(bought)cnt++;
-      const chip=document.createElement('button');chip.className='chip'+(bought?' bought':'');chip.onclick=()=>toggleBought(item.id);
-      chip.innerHTML='<span class="ck">'+(bought?'✓':'')+'</span><span>'+item.text+'</span>';
-      grid.appendChild(chip);
+    // 常備品チップ: タップでその常備品のチェックを外す（完了）
+    needStaples.forEach(s=>{
+      const chip=document.createElement('button');chip.className='chip chip-need';
+      chip.innerHTML='<span style="font-size:14px">📦</span><span>'+s.n+'</span><span style="font-size:11px;color:rgba(111,207,151,0.6)">✓ 完了</span>';
+      chip.onclick=()=>toggleStaple(s.id);grid.appendChild(chip);
+    });
+    // メモアイテムチップ: タップで購入済み（ホームから消えるがメモに残る）
+    needMemo.forEach(item=>{
+      const chip=document.createElement('button');chip.className='chip chip-manual';
+      chip.innerHTML='<span>'+item.text+'</span>';
+      chip.onclick=()=>buyMemoItem(item.id);grid.appendChild(chip);
     });
     chips.appendChild(grid);
-    document.getElementById('shop-footer').textContent=cnt+'/'+needed.length+' 購入完了';
-  }else{ss.style.display='none';}
+  }else ss.style.display='none';
   // 週タスク
   const we=document.getElementById('weekly-tasks');we.innerHTML='';
   WEEKLY.forEach(t=>we.appendChild(mkBtn(t.e,t.l,t.s,getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id))));
   // リング
-  const tr2=TRASH[dow];
   const done=
-    (tr2&&getDayDone('trash')?1:0)+
+    (TRASH[dow]&&getDayDone('trash')?1:0)+
     (getDayDone('cleaning')?1:0)+
     ((tm.cooked&&tm.eaten)?1:0)+
     DAILY.filter(t=>getDayDone(t.id)).length+
-    (needed.length>0&&needed.every(i=>getBought(i.id))?1:0)+
+    ((needStaples.length===0&&needMemo.length===0&&(getNeededStaples().length+(state.shopMemo||[]).filter(i=>i.active).length>0))?1:0)+
     WEEKLY.filter(t=>getWeekDone(t.id)).length;
-  const total=(tr2?1:0)+1+1+DAILY.length+(needed.length>0?1:0)+WEEKLY.length;
+  const shopTask=(state.shopMemo||[]).filter(i=>i.active).length>0||Object.keys(state.staplesNeeded||{}).some(id=>state.staplesNeeded[id])?1:0;
+  const total=(TRASH[dow]?1:0)+1+1+DAILY.length+shopTask+WEEKLY.length;
   const pct=total>0?Math.round(done/total*100):0;
   const circ=2*Math.PI*23;
   document.getElementById('ring-arc').style.strokeDashoffset=circ*(1-pct/100);
@@ -1006,7 +904,7 @@ function renderHome(){
   document.getElementById('ring-sub').textContent=done+'/'+total;
 }
 
-// ─── 水分ウィジェット ───────────────────────────────────────────
+// ─── 水分 ─────────────────────────────────────────────────────
 function renderDrink(){
   const el=document.getElementById('drink-widget');if(!el)return;el.innerHTML='';
   DRINKS.forEach(d=>{
@@ -1017,203 +915,153 @@ function renderDrink(){
   });
 }
 
-// ─── 食事タブ描画 ───────────────────────────────────────────────
+// ─── 食事タブ ──────────────────────────────────────────────────
 function renderMealTab(t){
   if(t==='rec'){
-    const all=allMeals();
-    const ce=document.getElementById('meal-cnt');if(ce)ce.textContent=all.length;
-    if(recIdxs.length===0){
-      const scored=all.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);
-      recIdxs=scored.slice(0,6).map(x=>x.i);
-    }
-    const el=document.getElementById('meal-cards');if(!el)return;el.innerHTML='';
-    const tm=getTodayMeal();
+    const all=allMeals();const ce=document.getElementById('meal-cnt');if(ce)ce.textContent=all.length;
+    if(recIdxs.length===0){const scored=all.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);recIdxs=scored.slice(0,6).map(x=>x.i);}
+    const el=document.getElementById('meal-cards');if(!el)return;el.innerHTML='';const tm=getTodayMeal();
     recIdxs.forEach(idx=>{
-      const m=allMeals()[idx];if(!m)return;
-      const sel=tm.menuId===m.id;
-      const avail=(m.ings||[]).filter(ing=>fridgeHas(ing.n)).length;
-      const stars=starStr(m.id);
-      const card=document.createElement('button');
-      card.className='meal-card'+(sel?' sel':'');card.onclick=()=>openRecipe(m.id);
+      const m=allMeals()[idx];if(!m)return;const sel=tm.menuId===m.id;
+      const avail=(m.ings||[]).filter(ing=>fridgeHas(ing.n)).length;const stars=starStr(m.id);
+      const card=document.createElement('button');card.className='meal-card'+(sel?' sel':'');card.onclick=()=>openRecipe(m.id);
       const tagsHTML=(m.tags||[]).map(t=>'<span class="mc-tag">'+t+'</span>').join('');
-      card.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'🍽️')+'</div><div class="mc-info"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div class="mc-right"><div class="mc-time">⏱ '+m.time+'分</div><div style="font-size:11px;color:var(--muted)">食材 '+avail+'/'+(m.ings||[]).length+'</div></div></div><div class="mc-meta"><div class="mc-tags">'+tagsHTML+'</div><div>'+stars+'</div></div><div class="mc-nutr"><div class="mc-n"><span>'+(m.nutr?.cal||'?')+'</span> kcal</div><div class="mc-n"><span>'+(m.nutr?.protein||'?')+'g</span> 蛋白質</div><div class="mc-n"><span>'+(m.nutr?.fat||'?')+'g</span> 脂質</div><div class="mc-n"><span>'+(m.nutr?.carb||'?')+'g</span> 糖質</div></div>';
+      card.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'🍽️')+'</div><div class="mc-info"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div style="text-align:right"><div style="font-size:11px;color:var(--muted)">⏱ '+m.time+'分</div><div style="font-size:11px;color:var(--muted)">食材 '+avail+'/'+(m.ings||[]).length+'</div></div></div><div class="mc-meta"><div class="mc-tags">'+tagsHTML+'</div><div>'+stars+'</div></div><div class="mc-nutr"><div class="mc-n"><span>'+(m.nutr?.cal||'?')+'</span> kcal</div><div class="mc-n"><span>'+(m.nutr?.protein||'?')+'g</span> 蛋白質</div><div class="mc-n"><span>'+(m.nutr?.fat||'?')+'g</span> 脂質</div><div class="mc-n"><span>'+(m.nutr?.carb||'?')+'g</span> 糖質</div></div>';
       el.appendChild(card);
     });
   }else if(t==='custom'){
     const el=document.getElementById('custom-list');if(!el)return;el.innerHTML='';
     const customs=state.customMeals||[];
     if(customs.length===0){el.innerHTML='<div class="empty"><div class="ei">✨</div><div class="et">カスタムメニューはまだありません</div></div>';return;}
-    const lbl=document.createElement('div');lbl.className='sec-label';lbl.style.marginTop='16px';lbl.textContent='保存済みカスタムメニュー';el.appendChild(lbl);
+    const lbl=document.createElement('div');lbl.className='sec-label';lbl.style.marginTop='14px';lbl.textContent='保存済みカスタムメニュー';el.appendChild(lbl);
     customs.forEach(m=>{
       const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';
       row.innerHTML='<span style="font-size:26px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' ・ '+(m.time||'?')+'分・'+(m.nutr?.cal||'?')+'kcal</div></div><button class="pill-btn" onclick="openRecipe(\''+m.id+'\')">詳細</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>';
       el.appendChild(row);
     });
-  }else if(t==='eatout'){renderEatOut();
-  }else if(t==='today'){
+  }else if(t==='eatout')renderEatOut();
+  else if(t==='today'){
     const el=document.getElementById('today-detail');if(!el)return;el.innerHTML='';
     const tm=getTodayMeal();
-    if(tm.type==='eatout'){
-      el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:16px;margin-bottom:14px"><div style="font-size:12px;color:var(--gold);margin-bottom:6px">📍 今日の外食</div><div style="font-size:16px;font-weight:600;color:white;margin-bottom:12px">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';
-    }else if(!tm.menuId){
-      el.innerHTML='<div class="empty"><div class="ei">🍳</div><div class="et">おすすめからメニューを選んでください</div></div>';
-    }else{
+    if(tm.type==='eatout'){el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:16px"><div style="font-size:12px;color:var(--gold);margin-bottom:6px">📍 今日の外食</div><div style="font-size:16px;font-weight:600;color:white">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';}
+    else if(!tm.menuId){el.innerHTML='<div class="empty"><div class="ei">🍳</div><div class="et">おすすめからメニューを選んでください</div></div>';}
+    else{
       const m=mealById(tm.menuId);if(!m)return;
       el.innerHTML='<div class="r-header"><div class="r-emoji">'+m.emoji+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・'+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+m.nutr.cal+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+m.nutr.protein+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+m.nutr.fat+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+m.nutr.carb+'g</div><div class="l">糖質</div></div></div>';
-      const btnWrap=document.createElement('div');btnWrap.style.cssText='display:flex;gap:10px;margin-bottom:16px';
-      [['toggleCooked','🍳','調理した',tm.cooked],['toggleEaten','😋','食べた',tm.eaten]].forEach(([fn,ic,lb,done])=>{
-        const b=mkBtn(ic,lb,'',done,'#6fcf97',window[fn]);b.style.flex='1';btnWrap.appendChild(b);
-      });
-      el.appendChild(btnWrap);
+      const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px;margin-bottom:16px';
+      [['toggleCooked','🍳','調理した',tm.cooked],['toggleEaten','😋','食べた',tm.eaten]].forEach(([fn,ic,lb,done])=>{const b=mkBtn(ic,lb,'',done,'#6fcf97',window[fn]);b.style.flex='1';wrap.appendChild(b);});
+      el.appendChild(wrap);
     }
-  }else if(t==='nutr'){renderNutr();}
+  }else if(t==='nutr')renderNutr();
 }
-function shuffleRec(){
-  const all=allMeals();const idxs=all.map((_,i)=>i);
-  for(let i=idxs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idxs[i],idxs[j]]=[idxs[j],idxs[i]];}
-  recIdxs=idxs.slice(0,6);renderMealTab('rec');
-}
+function shuffleRec(){const all=allMeals();const idxs=all.map((_,i)=>i);for(let i=idxs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idxs[i],idxs[j]]=[idxs[j],idxs[i]];}recIdxs=idxs.slice(0,6);renderMealTab('rec');}
 function renderEatOut(){
-  // 今日
   const tm=getTodayMeal();const el=document.getElementById('eo-today');if(!el)return;el.innerHTML='';
-  if(tm.type==='eatout'){
-    el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:14px;margin-bottom:14px"><div style="font-size:12px;color:var(--gold);margin-bottom:4px">📍 今日の外食</div><div style="font-size:15px;font-weight:600;color:white;margin-bottom:10px">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';
-  }
-  // 絵文字
+  if(tm.type==='eatout')el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:14px;margin-bottom:14px"><div style="font-size:12px;color:var(--gold);margin-bottom:4px">📍 今日の外食</div><div style="font-size:15px;font-weight:600;color:white">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';
   const cb=document.getElementById('cuisine-btns');if(!cb)return;cb.innerHTML='';
-  CUISINES.forEach(c=>{
-    const b=document.createElement('button');b.className='cu-btn'+(selectedCuisine===c.e?' on':'');
-    b.textContent=c.e+' '+c.l;
-    b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('.cu-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};
-    cb.appendChild(b);
-  });
-  // 履歴
+  CUISINES.forEach(c=>{const b=document.createElement('button');b.className='cu-btn'+(selectedCuisine===c.e?' on':'');b.textContent=c.e+' '+c.l;b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('.cu-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};cb.appendChild(b);});
   const hi=document.getElementById('eo-hist');if(!hi)return;hi.innerHTML='';
   const eos=Object.entries(state.meals||{}).filter(([,v])=>v.type==='eatout').sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10);
-  if(eos.length===0){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">外食の記録がまだありません</div></div>';return;}
-  eos.forEach(([date,m])=>{
-    const row=document.createElement('div');row.className='eo-row';
-    row.innerHTML='<span style="font-size:22px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+date+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+( m.eaten?'✅':'⬜')+'</span>';
-    hi.appendChild(row);
-  });
+  if(!eos.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">外食の記録がありません</div></div>';return;}
+  eos.forEach(([date,m])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+date+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+( m.eaten?'✅':'⬜')+'</span>';hi.appendChild(row);});
 }
 function renderNutr(){
   const el=document.getElementById('nutr-detail');if(!el)return;el.innerHTML='';
   const wm=Array.from({length:7},(_,i)=>{const k=daysAgo(i);const m=(state.meals||{})[k];return m?.menuId?mealById(m.menuId):null;}).filter(Boolean);
-  if(wm.length===0){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">食事の記録がまだありません</div></div>';return;}
-  const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});
-  const n=wm.length;
-  el.innerHTML='<div class="sec-label">過去7日の平均栄養（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div><div class="sec-label" style="margin-top:16px">PFCバランス</div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1;const p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:16px">今週の食事履歴</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+m.emoji+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
+  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">食事の記録がまだありません</div></div>';return;}
+  const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});const n=wm.length;
+  el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1;const p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+m.emoji+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
 }
 
-// ─── 在庫描画 ───────────────────────────────────────────────────
+// ─── 在庫 ──────────────────────────────────────────────────────
 function renderStockPage(){renderStockTab(curStockTab);}
 function renderStockTab(t){
   if(t==='fridge'){
     const el=document.getElementById('fridge-list');if(!el)return;el.innerHTML='';
     const items=state.fridge||[];
-    if(items.length===0){el.innerHTML='<div class="empty"><div class="ei">🧊</div><div class="et">食材を追加してください</div></div>';return;}
-    items.forEach(f=>{
-      const row=document.createElement('div');row.className='fi-row';
-      row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">✕</button>';
-      el.appendChild(row);
-    });
+    if(!items.length){el.innerHTML='<div class="empty"><div class="ei">🧊</div><div class="et">食材を追加してください</div></div>';return;}
+    items.forEach(f=>{const row=document.createElement('div');row.className='fi-row';row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">✕</button>';el.appendChild(row);});
   }else{
     const el=document.getElementById('staples-list');if(!el)return;el.innerHTML='';
     const cats=[...new Set(STAPLES.map(s=>s.c))];
     cats.forEach(cat=>{
-      const hdr=document.createElement('div');hdr.className='cat-hdr';hdr.textContent=cat;el.appendChild(hdr);
+      const hdr=document.createElement('div');hdr.className='staple-cat';hdr.textContent=cat;el.appendChild(hdr);
       STAPLES.filter(s=>s.c===cat).forEach(master=>{
-        const sq=state.staplesQty[master.id]||{qty:1,unit:'個',alertAt:1};
-        const isOut=sq.qty===0;const isLow=sq.qty>0&&sq.qty<=sq.alertAt;
-        const color=isOut?'var(--red)':isLow?'var(--gold)':'white';
-        const row=document.createElement('div');row.className='qty-row';
-        row.style.borderColor=isOut?'rgba(248,113,113,0.25)':isLow?'rgba(196,150,58,0.25)':'var(--border)';
-        row.innerHTML='<span class="qty-name" style="color:'+color+'">'+master.n+'</span><input type="number" class="qty-inp" min="0" value="'+sq.qty+'" onchange="updateQty(\''+master.id+'\',parseInt(this.value)||0)" style="border-color:'+(isOut?'rgba(248,113,113,0.4)':isLow?'rgba(196,150,58,0.4)':'rgba(255,255,255,0.12)')+'"><span class="qty-unit">'+sq.unit+'</span><button class="qty-badge '+(isOut?'qb-out':isLow?'qb-low':'qb-ok')+'" onclick="setAlertAt(\''+master.id+'\','+sq.alertAt+')" title="閾値:'+sq.alertAt+'">'+(isOut?'切れ':isLow?'残り少':'在庫あり')+'</button>';
+        const needed=isStapleNeeded(master.id);
+        const row=document.createElement('div');row.className='staple-row'+(needed?' needed':'');row.onclick=()=>toggleStaple(master.id);
+        row.innerHTML='<div class="staple-chk">'+(needed?'✓':'')+'</div><span class="staple-name">'+master.n+'</span>'+(needed?'<span class="need-badge">買い物リストに追加中</span>':'');
         el.appendChild(row);
       });
     });
   }
 }
 
-// ─── 買い物描画 ─────────────────────────────────────────────────
+// ─── 買い物 ────────────────────────────────────────────────────
 function renderShopPage(){renderShopTab(curShopTab);}
 function renderShopTab(t){
-  if(t==='check'){
-    const el=document.getElementById('sh-check-content');if(!el)return;el.innerHTML='';
-    const all=state.shopping||[];const cats=['補充品','食材','その他'];
-    let hasAny=false;
-    cats.forEach(cat=>{
-      const items=all.filter(i=>i.needed&&(i.cat||'その他')===cat);if(!items.length)return;
-      hasAny=true;
-      const lbl=document.createElement('div');lbl.className='shop-cat-lbl';
-      lbl.textContent={補充品:'📦 補充品',食材:'🍳 食材',その他:'📝 その他'}[cat];el.appendChild(lbl);
-      items.forEach(item=>{
-        const bought=getBought(item.id);
-        const row=document.createElement('div');row.className='check-row'+(item.needed?' on':'');
-        row.innerHTML='<button class="big-chk'+(bought?' on':'')+'" onclick="toggleBought(\''+item.id+'\')">'+(bought?'✓':'')+'</button><span class="cr-lbl">'+item.text+'</span><span class="badge'+(bought?' done':'')+'">'+(bought?'購入済':'未購入')+'</span>';
+  if(t==='today'){
+    const el=document.getElementById('sh-today-content');if(!el)return;el.innerHTML='';
+    const staples=getNeededStaples();const memo=getActiveShopItems();
+    if(!staples.length&&!memo.length){
+      el.innerHTML='<div class="empty"><div class="ei">✅</div><div class="et">今日の買い物リストは空です</div></div>';return;
+    }
+    if(staples.length){
+      const lbl=document.createElement('div');lbl.className='shop-cat-lbl';lbl.textContent='📦 常備品（在庫ページでチェック管理）';el.appendChild(lbl);
+      staples.forEach(s=>{
+        const row=document.createElement('div');row.className='shop-item active';
+        row.innerHTML='<span class="shop-item-name">'+s.n+'</span><button onclick="toggleStaple(\''+s.id+'\')" style="background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:12px;padding:8px 14px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">✓ 購入完了</button>';
         el.appendChild(row);
       });
-    });
-    if(!hasAny)el.innerHTML='<div class="empty"><div class="ei">🛒</div><div class="et">買い物リストは空です</div></div>';
+    }
+    if(memo.length){
+      const lbl=document.createElement('div');lbl.className='shop-cat-lbl';lbl.textContent='📝 メモリスト';el.appendChild(lbl);
+      memo.forEach(item=>{
+        const row=document.createElement('div');row.className='shop-item active';
+        row.innerHTML='<span class="shop-item-name">'+item.text+'</span><button onclick="buyMemoItem(\''+item.id+'\')" style="background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:12px;padding:8px 14px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">✓ 購入完了</button>';
+        el.appendChild(row);
+      });
+    }
   }else{
+    // メモリスト管理
     const el=document.getElementById('manage-list');if(!el)return;el.innerHTML='';
-    const all=(state.shopping||[]).filter(i=>!i.id.startsWith('stpl_'));
-    if(all.length===0){el.innerHTML='<div class="empty"><div class="ei">📝</div><div class="et">アイテムを追加してください</div></div>';return;}
+    const all=state.shopMemo||[];
+    if(!all.length){el.innerHTML='<div class="empty"><div class="ei">📝</div><div class="et">メモを追加してください</div></div>';return;}
     all.forEach(item=>{
-      const row=document.createElement('div');row.className='manage-row';
-      row.innerHTML='<button class="big-chk'+(item.needed?' on':'')+'" onclick="toggleNeeded(\''+item.id+'\')">'+(item.needed?'✓':'')+'</button><span class="mr-txt">'+item.text+'</span><span style="font-size:11px;color:var(--muted);margin-right:8px">'+({補充品:'📦',食材:'🍳',その他:'📝'}[item.cat]||'📝')+'</span><button class="del-btn" onclick="deleteItem(\''+item.id+'\')">✕</button>';
+      const bought=isBoughtToday(item.id);
+      const row=document.createElement('div');row.className='shop-item'+(item.active?' active':'');
+      row.innerHTML='<button class="big-chk'+(item.active?' on':'')+'" onclick="toggleMemoActive(\''+item.id+'\')">'+(item.active?'✓':'')+'</button><span class="shop-item-name"'+(bought?' style="text-decoration:line-through;color:var(--muted)"':'')+'>'+item.text+'</span>'+(bought?'<span style="font-size:11px;color:var(--green)">購入済</span>':'')+'<button class="del-btn" onclick="deleteMemo(\''+item.id+'\')">✕</button>';
       el.appendChild(row);
     });
   }
 }
 
-// ─── 記録描画 ───────────────────────────────────────────────────
+// ─── 記録 ──────────────────────────────────────────────────────
 function renderHist(){
-  const dow=new Date().getDay();const tr=TRASH[dow];
-  const tm=getTodayMeal();
+  const dow=new Date().getDay();const tr=TRASH[dow];const tm=getTodayMeal();
   const todayDone=HIDS.filter(id=>{
     if(id==='carwash'||id==='bedding')return getWeekDone(id);
     if(id==='trash')return tr&&getDayDone('trash');
     if(id==='meal')return tm.cooked&&tm.eaten;
     return getDayDone(id);
   }).length;
-  let streak=0;
-  for(let i=1;i<=60;i++){const k=daysAgo(i);const d=(state.days||{})[k];if(d&&HIDS.some(id=>d[id]))streak++;else break;}
+  let streak=0;for(let i=1;i<=60;i++){const k=daysAgo(i);const d=(state.days||{})[k];if(d&&HIDS.some(id=>d[id]))streak++;else break;}
   const recDays=Object.keys(state.days||{}).filter(k=>{const d=(state.days||{})[k];return d&&HIDS.some(id=>d[id]);}).length;
   document.getElementById('st-streak').textContent='🔥 '+streak;
-  document.getElementById('st-today').textContent='✅ '+todayDone;
+  document.getElementById('st-today-cnt').textContent='✅ '+todayDone;
   document.getElementById('st-days').textContent='📅 '+recDays;
   const labels=[],data=[],colors=[];
-  for(let i=13;i>=1;i--){
-    const k=daysAgo(i);const d=(state.days||{})[k]||{};const cnt=HIDS.filter(id=>d[id]).length;
-    const dt=new Date();dt.setDate(dt.getDate()-i);
-    labels.push((dt.getMonth()+1)+'/'+(dt.getDate()));
-    data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');
-  }
+  for(let i=13;i>=1;i--){const k=daysAgo(i);const d=(state.days||{})[k]||{};const cnt=HIDS.filter(id=>d[id]).length;const dt=new Date();dt.setDate(dt.getDate()-i);labels.push((dt.getMonth()+1)+'/'+(dt.getDate()));data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');}
   if(histChart)histChart.destroy();
   const ctx=document.getElementById('hist-chart').getContext('2d');
-  histChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' タスク完了'},backgroundColor:'#1a2b1e',titleColor:'rgba(255,255,255,0.6)',bodyColor:'#6fcf97',borderColor:'rgba(111,207,151,0.2)',borderWidth:1}},
-      scales:{x:{grid:{display:false},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},stepSize:1},beginAtZero:true}}}});
+  histChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' タスク完了'},backgroundColor:'#1a2b1e',titleColor:'rgba(255,255,255,0.6)',bodyColor:'#6fcf97',borderColor:'rgba(111,207,151,0.2)',borderWidth:1}},scales:{x:{grid:{display:false},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},stepSize:1},beginAtZero:true}}}});
   const dwd=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]&&HIDS.some(id=>(state.days||{})[k][id])).length;
   const el=document.getElementById('task-stats');if(!el)return;el.innerHTML='';
-  HIDS.map(id=>{
-    const done=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]?.[id]).length;
-    const pct=dwd>0?Math.round(done/dwd*100):0;return{id,label:TLABELS[id],pct};
-  }).sort((a,b)=>b.pct-a.pct).forEach(({label,pct})=>{
-    const color=pct>=70?'#6fcf97':pct>=40?'#3a8f6a':'#1e5a42';
-    const row=document.createElement('div');row.className='ts-item';
-    row.innerHTML='<div class="ts-lbl">'+label+'</div><div class="ts-bg"><div class="ts-bar" style="width:'+pct+'%;background:'+color+'"></div></div><div class="ts-pct" style="color:'+color+'">'+pct+'%</div>';
-    el.appendChild(row);
-  });
+  HIDS.map(id=>{const done=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]?.[id]).length;const pct=dwd>0?Math.round(done/dwd*100):0;return{id,label:TLABELS[id],pct};}).sort((a,b)=>b.pct-a.pct).forEach(({label,pct})=>{const color=pct>=70?'#6fcf97':pct>=40?'#3a8f6a':'#1e5a42';const row=document.createElement('div');row.className='ts-item';row.innerHTML='<div class="ts-lbl">'+label+'</div><div class="ts-bg"><div class="ts-bar" style="width:'+pct+'%;background:'+color+'"></div></div><div class="ts-pct" style="color:'+color+'">'+pct+'%</div>';el.appendChild(row);});
 }
 
-// ─── 起動 ───────────────────────────────────────────────────────
+// ─── 全体 ──────────────────────────────────────────────────────
 function renderAll(){renderHome();renderDrink();renderShopTab(curShopTab);renderMealTab(curMealTab);renderStockPage();}
-loadLocal();renderAll();
-pullCloud();setInterval(pullCloud,5*60*1000);
+loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
 </script>
 </body>
 </html>
