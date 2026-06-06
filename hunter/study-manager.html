@@ -788,125 +788,96 @@ function loadLocal() {
 }
 
 // ── QUIZ APP DATA READER ──
+// hunter_quiz_v1 / gun_quiz_v1 の構造:
+// { totalAnswered, totalCorrect, wrongIds:[], markedIds:[], catStats:{cat:{a,c}} }
 function loadFromQuizApps() {
-  // Read hunter-quiz localStorage
+  // hunter-quiz
   try {
-    const hd = localStorage.getItem('hunterQuizData');
+    const hd = localStorage.getItem('hunter_quiz_v1');
     if (hd) {
       const data = JSON.parse(hd);
-      renderWeakPoints(data, 'hunter');
-      updateHunterStats(data);
+      updateQuizStats(data, 'hunter');
+      renderWeakPointsFromIds(data, 'hunter');
     } else {
-      tryAlternativeHunterKeys();
+      document.getElementById('hunterAppStats').textContent = '未接続（未プレイ）';
     }
   } catch(e) {}
 
-  // Read gun-quiz localStorage
+  // gun-quiz
   try {
-    const gd = localStorage.getItem('gunQuizData');
+    const gd = localStorage.getItem('gun_quiz_v1');
     if (gd) {
       const data = JSON.parse(gd);
-      renderWeakPoints(data, 'gun');
-      updateGunStats(data);
+      updateQuizStats(data, 'gun');
+      renderWeakPointsFromIds(data, 'gun');
     } else {
-      tryAlternativeGunKeys();
+      document.getElementById('gunAppStats').textContent = '未接続（未プレイ）';
     }
   } catch(e) {}
 }
 
-function tryAlternativeHunterKeys() {
-  // Try common key patterns from the quiz apps
-  const keys = ['hunterQuiz', 'hunter_quiz', 'quizData_hunter', 'huntingQuiz'];
-  for (const k of keys) {
-    const v = localStorage.getItem(k);
-    if (v) { try { renderWeakPoints(JSON.parse(v), 'hunter'); return; } catch(e) {} }
-  }
-  document.getElementById('hunterAppStats').textContent = '未接続';
-}
-
-function tryAlternativeGunKeys() {
-  const keys = ['gunQuiz', 'gun_quiz', 'quizData_gun', 'riflequiz'];
-  for (const k of keys) {
-    const v = localStorage.getItem(k);
-    if (v) { try { renderWeakPoints(JSON.parse(v), 'gun'); return; } catch(e) {} }
-  }
-  document.getElementById('gunAppStats').textContent = '未接続';
-}
-
-function renderWeakPoints(data, type) {
-  // Support multiple data formats
-  let wrongQuestions = [];
-  let totalAnswered = 0;
-
-  if (Array.isArray(data.questions)) {
-    wrongQuestions = data.questions.filter(q =>
-      (q.wrongCount > 0 || q.incorrect > 0) || (q.correct === false)
-    );
-    totalAnswered = data.questions.filter(q => (q.attempts||0) > 0 || (q.answered)).length;
-  } else if (data.wrongAnswers) {
-    wrongQuestions = data.wrongAnswers;
-  }
-
-  const pct = totalAnswered > 0 ? Math.round(((totalAnswered - wrongQuestions.length) / totalAnswered) * 100) : 0;
+function updateQuizStats(data, type) {
+  const answered = data.totalAnswered || 0;
+  const correct = data.totalCorrect || 0;
+  const pct = answered > 0 ? Math.round(correct / answered * 100) : 0;
+  const wrongCount = (data.wrongIds || []).length;
+  const markedCount = (data.markedIds || []).length;
 
   if (type === 'hunter') {
     document.getElementById('hunterAppStats').textContent =
-      `正答率 ${pct}% / ${totalAnswered}問解答`;
+      `正答率 ${pct}% | ${answered}問解答 | 要復習${wrongCount}問`;
     state.progress.hunter = pct;
     document.getElementById('hunterBar').style.width = pct + '%';
     document.getElementById('hunterPct').textContent = pct + '%';
   } else {
     document.getElementById('gunAppStats').textContent =
-      `正答率 ${pct}% / ${totalAnswered}問解答`;
+      `正答率 ${pct}% | ${answered}問解答 | 要復習${wrongCount}問`;
     state.progress.gun = pct;
     document.getElementById('gunBar').style.width = pct + '%';
     document.getElementById('gunPct').textContent = pct + '%';
   }
+}
 
-  if (wrongQuestions.length === 0) return;
+function renderWeakPointsFromIds(data, type) {
+  const wrongIds = data.wrongIds || [];
+  const markedIds = data.markedIds || [];
+  if (wrongIds.length === 0 && markedIds.length === 0) return;
 
   const container = document.getElementById('weakSection');
-  container.innerHTML = container.innerHTML.replace(/<div class="empty-state">.*<\/div>/, '');
+  const emptyState = container.querySelector('.empty-state');
+  if (emptyState) emptyState.remove();
 
   const card = document.createElement('div');
   card.className = 'weak-card';
+
+  // catStats から苦手カテゴリを算出
+  const catStats = data.catStats || {};
+  const catNames = type === 'hunter'
+    ? {law:'法令・規制', safe:'安全・事故防止', bird:'鳥獣識別', gun:'猟具・銃器', eco:'生態・習性'}
+    : {law:'銃砲関連法令', safe:'安全な取扱い', keep:'保管・携帯・運搬', mech:'銃の構造・機能', exp:'火薬類・実包', acc:'事故・応急処置'};
+
+  const catRows = Object.entries(catStats).map(([k, v]) => {
+    const acc = v.a > 0 ? Math.round(v.c / v.a * 100) : 0;
+    const cls = acc < 50 ? 'pct-bad' : acc < 80 ? 'pct-mid' : 'pct-ok';
+    return `<div class="weak-item">
+      <span class="weak-pct ${cls}">${acc}%</span>
+      <span style="flex:1">${catNames[k] || k}</span>
+      <span style="font-size:0.65rem;color:var(--muted)">${v.c}/${v.a}問</span>
+    </div>`;
+  }).join('');
+
   card.innerHTML = `
     <div class="weak-header ${type}" onclick="this.nextElementSibling.classList.toggle('open')">
-      ${type === 'hunter' ? '🦆' : '🔫'} 苦手問題 ${wrongQuestions.length}件
-      <span style="margin-left:auto;font-size:0.65rem;">タップで展開</span>
+      ${type === 'hunter' ? '🦆' : '🔫'} カテゴリ別正答率 ／ 要復習 ${wrongIds.length}問 ／ マーク ${markedIds.length}問
+      <span style="margin-left:auto;font-size:0.65rem;">▼</span>
     </div>
     <div class="weak-list">
-      ${wrongQuestions.slice(0, 20).map(q => {
-        const wrong = q.wrongCount || q.incorrect || 0;
-        const total = q.attempts || q.total || (wrong + (q.correct || 0)) || 1;
-        const acc = Math.round(((total - wrong) / total) * 100);
-        const cls = acc < 50 ? 'pct-bad' : acc < 80 ? 'pct-mid' : 'pct-ok';
-        const text = q.question || q.text || q.q || '問題';
-        return `<div class="weak-item">
-          <span class="weak-pct ${cls}">${acc}%</span>
-          <span style="flex:1;font-size:0.7rem;">${text.slice(0,40)}…</span>
-        </div>`;
-      }).join('')}
+      ${catRows || '<div style="font-size:0.72rem;color:var(--muted)">まだカテゴリ別データがありません</div>'}
     </div>
   `;
   container.appendChild(card);
 }
 
-function updateHunterStats(data) {
-  let answered = 0;
-  if (data.questions) answered = data.questions.filter(q => (q.attempts||0)>0).length;
-  const pct = state.progress.hunter;
-  document.getElementById('hunterAppStats').textContent = `正答率 ${pct}% / ${answered}問`;
-  document.getElementById('hunterBar').style.width = pct + '%';
-  document.getElementById('hunterPct').textContent = pct + '%';
-}
-
-function updateGunStats(data) {
-  const pct = state.progress.gun;
-  document.getElementById('gunAppStats').textContent = `正答率 ${pct}%`;
-  document.getElementById('gunBar').style.width = pct + '%';
-  document.getElementById('gunPct').textContent = pct + '%';
-}
 
 // ── COUNTDOWN ──
 function renderCountdown() {
@@ -1069,26 +1040,16 @@ function renderCatList(id, cats, type) {
 }
 
 function getQuizCatData(type) {
-  // Try to read category accuracy from quiz app localStorage
-  const key = type === 'hunter' ? 'hunterQuizData' : 'gunQuizData';
+  // hunter_quiz_v1 / gun_quiz_v1 の catStats: { cat: {a:回答数, c:正解数} }
+  const key = type === 'hunter' ? 'hunter_quiz_v1' : 'gun_quiz_v1';
   try {
     const d = JSON.parse(localStorage.getItem(key) || '{}');
-    if (d.categoryStats) return d.categoryStats;
-    if (d.questions) {
-      const cats = {};
-      const counts = {};
-      d.questions.forEach(q => {
-        const c = q.category || q.cat || '未分類';
-        if (!cats[c]) { cats[c] = 0; counts[c] = 0; }
-        counts[c]++;
-        if (!q.wrongCount || q.wrongCount === 0) cats[c]++;
-      });
-      const result = {};
-      Object.keys(cats).forEach(c => {
-        result[c] = counts[c] > 0 ? Math.round((cats[c]/counts[c])*100) : 0;
-      });
-      return result;
-    }
+    const catStats = d.catStats || {};
+    const result = {};
+    Object.entries(catStats).forEach(([k, v]) => {
+      result[k] = v.a > 0 ? Math.round(v.c / v.a * 100) : 0;
+    });
+    return result;
   } catch(e) {}
   return {};
 }

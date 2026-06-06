@@ -156,6 +156,11 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     </div>
   </div>
 
+  <div style="display:flex;gap:8px;width:100%;max-width:380px;margin-bottom:4px;">
+    <button onclick="showSyncModal()" style="flex:1;padding:9px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;">⚙️ 同期設定</button>
+    <button onclick="pullFromCloud()" style="flex:1;padding:9px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;" id="sync-btn">☁️ クラウド同期</button>
+  </div>
+
   <div class="mode-btns">
     <button class="mode-btn btn-main" onclick="startMode('random')">
       <span class="icon">🎯</span>
@@ -721,6 +726,107 @@ function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.ra
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
 showHome();
+
+// ══════════════════════════════════════════════
+// JSONBIN.IO 同期
+// ══════════════════════════════════════════════
+const SYNC_KEY = 'gun_quiz_sync';
+
+function loadSyncConfig(){
+  try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'{}'); }catch(e){ return {}; }
+}
+function saveSyncConfig(cfg){ localStorage.setItem(SYNC_KEY, JSON.stringify(cfg)); }
+
+function showSyncModal(){
+  const cfg = loadSyncConfig();
+  document.getElementById('sync-apikey').value = cfg.apiKey||'';
+  document.getElementById('sync-binid').value = cfg.binId||'';
+  document.getElementById('sync-modal').style.display='flex';
+}
+function hideSyncModal(){ document.getElementById('sync-modal').style.display='none'; }
+
+function saveSyncSettings(){
+  const apiKey = document.getElementById('sync-apikey').value.trim();
+  const binId = document.getElementById('sync-binid').value.trim();
+  if(!apiKey||!binId){ showToast('API KeyとBin IDを入力してください'); return; }
+  saveSyncConfig({apiKey, binId});
+  hideSyncModal();
+  showToast('設定を保存しました');
+}
+
+async function pushToCloud(){
+  const cfg = loadSyncConfig();
+  if(!cfg.apiKey||!cfg.binId){ showToast('⚙️ 同期設定を先に行ってください'); return; }
+  document.getElementById('sync-btn').textContent='保存中…';
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
+      body: JSON.stringify({ gun_quiz_v1: state, updatedAt: new Date().toISOString() })
+    });
+    if(res.ok){ showToast('☁️ クラウドに保存しました'); }
+    else throw new Error(res.status);
+  }catch(e){ showToast('❌ 同期エラー: '+e.message); }
+  document.getElementById('sync-btn').textContent='☁️ クラウド同期';
+}
+
+async function pullFromCloud(){
+  const cfg = loadSyncConfig();
+  if(!cfg.apiKey||!cfg.binId){ showToast('⚙️ 同期設定を先に行ってください'); return; }
+  document.getElementById('sync-btn').textContent='取得中…';
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
+      headers:{'X-Master-Key':cfg.apiKey}
+    });
+    const json = await res.json();
+    const data = json.record;
+    if(data.gun_quiz_v1){
+      Object.assign(state, data.gun_quiz_v1);
+      saveState();
+      updateHomeStats();
+      showToast('☁️ データを取得しました');
+    } else { showToast('データが見つかりません'); }
+  }catch(e){ showToast('❌ 取得エラー: '+e.message); }
+  document.getElementById('sync-btn').textContent='☁️ クラウド同期';
+}
+
+// 学習管理アプリへのフィードバック読み込み
+function loadStudyManagerFeedback(){
+  try{
+    const fb = JSON.parse(localStorage.getItem('studyManager_gun_feedback')||'{}');
+    if(fb.importantTopics && fb.importantTopics.length > 0){
+      const existing = document.getElementById('sm-feedback-note');
+      if(!existing){
+        const el = document.createElement('div');
+        el.id = 'sm-feedback-note';
+        el.style.cssText='font-size:11px;color:var(--yellow);text-align:center;margin-bottom:4px;max-width:380px;';
+        el.textContent = `📋 学習管理より ${fb.importantTopics.length}件の重要トピックあり`;
+        document.getElementById('home').insertBefore(el, document.querySelector('.mode-btns'));
+      }
+    }
+  }catch(e){}
+}
+loadStudyManagerFeedback();
 </script>
+
+<!-- SYNC MODAL -->
+<div id="sync-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#0d1117;border:1px solid rgba(74,222,128,.2);border-radius:16px;padding:24px;width:100%;max-width:360px;">
+    <div style="font-size:16px;font-weight:700;color:#4ade80;margin-bottom:16px;">⚙️ JSONBin.io 同期設定</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">API KEY</div>
+      <input id="sync-apikey" type="password" placeholder="$2a$10$..." style="width:100%;padding:10px;background:#0a0e0a;border:1px solid rgba(74,222,128,.2);border-radius:8px;color:#e2e8f0;font-size:13px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">BIN ID（銃クイズ用）</div>
+      <input id="sync-binid" type="text" placeholder="68xxxxxxxxxxxxxxxx" style="width:100%;padding:10px;background:#0a0e0a;border:1px solid rgba(74,222,128,.2);border-radius:8px;color:#e2e8f0;font-size:13px;">
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="saveSyncSettings()" style="flex:1;padding:12px;background:linear-gradient(135deg,#16a34a,#052e16);border:1px solid rgba(74,222,128,.3);border-radius:10px;color:#4ade80;font-size:14px;font-weight:700;cursor:pointer;">保存</button>
+      <button onclick="hideSyncModal()" style="flex:1;padding:12px;background:#1a1a2e;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#6b7280;font-size:14px;cursor:pointer;">キャンセル</button>
+    </div>
+    <div style="margin-top:12px;font-size:10px;color:#6b7280;text-align:center;">学習管理アプリと同じAPI Keyを使用できます</div>
+  </div>
+</div>
 </body>
 </html>
