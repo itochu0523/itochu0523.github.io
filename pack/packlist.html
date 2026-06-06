@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PACK — 持ち物リスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f13;
+    --surface: #16181f;
+    --surface2: #1e2029;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0f1f5;
+    --muted: #6b7080;
+    --accent: #4ecca3;
+    --accent2: #f5a623;
+    --danger: #ff6b6b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14,15,19,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+  .btn-reset-all {
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px 0;
+    background: var(--bg);
+    scrollbar-width: none;
+  }
+  .tabs-wrapper::-webkit-scrollbar { display: none; }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    min-width: max-content;
+    padding-bottom: 14px;
+  }
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 72px;
+    position: relative;
+  }
+  .tab.active {
+    border-color: var(--accent);
+    background: rgba(78,204,163,0.08);
+  }
+  .tab-icon { font-size: 20px; line-height: 1; }
+  .tab-label {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .tab.active .tab-label { color: var(--accent); }
+  .tab-badge {
+    position: absolute;
+    top: -5px; right: -5px;
+    background: var(--accent);
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 1px 5px;
+    min-width: 16px;
+    text-align: center;
+    display: none;
+  }
+  .tab-badge.visible { display: block; }
+
+  /* ── PANEL ── */
+  .panel { display: none; padding: 16px; }
+  .panel.active { display: block; }
+
+  /* ── PANEL HEADER ── */
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+  .panel-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  .panel-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-ring-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+  }
+  .progress-ring-wrap svg {
+    transform: rotate(-90deg);
+    position: absolute; top: 0; left: 0;
+  }
+  .progress-track { fill: none; stroke: var(--surface2); stroke-width: 4; }
+  .progress-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease;
+  }
+  .progress-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* ── STATUS STRIP ── */
+  .status-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .status-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .status-btn.prepared {
+    border-color: rgba(245,166,35,0.5);
+    background: rgba(245,166,35,0.07);
+    color: var(--accent2);
+  }
+  .status-btn.packed {
+    border-color: rgba(78,204,163,0.5);
+    background: rgba(78,204,163,0.07);
+    color: var(--accent);
+  }
+
+  /* ── CATEGORY ── */
+  .category {
+    margin-bottom: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .cat-icon { font-size: 18px; }
+  .cat-name {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex: 1;
+  }
+  .cat-count {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .cat-chevron {
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  .category.open .cat-chevron { transform: rotate(180deg); }
+  .cat-body { display: none; padding: 0 14px 12px; }
+  .category.open .cat-body { display: block; }
+  .divider { height: 1px; background: var(--border); margin-bottom: 10px; }
+
+  /* ── ITEM ── */
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: opacity 0.2s;
+  }
+  .item:last-child { border-bottom: none; }
+  .item.done { opacity: 0.4; }
+  .item.done .item-name { text-decoration: line-through; }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--surface2);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    font-size: 12px;
+  }
+  .checkbox.prepared {
+    border-color: var(--accent2);
+    background: rgba(245,166,35,0.15);
+    color: var(--accent2);
+  }
+  .checkbox.packed {
+    border-color: var(--accent);
+    background: rgba(78,204,163,0.15);
+    color: var(--accent);
+  }
+
+  .item-info { flex: 1; min-width: 0; }
+  .item-name {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  .item-note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .item-status-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 9px;
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: all 0.15s;
+  }
+  .item-status-btn.prepared {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(245,166,35,0.1);
+  }
+  .item-status-btn.packed {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(78,204,163,0.1);
+  }
+
+  /* ── FLOATING ADD ── */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(78,204,163,0.4);
+    z-index: 200;
+    transition: transform 0.15s;
+  }
+  .fab:active { transform: scale(0.93); }
+
+  /* ── MODAL ── */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 300;
+    display: none;
+    align-items: flex-end;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 20px 40px;
+    width: 100%;
+    border-top: 1px solid var(--border);
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  .modal input, .modal select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-bottom: 10px;
+    outline: none;
+  }
+  .modal input:focus, .modal select:focus {
+    border-color: var(--accent);
+  }
+  .modal-btns { display: flex; gap: 8px; margin-top: 4px; }
+  .btn-cancel {
+    flex: 1; padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+  }
+  .btn-add {
+    flex: 2; padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+  }
+
+  /* ── EMPTY ── */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+  select option { background: var(--surface2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">PACK</div>
+    <div class="logo-sub">持ち物リスト</div>
+  </div>
+  <div class="header-right">
+    <button class="btn-reset-all" onclick="resetAll()">全リセット</button>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<!-- PANELS -->
+<div id="panels"></div>
+
+<!-- FAB -->
+<button class="fab" onclick="openModal()">＋</button>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-title">アイテム追加</div>
+    <input type="text" id="new-item-name" placeholder="アイテム名">
+    <input type="text" id="new-item-note" placeholder="メモ（任意）">
+    <select id="new-item-trip"></select>
+    <select id="new-item-cat"></select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-add" onclick="addItem()">追加</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────
+const TRIPS = [
+  { id: 'hiking',       label: '登山',        icon: '⛰️',  color: '#4ecca3' },
+  { id: 'snowhike',     label: '雪山登山',    icon: '🏔️',  color: '#89d4f5' },
+  { id: 'yamagata',     label: 'ひろ山形',    icon: '🏠',  color: '#f5a623' },
+  { id: 'tokyo',        label: '東京滞在',    icon: '🗼',  color: '#c084fc' },
+  { id: 'sendai',       label: '仙台出張',    icon: '💼',  color: '#fb923c' },
+  { id: 'onenight',     label: '一泊旅行',    icon: '🌙',  color: '#f472b6' },
+];
+
+const CATEGORIES = {
+  hiking: [
+    { id: 'clothing',  icon: '👕', name: '衣類・装備' },
+    { id: 'gear',      icon: '🎒', name: 'ギア・道具' },
+    { id: 'food',      icon: '🍙', name: '食料・水' },
+    { id: 'safety',    icon: '🛡️', name: '安全・緊急' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+  snowhike: [
+    { id: 'clothing',  icon: '🧥', name: '防寒衣類' },
+    { id: 'gear',      icon: '⛏️', name: '雪山ギア' },
+    { id: 'food',      icon: '🍙', name: '食料・水' },
+    { id: 'safety',    icon: '🛡️', name: '安全・緊急' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+  yamagata: [
+    { id: 'daily',     icon: '🏠', name: '日常用品' },
+    { id: 'hunt',      icon: '🦌', name: '狩猟関連' },
+    { id: 'work',      icon: '💻', name: '仕事道具' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+  tokyo: [
+    { id: 'clothing',  icon: '👔', name: '衣類' },
+    { id: 'work',      icon: '💻', name: '仕事道具' },
+    { id: 'personal',  icon: '🪥', name: '個人用品' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+  sendai: [
+    { id: 'work',      icon: '💼', name: '仕事道具' },
+    { id: 'clothing',  icon: '👔', name: '衣類' },
+    { id: 'personal',  icon: '🪥', name: '個人用品' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+  onenight: [
+    { id: 'clothing',  icon: '👕', name: '衣類' },
+    { id: 'personal',  icon: '🪥', name: '個人用品' },
+    { id: 'gadget',    icon: '🔌', name: 'ガジェット' },
+    { id: 'other',     icon: '📦', name: 'その他' },
+  ],
+};
+
+const DEFAULT_ITEMS = {
+  hiking: {
+    clothing: [
+      { name: 'ベースレイヤー（速乾）', note: '替えも1枚' },
+      { name: 'ミドルレイヤー（フリース）' },
+      { name: 'ハードシェル（レインウェア）' },
+      { name: '登山パンツ' },
+      { name: 'ウールソックス', note: '厚手' },
+      { name: 'グローブ' },
+      { name: 'ハット / ビーニー' },
+      { name: 'ゲイター' },
+      { name: '登山靴（紐チェック済み）' },
+    ],
+    gear: [
+      { name: 'ザック（30〜40L）' },
+      { name: 'レインカバー' },
+      { name: 'トレッキングポール' },
+      { name: 'ヘッドランプ＋予備電池' },
+      { name: 'コンパス＋地図' },
+      { name: 'サングラス' },
+      { name: 'サンスクリーン' },
+      { name: '虫除けスプレー' },
+    ],
+    food: [
+      { name: '行動食（ナッツ・バー等）' },
+      { name: '昼食（弁当・レトルト）' },
+      { name: 'ハイドレーション / 水筒', note: '最低1.5L' },
+      { name: 'ガスバーナー＋クッカー', note: '日帰りは不要' },
+    ],
+    safety: [
+      { name: '救急キット' },
+      { name: 'エマージェンシーブランケット' },
+      { name: '笛' },
+      { name: 'モバイルバッテリー' },
+      { name: '登山計画書（提出済み）' },
+    ],
+    other: [
+      { name: 'スマートフォン＋充電器' },
+      { name: '財布・現金' },
+      { name: '保険証' },
+    ],
+  },
+  snowhike: {
+    clothing: [
+      { name: 'ウールベースレイヤー' },
+      { name: 'ミッドレイヤー（厚手フリース）' },
+      { name: '防水ハードシェル上下' },
+      { name: 'インサレーション（ダウン）' },
+      { name: 'ウールソックス（厚手）', note: '2枚重ね推奨' },
+      { name: '防水グローブ＋インナーグローブ' },
+      { name: 'バラクラバ（目出し帽）' },
+      { name: 'ゴーグル' },
+      { name: '冬山用登山靴' },
+      { name: 'スパッツ（ロング）' },
+    ],
+    gear: [
+      { name: 'アイゼン（10本爪以上）' },
+      { name: 'ピッケル' },
+      { name: 'ヘルメット' },
+      { name: 'ヘッドランプ＋予備電池（リチウム）' },
+      { name: 'スノーシュー / ワカン', note: '状況により' },
+      { name: 'アバランチビーコン（ビーコン）' },
+      { name: 'プローブ（ゾンデ棒）' },
+      { name: 'ショベル（スコップ）' },
+    ],
+    food: [
+      { name: '行動食（凍らないもの）', note: 'ジェル・ナッツ' },
+      { name: '魔法瓶（温かい飲み物）' },
+      { name: 'ガスバーナー＋冬用ガスカートリッジ' },
+    ],
+    safety: [
+      { name: '救急キット（凍結対策済み）' },
+      { name: 'エマージェンシーブランケット' },
+      { name: 'ツェルト（緊急ビバーク用）' },
+      { name: 'モバイルバッテリー（防寒）' },
+      { name: '登山計画書（提出済み）' },
+    ],
+    other: [
+      { name: '日焼け止め（SPF50+）', note: '雪焼け注意' },
+      { name: 'リップクリーム' },
+      { name: 'スマートフォン＋充電器' },
+    ],
+  },
+  yamagata: {
+    daily: [
+      { name: '着替え（日数分）' },
+      { name: 'パジャマ' },
+      { name: '洗面用具（歯ブラシ等）' },
+      { name: 'シャンプー・ボディソープ' },
+      { name: 'タオル' },
+      { name: '室内着・スリッパ' },
+    ],
+    hunt: [
+      { name: '狩猟免許テキスト' },
+      { name: '問題集' },
+      { name: 'ノート・筆記用具' },
+      { name: '猟友会関連書類' },
+    ],
+    work: [
+      { name: 'MacBook' },
+      { name: '充電器・ケーブル類' },
+      { name: 'モバイルバッテリー' },
+      { name: 'イヤホン' },
+    ],
+    other: [
+      { name: '鍵（家・車）' },
+      { name: '財布・現金' },
+      { name: '常備薬' },
+    ],
+  },
+  tokyo: {
+    clothing: [
+      { name: 'シャツ（日数分）' },
+      { name: 'アウター' },
+      { name: 'ズボン・スカート' },
+      { name: '着替え下着・ソックス' },
+    ],
+    work: [
+      { name: 'MacBook＋充電器' },
+      { name: '名刺' },
+      { name: 'ノート・ペン' },
+      { name: 'モバイルバッテリー' },
+    ],
+    personal: [
+      { name: '洗面用具' },
+      { name: '薬（常備）' },
+      { name: 'スキンケア用品' },
+    ],
+    other: [
+      { name: 'Suica / 交通系IC' },
+      { name: '財布・現金' },
+      { name: 'スマートフォン＋充電器' },
+    ],
+  },
+  sendai: {
+    work: [
+      { name: 'MacBook＋充電器' },
+      { name: '名刺' },
+      { name: '提案資料（印刷済み）' },
+      { name: 'ノート・ペン' },
+      { name: 'モバイルバッテリー' },
+    ],
+    clothing: [
+      { name: 'スーツ / ビジネス服' },
+      { name: 'ワイシャツ（予備1枚）' },
+      { name: 'ネクタイ', note: '必要な場合' },
+      { name: '革靴 / ビジネスシューズ' },
+      { name: '着替え下着・ソックス' },
+    ],
+    personal: [
+      { name: '洗面用具（ホテル確認）' },
+      { name: '常備薬' },
+      { name: '耳栓', note: '宿泊時' },
+    ],
+    other: [
+      { name: 'Suica / 交通系IC' },
+      { name: '財布・領収書ファイル' },
+      { name: 'スマートフォン＋充電器' },
+    ],
+  },
+  onenight: {
+    clothing: [
+      { name: '着替え1セット（上下）' },
+      { name: '下着・ソックス（予備）' },
+      { name: 'パジャマ / 部屋着' },
+    ],
+    personal: [
+      { name: '歯ブラシ・歯磨き粉' },
+      { name: '洗顔・スキンケア' },
+      { name: 'ヘアケア用品' },
+      { name: '常備薬' },
+    ],
+    gadget: [
+      { name: 'スマートフォン＋充電器' },
+      { name: 'モバイルバッテリー' },
+      { name: 'イヤホン / AirPods' },
+    ],
+    other: [
+      { name: '財布・現金' },
+      { name: 'Suica / 交通系IC' },
+      { name: '鍵' },
+    ],
+  },
+};
+
+// ─── STATE ──────────────────────────────────────────────────
+const LS_KEY = 'packlist_v1';
+let state = loadState();
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  // init
+  const s = {};
+  TRIPS.forEach(t => {
+    s[t.id] = {};
+    Object.entries(DEFAULT_ITEMS[t.id] || {}).forEach(([catId, items]) => {
+      s[t.id][catId] = items.map((item, i) => ({
+        id: `${t.id}_${catId}_${i}`,
+        name: item.name,
+        note: item.note || '',
+        status: 'none', // none | prepared | packed
+      }));
+    });
+  });
+  return s;
+}
+
+function saveState() {
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+
+// ─── RENDER ─────────────────────────────────────────────────
+let activeTrip = TRIPS[0].id;
+
+function init() {
+  renderTabs();
+  renderPanels();
+  updateAllBadges();
+}
+
+function renderTabs() {
+  const container = document.getElementById('tabs');
+  container.innerHTML = TRIPS.map(t => `
+    <div class="tab ${t.id === activeTrip ? 'active' : ''}" onclick="switchTab('${t.id}')">
+      <span class="tab-icon">${t.icon}</span>
+      <span class="tab-label">${t.label}</span>
+      <span class="tab-badge" id="badge_${t.id}"></span>
+    </div>
+  `).join('');
+}
+
+function renderPanels() {
+  const container = document.getElementById('panels');
+  container.innerHTML = TRIPS.map(t => `
+    <div class="panel ${t.id === activeTrip ? 'active' : ''}" id="panel_${t.id}">
+      ${renderPanel(t)}
+    </div>
+  `).join('');
+}
+
+function renderPanel(trip) {
+  const cats = CATEGORIES[trip.id] || [];
+  const items_by_cat = state[trip.id] || {};
+  const allItems = Object.values(items_by_cat).flat();
+  const total = allItems.length;
+  const packed = allItems.filter(i => i.status === 'packed').length;
+  const prepared = allItems.filter(i => i.status === 'prepared').length;
+  const pct = total ? Math.round(packed / total * 100) : 0;
+  const r = 22, circ = 2 * Math.PI * r;
+  const dash = circ - (pct / 100 * circ);
+
+  return `
+    <div class="panel-header">
+      <div>
+        <div class="panel-title" style="color:${trip.color}">${trip.icon} ${trip.label}</div>
+        <div class="panel-subtitle">全${total}点 / 詰完 ${packed}点 / 準備済 ${prepared}点</div>
+      </div>
+      <div class="panel-actions">
+        <div class="progress-ring-wrap">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle class="progress-track" cx="28" cy="28" r="${r}"/>
+            <circle class="progress-fill" cx="28" cy="28" r="${r}"
+              stroke="${trip.color}"
+              stroke-dasharray="${circ}"
+              stroke-dashoffset="${dash}"/>
+          </svg>
+          <div class="progress-pct" style="color:${trip.color}">${pct}%</div>
+        </div>
+      </div>
+    </div>
+    <div class="status-strip">
+      <button class="status-btn prepared" onclick="bulkSetStatus('${trip.id}','prepared')">
+        🟡 全て用意済みに
+      </button>
+      <button class="status-btn packed" onclick="bulkSetStatus('${trip.id}','packed')">
+        ✅ 全て詰完に
+      </button>
+    </div>
+    ${cats.map(cat => {
+      const items = items_by_cat[cat.id] || [];
+      return `
+        <div class="category open" id="cat_${trip.id}_${cat.id}">
+          <div class="cat-header" onclick="toggleCat('${trip.id}','${cat.id}')">
+            <span class="cat-icon">${cat.icon}</span>
+            <span class="cat-name">${cat.name}</span>
+            <span class="cat-count">${items.filter(i=>i.status==='packed').length}/${items.length}</span>
+            <span class="cat-chevron">▼</span>
+          </div>
+          <div class="cat-body">
+            <div class="divider"></div>
+            ${items.length === 0 ? '<div class="empty" style="padding:10px 0;font-size:11px">アイテムがありません</div>' :
+              items.map(item => renderItem(item)).join('')}
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <div style="height:80px"></div>
+  `;
+}
+
+function renderItem(item) {
+  const st = item.status;
+  const icon = st === 'packed' ? '✓' : st === 'prepared' ? '◐' : '';
+  const nextStatus = st === 'none' ? 'prepared' : st === 'prepared' ? 'packed' : 'none';
+  const nextLabel = st === 'none' ? '用意済み' : st === 'prepared' ? '荷物詰完' : 'リセット';
+  return `
+    <div class="item ${st === 'packed' ? 'done' : ''}" id="item_${item.id}">
+      <div class="checkbox ${st}" onclick="cycleStatus('${item.id}')">${icon}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+      </div>
+      <button class="item-status-btn ${st}" onclick="cycleStatus('${item.id}')">${nextLabel}</button>
+    </div>
+  `;
+}
+
+// ─── ACTIONS ────────────────────────────────────────────────
+function switchTab(tripId) {
+  activeTrip = tripId;
+  document.querySelectorAll('.tab').forEach((el,i) => {
+    el.classList.toggle('active', TRIPS[i].id === tripId);
+  });
+  document.querySelectorAll('.panel').forEach(el => {
+    el.classList.toggle('active', el.id === `panel_${tripId}`);
+  });
+  // refresh panel
+  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(TRIPS.find(t=>t.id===tripId));
+  updateAllBadges();
+}
+
+function toggleCat(tripId, catId) {
+  const el = document.getElementById(`cat_${tripId}_${catId}`);
+  el.classList.toggle('open');
+}
+
+function findItem(itemId) {
+  for (const tripId in state) {
+    for (const catId in state[tripId]) {
+      const arr = state[tripId][catId];
+      const idx = arr.findIndex(i => i.id === itemId);
+      if (idx !== -1) return { tripId, catId, idx, item: arr[idx] };
+    }
+  }
+  return null;
+}
+
+function cycleStatus(itemId) {
+  const found = findItem(itemId);
+  if (!found) return;
+  const { tripId, catId, idx } = found;
+  const cur = state[tripId][catId][idx].status;
+  const next = cur === 'none' ? 'prepared' : cur === 'prepared' ? 'packed' : 'none';
+  state[tripId][catId][idx].status = next;
+  saveState();
+  // partial re-render
+  const trip = TRIPS.find(t => t.id === tripId);
+  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
+  updateAllBadges();
+}
+
+function bulkSetStatus(tripId, status) {
+  const cats = state[tripId];
+  Object.keys(cats).forEach(catId => {
+    cats[catId].forEach(item => item.status = status);
+  });
+  saveState();
+  const trip = TRIPS.find(t => t.id === tripId);
+  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
+  updateAllBadges();
+}
+
+function updateAllBadges() {
+  TRIPS.forEach(t => {
+    const allItems = Object.values(state[t.id] || {}).flat();
+    const undone = allItems.filter(i => i.status !== 'packed').length;
+    const badge = document.getElementById(`badge_${t.id}`);
+    if (badge) {
+      badge.textContent = undone;
+      badge.classList.toggle('visible', undone > 0);
+    }
+  });
+}
+
+function resetAll() {
+  if (!confirm('全リストのステータスをリセットしますか？')) return;
+  TRIPS.forEach(t => {
+    Object.keys(state[t.id] || {}).forEach(catId => {
+      state[t.id][catId].forEach(item => item.status = 'none');
+    });
+  });
+  saveState();
+  const trip = TRIPS.find(t => t.id === activeTrip);
+  document.getElementById(`panel_${activeTrip}`).innerHTML = renderPanel(trip);
+  updateAllBadges();
+}
+
+// ─── ADD ITEM MODAL ──────────────────────────────────────────
+function openModal() {
+  // populate trip select
+  const tripSel = document.getElementById('new-item-trip');
+  tripSel.innerHTML = TRIPS.map(t => `<option value="${t.id}" ${t.id===activeTrip?'selected':''}>${t.icon} ${t.label}</option>`).join('');
+  populateCatSelect();
+  tripSel.onchange = populateCatSelect;
+  document.getElementById('new-item-name').value = '';
+  document.getElementById('new-item-note').value = '';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('new-item-name').focus();
+}
+
+function populateCatSelect() {
+  const tripId = document.getElementById('new-item-trip').value;
+  const cats = CATEGORIES[tripId] || [];
+  document.getElementById('new-item-cat').innerHTML = cats.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function addItem() {
+  const name = document.getElementById('new-item-name').value.trim();
+  if (!name) { alert('アイテム名を入力してください'); return; }
+  const tripId = document.getElementById('new-item-trip').value;
+  const catId = document.getElementById('new-item-cat').value;
+  const note = document.getElementById('new-item-note').value.trim();
+
+  if (!state[tripId][catId]) state[tripId][catId] = [];
+  const id = `${tripId}_${catId}_${Date.now()}`;
+  state[tripId][catId].push({ id, name, note, status: 'none' });
+  saveState();
+  closeModal();
+  if (activeTrip !== tripId) switchTab(tripId);
+  else {
+    const trip = TRIPS.find(t => t.id === tripId);
+    document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
+    updateAllBadges();
+  }
+}
+
+// close overlay on bg click
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ─── BOOT ────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
