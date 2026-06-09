@@ -3,972 +3,1018 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>PACK — 持ち物リスト</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>GEAR — 持ち物リスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0e0f13;
-    --surface: #16181f;
-    --surface2: #1e2029;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0f1f5;
-    --muted: #6b7080;
-    --accent: #4ecca3;
-    --accent2: #f5a623;
-    --danger: #ff6b6b;
-  }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0a0b0d;
+  --s1:#111318;
+  --s2:#181b22;
+  --s3:#1e2230;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.12);
+  --text:#e8eaf0;
+  --muted:#5a6070;
+  --muted2:#8892a0;
+  --acc:#e8f442;
+  --acc2:#ff6b35;
+  --acc3:#4ecdc4;
+  --prepared:#f5a623;
+  --packed:#4ecca3;
+}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* HEADER */
+.app-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,11,13,0.94);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;
+  display:flex;align-items:center;gap:0;
+  height:52px;
+}
+.logo-mark{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;font-size:22px;letter-spacing:4px;
+  color:var(--acc);margin-right:10px;
+}
+.header-trip-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;font-size:16px;letter-spacing:2px;
+  color:var(--muted2);text-transform:uppercase;
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.header-mode-badge{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;font-weight:700;
+  background:rgba(232,244,66,0.12);color:var(--acc);border:1px solid rgba(232,244,66,0.25);
+}
+.header-mode-badge.pack{background:rgba(78,204,163,0.12);color:var(--packed);border-color:rgba(78,204,163,0.3);}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,13,0.96);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:10px 4px 8px;cursor:pointer;
+  font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);
+  border:none;background:none;font-family:'Noto Sans JP',sans-serif;
+  transition:color 0.15s;
+}
+.nav-btn.active{color:var(--acc);}
+.nav-btn .ni{font-size:20px;line-height:1;}
 
-  /* ── HEADER ── */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(14,15,19,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 4px;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .logo-sub {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .header-right {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
-  }
-  .btn-reset-all {
-    font-size: 10px;
-    color: var(--muted);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+/* SCREENS */
+.screen{display:none;padding:14px 14px 90px;}
+.screen.active{display:block;}
 
-  /* ── TABS ── */
-  .tabs-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 14px 16px 0;
-    background: var(--bg);
-    scrollbar-width: none;
-  }
-  .tabs-wrapper::-webkit-scrollbar { display: none; }
-  .tabs {
-    display: flex;
-    gap: 8px;
-    min-width: max-content;
-    padding-bottom: 14px;
-  }
-  .tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 10px 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 72px;
-    position: relative;
-  }
-  .tab.active {
-    border-color: var(--accent);
-    background: rgba(78,204,163,0.08);
-  }
-  .tab-icon { font-size: 20px; line-height: 1; }
-  .tab-label {
-    font-size: 9px;
-    letter-spacing: 1px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .tab.active .tab-label { color: var(--accent); }
-  .tab-badge {
-    position: absolute;
-    top: -5px; right: -5px;
-    background: var(--accent);
-    color: #000;
-    font-size: 9px;
-    font-weight: 700;
-    border-radius: 20px;
-    padding: 1px 5px;
-    min-width: 16px;
-    text-align: center;
-    display: none;
-  }
-  .tab-badge.visible { display: block; }
+/* ── TRIP SELECT ── */
+.trip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.trip-card{
+  border-radius:16px;border:1px solid var(--border);background:var(--s1);
+  padding:16px 14px;cursor:pointer;position:relative;overflow:hidden;
+  transition:border-color 0.2s,background 0.2s;
+  display:flex;flex-direction:column;gap:6px;
+  min-height:110px;
+}
+.trip-card.selected{border-color:var(--acc);background:rgba(232,244,66,0.05);}
+.trip-card-icon{font-size:28px;line-height:1;}
+.trip-card-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:2px;text-transform:uppercase;color:var(--text);}
+.trip-card-sub{font-size:10px;color:var(--muted);letter-spacing:1px;}
+.trip-card-dot{
+  position:absolute;top:10px;right:10px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--acc);
+  display:none;
+}
+.trip-card.selected .trip-card-dot{display:block;}
+.trip-card-progress{
+  margin-top:auto;
+  height:2px;border-radius:2px;background:var(--s3);overflow:hidden;
+}
+.trip-card-progress-fill{height:100%;background:var(--packed);border-radius:2px;transition:width 0.3s;}
 
-  /* ── PANEL ── */
-  .panel { display: none; padding: 16px; }
-  .panel.active { display: block; }
+.screen-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--acc);
+  margin-bottom:4px;
+}
+.screen-sub{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:16px;}
 
-  /* ── PANEL HEADER ── */
-  .panel-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .panel-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    letter-spacing: 3px;
-    line-height: 1;
-  }
-  .panel-subtitle {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
-    letter-spacing: 1px;
-  }
-  .panel-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: flex-end;
-  }
+/* ── MASTER SCREEN ── */
+.master-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.master-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;
+  letter-spacing:3px;text-transform:uppercase;
+}
+.btn-sm{
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding:6px 12px;border-radius:8px;cursor:pointer;
+  background:var(--s2);border:1px solid var(--border2);color:var(--muted2);
+  font-family:'Noto Sans JP',sans-serif;transition:all 0.15s;
+}
+.btn-sm:active{opacity:0.7;}
+.btn-sm.accent{background:rgba(232,244,66,0.1);border-color:rgba(232,244,66,0.3);color:var(--acc);}
 
-  /* ── PROGRESS ── */
-  .progress-ring-wrap {
-    position: relative;
-    width: 56px;
-    height: 56px;
-  }
-  .progress-ring-wrap svg {
-    transform: rotate(-90deg);
-    position: absolute; top: 0; left: 0;
-  }
-  .progress-track { fill: none; stroke: var(--surface2); stroke-width: 4; }
-  .progress-fill {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 4;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s ease;
-  }
-  .progress-pct {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
-    color: var(--accent);
-    letter-spacing: 1px;
-  }
+.cat-block{margin-bottom:10px;border-radius:14px;border:1px solid var(--border);background:var(--s1);overflow:hidden;}
+.cat-hd{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  cursor:pointer;user-select:none;
+}
+.cat-hd-icon{font-size:16px;}
+.cat-hd-name{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);flex:1;}
+.cat-hd-count{font-size:10px;color:var(--muted);}
+.cat-hd-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;}
+.cat-block.open .cat-hd-arrow{transform:rotate(180deg);}
+.cat-body{display:none;padding:0 12px 12px;}
+.cat-block.open .cat-body{display:block;}
+.cat-divider{height:1px;background:var(--border);margin-bottom:8px;}
 
-  /* ── STATUS STRIP ── */
-  .status-strip {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .status-btn {
-    flex: 1;
-    padding: 8px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 11px;
-    font-family: 'Noto Sans JP', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .status-btn.prepared {
-    border-color: rgba(245,166,35,0.5);
-    background: rgba(245,166,35,0.07);
-    color: var(--accent2);
-  }
-  .status-btn.packed {
-    border-color: rgba(78,204,163,0.5);
-    background: rgba(78,204,163,0.07);
-    color: var(--accent);
-  }
+/* master item */
+.m-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.m-item:last-child{border-bottom:none;}
+.m-item-icon{
+  width:32px;height:32px;border-radius:8px;background:var(--s2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;
+}
+.m-item-info{flex:1;min-width:0;}
+.m-item-name{font-size:13px;font-weight:500;line-height:1.3;}
+.m-item-detail{font-size:10px;color:var(--muted);margin-top:1px;}
+.m-item-del{
+  width:28px;height:28px;border-radius:7px;
+  background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.15);
+  color:#ff6b6b;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
 
-  /* ── CATEGORY ── */
-  .category {
-    margin-bottom: 12px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    overflow: hidden;
-  }
-  .cat-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .cat-icon { font-size: 18px; }
-  .cat-name {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    flex: 1;
-  }
-  .cat-count {
-    font-size: 10px;
-    color: var(--muted);
-  }
-  .cat-chevron {
-    font-size: 12px;
-    color: var(--muted);
-    transition: transform 0.2s;
-  }
-  .category.open .cat-chevron { transform: rotate(180deg); }
-  .cat-body { display: none; padding: 0 14px 12px; }
-  .category.open .cat-body { display: block; }
-  .divider { height: 1px; background: var(--border); margin-bottom: 10px; }
+/* add item inline */
+.add-item-row{
+  display:flex;gap:6px;margin-top:8px;padding-top:8px;
+  border-top:1px solid var(--border);
+}
+.add-item-row input{
+  flex:1;background:var(--s2);border:1px solid var(--border2);border-radius:9px;
+  padding:9px 11px;color:var(--text);font-size:13px;font-family:'Noto Sans JP',sans-serif;outline:none;
+}
+.add-item-row input:focus{border-color:var(--acc);}
+.btn-add-item{
+  background:var(--acc);color:#000;font-size:18px;font-weight:700;
+  border:none;border-radius:9px;width:38px;flex-shrink:0;cursor:pointer;
+}
 
-  /* ── ITEM ── */
-  .item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: opacity 0.2s;
-  }
-  .item:last-child { border-bottom: none; }
-  .item.done { opacity: 0.4; }
-  .item.done .item-name { text-decoration: line-through; }
+/* ── PACK SCREEN ── */
+.pack-hero{
+  background:var(--s1);border-radius:16px;border:1px solid var(--border);
+  padding:16px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;
+}
+.pack-progress-ring{position:relative;width:64px;height:64px;flex-shrink:0;}
+.pack-progress-ring svg{transform:rotate(-90deg);}
+.pack-pct{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--packed);
+  letter-spacing:1px;
+}
+.pack-stats{flex:1;}
+.pack-stat-row{display:flex;gap:14px;margin-bottom:6px;}
+.pack-stat{text-align:center;}
+.pack-stat-num{
+  font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;line-height:1;
+  color:var(--text);
+}
+.pack-stat-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.pack-stat-num.c-prep{color:var(--prepared);}
+.pack-stat-num.c-pack{color:var(--packed);}
+.pack-actions{display:flex;gap:6px;margin-bottom:14px;}
+.pack-btn{
+  flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);
+  background:var(--s1);font-family:'Noto Sans JP',sans-serif;font-size:11px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  color:var(--muted2);transition:all 0.15s;
+}
+.pack-btn:active{opacity:0.7;}
+.pack-btn.prep{border-color:rgba(245,166,35,0.4);color:var(--prepared);background:rgba(245,166,35,0.06);}
+.pack-btn.pack{border-color:rgba(78,204,163,0.4);color:var(--packed);background:rgba(78,204,163,0.06);}
 
-  .checkbox {
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    border: 2px solid var(--surface2);
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.15s;
-    font-size: 12px;
-  }
-  .checkbox.prepared {
-    border-color: var(--accent2);
-    background: rgba(245,166,35,0.15);
-    color: var(--accent2);
-  }
-  .checkbox.packed {
-    border-color: var(--accent);
-    background: rgba(78,204,163,0.15);
-    color: var(--accent);
-  }
+/* pack item */
+.p-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  transition:opacity 0.2s;
+}
+.p-item:last-child{border-bottom:none;}
+.p-item.st-packed{opacity:0.38;}
+.p-check{
+  width:26px;height:26px;border-radius:8px;
+  border:2px solid var(--s3);background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;font-size:13px;font-weight:700;
+  transition:all 0.15s;
+}
+.p-check.st-prepared{border-color:var(--prepared);background:rgba(245,166,35,0.15);color:var(--prepared);}
+.p-check.st-packed{border-color:var(--packed);background:rgba(78,204,163,0.15);color:var(--packed);}
+.p-info{flex:1;min-width:0;}
+.p-name{font-size:14px;line-height:1.3;}
+.p-item.st-packed .p-name{text-decoration:line-through;}
+.p-detail{font-size:10px;color:var(--muted);margin-top:1px;}
+.p-status-tag{
+  font-size:10px;letter-spacing:1px;
+  padding:3px 8px;border-radius:20px;flex-shrink:0;cursor:pointer;
+  border:1px solid var(--border);color:var(--muted);background:var(--s2);
+  font-family:'Noto Sans JP',sans-serif;transition:all 0.15s;
+}
+.p-status-tag.st-prepared{border-color:rgba(245,166,35,0.4);color:var(--prepared);background:rgba(245,166,35,0.08);}
+.p-status-tag.st-packed{border-color:rgba(78,204,163,0.4);color:var(--packed);background:rgba(78,204,163,0.08);}
 
-  .item-info { flex: 1; min-width: 0; }
-  .item-name {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
-  }
-  .item-note {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 1px;
-  }
-  .item-status-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3px 9px;
-    font-size: 10px;
-    color: var(--muted);
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-family: 'Noto Sans JP', sans-serif;
-    transition: all 0.15s;
-  }
-  .item-status-btn.prepared {
-    border-color: var(--accent2);
-    color: var(--accent2);
-    background: rgba(245,166,35,0.1);
-  }
-  .item-status-btn.packed {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(78,204,163,0.1);
-  }
+/* ── SELECT SCREEN ── */
+.sel-intro{
+  background:var(--s1);border-radius:14px;border:1px solid var(--border);
+  padding:14px;margin-bottom:14px;
+}
+.sel-intro-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:2px;color:var(--acc2);margin-bottom:4px;}
+.sel-intro-text{font-size:11px;color:var(--muted2);line-height:1.6;}
+.sel-count{font-size:11px;color:var(--acc);margin-top:6px;font-weight:700;}
 
-  /* ── FLOATING ADD ── */
-  .fab {
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    font-size: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 24px rgba(78,204,163,0.4);
-    z-index: 200;
-    transition: transform 0.15s;
-  }
-  .fab:active { transform: scale(0.93); }
+.sel-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+}
+.sel-item:last-child{border-bottom:none;}
+.sel-check{
+  width:24px;height:24px;border-radius:7px;
+  border:2px solid var(--s3);background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;flex-shrink:0;transition:all 0.15s;
+}
+.sel-check.on{border-color:var(--acc2);background:rgba(255,107,53,0.15);color:var(--acc2);}
+.sel-item-name{font-size:13px;font-weight:500;flex:1;}
+.sel-item-detail{font-size:10px;color:var(--muted);margin-top:1px;}
 
-  /* ── MODAL ── */
-  .overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 300;
-    display: none;
-    align-items: flex-end;
-  }
-  .overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: 20px 20px 0 0;
-    padding: 20px 20px 40px;
-    width: 100%;
-    border-top: 1px solid var(--border);
-  }
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    margin-bottom: 16px;
-    color: var(--accent);
-  }
-  .modal input, .modal select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: var(--text);
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
-    margin-bottom: 10px;
-    outline: none;
-  }
-  .modal input:focus, .modal select:focus {
-    border-color: var(--accent);
-  }
-  .modal-btns { display: flex; gap: 8px; margin-top: 4px; }
-  .btn-cancel {
-    flex: 1; padding: 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--muted);
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
-    cursor: pointer;
-  }
-  .btn-add {
-    flex: 2; padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: var(--accent);
-    color: #000;
-    font-size: 14px;
-    font-weight: 700;
-    font-family: 'Noto Sans JP', sans-serif;
-    cursor: pointer;
-  }
+.btn-start-trip{
+  width:100%;padding:16px;border-radius:14px;border:none;
+  background:var(--acc2);color:#fff;
+  font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:3px;
+  cursor:pointer;margin-top:14px;transition:opacity 0.15s;
+}
+.btn-start-trip:active{opacity:0.8;}
 
-  /* ── EMPTY ── */
-  .empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-  .empty-icon { font-size: 40px; margin-bottom: 10px; }
+/* MODALS */
+.modal-overlay{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,0.75);
+  display:none;align-items:flex-end;
+}
+.modal-overlay.open{display:flex;}
+.modal-sheet{
+  background:var(--s1);border-radius:22px 22px 0 0;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+  width:100%;border-top:1px solid var(--border2);
+  animation:slideUp 0.25s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px;}
+.modal-sheet input,.modal-sheet select,.modal-sheet textarea{
+  width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:10px;
+  padding:12px 14px;color:var(--text);font-size:14px;font-family:'Noto Sans JP',sans-serif;
+  margin-bottom:10px;outline:none;
+}
+.modal-sheet input:focus,.modal-sheet select:focus{border-color:var(--acc);}
+select option{background:var(--s2);}
+.modal-btns{display:flex;gap:8px;}
+.btn-cancel{flex:1;padding:13px;border-radius:10px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:14px;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
+.btn-confirm{flex:2;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#000;font-size:14px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
 
-  select option { background: var(--surface2); }
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-state-icon{font-size:44px;margin-bottom:10px;}
+.empty-state-text{font-size:12px;letter-spacing:1px;line-height:1.8;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--s2);border:1px solid var(--border2);border-radius:20px;
+  padding:8px 18px;font-size:12px;color:var(--text);
+  opacity:0;transition:all 0.3s;pointer-events:none;z-index:400;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* SECTION LABEL */
+.section-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;font-weight:700;}
 </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <div class="logo">PACK</div>
-    <div class="logo-sub">持ち物リスト</div>
-  </div>
-  <div class="header-right">
-    <button class="btn-reset-all" onclick="resetAll()">全リセット</button>
-  </div>
-</header>
-
-<!-- TABS -->
-<div class="tabs-wrapper">
-  <div class="tabs" id="tabs"></div>
+<div class="app-header">
+  <div class="logo-mark">GEAR</div>
+  <div class="header-trip-name" id="headerTripName">持ち物リスト</div>
+  <div class="header-mode-badge" id="headerModeBadge">HOME</div>
 </div>
 
-<!-- PANELS -->
-<div id="panels"></div>
+<!-- SCREENS -->
+<!-- 0: HOME (trip select) -->
+<div class="screen active" id="screen-home">
+  <div class="screen-title">MY TRIPS</div>
+  <div class="screen-sub">旅行タイプを選択</div>
+  <div class="trip-grid" id="tripGrid"></div>
+</div>
 
-<!-- FAB -->
-<button class="fab" onclick="openModal()">＋</button>
+<!-- 1: MASTER (gear registry) -->
+<div class="screen" id="screen-master">
+  <div class="master-header">
+    <div class="master-title" id="masterTitle">MASTER</div>
+    <button class="btn-sm accent" onclick="openAddCatModal()">＋ カテゴリ</button>
+  </div>
+  <div id="masterCats"></div>
+</div>
 
-<!-- MODAL -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modal-title">アイテム追加</div>
-    <input type="text" id="new-item-name" placeholder="アイテム名">
-    <input type="text" id="new-item-note" placeholder="メモ（任意）">
-    <select id="new-item-trip"></select>
-    <select id="new-item-cat"></select>
+<!-- 2: SELECT (choose items for this trip) -->
+<div class="screen" id="screen-select">
+  <div class="sel-intro">
+    <div class="sel-intro-title">▶ 今回の持ち物を選択</div>
+    <div class="sel-intro-text">マスターリストから今回持っていくものを選んでください。選んだアイテムだけがパッキングリストになります。</div>
+    <div class="sel-count" id="selCount">0 アイテム選択中</div>
+  </div>
+  <div id="selectCats"></div>
+  <button class="btn-start-trip" onclick="startTrip()">✓ このリストでパッキング開始</button>
+  <div style="height:20px"></div>
+</div>
+
+<!-- 3: PACK (status management) -->
+<div class="screen" id="screen-pack">
+  <div class="pack-hero">
+    <div class="pack-progress-ring">
+      <svg width="64" height="64" viewBox="0 0 64 64">
+        <circle fill="none" stroke="var(--s3)" stroke-width="5" cx="32" cy="32" r="26"/>
+        <circle id="packRingFill" fill="none" stroke="var(--packed)" stroke-width="5"
+          cx="32" cy="32" r="26" stroke-linecap="round"
+          stroke-dasharray="163.4" stroke-dashoffset="163.4" transition="stroke-dashoffset 0.5s"/>
+      </svg>
+      <div class="pack-pct" id="packPct">0%</div>
+    </div>
+    <div class="pack-stats">
+      <div class="pack-stat-row">
+        <div class="pack-stat"><div class="pack-stat-num" id="statTotal">0</div><div class="pack-stat-label">TOTAL</div></div>
+        <div class="pack-stat"><div class="pack-stat-num c-prep" id="statPrep">0</div><div class="pack-stat-label">READY</div></div>
+        <div class="pack-stat"><div class="pack-stat-num c-pack" id="statPacked">0</div><div class="pack-stat-label">PACKED</div></div>
+      </div>
+      <div style="height:1px;background:var(--border);margin:6px 0;"></div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TAP → 用意済み → 詰完 → リセット</div>
+    </div>
+  </div>
+  <div class="pack-actions">
+    <button class="pack-btn prep" onclick="bulkPackStatus('prepared')">🟡 全て用意済み</button>
+    <button class="pack-btn pack" onclick="bulkPackStatus('packed')">✅ 全て詰完</button>
+    <button class="pack-btn" onclick="bulkPackStatus('none')">↺ リセット</button>
+  </div>
+  <div id="packCats"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="goScreen('home')">
+    <span class="ni">🗺️</span>HOME
+  </button>
+  <button class="nav-btn" id="nav-master" onclick="goScreen('master')">
+    <span class="ni">📋</span>MASTER
+  </button>
+  <button class="nav-btn" id="nav-select" onclick="goScreen('select')">
+    <span class="ni">☑️</span>SELECT
+  </button>
+  <button class="nav-btn" id="nav-pack" onclick="goScreen('pack')">
+    <span class="ni">🎒</span>PACK
+  </button>
+</div>
+
+<!-- MODAL: Add Category -->
+<div class="modal-overlay" id="modalCat">
+  <div class="modal-sheet">
+    <div class="modal-title">カテゴリ追加</div>
+    <input type="text" id="newCatIcon" placeholder="アイコン（絵文字 例: 🧥）" maxlength="2">
+    <input type="text" id="newCatName" placeholder="カテゴリ名">
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-      <button class="btn-add" onclick="addItem()">追加</button>
+      <button class="btn-cancel" onclick="closeModal('modalCat')">キャンセル</button>
+      <button class="btn-confirm" onclick="addCategory()">追加</button>
     </div>
   </div>
 </div>
 
+<!-- MODAL: Add Item -->
+<div class="modal-overlay" id="modalItem">
+  <div class="modal-sheet">
+    <div class="modal-title">アイテム追加</div>
+    <input type="text" id="newItemName" placeholder="アイテム名（例: NorthFace雪山用30L）">
+    <input type="text" id="newItemDetail" placeholder="詳細メモ（任意）">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('modalItem')">キャンセル</button>
+      <button class="btn-confirm" onclick="addItem()">追加</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ─── DATA ───────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// TRIPS CONFIG
+// ═══════════════════════════════════════════════════
 const TRIPS = [
-  { id: 'hiking',       label: '登山',        icon: '⛰️',  color: '#4ecca3' },
-  { id: 'snowhike',     label: '雪山登山',    icon: '🏔️',  color: '#89d4f5' },
-  { id: 'yamagata',     label: 'ひろ山形',    icon: '🏠',  color: '#f5a623' },
-  { id: 'tokyo',        label: '東京滞在',    icon: '🗼',  color: '#c084fc' },
-  { id: 'sendai',       label: '仙台出張',    icon: '💼',  color: '#fb923c' },
-  { id: 'onenight',     label: '一泊旅行',    icon: '🌙',  color: '#f472b6' },
+  {id:'hiking',   name:'登山',      icon:'⛰️',  color:'#4ecca3'},
+  {id:'snow',     name:'雪山登山',  icon:'🏔️',  color:'#89d4f5'},
+  {id:'yamagata', name:'ひろ山形',  icon:'🏠',  color:'#f5a623'},
+  {id:'tokyo',    name:'東京滞在',  icon:'🗼',  color:'#c084fc'},
+  {id:'sendai',   name:'仙台出張',  icon:'💼',  color:'#fb923c'},
+  {id:'onenight', name:'一泊旅行',  icon:'🌙',  color:'#f472b6'},
 ];
 
-const CATEGORIES = {
-  hiking: [
-    { id: 'clothing',  icon: '👕', name: '衣類・装備' },
-    { id: 'gear',      icon: '🎒', name: 'ギア・道具' },
-    { id: 'food',      icon: '🍙', name: '食料・水' },
-    { id: 'safety',    icon: '🛡️', name: '安全・緊急' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-  snowhike: [
-    { id: 'clothing',  icon: '🧥', name: '防寒衣類' },
-    { id: 'gear',      icon: '⛏️', name: '雪山ギア' },
-    { id: 'food',      icon: '🍙', name: '食料・水' },
-    { id: 'safety',    icon: '🛡️', name: '安全・緊急' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-  yamagata: [
-    { id: 'daily',     icon: '🏠', name: '日常用品' },
-    { id: 'hunt',      icon: '🦌', name: '狩猟関連' },
-    { id: 'work',      icon: '💻', name: '仕事道具' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-  tokyo: [
-    { id: 'clothing',  icon: '👔', name: '衣類' },
-    { id: 'work',      icon: '💻', name: '仕事道具' },
-    { id: 'personal',  icon: '🪥', name: '個人用品' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-  sendai: [
-    { id: 'work',      icon: '💼', name: '仕事道具' },
-    { id: 'clothing',  icon: '👔', name: '衣類' },
-    { id: 'personal',  icon: '🪥', name: '個人用品' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-  onenight: [
-    { id: 'clothing',  icon: '👕', name: '衣類' },
-    { id: 'personal',  icon: '🪥', name: '個人用品' },
-    { id: 'gadget',    icon: '🔌', name: 'ガジェット' },
-    { id: 'other',     icon: '📦', name: 'その他' },
-  ],
-};
-
-const DEFAULT_ITEMS = {
-  hiking: {
-    clothing: [
-      { name: 'ベースレイヤー（速乾）', note: '替えも1枚' },
-      { name: 'ミドルレイヤー（フリース）' },
-      { name: 'ハードシェル（レインウェア）' },
-      { name: '登山パンツ' },
-      { name: 'ウールソックス', note: '厚手' },
-      { name: 'グローブ' },
-      { name: 'ハット / ビーニー' },
-      { name: 'ゲイター' },
-      { name: '登山靴（紐チェック済み）' },
-    ],
-    gear: [
-      { name: 'ザック（30〜40L）' },
-      { name: 'レインカバー' },
-      { name: 'トレッキングポール' },
-      { name: 'ヘッドランプ＋予備電池' },
-      { name: 'コンパス＋地図' },
-      { name: 'サングラス' },
-      { name: 'サンスクリーン' },
-      { name: '虫除けスプレー' },
-    ],
-    food: [
-      { name: '行動食（ナッツ・バー等）' },
-      { name: '昼食（弁当・レトルト）' },
-      { name: 'ハイドレーション / 水筒', note: '最低1.5L' },
-      { name: 'ガスバーナー＋クッカー', note: '日帰りは不要' },
-    ],
-    safety: [
-      { name: '救急キット' },
-      { name: 'エマージェンシーブランケット' },
-      { name: '笛' },
-      { name: 'モバイルバッテリー' },
-      { name: '登山計画書（提出済み）' },
-    ],
-    other: [
-      { name: 'スマートフォン＋充電器' },
-      { name: '財布・現金' },
-      { name: '保険証' },
-    ],
+// Default master categories & items per trip
+const DEFAULTS = {
+  hiking:{
+    cats:[
+      {id:'c1',icon:'🎒',name:'バックパック',items:[
+        {id:'i1',name:'NorthFace 登山用 30L',detail:'メイン'},
+        {id:'i2',name:'Monbell 青 30L',detail:'サブ'},
+      ]},
+      {id:'c2',icon:'👕',name:'衣類・レイヤリング',items:[
+        {id:'i3',name:'ウールベースレイヤー上',detail:'速乾'},
+        {id:'i4',name:'ベースレイヤー下'},
+        {id:'i5',name:'ミッドレイヤー フリース'},
+        {id:'i6',name:'ハードシェル ジャケット'},
+        {id:'i7',name:'登山パンツ'},
+        {id:'i8',name:'ウールソックス 厚手',detail:'2足'},
+      ]},
+      {id:'c3',icon:'👟',name:'フットウェア',items:[
+        {id:'i9',name:'登山靴 SALOMON',detail:'紐チェック要'},
+        {id:'i10',name:'サンダル（テント場用）'},
+      ]},
+      {id:'c4',icon:'⚙️',name:'ギア・道具',items:[
+        {id:'i11',name:'トレッキングポール',detail:'2本'},
+        {id:'i12',name:'ヘッドランプ',detail:'PETZL'},
+        {id:'i13',name:'予備電池 単三',detail:'2本'},
+        {id:'i14',name:'コンパス'},
+        {id:'i15',name:'地図（紙）'},
+        {id:'i16',name:'サングラス'},
+        {id:'i17',name:'レインカバー'},
+      ]},
+      {id:'c5',icon:'🍙',name:'食料・水',items:[
+        {id:'i18',name:'行動食（ナッツ・バー）'},
+        {id:'i19',name:'昼食'},
+        {id:'i20',name:'ハイドレーション 1.5L'},
+        {id:'i21',name:'ガスバーナー',detail:'日帰り不要'},
+        {id:'i22',name:'クッカー',detail:'日帰り不要'},
+      ]},
+      {id:'c6',icon:'🛡️',name:'安全・緊急',items:[
+        {id:'i23',name:'救急キット'},
+        {id:'i24',name:'エマージェンシーブランケット'},
+        {id:'i25',name:'笛'},
+        {id:'i26',name:'登山計画書'},
+      ]},
+      {id:'c7',icon:'📱',name:'ガジェット・貴重品',items:[
+        {id:'i27',name:'スマートフォン'},
+        {id:'i28',name:'モバイルバッテリー'},
+        {id:'i29',name:'充電ケーブル'},
+        {id:'i30',name:'財布・現金'},
+        {id:'i31',name:'保険証'},
+      ]},
+    ]
   },
-  snowhike: {
-    clothing: [
-      { name: 'ウールベースレイヤー' },
-      { name: 'ミッドレイヤー（厚手フリース）' },
-      { name: '防水ハードシェル上下' },
-      { name: 'インサレーション（ダウン）' },
-      { name: 'ウールソックス（厚手）', note: '2枚重ね推奨' },
-      { name: '防水グローブ＋インナーグローブ' },
-      { name: 'バラクラバ（目出し帽）' },
-      { name: 'ゴーグル' },
-      { name: '冬山用登山靴' },
-      { name: 'スパッツ（ロング）' },
-    ],
-    gear: [
-      { name: 'アイゼン（10本爪以上）' },
-      { name: 'ピッケル' },
-      { name: 'ヘルメット' },
-      { name: 'ヘッドランプ＋予備電池（リチウム）' },
-      { name: 'スノーシュー / ワカン', note: '状況により' },
-      { name: 'アバランチビーコン（ビーコン）' },
-      { name: 'プローブ（ゾンデ棒）' },
-      { name: 'ショベル（スコップ）' },
-    ],
-    food: [
-      { name: '行動食（凍らないもの）', note: 'ジェル・ナッツ' },
-      { name: '魔法瓶（温かい飲み物）' },
-      { name: 'ガスバーナー＋冬用ガスカートリッジ' },
-    ],
-    safety: [
-      { name: '救急キット（凍結対策済み）' },
-      { name: 'エマージェンシーブランケット' },
-      { name: 'ツェルト（緊急ビバーク用）' },
-      { name: 'モバイルバッテリー（防寒）' },
-      { name: '登山計画書（提出済み）' },
-    ],
-    other: [
-      { name: '日焼け止め（SPF50+）', note: '雪焼け注意' },
-      { name: 'リップクリーム' },
-      { name: 'スマートフォン＋充電器' },
-    ],
+  snow:{
+    cats:[
+      {id:'c1',icon:'🎒',name:'バックパック',items:[
+        {id:'i1',name:'NorthFace 雪山用 35L',detail:'メイン'},
+        {id:'i2',name:'Hyperlite 40L',detail:'ビッグデイ用'},
+      ]},
+      {id:'c2',icon:'🧥',name:'防寒衣類',items:[
+        {id:'i3',name:'ウールベースレイヤー 厚手'},
+        {id:'i4',name:'ミッドレイヤー 厚手フリース'},
+        {id:'i5',name:'防水ハードシェル上下'},
+        {id:'i6',name:'ダウンジャケット'},
+        {id:'i7',name:'ウールソックス 極厚',detail:'2枚重ね'},
+        {id:'i8',name:'防水グローブ'},
+        {id:'i9',name:'インナーグローブ'},
+        {id:'i10',name:'バラクラバ'},
+        {id:'i11',name:'ゴーグル'},
+      ]},
+      {id:'c3',icon:'👟',name:'フットウェア',items:[
+        {id:'i12',name:'冬山用登山靴',detail:'プラブーツ'},
+        {id:'i13',name:'スパッツ ロング'},
+      ]},
+      {id:'c4',icon:'⛏️',name:'雪山ギア',items:[
+        {id:'i14',name:'アイゼン 12本爪'},
+        {id:'i15',name:'ピッケル'},
+        {id:'i16',name:'ヘルメット'},
+        {id:'i17',name:'アバランチビーコン'},
+        {id:'i18',name:'プローブ（ゾンデ棒）'},
+        {id:'i19',name:'ショベル'},
+        {id:'i20',name:'ワカン'},
+        {id:'i21',name:'ヘッドランプ（リチウム電池）'},
+      ]},
+      {id:'c5',icon:'🍶',name:'食料・水',items:[
+        {id:'i22',name:'魔法瓶（温かい飲み物）'},
+        {id:'i23',name:'行動食（凍らないもの）'},
+        {id:'i24',name:'冬用ガスカートリッジ'},
+        {id:'i25',name:'バーナー'},
+      ]},
+      {id:'c6',icon:'🛡️',name:'安全・緊急',items:[
+        {id:'i26',name:'救急キット'},
+        {id:'i27',name:'ツェルト'},
+        {id:'i28',name:'エマージェンシーブランケット'},
+        {id:'i29',name:'登山計画書'},
+      ]},
+      {id:'c7',icon:'📱',name:'ガジェット・貴重品',items:[
+        {id:'i30',name:'スマートフォン'},
+        {id:'i31',name:'モバイルバッテリー（防寒）'},
+        {id:'i32',name:'充電ケーブル'},
+        {id:'i33',name:'財布・現金'},
+      ]},
+    ]
   },
-  yamagata: {
-    daily: [
-      { name: '着替え（日数分）' },
-      { name: 'パジャマ' },
-      { name: '洗面用具（歯ブラシ等）' },
-      { name: 'シャンプー・ボディソープ' },
-      { name: 'タオル' },
-      { name: '室内着・スリッパ' },
-    ],
-    hunt: [
-      { name: '狩猟免許テキスト' },
-      { name: '問題集' },
-      { name: 'ノート・筆記用具' },
-      { name: '猟友会関連書類' },
-    ],
-    work: [
-      { name: 'MacBook' },
-      { name: '充電器・ケーブル類' },
-      { name: 'モバイルバッテリー' },
-      { name: 'イヤホン' },
-    ],
-    other: [
-      { name: '鍵（家・車）' },
-      { name: '財布・現金' },
-      { name: '常備薬' },
-    ],
+  yamagata:{
+    cats:[
+      {id:'c1',icon:'👕',name:'衣類',items:[
+        {id:'i1',name:'着替え 上下',detail:'日数分'},
+        {id:'i2',name:'パジャマ・部屋着'},
+        {id:'i3',name:'下着・ソックス',detail:'予備込み'},
+        {id:'i4',name:'アウター'},
+      ]},
+      {id:'c2',icon:'🦌',name:'狩猟関連',items:[
+        {id:'i5',name:'狩猟免許テキスト'},
+        {id:'i6',name:'問題集'},
+        {id:'i7',name:'ノート・筆記用具'},
+        {id:'i8',name:'猟友会 書類'},
+        {id:'i9',name:'申請書類一式'},
+      ]},
+      {id:'c3',icon:'💻',name:'仕事・ガジェット',items:[
+        {id:'i10',name:'MacBook'},
+        {id:'i11',name:'充電器'},
+        {id:'i12',name:'モバイルバッテリー'},
+        {id:'i13',name:'イヤホン'},
+        {id:'i14',name:'ケーブル類'},
+      ]},
+      {id:'c4',icon:'🪥',name:'洗面・日用品',items:[
+        {id:'i15',name:'歯ブラシ・歯磨き粉'},
+        {id:'i16',name:'シャンプー'},
+        {id:'i17',name:'ボディソープ'},
+        {id:'i18',name:'タオル'},
+        {id:'i19',name:'常備薬'},
+      ]},
+      {id:'c5',icon:'🔑',name:'貴重品',items:[
+        {id:'i20',name:'鍵（家・車）'},
+        {id:'i21',name:'財布・現金'},
+        {id:'i22',name:'保険証'},
+      ]},
+    ]
   },
-  tokyo: {
-    clothing: [
-      { name: 'シャツ（日数分）' },
-      { name: 'アウター' },
-      { name: 'ズボン・スカート' },
-      { name: '着替え下着・ソックス' },
-    ],
-    work: [
-      { name: 'MacBook＋充電器' },
-      { name: '名刺' },
-      { name: 'ノート・ペン' },
-      { name: 'モバイルバッテリー' },
-    ],
-    personal: [
-      { name: '洗面用具' },
-      { name: '薬（常備）' },
-      { name: 'スキンケア用品' },
-    ],
-    other: [
-      { name: 'Suica / 交通系IC' },
-      { name: '財布・現金' },
-      { name: 'スマートフォン＋充電器' },
-    ],
+  tokyo:{
+    cats:[
+      {id:'c1',icon:'👔',name:'衣類',items:[
+        {id:'i1',name:'シャツ・トップス',detail:'日数分'},
+        {id:'i2',name:'ボトムス'},
+        {id:'i3',name:'下着・ソックス'},
+        {id:'i4',name:'アウター'},
+      ]},
+      {id:'c2',icon:'💻',name:'仕事道具',items:[
+        {id:'i5',name:'MacBook＋充電器'},
+        {id:'i6',name:'名刺'},
+        {id:'i7',name:'ノート・ペン'},
+        {id:'i8',name:'モバイルバッテリー'},
+      ]},
+      {id:'c3',icon:'🪥',name:'個人用品',items:[
+        {id:'i9',name:'洗面用具'},
+        {id:'i10',name:'スキンケア'},
+        {id:'i11',name:'常備薬'},
+      ]},
+      {id:'c4',icon:'💳',name:'貴重品',items:[
+        {id:'i12',name:'Suica / 交通系IC'},
+        {id:'i13',name:'財布・現金'},
+        {id:'i14',name:'スマートフォン'},
+      ]},
+    ]
   },
-  sendai: {
-    work: [
-      { name: 'MacBook＋充電器' },
-      { name: '名刺' },
-      { name: '提案資料（印刷済み）' },
-      { name: 'ノート・ペン' },
-      { name: 'モバイルバッテリー' },
-    ],
-    clothing: [
-      { name: 'スーツ / ビジネス服' },
-      { name: 'ワイシャツ（予備1枚）' },
-      { name: 'ネクタイ', note: '必要な場合' },
-      { name: '革靴 / ビジネスシューズ' },
-      { name: '着替え下着・ソックス' },
-    ],
-    personal: [
-      { name: '洗面用具（ホテル確認）' },
-      { name: '常備薬' },
-      { name: '耳栓', note: '宿泊時' },
-    ],
-    other: [
-      { name: 'Suica / 交通系IC' },
-      { name: '財布・領収書ファイル' },
-      { name: 'スマートフォン＋充電器' },
-    ],
+  sendai:{
+    cats:[
+      {id:'c1',icon:'💼',name:'仕事道具',items:[
+        {id:'i1',name:'MacBook＋充電器'},
+        {id:'i2',name:'名刺'},
+        {id:'i3',name:'提案資料（印刷）'},
+        {id:'i4',name:'ノート・ペン'},
+        {id:'i5',name:'モバイルバッテリー'},
+      ]},
+      {id:'c2',icon:'👔',name:'ビジネス衣類',items:[
+        {id:'i6',name:'スーツ上下'},
+        {id:'i7',name:'ワイシャツ',detail:'予備1枚'},
+        {id:'i8',name:'ネクタイ'},
+        {id:'i9',name:'革靴'},
+        {id:'i10',name:'下着・ソックス'},
+      ]},
+      {id:'c3',icon:'🪥',name:'個人用品',items:[
+        {id:'i11',name:'洗面用具'},
+        {id:'i12',name:'常備薬'},
+        {id:'i13',name:'耳栓'},
+      ]},
+      {id:'c4',icon:'💳',name:'貴重品',items:[
+        {id:'i14',name:'Suica / 交通系IC'},
+        {id:'i15',name:'財布・領収書ファイル'},
+        {id:'i16',name:'スマートフォン'},
+      ]},
+    ]
   },
-  onenight: {
-    clothing: [
-      { name: '着替え1セット（上下）' },
-      { name: '下着・ソックス（予備）' },
-      { name: 'パジャマ / 部屋着' },
-    ],
-    personal: [
-      { name: '歯ブラシ・歯磨き粉' },
-      { name: '洗顔・スキンケア' },
-      { name: 'ヘアケア用品' },
-      { name: '常備薬' },
-    ],
-    gadget: [
-      { name: 'スマートフォン＋充電器' },
-      { name: 'モバイルバッテリー' },
-      { name: 'イヤホン / AirPods' },
-    ],
-    other: [
-      { name: '財布・現金' },
-      { name: 'Suica / 交通系IC' },
-      { name: '鍵' },
-    ],
+  onenight:{
+    cats:[
+      {id:'c1',icon:'👕',name:'衣類',items:[
+        {id:'i1',name:'着替え 上下 1セット'},
+        {id:'i2',name:'パジャマ・部屋着'},
+        {id:'i3',name:'下着・ソックス 予備'},
+      ]},
+      {id:'c2',icon:'🪥',name:'個人用品',items:[
+        {id:'i4',name:'歯ブラシ・歯磨き粉'},
+        {id:'i5',name:'洗顔・スキンケア'},
+        {id:'i6',name:'ヘアケア'},
+        {id:'i7',name:'常備薬'},
+      ]},
+      {id:'c3',icon:'🔌',name:'ガジェット',items:[
+        {id:'i8',name:'スマートフォン＋充電器'},
+        {id:'i9',name:'モバイルバッテリー'},
+        {id:'i10',name:'イヤホン / AirPods'},
+      ]},
+      {id:'c4',icon:'💳',name:'貴重品',items:[
+        {id:'i11',name:'財布・現金'},
+        {id:'i12',name:'Suica / 交通系IC'},
+        {id:'i13',name:'鍵'},
+      ]},
+    ]
   },
 };
 
-// ─── STATE ──────────────────────────────────────────────────
-const LS_KEY = 'packlist_v1';
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+const LS = 'gear_v2';
 let state = loadState();
+let curTrip = 'hiking';
+let curScreen = 'home';
+let addItemTargetCat = null;
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem(LS_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  // init
+function loadState(){
+  try{
+    const s = localStorage.getItem(LS);
+    if(s) return JSON.parse(s);
+  }catch(e){}
+  return initState();
+}
+
+function initState(){
   const s = {};
   TRIPS.forEach(t => {
-    s[t.id] = {};
-    Object.entries(DEFAULT_ITEMS[t.id] || {}).forEach(([catId, items]) => {
-      s[t.id][catId] = items.map((item, i) => ({
-        id: `${t.id}_${catId}_${i}`,
-        name: item.name,
-        note: item.note || '',
-        status: 'none', // none | prepared | packed
-      }));
-    });
+    const def = DEFAULTS[t.id];
+    s[t.id] = {
+      master: JSON.parse(JSON.stringify(def.cats)),
+      // selected: array of item ids chosen for current trip
+      selected: [],
+      // packStatus: {itemId: 'none'|'prepared'|'packed'}
+      packStatus: {},
+    };
   });
   return s;
 }
 
-function saveState() {
-  localStorage.setItem(LS_KEY, JSON.stringify(state));
+function save(){localStorage.setItem(LS, JSON.stringify(state));}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function goScreen(name){
+  curScreen = name;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+  updateHeader();
+
+  if(name==='master') renderMaster();
+  if(name==='select') renderSelect();
+  if(name==='pack') renderPack();
+  if(name==='home') renderHome();
 }
 
-// ─── RENDER ─────────────────────────────────────────────────
-let activeTrip = TRIPS[0].id;
-
-function init() {
-  renderTabs();
-  renderPanels();
-  updateAllBadges();
+function selectTrip(tid){
+  curTrip = tid;
+  renderHome();
+  setTimeout(()=>goScreen('master'),80);
 }
 
-function renderTabs() {
-  const container = document.getElementById('tabs');
-  container.innerHTML = TRIPS.map(t => `
-    <div class="tab ${t.id === activeTrip ? 'active' : ''}" onclick="switchTab('${t.id}')">
-      <span class="tab-icon">${t.icon}</span>
-      <span class="tab-label">${t.label}</span>
-      <span class="tab-badge" id="badge_${t.id}"></span>
-    </div>
-  `).join('');
+function updateHeader(){
+  const trip = TRIPS.find(t=>t.id===curTrip);
+  document.getElementById('headerTripName').textContent = trip ? trip.icon+' '+trip.name : '持ち物リスト';
+  const badge = document.getElementById('headerModeBadge');
+  const modeMap = {home:'HOME',master:'MASTER',select:'SELECT',pack:'PACK'};
+  badge.textContent = modeMap[curScreen]||'';
+  badge.className = 'header-mode-badge' + (curScreen==='pack'?' pack':'');
 }
 
-function renderPanels() {
-  const container = document.getElementById('panels');
-  container.innerHTML = TRIPS.map(t => `
-    <div class="panel ${t.id === activeTrip ? 'active' : ''}" id="panel_${t.id}">
-      ${renderPanel(t)}
-    </div>
-  `).join('');
+// ═══════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════
+function renderHome(){
+  const grid = document.getElementById('tripGrid');
+  grid.innerHTML = TRIPS.map(t=>{
+    const ts = state[t.id];
+    const total = ts.selected.length;
+    const packed = ts.selected.filter(id => ts.packStatus[id]==='packed').length;
+    const pct = total ? Math.round(packed/total*100) : 0;
+    const isActive = t.id===curTrip;
+    return `<div class="trip-card ${isActive?'selected':''}" onclick="selectTrip('${t.id}')">
+      <div class="trip-card-dot"></div>
+      <div class="trip-card-icon">${t.icon}</div>
+      <div class="trip-card-name">${t.name}</div>
+      <div class="trip-card-sub">${total>0?total+'点選択中 / 詰完'+packed+'点':'マスター未設定'}</div>
+      <div class="trip-card-progress"><div class="trip-card-progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
 }
 
-function renderPanel(trip) {
-  const cats = CATEGORIES[trip.id] || [];
-  const items_by_cat = state[trip.id] || {};
-  const allItems = Object.values(items_by_cat).flat();
-  const total = allItems.length;
-  const packed = allItems.filter(i => i.status === 'packed').length;
-  const prepared = allItems.filter(i => i.status === 'prepared').length;
-  const pct = total ? Math.round(packed / total * 100) : 0;
-  const r = 22, circ = 2 * Math.PI * r;
-  const dash = circ - (pct / 100 * circ);
-
-  return `
-    <div class="panel-header">
-      <div>
-        <div class="panel-title" style="color:${trip.color}">${trip.icon} ${trip.label}</div>
-        <div class="panel-subtitle">全${total}点 / 詰完 ${packed}点 / 準備済 ${prepared}点</div>
-      </div>
-      <div class="panel-actions">
-        <div class="progress-ring-wrap">
-          <svg width="56" height="56" viewBox="0 0 56 56">
-            <circle class="progress-track" cx="28" cy="28" r="${r}"/>
-            <circle class="progress-fill" cx="28" cy="28" r="${r}"
-              stroke="${trip.color}"
-              stroke-dasharray="${circ}"
-              stroke-dashoffset="${dash}"/>
-          </svg>
-          <div class="progress-pct" style="color:${trip.color}">${pct}%</div>
+// ═══════════════════════════════════════════════════
+// MASTER
+// ═══════════════════════════════════════════════════
+function renderMaster(){
+  const trip = TRIPS.find(t=>t.id===curTrip);
+  document.getElementById('masterTitle').textContent = trip.icon+' '+trip.name;
+  const cats = state[curTrip].master;
+  document.getElementById('masterCats').innerHTML = cats.length===0
+    ? `<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">カテゴリがありません<br>右上の＋ボタンで追加</div></div>`
+    : cats.map((cat,ci)=>`
+      <div class="cat-block open" id="mc_${cat.id}">
+        <div class="cat-hd" onclick="toggleCat('mc_${cat.id}')">
+          <span class="cat-hd-icon">${cat.icon}</span>
+          <span class="cat-hd-name">${cat.name}</span>
+          <span class="cat-hd-count">${cat.items.length}点</span>
+          <button class="btn-sm" style="font-size:9px;padding:4px 8px;margin-right:6px" onclick="event.stopPropagation();deleteCat('${cat.id}')">削除</button>
+          <span class="cat-hd-arrow">▼</span>
+        </div>
+        <div class="cat-body">
+          <div class="cat-divider"></div>
+          ${cat.items.map(item=>`
+            <div class="m-item" id="mi_${item.id}">
+              <div class="m-item-icon">${cat.icon}</div>
+              <div class="m-item-info">
+                <div class="m-item-name">${item.name}</div>
+                ${item.detail?`<div class="m-item-detail">${item.detail}</div>`:''}
+              </div>
+              <div class="m-item-del" onclick="deleteItem('${cat.id}','${item.id}')">×</div>
+            </div>
+          `).join('')}
+          <div class="add-item-row">
+            <input type="text" id="addInput_${cat.id}" placeholder="アイテムを追加..." 
+              onkeydown="if(event.key==='Enter')quickAddItem('${cat.id}')">
+            <button class="btn-add-item" onclick="quickAddItem('${cat.id}')">+</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="status-strip">
-      <button class="status-btn prepared" onclick="bulkSetStatus('${trip.id}','prepared')">
-        🟡 全て用意済みに
-      </button>
-      <button class="status-btn packed" onclick="bulkSetStatus('${trip.id}','packed')">
-        ✅ 全て詰完に
-      </button>
-    </div>
-    ${cats.map(cat => {
-      const items = items_by_cat[cat.id] || [];
-      return `
-        <div class="category open" id="cat_${trip.id}_${cat.id}">
-          <div class="cat-header" onclick="toggleCat('${trip.id}','${cat.id}')">
-            <span class="cat-icon">${cat.icon}</span>
-            <span class="cat-name">${cat.name}</span>
-            <span class="cat-count">${items.filter(i=>i.status==='packed').length}/${items.length}</span>
-            <span class="cat-chevron">▼</span>
-          </div>
-          <div class="cat-body">
-            <div class="divider"></div>
-            ${items.length === 0 ? '<div class="empty" style="padding:10px 0;font-size:11px">アイテムがありません</div>' :
-              items.map(item => renderItem(item)).join('')}
-          </div>
-        </div>
-      `;
-    }).join('')}
-    <div style="height:80px"></div>
-  `;
+    `).join('');
 }
 
-function renderItem(item) {
-  const st = item.status;
-  const icon = st === 'packed' ? '✓' : st === 'prepared' ? '◐' : '';
-  const nextStatus = st === 'none' ? 'prepared' : st === 'prepared' ? 'packed' : 'none';
-  const nextLabel = st === 'none' ? '用意済み' : st === 'prepared' ? '荷物詰完' : 'リセット';
-  return `
-    <div class="item ${st === 'packed' ? 'done' : ''}" id="item_${item.id}">
-      <div class="checkbox ${st}" onclick="cycleStatus('${item.id}')">${icon}</div>
-      <div class="item-info">
-        <div class="item-name">${item.name}</div>
-        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
-      </div>
-      <button class="item-status-btn ${st}" onclick="cycleStatus('${item.id}')">${nextLabel}</button>
-    </div>
-  `;
+function toggleCat(elemId){
+  document.getElementById(elemId).classList.toggle('open');
 }
 
-// ─── ACTIONS ────────────────────────────────────────────────
-function switchTab(tripId) {
-  activeTrip = tripId;
-  document.querySelectorAll('.tab').forEach((el,i) => {
-    el.classList.toggle('active', TRIPS[i].id === tripId);
-  });
-  document.querySelectorAll('.panel').forEach(el => {
-    el.classList.toggle('active', el.id === `panel_${tripId}`);
-  });
-  // refresh panel
-  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(TRIPS.find(t=>t.id===tripId));
-  updateAllBadges();
+function quickAddItem(catId){
+  const inp = document.getElementById('addInput_'+catId);
+  const name = inp.value.trim();
+  if(!name) return;
+  const cat = state[curTrip].master.find(c=>c.id===catId);
+  if(!cat) return;
+  const id = 'i'+Date.now();
+  cat.items.push({id, name, detail:''});
+  save();
+  inp.value='';
+  renderMaster();
+  showToast('追加しました');
 }
 
-function toggleCat(tripId, catId) {
-  const el = document.getElementById(`cat_${tripId}_${catId}`);
-  el.classList.toggle('open');
+function deleteItem(catId, itemId){
+  const cat = state[curTrip].master.find(c=>c.id===catId);
+  if(!cat) return;
+  cat.items = cat.items.filter(i=>i.id!==itemId);
+  // remove from selected too
+  state[curTrip].selected = state[curTrip].selected.filter(id=>id!==itemId);
+  delete state[curTrip].packStatus[itemId];
+  save();
+  renderMaster();
 }
 
-function findItem(itemId) {
-  for (const tripId in state) {
-    for (const catId in state[tripId]) {
-      const arr = state[tripId][catId];
-      const idx = arr.findIndex(i => i.id === itemId);
-      if (idx !== -1) return { tripId, catId, idx, item: arr[idx] };
-    }
-  }
-  return null;
-}
-
-function cycleStatus(itemId) {
-  const found = findItem(itemId);
-  if (!found) return;
-  const { tripId, catId, idx } = found;
-  const cur = state[tripId][catId][idx].status;
-  const next = cur === 'none' ? 'prepared' : cur === 'prepared' ? 'packed' : 'none';
-  state[tripId][catId][idx].status = next;
-  saveState();
-  // partial re-render
-  const trip = TRIPS.find(t => t.id === tripId);
-  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
-  updateAllBadges();
-}
-
-function bulkSetStatus(tripId, status) {
-  const cats = state[tripId];
-  Object.keys(cats).forEach(catId => {
-    cats[catId].forEach(item => item.status = status);
-  });
-  saveState();
-  const trip = TRIPS.find(t => t.id === tripId);
-  document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
-  updateAllBadges();
-}
-
-function updateAllBadges() {
-  TRIPS.forEach(t => {
-    const allItems = Object.values(state[t.id] || {}).flat();
-    const undone = allItems.filter(i => i.status !== 'packed').length;
-    const badge = document.getElementById(`badge_${t.id}`);
-    if (badge) {
-      badge.textContent = undone;
-      badge.classList.toggle('visible', undone > 0);
-    }
-  });
-}
-
-function resetAll() {
-  if (!confirm('全リストのステータスをリセットしますか？')) return;
-  TRIPS.forEach(t => {
-    Object.keys(state[t.id] || {}).forEach(catId => {
-      state[t.id][catId].forEach(item => item.status = 'none');
+function deleteCat(catId){
+  if(!confirm('このカテゴリを削除しますか？')) return;
+  const cats = state[curTrip].master;
+  const cat = cats.find(c=>c.id===catId);
+  if(cat){
+    cat.items.forEach(item=>{
+      state[curTrip].selected = state[curTrip].selected.filter(id=>id!==item.id);
+      delete state[curTrip].packStatus[item.id];
     });
-  });
-  saveState();
-  const trip = TRIPS.find(t => t.id === activeTrip);
-  document.getElementById(`panel_${activeTrip}`).innerHTML = renderPanel(trip);
-  updateAllBadges();
-}
-
-// ─── ADD ITEM MODAL ──────────────────────────────────────────
-function openModal() {
-  // populate trip select
-  const tripSel = document.getElementById('new-item-trip');
-  tripSel.innerHTML = TRIPS.map(t => `<option value="${t.id}" ${t.id===activeTrip?'selected':''}>${t.icon} ${t.label}</option>`).join('');
-  populateCatSelect();
-  tripSel.onchange = populateCatSelect;
-  document.getElementById('new-item-name').value = '';
-  document.getElementById('new-item-note').value = '';
-  document.getElementById('overlay').classList.add('open');
-  document.getElementById('new-item-name').focus();
-}
-
-function populateCatSelect() {
-  const tripId = document.getElementById('new-item-trip').value;
-  const cats = CATEGORIES[tripId] || [];
-  document.getElementById('new-item-cat').innerHTML = cats.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
-}
-
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-}
-
-function addItem() {
-  const name = document.getElementById('new-item-name').value.trim();
-  if (!name) { alert('アイテム名を入力してください'); return; }
-  const tripId = document.getElementById('new-item-trip').value;
-  const catId = document.getElementById('new-item-cat').value;
-  const note = document.getElementById('new-item-note').value.trim();
-
-  if (!state[tripId][catId]) state[tripId][catId] = [];
-  const id = `${tripId}_${catId}_${Date.now()}`;
-  state[tripId][catId].push({ id, name, note, status: 'none' });
-  saveState();
-  closeModal();
-  if (activeTrip !== tripId) switchTab(tripId);
-  else {
-    const trip = TRIPS.find(t => t.id === tripId);
-    document.getElementById(`panel_${tripId}`).innerHTML = renderPanel(trip);
-    updateAllBadges();
   }
+  state[curTrip].master = cats.filter(c=>c.id!==catId);
+  save();
+  renderMaster();
 }
 
-// close overlay on bg click
-document.getElementById('overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
+function openAddCatModal(){
+  document.getElementById('newCatIcon').value='';
+  document.getElementById('newCatName').value='';
+  openModal('modalCat');
+}
+
+function addCategory(){
+  const icon = document.getElementById('newCatIcon').value.trim() || '📦';
+  const name = document.getElementById('newCatName').value.trim();
+  if(!name){alert('カテゴリ名を入力してください');return;}
+  state[curTrip].master.push({id:'c'+Date.now(), icon, name, items:[]});
+  save();
+  closeModal('modalCat');
+  renderMaster();
+  showToast('カテゴリを追加しました');
+}
+
+// ═══════════════════════════════════════════════════
+// SELECT
+// ═══════════════════════════════════════════════════
+function renderSelect(){
+  const ts = state[curTrip];
+  const cats = ts.master;
+  updateSelCount();
+  document.getElementById('selectCats').innerHTML = cats.map(cat=>`
+    <div class="section-label">${cat.icon} ${cat.name}</div>
+    <div class="cat-block open">
+      <div class="cat-body" style="padding-top:10px">
+        ${cat.items.length===0
+          ? '<div style="font-size:11px;color:var(--muted);padding:4px 0">アイテムがありません</div>'
+          : cat.items.map(item=>{
+              const on = ts.selected.includes(item.id);
+              return `<div class="sel-item" onclick="toggleSelect('${item.id}')">
+                <div class="sel-check ${on?'on':''}">${on?'✓':''}</div>
+                <div class="m-item-info">
+                  <div class="sel-item-name">${item.name}</div>
+                  ${item.detail?`<div class="sel-item-detail">${item.detail}</div>`:''}
+                </div>
+              </div>`;
+            }).join('')
+        }
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleSelect(itemId){
+  const sel = state[curTrip].selected;
+  const idx = sel.indexOf(itemId);
+  if(idx===-1) sel.push(itemId);
+  else sel.splice(idx,1);
+  save();
+  updateSelCount();
+  // re-render just the check
+  renderSelect();
+}
+
+function updateSelCount(){
+  const n = state[curTrip].selected.length;
+  document.getElementById('selCount').textContent = n+'点選択中';
+}
+
+function startTrip(){
+  if(state[curTrip].selected.length===0){showToast('アイテムを1つ以上選択してください');return;}
+  // reset pack status for unselected, keep for selected
+  const sel = state[curTrip].selected;
+  const ps = state[curTrip].packStatus;
+  Object.keys(ps).forEach(id=>{if(!sel.includes(id)) delete ps[id];});
+  sel.forEach(id=>{if(!ps[id]) ps[id]='none';});
+  save();
+  goScreen('pack');
+}
+
+// ═══════════════════════════════════════════════════
+// PACK
+// ═══════════════════════════════════════════════════
+function renderPack(){
+  const ts = state[curTrip];
+  const sel = ts.selected;
+  const ps = ts.packStatus;
+
+  if(sel.length===0){
+    document.getElementById('packCats').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">☑️</div>
+        <div class="empty-state-text">まずSELECTタブで<br>今回持っていくものを選んでください</div>
+      </div>`;
+    updatePackStats(0,0,0);
+    return;
+  }
+
+  const total = sel.length;
+  const prepCount = sel.filter(id=>ps[id]==='prepared').length;
+  const packCount = sel.filter(id=>ps[id]==='packed').length;
+  updatePackStats(total, prepCount, packCount);
+
+  // build per-cat
+  const cats = ts.master;
+  let html = '';
+  cats.forEach(cat=>{
+    const catItems = cat.items.filter(item=>sel.includes(item.id));
+    if(catItems.length===0) return;
+    const catPacked = catItems.filter(i=>ps[i.id]==='packed').length;
+    html += `
+      <div class="cat-block open" id="pc_${cat.id}">
+        <div class="cat-hd" onclick="toggleCat('pc_${cat.id}')">
+          <span class="cat-hd-icon">${cat.icon}</span>
+          <span class="cat-hd-name">${cat.name}</span>
+          <span class="cat-hd-count">${catPacked}/${catItems.length}</span>
+          <span class="cat-hd-arrow">▼</span>
+        </div>
+        <div class="cat-body">
+          <div class="cat-divider"></div>
+          ${catItems.map(item=>{
+            const st = ps[item.id]||'none';
+            const nextLabel = st==='none'?'用意済み': st==='prepared'?'詰完':'リセット';
+            return `<div class="p-item st-${st}" id="pi_${item.id}">
+              <div class="p-check st-${st}" onclick="cycleStatus('${item.id}')">${st==='packed'?'✓':st==='prepared'?'◐':''}</div>
+              <div class="p-info">
+                <div class="p-name">${item.name}</div>
+                ${item.detail?`<div class="p-detail">${item.detail}</div>`:''}
+              </div>
+              <div class="p-status-tag st-${st}" onclick="cycleStatus('${item.id}')">${nextLabel}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  });
+  document.getElementById('packCats').innerHTML = html;
+}
+
+function updatePackStats(total, prep, packed){
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPrep').textContent = prep;
+  document.getElementById('statPacked').textContent = packed;
+  const pct = total ? Math.round(packed/total*100) : 0;
+  document.getElementById('packPct').textContent = pct+'%';
+  const circ = 163.4;
+  const offset = circ - (pct/100*circ);
+  document.getElementById('packRingFill').setAttribute('stroke-dashoffset', offset);
+}
+
+function cycleStatus(itemId){
+  const ps = state[curTrip].packStatus;
+  const cur = ps[itemId]||'none';
+  ps[itemId] = cur==='none'?'prepared': cur==='prepared'?'packed':'none';
+  save();
+  renderPack();
+  renderHome(); // update progress on home
+}
+
+function bulkPackStatus(status){
+  const ts = state[curTrip];
+  ts.selected.forEach(id=>{ ts.packStatus[id] = status; });
+  save();
+  renderPack();
+  renderHome();
+}
+
+// ═══════════════════════════════════════════════════
+// MODALS & UTILS
+// ═══════════════════════════════════════════════════
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click', e=>{ if(e.target===el) el.classList.remove('open'); });
 });
 
-// ─── BOOT ────────────────────────────────────────────────────
-init();
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+// ═══════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════
+renderHome();
+updateHeader();
 </script>
 </body>
 </html>
