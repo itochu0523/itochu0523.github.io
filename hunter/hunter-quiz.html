@@ -880,7 +880,118 @@ function nextQ(){
   if(session.idx>=session.qs.length){showResult();return;}
   renderQ();
 }
-function exitQuiz(){if(confirm('終了しますか？'))
+function exitQuiz(){if(confirm('終了しますか？'))// ── 起動時クラウド自動ロード ──
+(async function autoLoad(){
+  try{
+    const cfg = JSON.parse(localStorage.getItem('hunter_quiz_sync')||'{}');
+    if(!cfg.apiKey||!cfg.binId) return;
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
+      headers:{'X-Master-Key': cfg.apiKey}
+    });
+    if(!res.ok) return;
+    const json = await res.json();
+    const data = json.record;
+    if(data && data['hunter_quiz_v1']){
+      // LocalStorageより新しければクラウドを優先
+      const cloud = data['hunter_quiz_v1'];
+      const local = state;
+      if((cloud.totalAnswered||0) >= (local.totalAnswered||0)){
+        Object.assign(state, cloud);
+        saveState();
+        updateHomeStats();
+        showToast('☁️ データを復元しました');
+      }
+    }
+  }catch(e){ /* 起動時エラーは無視 */ }
+})();
+
+showHome();}
+
+function toggleMark(){
+  const id=currentQ.id;
+  if(state.markedIds.includes(id)){state.markedIds=state.markedIds.filter(x=>x!==id);}
+  else{state.markedIds.push(id);}
+  saveState();updateMarkBtn();
+}
+function updateMarkBtn(){
+  const btn=document.getElementById('mark-btn');
+  if(!btn||!currentQ)return;
+  const marked=state.markedIds.includes(currentQ.id);
+  btn.textContent=marked?'★ マーク済':'☆ 重要マーク';
+  btn.style.color=marked?'var(--yellow)':'var(--muted)';
+}
+
+function showResult(){
+  hideAll();
+  document.getElementById('result').style.display='flex';
+  const total=session.qs.length;
+  const correct=session.answers.filter(a=>a.correct).length;
+  const rate=Math.round(correct/total*100);
+  const elapsed=Math.round((Date.now()-session.startTime)/1000);
+  const mins=Math.floor(elapsed/60);const secs=elapsed%60;
+  document.getElementById('res-score').textContent=`${correct}/${total}`;
+  document.getElementById('res-rate').textContent=rate+'%';
+  document.getElementById('res-rate').style.color=rate===100?'#4ade80':rate>=80?'var(--yellow)':'var(--red)';
+  document.getElementById('res-time').textContent=`${mins}分${secs}秒`;
+  const passEl=document.getElementById('res-pass');
+  if(session.mode==='exam'){
+    passEl.style.display='block';
+    passEl.textContent=rate>=70?'🎉 合格ライン達成！（70%以上）':'⚠️ 要復習（合格は70%以上・21問以上正解）';
+    passEl.style.color=rate>=70?'#4ade80':'var(--red)';
+  } else { passEl.style.display='none'; }
+  const catResults={};
+  session.answers.forEach(a=>{
+    const q=QDB.find(x=>x.id===a.id);if(!q)return;
+    if(!catResults[q.cat])catResults[q.cat]={c:0,t:0};
+    catResults[q.cat].t++;if(a.correct)catResults[q.cat].c++;
+  });
+  document.getElementById('cat-results').innerHTML=Object.entries(catResults).map(([k,v])=>{
+    const r=Math.round(v.c/v.t*100);
+    const col=r===100?'#4ade80':r>=70?'var(--yellow)':'var(--red)';
+    return `<div class="cat-result-row">
+      <div class="cat-result-top"><span class="cat-result-name">${CATS[k].icon} ${CATS[k].name}</span><span class="cat-result-score" style="color:${col}">${v.c}/${v.t}問 (${r}%)</span></div>
+      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${r}%;background:${col}"></div></div>
+    </div>`;
+  }).join('');
+  autoSaveAll();
+}
+
+function hideAll(){['home','catscreen','quiz','result'].forEach(id=>{
+  const el=document.getElementById(id);if(el)el.style.display='none';
+});}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+function loadStudyManagerFeedback(){
+  try{
+    const fb=JSON.parse(localStorage.getItem('studyManager_hunter_feedback')||'{}');
+    if(fb.importantTopics&&fb.importantTopics.length>0){
+      const existing=document.getElementById('sm-feedback-note');
+      if(!existing){
+        const el=document.createElement('div');
+        el.id='sm-feedback-note';
+        el.style.cssText='font-size:11px;color:var(--yellow);text-align:center;margin-bottom:4px;max-width:380px;';
+        el.textContent=`📋 学習管理より ${fb.importantTopics.length}件の重要トピックあり`;
+        const home=document.getElementById('home');
+        const mbtns=home.querySelector('.mode-btns');
+        if(mbtns)home.insertBefore(el,mbtns);
+      }
+    }
+  }catch(e){}
+}
+
+let state=loadState();
+(async()=>{
+  const ok=await autoLoadFromCloud('hunter_quiz_v1');
+  if(ok){ state=loadState(); updateHomeStats(); showToast('☁️ データを復元しました'); }
+})();
+let session={qs:[],idx:0,answers:[],mode:'',cat:'',startTime:0};
+let currentQ=null;
+let answered=false;
+
+showHome();
+
+
 // ════ 共通同期 (hunting_sync_cfg) ════
 const SYNC_KEY = 'hunting_sync_cfg';
 function getSyncCfg(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'{}'); }catch(e){ return {}; } }
@@ -930,4 +1041,5 @@ async function autoSave(){
   try{ await syncPush('hunter_quiz_v1', state); }catch(e){}
 }
 </script>
-</body></html>
+</body>
+</html>
