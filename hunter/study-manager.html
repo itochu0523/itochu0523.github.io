@@ -3,466 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="試験管理">
-<link rel="apple-touch-icon" href="data:image/png;base64,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">
-<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iIzFhMTIwOCIvPgogIDwhLS0gb3V0ZXIgcmluZyAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMzAiIHI9IjEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYjg4NjBiIiBzdHJva2Utd2lkdGg9IjgiIG9wYWNpdHk9IjAuNSIvPgogIDwhLS0gbWlkZGxlIHJpbmcgLS0+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSI5MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzU3MzJhIiBzdHJva2Utd2lkdGg9IjYiIG9wYWNpdHk9IjAuNyIvPgogIDwhLS0gaW5uZXIgcmluZyAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMzAiIHI9IjUwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iNSIvPgogIDwhLS0gY3Jvc3NoYWlyIGxpbmVzIC0tPgogIDxsaW5lIHgxPSIyNTYiIHkxPSI4OCIgeDI9IjI1NiIgeTI9IjE1MiIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjQiLz4KICA8bGluZSB4MT0iMjU2IiB5MT0iMzA4IiB4Mj0iMjU2IiB5Mj0iMzcyIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iNCIvPgogIDxsaW5lIHgxPSIxMTQiIHkxPSIyMzAiIHgyPSIxNzgiIHkyPSIyMzAiIHN0cm9rZT0iI2Y1OWUwYiIgc3Ryb2tlLXdpZHRoPSI0Ii8+CiAgPGxpbmUgeDE9IjMzNCIgeTE9IjIzMCIgeDI9IjM5OCIgeTI9IjIzMCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjQiLz4KICA8IS0tIGNlbnRlciBkb3QgLS0+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjMwIiByPSIxMiIgZmlsbD0iI2Y1OWUwYiIvPgogIDwhLS0gSFEgdGV4dCAtLT4KICA8dGV4dCB4PSIyNTYiIHk9IjQzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjcyIiBmaWxsPSIjYzU3MzJhIiBsZXR0ZXItc3BhY2luZz0iOCI+SFE8L3RleHQ+Cjwvc3ZnPg==">
 <title>狩猟試験 学習管理</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="試験管理">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Josefin+Sans:wght@300;400;600&display=swap');
-
-  :root {
-    --ink: #1a1410;
-    --paper: #f5f0e8;
-    --paper2: #ede7d5;
-    --accent: #8b4513;
-    --accent2: #c5732a;
-    --green: #3a6b35;
-    --red: #8b2020;
-    --gold: #b8860b;
-    --muted: #7a6e5f;
-    --border: #c8b89a;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Noto Serif JP', serif;
-    background: var(--paper);
-    color: var(--ink);
-    min-height: 100vh;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.15) 28px),
-      radial-gradient(ellipse at 20% 0%, rgba(180,120,50,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(58,107,53,0.06) 0%, transparent 60%);
-  }
-
-  header {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 18px 20px 14px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.4);
-  }
-
-  .header-top {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .header-top h1 {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.15em;
-    font-weight: 600;
-    color: var(--accent2);
-  }
-
-  .header-top .subtitle {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
-  .exam-countdown {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .countdown-chip {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 0.72rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .countdown-chip .label { color: var(--muted); font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.05em; }
-  .countdown-chip .days { color: var(--accent2); font-weight: 600; font-family: 'Josefin Sans', sans-serif; font-size: 1rem; }
-  .countdown-chip .unit { color: var(--muted); font-size: 0.65rem; }
-
-  nav {
-    display: flex;
-    background: var(--paper2);
-    border-bottom: 2px solid var(--border);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  nav button {
-    flex: 1;
-    min-width: 70px;
-    padding: 10px 4px 8px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: 'Noto Serif JP', serif;
-    font-size: 0.68rem;
-    color: var(--muted);
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-
-  nav button .nav-icon { font-size: 1.1rem; }
-  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
-  nav button:hover { background: rgba(139,69,19,0.05); }
-
-  main { padding: 16px; max-width: 680px; margin: 0 auto; }
-
-  /* ── SECTION ── */
-  .section { display: none; }
-  .section.active { display: block; }
-
-  .section-title {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ── DASHBOARD ── */
-  .dash-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .stat-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px;
-    box-shadow: 2px 2px 0 var(--border);
-  }
-
-  .stat-card .s-label {
-    font-size: 0.65rem;
-    color: var(--muted);
-    font-family: 'Josefin Sans', sans-serif;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-
-  .stat-card .s-val {
-    font-size: 1.6rem;
-    font-weight: 700;
-    font-family: 'Josefin Sans', sans-serif;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  .stat-card .s-sub { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
-
-  .progress-bar-wrap { margin-bottom: 6px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 0.68rem; margin-bottom: 4px; }
-  .progress-bar { height: 8px; background: var(--paper2); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
-  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-  .fill-hunter { background: var(--accent); }
-  .fill-gun { background: var(--green); }
-
-  /* App Links */
-  .app-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-
-  .app-link-card {
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    text-decoration: none;
-    display: block;
-    background: white;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .app-link-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-  }
-
-  .app-link-card.hunter::before { background: var(--accent); }
-  .app-link-card.gun::before { background: var(--green); }
-
-  .app-link-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-  .app-link-card .al-icon { font-size: 1.4rem; margin-bottom: 6px; }
-  .app-link-card .al-name { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; }
-  .app-link-card .al-sub { font-size: 0.62rem; color: var(--muted); }
-  .app-link-card .al-stats { margin-top: 8px; font-size: 0.65rem; color: var(--muted); }
-
-  /* Weak points from quiz apps */
-  .weak-section { margin-bottom: 16px; }
-
-  .weak-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 8px;
-    overflow: hidden;
-  }
-
-  .weak-header {
-    padding: 10px 14px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-  }
-
-  .weak-header.hunter { background: rgba(139,69,19,0.08); border-left: 4px solid var(--accent); }
-  .weak-header.gun { background: rgba(58,107,53,0.08); border-left: 4px solid var(--green); }
-
-  .weak-list { padding: 8px 14px 12px; display: none; }
-  .weak-list.open { display: block; }
-
-  .weak-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--paper2);
-    font-size: 0.72rem;
-  }
-
-  .weak-item:last-child { border-bottom: none; }
-  .weak-pct { font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; font-weight: 600; min-width: 36px; }
-  .pct-bad { color: var(--red); }
-  .pct-mid { color: var(--gold); }
-  .pct-ok { color: var(--green); }
-
-  /* ── SCHEDULE ── */
-  .schedule-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-
-  .sch-date-bar {
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.72rem;
-  }
-
-  .sch-date-bar.exam { background: var(--red); color: white; }
-  .sch-date-bar.lecture { background: var(--accent); color: white; }
-  .sch-date-bar.study { background: var(--ink); color: var(--paper); }
-  .sch-date-bar.milestone { background: var(--green); color: white; }
-
-  .sch-date { font-family: 'Josefin Sans', sans-serif; font-weight: 600; font-size: 0.9rem; }
-  .sch-days-left { margin-left: auto; font-size: 0.65rem; opacity: 0.85; }
-
-  .sch-body { padding: 10px 14px; font-size: 0.75rem; }
-  .sch-title { font-weight: 600; margin-bottom: 4px; }
-  .sch-note { color: var(--muted); font-size: 0.68rem; }
-
-  /* Add event form */
-  .add-form {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 16px;
-  }
-
-  .form-row { margin-bottom: 10px; }
-  .form-label { font-size: 0.68rem; color: var(--muted); display: block; margin-bottom: 4px; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.05em; }
-
-  input, select, textarea {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-family: 'Noto Serif JP', serif;
-    font-size: 0.78rem;
-    background: var(--paper);
-    color: var(--ink);
-  }
-
-  textarea { resize: vertical; min-height: 60px; }
-
-  .btn {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    transition: all 0.2s;
-  }
-
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: var(--accent2); }
-  .btn-sm { padding: 5px 10px; font-size: 0.68rem; }
-  .btn-danger { background: var(--red); color: white; }
-
-  /* ── MEMO / NOTES ── */
-  .note-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    position: relative;
-  }
-
-  .note-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-    flex-wrap: wrap;
-  }
-
-  .note-tag {
-    font-size: 0.6rem;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-family: 'Josefin Sans', sans-serif;
-    letter-spacing: 0.05em;
-  }
-
-  .tag-hunter { background: rgba(139,69,19,0.12); color: var(--accent); }
-  .tag-gun { background: rgba(58,107,53,0.12); color: var(--green); }
-  .tag-both { background: rgba(184,134,11,0.12); color: var(--gold); }
-
-  .note-date { font-size: 0.62rem; color: var(--muted); margin-left: auto; }
-  .note-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; }
-  .note-body { font-size: 0.72rem; color: #3a3228; line-height: 1.7; white-space: pre-wrap; }
-  .note-del { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 0.9rem; }
-  .note-del:hover { color: var(--red); }
-
-  /* importance stars */
-  .importance { color: var(--gold); font-size: 0.75rem; }
-
-  /* ── STRATEGY ── */
-  .strategy-grid { display: grid; gap: 10px; }
-
-  .strategy-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .strategy-head {
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .strategy-head.hunter { background: rgba(139,69,19,0.08); border-left: 4px solid var(--accent); }
-  .strategy-head.gun { background: rgba(58,107,53,0.08); border-left: 4px solid var(--green); }
-  .strategy-body { padding: 10px 14px; display: none; font-size: 0.75rem; line-height: 1.8; }
-  .strategy-body.open { display: block; }
-
-  .cat-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--paper2);
-  }
-
-  .cat-row:last-child { border-bottom: none; }
-  .cat-name { flex: 1; font-size: 0.72rem; }
-  .cat-bar { width: 80px; height: 6px; background: var(--paper2); border-radius: 3px; overflow: hidden; }
-  .cat-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
-
-  /* ── SYNC ── */
-  .sync-box {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 12px;
-  }
-
-  .sync-status { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; margin-bottom: 10px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .dot-ok { background: var(--green); }
-  .dot-err { background: var(--red); }
-  .dot-idle { background: var(--muted); }
-
-  .sync-log { font-size: 0.65rem; color: var(--muted); font-family: 'Josefin Sans', sans-serif; }
-
-  /* Toast */
-  #toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(60px);
-    background: var(--ink);
-    color: var(--paper);
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    transition: transform 0.3s;
-    z-index: 999;
-    white-space: nowrap;
-  }
-
-  #toast.show { transform: translateX(-50%) translateY(0); }
-
-  .row { display: flex; gap: 8px; align-items: center; }
-  .flex1 { flex: 1; }
-
-  .empty-state {
-    text-align: center;
-    padding: 30px;
-    color: var(--muted);
-    font-size: 0.75rem;
-  }
-
-  .badge-count {
-    background: var(--red);
-    color: white;
-    font-size: 0.6rem;
-    padding: 1px 5px;
-    border-radius: 8px;
-    font-family: 'Josefin Sans', sans-serif;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Josefin+Sans:wght@300;400;600&display=swap');
+:root{
+  --ink:#1a1410;--paper:#f5f0e8;--paper2:#ede7d5;
+  --accent:#8b4513;--accent2:#c5732a;--green:#3a6b35;
+  --red:#8b2020;--gold:#b8860b;--muted:#7a6e5f;--border:#c8b89a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Serif JP',serif;background:var(--paper);color:var(--ink);min-height:100vh;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(180,160,120,.15) 28px);}
+header{background:var(--ink);color:var(--paper);padding:16px 20px 12px;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.4);}
+.header-top{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
+.header-top h1{font-family:'Josefin Sans',sans-serif;font-size:1.05rem;letter-spacing:.15em;font-weight:600;color:var(--accent2);}
+.header-top .subtitle{font-size:.7rem;color:var(--muted);letter-spacing:.1em;}
+.exam-countdown{display:flex;gap:10px;flex-wrap:wrap;}
+.countdown-chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:4px 10px;font-size:.72rem;display:flex;align-items:center;gap:6px;}
+.countdown-chip .label{color:var(--muted);font-family:'Josefin Sans',sans-serif;}
+.countdown-chip .days{color:var(--accent2);font-weight:600;font-family:'Josefin Sans',sans-serif;font-size:.95rem;}
+.countdown-chip .unit{color:var(--muted);font-size:.65rem;}
+nav{display:flex;background:var(--paper2);border-bottom:2px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+nav button{flex:1;min-width:60px;padding:10px 4px 8px;border:none;background:none;cursor:pointer;font-family:'Noto Serif JP',serif;font-size:.65rem;color:var(--muted);border-bottom:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;}
+nav button .nav-icon{font-size:1.1rem;}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);}
+main{padding:16px;max-width:680px;margin:0 auto;}
+.section{display:none;} .section.active{display:block;}
+.section-title{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-card{background:white;border:1px solid var(--border);border-radius:6px;padding:14px;box-shadow:2px 2px 0 var(--border);}
+.stat-card .s-label{font-size:.65rem;color:var(--muted);font-family:'Josefin Sans',sans-serif;letter-spacing:.1em;margin-bottom:4px;}
+.stat-card .s-val{font-size:1.5rem;font-weight:700;font-family:'Josefin Sans',sans-serif;color:var(--accent);}
+.stat-card .s-sub{font-size:.65rem;color:var(--muted);margin-top:2px;}
+.progress-bar-wrap{margin-bottom:6px;}
+.progress-label{display:flex;justify-content:space-between;font-size:.68rem;margin-bottom:4px;}
+.progress-bar{height:8px;background:var(--paper2);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.progress-fill{height:100%;border-radius:4px;transition:width .5s;}
+.fill-hunter{background:var(--accent);} .fill-gun{background:var(--green);}
+.app-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.app-link-card{border:2px solid var(--border);border-radius:8px;padding:14px 12px;text-decoration:none;display:block;background:white;transition:all .2s;position:relative;overflow:hidden;}
+.app-link-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.app-link-card.hunter::before{background:var(--accent);}
+.app-link-card.gun::before{background:var(--green);}
+.app-link-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.app-link-card .al-icon{font-size:1.4rem;margin-bottom:6px;}
+.app-link-card .al-name{font-size:.75rem;font-weight:600;margin-bottom:2px;}
+.app-link-card .al-sub{font-size:.62rem;color:var(--muted);}
+.app-link-card .al-stats{margin-top:8px;font-size:.65rem;color:var(--muted);}
+.weak-card{background:white;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden;}
+.weak-header{padding:10px 14px;font-size:.75rem;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer;}
+.weak-header.hunter{background:rgba(139,69,19,.08);border-left:4px solid var(--accent);}
+.weak-header.gun{background:rgba(58,107,53,.08);border-left:4px solid var(--green);}
+.weak-list{padding:8px 14px 12px;display:none;}
+.weak-list.open{display:block;}
+.weak-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--paper2);font-size:.72rem;}
+.weak-item:last-child{border-bottom:none;}
+.weak-pct{font-family:'Josefin Sans',sans-serif;font-size:.85rem;font-weight:600;min-width:36px;}
+.pct-bad{color:var(--red);} .pct-mid{color:var(--gold);} .pct-ok{color:var(--green);}
+.schedule-card{background:white;border:1px solid var(--border);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.sch-date-bar{padding:8px 14px;display:flex;align-items:center;gap:10px;font-size:.72rem;}
+.sch-date-bar.exam{background:var(--red);color:white;}
+.sch-date-bar.lecture{background:var(--accent);color:white;}
+.sch-date-bar.study{background:var(--ink);color:var(--paper);}
+.sch-date-bar.milestone{background:var(--green);color:white;}
+.sch-date{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:.9rem;}
+.sch-days-left{margin-left:auto;font-size:.65rem;opacity:.85;}
+.sch-body{padding:10px 14px;font-size:.75rem;}
+.sch-note{color:var(--muted);font-size:.68rem;}
+.add-form{background:white;border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:16px;}
+.form-row{margin-bottom:10px;}
+.form-label{font-size:.68rem;color:var(--muted);display:block;margin-bottom:4px;font-family:'Josefin Sans',sans-serif;letter-spacing:.05em;}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;font-family:'Noto Serif JP',serif;font-size:.78rem;background:var(--paper);color:var(--ink);}
+textarea{resize:vertical;min-height:60px;}
+.btn{padding:8px 16px;border:none;border-radius:4px;cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:.78rem;letter-spacing:.05em;transition:all .2s;}
+.btn-primary{background:var(--accent);color:white;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-sm{padding:5px 10px;font-size:.68rem;}
+.btn-danger{background:var(--red);color:white;}
+.note-card{background:white;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:10px;position:relative;}
+.note-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.note-tag{font-size:.6rem;padding:2px 7px;border-radius:10px;font-family:'Josefin Sans',sans-serif;letter-spacing:.05em;}
+.tag-hunter{background:rgba(139,69,19,.12);color:var(--accent);}
+.tag-gun{background:rgba(58,107,53,.12);color:var(--green);}
+.tag-both{background:rgba(184,134,11,.12);color:var(--gold);}
+.note-date{font-size:.62rem;color:var(--muted);margin-left:auto;}
+.note-title{font-size:.82rem;font-weight:600;margin-bottom:4px;}
+.note-body{font-size:.72rem;color:#3a3228;line-height:1.7;white-space:pre-wrap;}
+.note-del{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;}
+.note-del:hover{color:var(--red);}
+.importance{color:var(--gold);font-size:.75rem;}
+.sync-box{background:white;border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px;}
+.sync-status{display:flex;align-items:center;gap:8px;font-size:.75rem;margin-bottom:10px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot-ok{background:var(--green);} .dot-err{background:var(--red);} .dot-idle{background:var(--muted);}
+.sync-log{font-size:.65rem;color:var(--muted);}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:20px;font-size:.78rem;transition:transform .3s;z-index:999;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+.row{display:flex;gap:8px;align-items:center;} .flex1{flex:1;}
+.empty-state{text-align:center;padding:30px;color:var(--muted);font-size:.75rem;}
+.cat-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--paper2);}
+.cat-row:last-child{border-bottom:none;}
+.cat-name{flex:1;font-size:.72rem;}
+.cat-bar{width:80px;height:6px;background:var(--paper2);border-radius:3px;overflow:hidden;}
+.cat-fill{height:100%;border-radius:3px;transition:width .5s;}
+.strategy-card{background:white;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:10px;}
+.strategy-head{padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;cursor:pointer;}
+.strategy-head.hunter{background:rgba(139,69,19,.08);border-left:4px solid var(--accent);}
+.strategy-head.gun{background:rgba(58,107,53,.08);border-left:4px solid var(--green);}
+.strategy-body{padding:10px 14px;display:none;font-size:.75rem;line-height:1.8;}
+.strategy-body.open{display:block;}
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-top">
     <h1>🎯 HUNTING EXAM HQ</h1>
@@ -470,744 +126,484 @@
   </div>
   <div class="exam-countdown" id="countdownBar"></div>
 </header>
-
 <nav>
-  <button class="active" onclick="showSection('dash')">
-    <span class="nav-icon">🏠</span>ダッシュボード
-  </button>
-  <button onclick="showSection('schedule')">
-    <span class="nav-icon">📅</span>日程管理
-  </button>
-  <button onclick="showSection('notes')">
-    <span class="nav-icon">📝</span>学習メモ
-  </button>
-  <button onclick="showSection('strategy')">
-    <span class="nav-icon">🎯</span>対策分析
-  </button>
-  <button onclick="showSection('sync')">
-    <span class="nav-icon">⚙️</span>設定/同期
-  </button>
+  <button class="active" onclick="showSection('dash',this)"><span class="nav-icon">🏠</span>ダッシュ</button>
+  <button onclick="showSection('schedule',this)"><span class="nav-icon">📅</span>日程</button>
+  <button onclick="showSection('notes',this)"><span class="nav-icon">📝</span>メモ</button>
+  <button onclick="showSection('strategy',this)"><span class="nav-icon">🎯</span>対策</button>
+  <button onclick="showSection('sync',this)"><span class="nav-icon">⚙️</span>設定</button>
 </nav>
-
 <main>
 
-  <!-- ── DASHBOARD ── -->
-  <div class="section active" id="sec-dash">
-    <div class="section-title">ダッシュボード</div>
-
-    <div class="dash-grid">
-      <div class="stat-card">
-        <div class="s-label">学習日数</div>
-        <div class="s-val" id="studyDays">0</div>
-        <div class="s-sub">日間記録</div>
-      </div>
-      <div class="stat-card">
-        <div class="s-label">今日のメモ</div>
-        <div class="s-val" id="todayNotes">0</div>
-        <div class="s-sub">件追加</div>
-      </div>
+<!-- ダッシュボード -->
+<div class="section active" id="sec-dash">
+  <div class="section-title">ダッシュボード</div>
+  <div class="dash-grid">
+    <div class="stat-card"><div class="s-label">学習日数</div><div class="s-val" id="studyDays">0</div><div class="s-sub">日間記録</div></div>
+    <div class="stat-card"><div class="s-label">今日のメモ</div><div class="s-val" id="todayNotes">0</div><div class="s-sub">件追加</div></div>
+  </div>
+  <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:16px;">
+    <div style="font-size:.7rem;color:var(--muted);margin-bottom:10px;font-family:'Josefin Sans',sans-serif;letter-spacing:.1em;">試験別進捗</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>🦆 狩猟免許試験</span><span id="hunterPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-hunter" id="hunterBar" style="width:0%"></div></div>
     </div>
-
-    <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:16px;">
-      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:10px;font-family:'Josefin Sans',sans-serif;letter-spacing:0.1em;">試験別進捗</div>
-      <div class="progress-bar-wrap">
-        <div class="progress-label">
-          <span>🦆 狩猟免許試験</span>
-          <span id="hunterPct">0%</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill fill-hunter" id="hunterBar" style="width:0%"></div>
-        </div>
-      </div>
-      <div style="height:10px"></div>
-      <div class="progress-bar-wrap">
-        <div class="progress-label">
-          <span>🔫 猟銃講習会試験</span>
-          <span id="gunPct">0%</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill fill-gun" id="gunBar" style="width:0%"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- App Links -->
-    <div class="section-title">クイズアプリ</div>
-    <button onclick="pullFromCloud()" style="width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:6px;font-family:'Josefin Sans',sans-serif;font-size:0.8rem;letter-spacing:0.05em;cursor:pointer;margin-bottom:12px;">☁️ クラウドから最新データを取得</button>
-    <div class="app-links">
-      <a href="hunter-quiz.html" class="app-link-card hunter">
-        <div class="al-icon">🦆</div>
-        <div class="al-name">狩猟免許<br>クイズ</div>
-        <div class="al-sub">150問 / 5カテゴリ</div>
-        <div class="al-stats" id="hunterAppStats">読み込み中…</div>
-      </a>
-      <a href="gun-quiz.html" class="app-link-card gun">
-        <div class="al-icon">🔫</div>
-        <div class="al-name">猟銃講習会<br>クイズ</div>
-        <div class="al-sub">100問 / 6カテゴリ</div>
-        <div class="al-stats" id="gunAppStats">読み込み中…</div>
-      </a>
-    </div>
-
-    <!-- Weak Points from Quiz Apps -->
-    <div class="section-title">苦手問題 <span style="font-size:0.6rem;color:var(--muted);">クイズアプリから自動取得</span></div>
-    <div class="weak-section" id="weakSection">
-      <div class="empty-state">クイズアプリでLocalStorageデータを蓄積すると<br>ここに苦手問題が表示されます</div>
+    <div style="height:10px"></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>🔫 猟銃講習会試験</span><span id="gunPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-gun" id="gunBar" style="width:0%"></div></div>
     </div>
   </div>
-
-  <!-- ── SCHEDULE ── -->
-  <div class="section" id="sec-schedule">
-    <div class="section-title">試験日程・学習計画</div>
-
-    <!-- Fixed exam dates -->
-    <div id="scheduleList"></div>
-
-    <!-- Add custom event -->
-    <div class="section-title" style="margin-top:16px;">学習イベントを追加</div>
-    <div class="add-form">
-      <div class="form-row">
-        <label class="form-label">日付</label>
-        <input type="date" id="evDate">
-      </div>
-      <div class="form-row">
-        <label class="form-label">種別</label>
-        <select id="evType">
-          <option value="study">学習日</option>
-          <option value="milestone">マイルストーン</option>
-          <option value="lecture">講習</option>
-          <option value="exam">試験</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">タイトル</label>
-        <input type="text" id="evTitle" placeholder="例：鳥獣識別 集中復習">
-      </div>
-      <div class="form-row">
-        <label class="form-label">メモ</label>
-        <textarea id="evNote" placeholder="内容・目標など"></textarea>
-      </div>
-      <button class="btn btn-primary" onclick="addEvent()">追加する</button>
-    </div>
+  <div class="section-title">クイズアプリ</div>
+  <button onclick="doFullSync()" style="width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:6px;font-family:'Josefin Sans',sans-serif;font-size:.8rem;letter-spacing:.05em;cursor:pointer;margin-bottom:12px;" id="syncAllBtn">☁️ クラウドから最新データを取得</button>
+  <div class="app-links">
+    <a href="hunter-quiz.html" class="app-link-card hunter">
+      <div class="al-icon">🦆</div><div class="al-name">狩猟免許<br>クイズ</div>
+      <div class="al-sub">67問 / 5カテゴリ</div>
+      <div class="al-stats" id="hunterAppStats">―</div>
+    </a>
+    <a href="gun-quiz.html" class="app-link-card gun">
+      <div class="al-icon">🔫</div><div class="al-name">猟銃講習会<br>クイズ</div>
+      <div class="al-sub">120問 / 6カテゴリ</div>
+      <div class="al-stats" id="gunAppStats">―</div>
+    </a>
   </div>
+  <div class="section-title">苦手問題</div>
+  <div id="weakSection"><div class="empty-state">クイズデータを取得すると苦手分析が表示されます</div></div>
+</div>
 
-  <!-- ── NOTES ── -->
-  <div class="section" id="sec-notes">
-    <div class="section-title">学習メモ</div>
-
-    <div class="add-form">
-      <div class="form-row">
-        <label class="form-label">対象試験</label>
-        <select id="noteTag">
-          <option value="hunter">🦆 狩猟免許</option>
-          <option value="gun">🔫 猟銃講習会</option>
-          <option value="both">📚 共通</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">タイトル</label>
-        <input type="text" id="noteTitle" placeholder="例：ゴイサギ・バンは令和4年改正で削除">
-      </div>
-      <div class="form-row">
-        <label class="form-label">内容</label>
-        <textarea id="noteBody" placeholder="覚えたこと・気づき・試験頻出ポイントなど" style="min-height:80px;"></textarea>
-      </div>
-      <div class="form-row row">
-        <div class="flex1">
-          <label class="form-label">重要度</label>
-          <select id="noteImportance">
-            <option value="3">⭐⭐⭐ 最重要</option>
-            <option value="2">⭐⭐ 重要</option>
-            <option value="1">⭐ 参考</option>
-          </select>
-        </div>
-        <div class="flex1">
-          <label class="form-label">カテゴリ</label>
-          <input type="text" id="noteCat" placeholder="例：鳥獣識別">
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="addNote()">メモを保存</button>
+<!-- 日程 -->
+<div class="section" id="sec-schedule">
+  <div class="section-title">試験日程・学習計画</div>
+  <div id="scheduleList"></div>
+  <div class="section-title" style="margin-top:16px;">イベントを追加</div>
+  <div class="add-form">
+    <div class="form-row"><label class="form-label">日付</label><input type="date" id="evDate"></div>
+    <div class="form-row"><label class="form-label">種別</label>
+      <select id="evType"><option value="study">学習日</option><option value="milestone">マイルストーン</option><option value="lecture">講習</option><option value="exam">試験</option></select>
     </div>
-
-    <!-- Filter -->
-    <div class="row" style="margin-bottom:12px;gap:6px;">
-      <select id="filterTag" onchange="renderNotes()" style="flex:1;">
-        <option value="all">すべて</option>
-        <option value="hunter">狩猟免許</option>
-        <option value="gun">猟銃講習会</option>
-        <option value="both">共通</option>
-      </select>
-      <select id="filterSort" onchange="renderNotes()" style="flex:1;">
-        <option value="new">新しい順</option>
-        <option value="imp">重要度順</option>
-      </select>
-    </div>
-
-    <div id="notesList"></div>
+    <div class="form-row"><label class="form-label">タイトル</label><input type="text" id="evTitle" placeholder="例：鳥獣識別 集中復習"></div>
+    <div class="form-row"><label class="form-label">メモ</label><textarea id="evNote"></textarea></div>
+    <button class="btn btn-primary" onclick="addEvent()">追加する</button>
   </div>
+</div>
 
-  <!-- ── STRATEGY ── -->
-  <div class="section" id="sec-strategy">
-    <div class="section-title">試験傾向・対策分析</div>
-
-    <div class="strategy-grid">
-      <div class="strategy-card">
-        <div class="strategy-head hunter" onclick="toggleStrategy(this)">
-          🦆 狩猟免許試験 — カテゴリ別習熟度
-          <span style="margin-left:auto">▼</span>
-        </div>
-        <div class="strategy-body" id="hunterStratBody">
-          <div id="hunterCatList"></div>
-          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper2);">
-            <div style="font-size:0.7rem;color:var(--muted);margin-bottom:6px;font-family:'Josefin Sans',sans-serif;">対策メモ</div>
-            <textarea id="hunterStratNote" placeholder="狩猟免許試験の対策・傾向メモ" onchange="saveStratNote()" style="min-height:80px;font-size:0.75rem;"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="strategy-card">
-        <div class="strategy-head gun" onclick="toggleStrategy(this)">
-          🔫 猟銃講習会試験 — カテゴリ別習熟度
-          <span style="margin-left:auto">▼</span>
-        </div>
-        <div class="strategy-body" id="gunStratBody">
-          <div id="gunCatList"></div>
-          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper2);">
-            <div style="font-size:0.7rem;color:var(--muted);margin-bottom:6px;font-family:'Josefin Sans',sans-serif;">対策メモ</div>
-            <textarea id="gunStratNote" placeholder="猟銃講習会試験の対策・傾向メモ" onchange="saveStratNote()" style="min-height:80px;font-size:0.75rem;"></textarea>
-          </div>
-        </div>
-      </div>
+<!-- メモ -->
+<div class="section" id="sec-notes">
+  <div class="section-title">学習メモ</div>
+  <div class="add-form">
+    <div class="form-row"><label class="form-label">対象試験</label>
+      <select id="noteTag"><option value="hunter">🦆 狩猟免許</option><option value="gun">🔫 猟銃講習会</option><option value="both">📚 共通</option></select>
     </div>
+    <div class="form-row"><label class="form-label">タイトル</label><input type="text" id="noteTitle" placeholder="例：ゴイサギ・バンは令和4年改正で削除"></div>
+    <div class="form-row"><label class="form-label">内容</label><textarea id="noteBody" style="min-height:80px;"></textarea></div>
+    <div class="form-row row">
+      <div class="flex1"><label class="form-label">重要度</label>
+        <select id="noteImportance"><option value="3">⭐⭐⭐ 最重要</option><option value="2">⭐⭐ 重要</option><option value="1">⭐ 参考</option></select>
+      </div>
+      <div class="flex1"><label class="form-label">カテゴリ</label><input type="text" id="noteCat" placeholder="例：鳥獣識別"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addNote()">保存</button>
+  </div>
+  <div class="row" style="margin-bottom:12px;gap:6px;">
+    <select id="filterTag" onchange="renderNotes()" style="flex:1;"><option value="all">すべて</option><option value="hunter">狩猟免許</option><option value="gun">猟銃講習会</option><option value="both">共通</option></select>
+    <select id="filterSort" onchange="renderNotes()" style="flex:1;"><option value="new">新しい順</option><option value="imp">重要度順</option></select>
+  </div>
+  <div id="notesList"></div>
+</div>
 
-    <!-- Feedback to quiz -->
-    <div class="section-title" style="margin-top:16px;">クイズアプリへフィードバック</div>
-    <div class="strategy-card">
-      <div style="padding:14px;">
-        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:12px;">学習管理アプリから「重要マーク」をクイズアプリに同期します。JSONBin.ioを通じてリアルタイム連携。</p>
-        <div class="row" style="gap:8px;">
-          <button class="btn btn-primary btn-sm" onclick="pushFeedback('hunter')">🦆 狩猟クイズに同期</button>
-          <button class="btn btn-primary btn-sm" style="background:var(--green);" onclick="pushFeedback('gun')">🔫 銃クイズに同期</button>
-        </div>
-        <div id="feedbackLog" style="margin-top:10px;font-size:0.65rem;color:var(--muted);"></div>
+<!-- 対策 -->
+<div class="section" id="sec-strategy">
+  <div class="section-title">試験傾向・対策分析</div>
+  <div class="strategy-card">
+    <div class="strategy-head hunter" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('span:last-child').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
+      🦆 狩猟免許 カテゴリ別習熟度<span style="margin-left:auto">▼</span>
+    </div>
+    <div class="strategy-body">
+      <div id="hunterCatList"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper2);">
+        <div class="form-label">対策メモ</div>
+        <textarea id="hunterStratNote" onchange="saveStratNote()" style="min-height:80px;font-size:.75rem;"></textarea>
       </div>
     </div>
   </div>
-
-  <!-- ── SYNC ── -->
-  <div class="section" id="sec-sync">
-    <div class="section-title">⚙️ 設定・データ同期</div>
-
-    <div class="sync-box">
-      <div class="sync-status">
-        <div class="dot dot-idle" id="syncDot"></div>
-        <span id="syncStatusText">未設定</span>
-      </div>
-      <div class="form-row">
-        <label class="form-label">JSONBin.io API KEY</label>
-        <input type="password" id="apiKeyInput" placeholder="$2a$10$...">
-      </div>
-      <div class="form-row">
-        <label class="form-label">学習管理用 BIN ID</label>
-        <input type="text" id="binIdInput" placeholder="68xxxxxxxxxxxxxxxx">
-      </div>
-      <div class="row" style="gap:8px;margin-top:4px;">
-        <button class="btn btn-primary btn-sm" onclick="saveAndSync()">保存して同期</button>
-        <button class="btn btn-sm" style="background:var(--paper2);" onclick="pullFromCloud()">↓ クラウドから取得</button>
-        <button class="btn btn-sm" style="background:var(--paper2);" onclick="pushToCloud()">↑ クラウドに保存</button>
-      </div>
-      <div class="sync-log" id="syncLog" style="margin-top:8px;"></div>
+  <div class="strategy-card">
+    <div class="strategy-head gun" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('span:last-child').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
+      🔫 猟銃講習会 カテゴリ別習熟度<span style="margin-left:auto">▼</span>
     </div>
-
-    <div class="sync-box">
-      <div style="font-size:0.75rem;font-weight:600;margin-bottom:8px;">クイズアプリとの連携状況</div>
-      <div style="font-size:0.72rem;color:var(--muted);line-height:1.8;">
-        <div>🦆 hunter-quiz.html の LocalStorage を自動読み込み</div>
-        <div>🔫 gun-quiz.html の LocalStorage を自動読み込み</div>
-        <div style="margin-top:8px;font-size:0.65rem;">※同じブラウザ・同じドメインで開いている場合のみ読み取り可能</div>
+    <div class="strategy-body">
+      <div id="gunCatList"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper2);">
+        <div class="form-label">対策メモ</div>
+        <textarea id="gunStratNote" onchange="saveStratNote()" style="min-height:80px;font-size:.75rem;"></textarea>
       </div>
-    </div>
-
-    <div class="sync-box">
-      <div style="font-size:0.75rem;font-weight:600;margin-bottom:8px;">データリセット</div>
-      <button class="btn btn-danger btn-sm" onclick="resetAll()">⚠️ 学習データをリセット</button>
     </div>
   </div>
+</div>
+
+<!-- 設定 -->
+<div class="section" id="sec-sync">
+  <div class="section-title">設定・データ同期</div>
+  <div class="sync-box">
+    <div class="sync-status"><div class="dot dot-idle" id="syncDot"></div><span id="syncStatusText">未設定</span></div>
+    <div class="form-row"><label class="form-label">JSONBin.io API KEY</label><input type="password" id="apiKeyInput" placeholder="$2a$10$..."></div>
+    <div class="form-row"><label class="form-label">BIN ID</label><input type="text" id="binIdInput" placeholder="68xxxxxxxxxxxxxxxx"></div>
+    <div class="row" style="gap:8px;margin-top:6px;">
+      <button class="btn btn-primary btn-sm" onclick="saveCfgAndSync()">保存して同期</button>
+      <button class="btn btn-sm" style="background:var(--paper2);" onclick="doFullSync()">↓ クラウドから取得</button>
+      <button class="btn btn-sm" style="background:var(--paper2);" onclick="doPush()">↑ クラウドに保存</button>
+    </div>
+    <div class="sync-log" id="syncLog" style="margin-top:8px;"></div>
+  </div>
+  <div class="sync-box">
+    <div style="font-size:.75rem;font-weight:600;margin-bottom:8px;">クイズアプリとの連携</div>
+    <div style="font-size:.72rem;color:var(--muted);line-height:1.9;">
+      ✅ API Keyは全アプリ共通（ここで1回設定すれば自動共有）<br>
+      ✅ クイズ終了時に自動保存<br>
+      ✅ このアプリ起動時に自動取得
+    </div>
+  </div>
+  <div class="sync-box">
+    <div style="font-size:.75rem;font-weight:600;margin-bottom:8px;">データリセット</div>
+    <button class="btn btn-danger btn-sm" onclick="resetAll()">⚠️ 学習データをリセット</button>
+  </div>
+</div>
 
 </main>
-
 <div id="toast"></div>
 
 <script>
-// ── DATA ──
-let state = {
-  notes: [],
-  events: [],
-  progress: { hunter: 0, gun: 0 },
-  stratNotes: { hunter: '', gun: '' },
-  apiKey: '',
-  binId: ''
-};
+// ── ローカル状態 ──
+let state = {notes:[],events:[],progress:{hunter:0,gun:0},stratNotes:{hunter:'',gun:''}};
 
 const FIXED_EVENTS = [
-  { date: '2025-07-25', type: 'lecture', title: '狩猟者登録 初心者講習会', note: '山形市開催 / 費用領収書持参' },
-  { date: '2025-09-12', type: 'exam', title: '狩猟免許試験 1日目', note: '山形県 / 全力で満点を目指す！' },
-  { date: '2025-09-13', type: 'exam', title: '狩猟免許試験 2日目', note: '引き続き集中！' },
+  {date:'2025-07-25',type:'lecture',title:'猟銃初心者講習会',note:'山形市開催'},
+  {date:'2025-09-12',type:'exam',title:'狩猟免許試験 1日目',note:'村山会場'},
+  {date:'2025-09-13',type:'exam',title:'狩猟免許試験 2日目',note:'村山会場'},
 ];
 
-// ── INIT ──
-function init() {
-  loadLocal();
-  renderCountdown();
-  renderSchedule();
-  renderNotes();
-  loadFromQuizApps();
-  renderStrategyCategories();
-  document.getElementById('hunterStratNote').value = state.stratNotes.hunter || '';
-  document.getElementById('gunStratNote').value = state.stratNotes.gun || '';
-  updateDashboard();
-  // 共通設定キーから自動読み込み
-  const cfg = getSyncCfg();
-  if(cfg.apiKey){
-    document.getElementById('apiKeyInput').value = cfg.apiKey;
-    document.getElementById('binIdInput').value = cfg.binId;
-    document.getElementById('syncStatusText').textContent = '設定済み';
-    document.getElementById('syncDot').className = 'dot dot-ok';
-    // 起動時に自動でクラウドから取得
-    setTimeout(()=>pullFromCloud(), 500);
-  }
-  setTodayDate();
-}
-
-function setTodayDate() {
-  const today = new Date().toISOString().slice(0, 10);
-  document.getElementById('evDate').value = today;
-}
-
-// ── LOCAL STORAGE ──
-function saveLocal() {
-  localStorage.setItem('studyManager_v1', JSON.stringify(state));
-}
-
-function loadLocal() {
-  const d = localStorage.getItem('studyManager_v1');
-  if (d) {
-    const parsed = JSON.parse(d);
-    state = { ...state, ...parsed };
-  }
-}
-
-// ── QUIZ APP DATA READER ──
-// hunter_quiz_v1 / gun_quiz_v1 の構造:
-// { totalAnswered, totalCorrect, wrongIds:[], markedIds:[], catStats:{cat:{a,c}} }
-function loadFromQuizApps() {
-  // hunter-quiz
-  try {
-    const hd = localStorage.getItem('hunter_quiz_v1');
-    if (hd) {
-      const data = JSON.parse(hd);
-      updateQuizStats(data, 'hunter');
-      renderWeakPointsFromIds(data, 'hunter');
-    } else {
-      document.getElementById('hunterAppStats').textContent = '未接続（未プレイ）';
-    }
-  } catch(e) {}
-
-  // gun-quiz
-  try {
-    const gd = localStorage.getItem('gun_quiz_v1');
-    if (gd) {
-      const data = JSON.parse(gd);
-      updateQuizStats(data, 'gun');
-      renderWeakPointsFromIds(data, 'gun');
-    } else {
-      document.getElementById('gunAppStats').textContent = '未接続（未プレイ）';
-    }
-  } catch(e) {}
-}
-
-function updateQuizStats(data, type) {
-  const answered = data.totalAnswered || 0;
-  const correct = data.totalCorrect || 0;
-  const pct = answered > 0 ? Math.round(correct / answered * 100) : 0;
-  const wrongCount = (data.wrongIds || []).length;
-  const markedCount = (data.markedIds || []).length;
-
-  if (type === 'hunter') {
-    document.getElementById('hunterAppStats').textContent =
-      `正答率 ${pct}% | ${answered}問解答 | 要復習${wrongCount}問`;
-    state.progress.hunter = pct;
-    document.getElementById('hunterBar').style.width = pct + '%';
-    document.getElementById('hunterPct').textContent = pct + '%';
-  } else {
-    document.getElementById('gunAppStats').textContent =
-      `正答率 ${pct}% | ${answered}問解答 | 要復習${wrongCount}問`;
-    state.progress.gun = pct;
-    document.getElementById('gunBar').style.width = pct + '%';
-    document.getElementById('gunPct').textContent = pct + '%';
-  }
-}
-
-function renderWeakPointsFromIds(data, type) {
-  const wrongIds = data.wrongIds || [];
-  const markedIds = data.markedIds || [];
-  if (wrongIds.length === 0 && markedIds.length === 0) return;
-
-  const container = document.getElementById('weakSection');
-  const emptyState = container.querySelector('.empty-state');
-  if (emptyState) emptyState.remove();
-
-  const card = document.createElement('div');
-  card.className = 'weak-card';
-
-  // catStats から苦手カテゴリを算出
-  const catStats = data.catStats || {};
-  const catNames = type === 'hunter'
-    ? {law:'法令・規制', safe:'安全・事故防止', bird:'鳥獣識別', gun:'猟具・銃器', eco:'生態・習性'}
-    : {law:'銃砲関連法令', safe:'安全な取扱い', keep:'保管・携帯・運搬', mech:'銃の構造・機能', exp:'火薬類・実包', acc:'事故・応急処置'};
-
-  const catRows = Object.entries(catStats).map(([k, v]) => {
-    const acc = v.a > 0 ? Math.round(v.c / v.a * 100) : 0;
-    const cls = acc < 50 ? 'pct-bad' : acc < 80 ? 'pct-mid' : 'pct-ok';
-    return `<div class="weak-item">
-      <span class="weak-pct ${cls}">${acc}%</span>
-      <span style="flex:1">${catNames[k] || k}</span>
-      <span style="font-size:0.65rem;color:var(--muted)">${v.c}/${v.a}問</span>
-    </div>`;
-  }).join('');
-
-  card.innerHTML = `
-    <div class="weak-header ${type}" onclick="this.nextElementSibling.classList.toggle('open')">
-      ${type === 'hunter' ? '🦆' : '🔫'} カテゴリ別正答率 ／ 要復習 ${wrongIds.length}問 ／ マーク ${markedIds.length}問
-      <span style="margin-left:auto;font-size:0.65rem;">▼</span>
-    </div>
-    <div class="weak-list">
-      ${catRows || '<div style="font-size:0.72rem;color:var(--muted)">まだカテゴリ別データがありません</div>'}
-    </div>
-  `;
-  container.appendChild(card);
+function saveLocal(){ localStorage.setItem('studyManager_v1', JSON.stringify(state)); }
+function loadLocal(){
+  try{ const d=localStorage.getItem('studyManager_v1'); if(d) state={...state,...JSON.parse(d)}; }catch(e){}
 }
 
 
-// ── COUNTDOWN ──
-function renderCountdown() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const exams = [
-    { label: '初心者講習', date: new Date('2025-07-25') },
-    { label: '狩猟試験', date: new Date('2025-09-12') },
-  ];
-  const bar = document.getElementById('countdownBar');
-  bar.innerHTML = exams.map(e => {
-    const diff = Math.ceil((e.date - today) / 86400000);
-    return `<div class="countdown-chip">
-      <span class="label">${e.label}</span>
-      <span class="days">${diff > 0 ? diff : 0}</span>
-      <span class="unit">日前</span>
-    </div>`;
-  }).join('');
-}
-
-// ── SCHEDULE ──
-function renderSchedule() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const all = [...FIXED_EVENTS, ...state.events]
-    .sort((a, b) => a.date.localeCompare(b.date));
-
-  const list = document.getElementById('scheduleList');
-  list.innerHTML = all.map((ev, i) => {
-    const d = new Date(ev.date);
-    const diff = Math.ceil((d - today) / 86400000);
-    const diffStr = diff > 0 ? `あと ${diff}日` : diff === 0 ? '今日' : `${Math.abs(diff)}日前`;
-    const isCustom = !FIXED_EVENTS.find(f => f.date === ev.date && f.title === ev.title);
-    return `<div class="schedule-card">
-      <div class="sch-date-bar ${ev.type}">
-        <span class="sch-date">${ev.date}</span>
-        <span>${ev.title}</span>
-        <span class="sch-days-left">${diffStr}</span>
-      </div>
-      <div class="sch-body">
-        <div class="sch-note">${ev.note || ''}</div>
-        ${isCustom ? `<button class="btn btn-sm" style="margin-top:6px;background:var(--paper2);" onclick="deleteEvent(${i})">削除</button>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function addEvent() {
-  const date = document.getElementById('evDate').value;
-  const type = document.getElementById('evType').value;
-  const title = document.getElementById('evTitle').value.trim();
-  const note = document.getElementById('evNote').value.trim();
-  if (!date || !title) { toast('日付とタイトルを入力してください'); return; }
-  state.events.push({ date, type, title, note });
-  state.events.sort((a,b) => a.date.localeCompare(b.date));
-  saveLocal();
-  renderSchedule();
-  document.getElementById('evTitle').value = '';
-  document.getElementById('evNote').value = '';
-  toast('イベントを追加しました');
-}
-
-function deleteEvent(idx) {
-  // Find in combined array which one is custom
-  const all = [...FIXED_EVENTS, ...state.events];
-  const ev = all[idx];
-  const ci = state.events.findIndex(e => e.date === ev.date && e.title === ev.title);
-  if (ci >= 0) { state.events.splice(ci, 1); saveLocal(); renderSchedule(); }
-}
-
-// ── NOTES ──
-function addNote() {
-  const tag = document.getElementById('noteTag').value;
-  const title = document.getElementById('noteTitle').value.trim();
-  const body = document.getElementById('noteBody').value.trim();
-  const importance = parseInt(document.getElementById('noteImportance').value);
-  const cat = document.getElementById('noteCat').value.trim();
-  if (!title || !body) { toast('タイトルと内容を入力してください'); return; }
-  state.notes.unshift({
-    id: Date.now(),
-    tag, title, body, importance, cat,
-    date: new Date().toISOString().slice(0,10)
-  });
-  saveLocal();
-  renderNotes();
-  document.getElementById('noteTitle').value = '';
-  document.getElementById('noteBody').value = '';
-  toast('メモを保存しました');
-  updateDashboard();
-}
-
-function renderNotes() {
-  const filterTag = document.getElementById('filterTag').value;
-  const filterSort = document.getElementById('filterSort').value;
-
-  let notes = [...state.notes];
-  if (filterTag !== 'all') notes = notes.filter(n => n.tag === filterTag);
-  if (filterSort === 'imp') notes.sort((a,b) => b.importance - a.importance);
-
-  const list = document.getElementById('notesList');
-  if (notes.length === 0) {
-    list.innerHTML = '<div class="empty-state">まだメモがありません</div>';
-    return;
-  }
-
-  list.innerHTML = notes.map(n => {
-    const stars = '⭐'.repeat(n.importance || 1);
-    const tagMap = { hunter: 'tag-hunter', gun: 'tag-gun', both: 'tag-both' };
-    const tagLabel = { hunter: '狩猟免許', gun: '猟銃講習会', both: '共通' };
-    return `<div class="note-card">
-      <button class="note-del" onclick="deleteNote(${n.id})">✕</button>
-      <div class="note-meta">
-        <span class="note-tag ${tagMap[n.tag]}">${tagLabel[n.tag]}</span>
-        ${n.cat ? `<span class="note-tag" style="background:var(--paper2);color:var(--muted);">${n.cat}</span>` : ''}
-        <span class="importance">${stars}</span>
-        <span class="note-date">${n.date}</span>
-      </div>
-      <div class="note-title">${n.title}</div>
-      <div class="note-body">${n.body}</div>
-    </div>`;
-  }).join('');
-}
-
-function deleteNote(id) {
-  state.notes = state.notes.filter(n => n.id !== id);
-  saveLocal();
-  renderNotes();
-  updateDashboard();
-}
-
-// ── DASHBOARD ──
-function updateDashboard() {
-  const today = new Date().toISOString().slice(0,10);
-  const todayCount = state.notes.filter(n => n.date === today).length;
-  document.getElementById('todayNotes').textContent = todayCount;
-
-  const dates = [...new Set(state.notes.map(n => n.date))];
-  document.getElementById('studyDays').textContent = dates.length;
-}
-
-// ── STRATEGY ──
-const HUNTER_CATS = ['法令・規則', '安全管理', '鳥獣識別', '猟具', '生態・環境'];
-const GUN_CATS = ['猟銃関係法令', '安全な取扱い', '保管・携帯・運搬', '銃器の構造', '火薬類', '危急・救急'];
-
-function renderStrategyCategories() {
-  renderCatList('hunterCatList', HUNTER_CATS, 'hunter');
-  renderCatList('gunCatList', GUN_CATS, 'gun');
-}
-
-function renderCatList(id, cats, type) {
-  const data = getQuizCatData(type);
-  document.getElementById(id).innerHTML = cats.map(cat => {
-    const pct = data[cat] || 0;
-    const cls = pct < 50 ? 'var(--red)' : pct < 80 ? 'var(--gold)' : 'var(--green)';
-    return `<div class="cat-row">
-      <span class="cat-name">${cat}</span>
-      <div class="cat-bar"><div class="cat-fill" style="width:${pct}%;background:${cls};"></div></div>
-      <span style="font-size:0.7rem;font-family:'Josefin Sans',sans-serif;min-width:32px;text-align:right;">${pct}%</span>
-    </div>`;
-  }).join('');
-}
-
-function getQuizCatData(type) {
-  // hunter_quiz_v1 / gun_quiz_v1 の catStats: { cat: {a:回答数, c:正解数} }
-  const key = type === 'hunter' ? 'hunter_quiz_v1' : 'gun_quiz_v1';
-  try {
-    const d = JSON.parse(localStorage.getItem(key) || '{}');
-    const catStats = d.catStats || {};
-    const result = {};
-    Object.entries(catStats).forEach(([k, v]) => {
-      result[k] = v.a > 0 ? Math.round(v.c / v.a * 100) : 0;
-    });
-    return result;
-  } catch(e) {}
-  return {};
-}
-
-function toggleStrategy(el) {
-  const body = el.nextElementSibling;
-  body.classList.toggle('open');
-  el.querySelector('span:last-child').textContent = body.classList.contains('open') ? '▲' : '▼';
-}
-
-function saveStratNote() {
-  state.stratNotes.hunter = document.getElementById('hunterStratNote').value;
-  state.stratNotes.gun = document.getElementById('gunStratNote').value;
-  saveLocal();
-}
-
-// ── FEEDBACK TO QUIZ ──
-function pushFeedback(type) {
-  const important = state.notes
-    .filter(n => (n.tag === type || n.tag === 'both') && n.importance === 3)
-    .map(n => ({ title: n.title, cat: n.cat, date: n.date }));
-
-  const key = type === 'hunter' ? 'studyManager_hunter_feedback' : 'studyManager_gun_feedback';
-  localStorage.setItem(key, JSON.stringify({
-    updatedAt: new Date().toISOString(),
-    importantTopics: important
-  }));
-  document.getElementById('feedbackLog').textContent =
-    `✓ ${type === 'hunter' ? '狩猟' : '銃'}クイズに ${important.length}件の重要トピックを同期しました (${new Date().toLocaleTimeString()})`;
-  toast('同期しました');
-}
-
-// ── CLOUD SYNC ──
-async function saveAndSync() {
-  state.apiKey = document.getElementById('apiKeyInput').value.trim();
-  state.binId = document.getElementById('binIdInput').value.trim();
-  saveLocal();
-  await pushToCloud();
-}
-
-// ═══════════════════════════════════════════════════
-// 共通同期ライブラリ (全アプリ共通)
-// 設定キー: hunting_sync_cfg → {apiKey, binId}
-// ═══════════════════════════════════════════════════
-const SYNC_CFG_KEY = 'hunting_sync_cfg';
-
-function getSyncCfg(){
-  try{ return JSON.parse(localStorage.getItem(SYNC_CFG_KEY)||'{}'); }catch(e){ return {}; }
-}
-function setSyncCfg(cfg){ localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(cfg)); }
+// ════ 共通同期 (hunting_sync_cfg) ════
+const SYNC_KEY = 'hunting_sync_cfg';
+function getSyncCfg(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'{}'); }catch(e){ return {}; } }
+function setSyncCfg(cfg){ localStorage.setItem(SYNC_KEY, JSON.stringify(cfg)); }
 function hasSyncCfg(){ const c=getSyncCfg(); return !!(c.apiKey&&c.binId); }
 
-// クラウドから全データ取得
-async function cloudPull(){
-  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return null;
-  try{
-    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
-      headers:{'X-Master-Key':cfg.apiKey}
-    });
-    if(!res.ok) return null;
-    const j=await res.json(); return j.record||null;
-  }catch(e){ return null; }
+async function _fetchBin(){
+  const {apiKey,binId}=getSyncCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`,{headers:{'X-Master-Key':apiKey}});
+  if(!r.ok) throw new Error(r.status);
+  const j=await r.json(); return j.record||{};
 }
-
-// クラウドへ全データ保存（マージ）
-async function cloudPush(appKey, appData){
-  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return false;
-  try{
-    // 既存データ取得してマージ
-    let existing={};
-    const pulled = await cloudPull();
-    if(pulled) existing=pulled;
-    const merged={...existing, [appKey]:appData, updatedAt:new Date().toISOString()};
-    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
-      body:JSON.stringify(merged)
-    });
-    return res.ok;
-  }catch(e){ return false; }
+async function _putBin(data){
+  const {apiKey,binId}=getSyncCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}`,{
+    method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':apiKey},
+    body:JSON.stringify(data)
+  });
+  return r.ok;
 }
-
-// 起動時自動ロード（クラウドのデータをLocalStorageに反映）
-async function autoLoadFromCloud(appKey){
+async function syncPush(appKey, appData){
   if(!hasSyncCfg()) return false;
   try{
-    const data=await cloudPull();
-    if(!data||!data[appKey]) return false;
-    const cloud=data[appKey];
-    const localRaw=localStorage.getItem(appKey);
-    const local=localRaw?JSON.parse(localRaw):{totalAnswered:0};
-    // クラウドの方が多く解答していれば上書き
-    if((cloud.totalAnswered||0)>=(local.totalAnswered||0)){
-      localStorage.setItem(appKey, JSON.stringify(cloud));
-      return true;
-    }
-    return false;
+    const existing=await _fetchBin();
+    return await _putBin({...existing, [appKey]:appData, _updated:Date.now()});
   }catch(e){ return false; }
 }
+async function syncPull(){
+  if(!hasSyncCfg()) return null;
+  try{ return await _fetchBin(); }catch(e){ return null; }
+}
+// ════════════════════════════════════
 
-// ── study-manager 同期UI ──
-function saveAndSync(){
+
+// ── 同期UI関数 ──
+function setSyncStatus(s, msg){
+  const map={ok:['dot-ok','同期済み'],err:['dot-err','エラー'],saving:['dot-idle','保存中…'],loading:['dot-idle','取得中…']};
+  const [cls,label]=map[s]||['dot-idle','未設定'];
+  document.getElementById('syncDot').className='dot '+cls;
+  document.getElementById('syncStatusText').textContent=label;
+  if(msg) document.getElementById('syncLog').textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
+}
+
+function saveCfgAndSync(){
   const apiKey=document.getElementById('apiKeyInput').value.trim();
   const binId=document.getElementById('binIdInput').value.trim();
   if(!apiKey||!binId){toast('API KeyとBin IDを入力してください');return;}
   setSyncCfg({apiKey,binId});
-  // localStateも保存
-  state.apiKey=apiKey; state.binId=binId;
-  saveLocal();
   setSyncStatus('ok','設定を保存しました');
-  pushToCloud();
+  doPush();
 }
 
-async function pushToCloud(){
-  if(!hasSyncCfg()){toast('API KeyとBin IDを設定してください');return;}
+async function doPush(){
+  if(!hasSyncCfg()){toast('先に設定タブでAPI KeyとBin IDを入力してください');return;}
   setSyncStatus('saving');
-  // まず既存クラウドデータを取得してマージ
-  const existing = await cloudPull() || {};
-  // study-managerのデータをマージ
-  const smData = {notes:state.notes, events:state.events, stratNotes:state.stratNotes, progress:state.progress};
-  const ok = await cloudPush('studyManager_v1', smData);
+  const smData={notes:state.notes,events:state.events,stratNotes:state.stratNotes,progress:state.progress};
+  const ok=await syncPush('studyManager_v1', smData);
   if(ok){ setSyncStatus('ok',`保存完了 (${new Date().toLocaleTimeString()})`); toast('☁️ 保存完了'); }
-  else { setSyncStatus('err','保存エラー'); toast('❌ 保存エラー'); }
+  else{ setSyncStatus('err','保存失敗'); toast('❌ 保存エラー'); }
 }
 
-async function pullFromCloud(){
-  if(!hasSyncCfg()){toast('API KeyとBin IDを設定してください');return;}
+async function doFullSync(){
+  if(!hasSyncCfg()){toast('先に設定タブでAPI KeyとBin IDを入力してください');return;}
+  const btn=document.getElementById('syncAllBtn');
+  if(btn) btn.textContent='取得中…';
   setSyncStatus('loading');
-  const data = await cloudPull();
-  if(!data){ setSyncStatus('err','取得エラー'); return; }
-
-  // study-managerデータを復元
+  const data=await syncPull();
+  if(!data){ setSyncStatus('err','取得失敗'); if(btn) btn.textContent='☁️ クラウドから最新データを取得'; return; }
+  // study-managerデータ復元
   if(data.studyManager_v1){
     const sm=data.studyManager_v1;
     if(sm.notes) state.notes=sm.notes;
     if(sm.events) state.events=sm.events;
     if(sm.stratNotes) state.stratNotes=sm.stratNotes;
+    if(sm.progress) state.progress=sm.progress;
   }
-  // クイズデータをLocalStorageに反映
-  if(data.hunter_quiz_v1) localStorage.setItem('hunter_quiz_v1', JSON.stringify(data.hunter_quiz_v1));
-  if(data.gun_quiz_v1) localStorage.setItem('gun_quiz_v1', JSON.stringify(data.gun_quiz_v1));
-
+  // クイズデータをLocalStorageに書き込み
+  if(data.hunter_quiz_v1) localStorage.setItem('hunter_quiz_v1',JSON.stringify(data.hunter_quiz_v1));
+  if(data.gun_quiz_v1) localStorage.setItem('gun_quiz_v1',JSON.stringify(data.gun_quiz_v1));
   saveLocal();
-  renderNotes(); renderSchedule(); updateDashboard();
-  document.getElementById('weakSection').innerHTML='<div class="empty-state">読み込み中…</div>';
-  loadFromQuizApps();
+  renderNotes(); renderSchedule(); updateDashboard(); loadFromQuizApps(); renderStrategyCategories();
   setSyncStatus('ok',`取得完了 (${new Date().toLocaleTimeString()})`);
-  toast('☁️ 取得完了！クイズデータも反映しました');
-}</script>
+  toast('☁️ データを取得しました');
+  if(btn) btn.textContent='☁️ クラウドから最新データを取得';
+}
+
+// ── クイズデータ読み込み ──
+function loadFromQuizApps(){
+  loadQuizData('hunter_quiz_v1','hunter');
+  loadQuizData('gun_quiz_v1','gun');
+}
+
+function loadQuizData(key, type){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    const answered=d.totalAnswered||0;
+    const correct=d.totalCorrect||0;
+    const pct=answered>0?Math.round(correct/answered*100):0;
+    const wrong=(d.wrongIds||[]).length;
+    if(type==='hunter'){
+      document.getElementById('hunterAppStats').textContent=`正答率${pct}% / ${answered}問 / 要復習${wrong}問`;
+      state.progress.hunter=pct;
+      document.getElementById('hunterBar').style.width=pct+'%';
+      document.getElementById('hunterPct').textContent=pct+'%';
+    } else {
+      document.getElementById('gunAppStats').textContent=`正答率${pct}% / ${answered}問 / 要復習${wrong}問`;
+      state.progress.gun=pct;
+      document.getElementById('gunBar').style.width=pct+'%';
+      document.getElementById('gunPct').textContent=pct+'%';
+    }
+    // 苦手問題表示
+    renderWeakPoints(d, type);
+    // カテゴリ分析更新
+    renderStrategyCategories();
+  }catch(e){}
+}
+
+function renderWeakPoints(d, type){
+  const catStats=d.catStats||{};
+  const wrongIds=d.wrongIds||[];
+  if(Object.keys(catStats).length===0 && wrongIds.length===0) return;
+  const container=document.getElementById('weakSection');
+  const emptyState=container.querySelector('.empty-state');
+  if(emptyState) emptyState.remove();
+  if(document.getElementById('weak-'+type)) return;
+  const catNames=type==='hunter'
+    ?{law:'法令・制度',bird:'鳥獣識別',gun:'猟具・銃器',safe:'安全・事故防止',eco:'生態・保護管理'}
+    :{law:'銃砲関連法令',safe:'安全な取扱い',keep:'保管・携帯・運搬',mech:'銃の構造・機能',exp:'火薬類・実包',acc:'事故・応急処置'};
+  const rows=Object.entries(catStats).map(([k,v])=>{
+    const acc=v.a>0?Math.round(v.c/v.a*100):0;
+    const cls=acc<50?'pct-bad':acc<80?'pct-mid':'pct-ok';
+    return `<div class="weak-item"><span class="weak-pct ${cls}">${acc}%</span><span style="flex:1">${catNames[k]||k}</span><span style="font-size:.65rem;color:var(--muted)">${v.c}/${v.a}問</span></div>`;
+  }).join('');
+  const card=document.createElement('div');
+  card.id='weak-'+type;
+  card.className='weak-card';
+  card.innerHTML=`<div class="weak-header ${type}" onclick="this.nextElementSibling.classList.toggle('open')">
+    ${type==='hunter'?'🦆':'🔫'} カテゴリ別正答率 / 要復習${wrongIds.length}問 <span style="margin-left:auto">▼</span>
+  </div><div class="weak-list">${rows}</div>`;
+  container.appendChild(card);
+}
+
+// ── カウントダウン ──
+function renderCountdown(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const exams=[{label:'初心者講習',date:new Date('2025-07-25')},{label:'狩猟試験',date:new Date('2025-09-12')}];
+  document.getElementById('countdownBar').innerHTML=exams.map(e=>{
+    const diff=Math.ceil((e.date-today)/86400000);
+    return `<div class="countdown-chip"><span class="label">${e.label}</span><span class="days">${diff>0?diff:0}</span><span class="unit">日前</span></div>`;
+  }).join('');
+}
+
+// ── スケジュール ──
+function renderSchedule(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const all=[...FIXED_EVENTS,...state.events].sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById('scheduleList').innerHTML=all.map((ev,i)=>{
+    const d=new Date(ev.date);
+    const diff=Math.ceil((d-today)/86400000);
+    const diffStr=diff>0?`あと${diff}日`:diff===0?'今日':`${Math.abs(diff)}日前`;
+    const isCustom=!FIXED_EVENTS.find(f=>f.date===ev.date&&f.title===ev.title);
+    return `<div class="schedule-card"><div class="sch-date-bar ${ev.type}">
+      <span class="sch-date">${ev.date}</span><span>${ev.title}</span><span class="sch-days-left">${diffStr}</span>
+    </div><div class="sch-body"><div class="sch-note">${ev.note||''}</div>
+    ${isCustom?`<button class="btn btn-sm" style="margin-top:6px;background:var(--paper2);" onclick="deleteEvent(${i})">削除</button>`:''}
+    </div></div>`;
+  }).join('');
+}
+
+function addEvent(){
+  const date=document.getElementById('evDate').value;
+  const type=document.getElementById('evType').value;
+  const title=document.getElementById('evTitle').value.trim();
+  const note=document.getElementById('evNote').value.trim();
+  if(!date||!title){toast('日付とタイトルを入力してください');return;}
+  state.events.push({date,type,title,note});
+  state.events.sort((a,b)=>a.date.localeCompare(b.date));
+  saveLocal(); renderSchedule(); doPush();
+  document.getElementById('evTitle').value=''; document.getElementById('evNote').value='';
+  toast('追加しました');
+}
+
+function deleteEvent(idx){
+  const all=[...FIXED_EVENTS,...state.events];
+  const ev=all[idx];
+  const ci=state.events.findIndex(e=>e.date===ev.date&&e.title===ev.title);
+  if(ci>=0){state.events.splice(ci,1);saveLocal();renderSchedule();}
+}
+
+// ── メモ ──
+function addNote(){
+  const tag=document.getElementById('noteTag').value;
+  const title=document.getElementById('noteTitle').value.trim();
+  const body=document.getElementById('noteBody').value.trim();
+  const importance=parseInt(document.getElementById('noteImportance').value);
+  const cat=document.getElementById('noteCat').value.trim();
+  if(!title||!body){toast('タイトルと内容を入力してください');return;}
+  state.notes.unshift({id:Date.now(),tag,title,body,importance,cat,date:new Date().toISOString().slice(0,10)});
+  saveLocal(); renderNotes(); updateDashboard(); doPush();
+  document.getElementById('noteTitle').value=''; document.getElementById('noteBody').value='';
+  toast('保存しました');
+}
+
+function renderNotes(){
+  const filterTag=document.getElementById('filterTag').value;
+  const filterSort=document.getElementById('filterSort').value;
+  let notes=[...state.notes];
+  if(filterTag!=='all') notes=notes.filter(n=>n.tag===filterTag);
+  if(filterSort==='imp') notes.sort((a,b)=>b.importance-a.importance);
+  const list=document.getElementById('notesList');
+  if(!notes.length){list.innerHTML='<div class="empty-state">まだメモがありません</div>';return;}
+  const tagMap={hunter:'tag-hunter',gun:'tag-gun',both:'tag-both'};
+  const tagLabel={hunter:'狩猟免許',gun:'猟銃講習会',both:'共通'};
+  list.innerHTML=notes.map(n=>`<div class="note-card">
+    <button class="note-del" onclick="deleteNote(${n.id})">✕</button>
+    <div class="note-meta">
+      <span class="note-tag ${tagMap[n.tag]}">${tagLabel[n.tag]}</span>
+      ${n.cat?`<span class="note-tag" style="background:var(--paper2);color:var(--muted);">${n.cat}</span>`:''}
+      <span class="importance">${'⭐'.repeat(n.importance||1)}</span>
+      <span class="note-date">${n.date}</span>
+    </div>
+    <div class="note-title">${n.title}</div>
+    <div class="note-body">${n.body}</div>
+  </div>`).join('');
+}
+
+function deleteNote(id){
+  state.notes=state.notes.filter(n=>n.id!==id);
+  saveLocal(); renderNotes(); updateDashboard(); doPush();
+}
+
+// ── ダッシュボード ──
+function updateDashboard(){
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('todayNotes').textContent=state.notes.filter(n=>n.date===today).length;
+  document.getElementById('studyDays').textContent=[...new Set(state.notes.map(n=>n.date))].length;
+}
+
+// ── 対策分析 ──
+const HUNTER_CATS={law:'法令・制度',bird:'鳥獣識別',gun:'猟具・銃器',safe:'安全・事故防止',eco:'生態・保護管理'};
+const GUN_CATS={law:'銃砲関連法令',safe:'安全な取扱い',keep:'保管・携帯・運搬',mech:'銃の構造・機能',exp:'火薬類・実包',acc:'事故・応急処置'};
+
+function renderStrategyCategories(){
+  renderCatList('hunterCatList', HUNTER_CATS, 'hunter_quiz_v1');
+  renderCatList('gunCatList', GUN_CATS, 'gun_quiz_v1');
+}
+
+function renderCatList(id, cats, lsKey){
+  try{
+    const d=JSON.parse(localStorage.getItem(lsKey)||'{}');
+    const catStats=d.catStats||{};
+    document.getElementById(id).innerHTML=Object.entries(cats).map(([k,name])=>{
+      const v=catStats[k]||{a:0,c:0};
+      const pct=v.a>0?Math.round(v.c/v.a*100):0;
+      const col=pct<50?'var(--red)':pct<80?'var(--gold)':'var(--green)';
+      return `<div class="cat-row"><span class="cat-name">${name}</span>
+        <div class="cat-bar"><div class="cat-fill" style="width:${pct}%;background:${col}"></div></div>
+        <span style="font-size:.7rem;font-family:'Josefin Sans',sans-serif;min-width:32px;text-align:right;">${pct}%</span>
+      </div>`;
+    }).join('');
+  }catch(e){}
+}
+
+function saveStratNote(){
+  state.stratNotes.hunter=document.getElementById('hunterStratNote').value;
+  state.stratNotes.gun=document.getElementById('gunStratNote').value;
+  saveLocal();
+}
+
+// ── ナビ ──
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ── リセット ──
+function resetAll(){
+  if(!confirm('学習データをすべて削除しますか？'))return;
+  state={notes:[],events:[],progress:{hunter:0,gun:0},stratNotes:{hunter:'',gun:''}};
+  saveLocal(); renderNotes(); renderSchedule(); updateDashboard();
+  toast('リセットしました');
+}
+
+// ── トースト ──
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── 初期化 ──
+function init(){
+  loadLocal();
+  renderCountdown();
+  renderSchedule();
+  renderNotes();
+  updateDashboard();
+  // 設定を読み込んでUI反映
+  const cfg=getSyncCfg();
+  if(cfg.apiKey){
+    document.getElementById('apiKeyInput').value=cfg.apiKey;
+    document.getElementById('binIdInput').value=cfg.binId;
+    setSyncStatus('ok','設定済み');
+    // 起動時に自動でクラウドから取得
+    doFullSync();
+  }
+  document.getElementById('evDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('hunterStratNote').value=state.stratNotes.hunter||'';
+  document.getElementById('gunStratNote').value=state.stratNotes.gun||'';
+}
+
+init();
+</script>
 </body>
 </html>

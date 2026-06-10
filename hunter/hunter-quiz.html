@@ -178,11 +178,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     </div>
   </div>
 
-  <div style="display:flex;gap:8px;width:100%;max-width:380px;margin-bottom:4px;">
-    <button onclick="showSyncModal()" style="flex:1;padding:9px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;">⚙️ 同期設定</button>
-    <button onclick="autoSaveAll()" style="flex:1;padding:9px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;" id="sync-btn">☁️ クラウドに保存</button>
-  </div>
-
   <div class="mode-btns">
     <button class="mode-btn btn-main" onclick="startMode('random')">
       <span class="icon">🎯</span>
@@ -885,239 +880,54 @@ function nextQ(){
   if(session.idx>=session.qs.length){showResult();return;}
   renderQ();
 }
-function exitQuiz(){if(confirm('終了しますか？'))// ── 起動時クラウド自動ロード ──
-(async function autoLoad(){
+function exitQuiz(){if(confirm('終了しますか？'))
+// ════ 共通同期 (hunting_sync_cfg) ════
+const SYNC_KEY = 'hunting_sync_cfg';
+function getSyncCfg(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'{}'); }catch(e){ return {}; } }
+function setSyncCfg(cfg){ localStorage.setItem(SYNC_KEY, JSON.stringify(cfg)); }
+function hasSyncCfg(){ const c=getSyncCfg(); return !!(c.apiKey&&c.binId); }
+async function _fetchBin(){
+  const {apiKey,binId}=getSyncCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`,{headers:{'X-Master-Key':apiKey}});
+  if(!r.ok) throw new Error(r.status);
+  const j=await r.json(); return j.record||{};
+}
+async function _putBin(data){
+  const {apiKey,binId}=getSyncCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}`,{
+    method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':apiKey},
+    body:JSON.stringify(data)
+  });
+  return r.ok;
+}
+async function syncPush(appKey, appData){
+  if(!hasSyncCfg()) return false;
+  try{ const e=await _fetchBin(); return await _putBin({...e,[appKey]:appData,_updated:Date.now()}); }catch(e){ return false; }
+}
+// ════════════════════════════════════
+
+// ── 起動時クラウド自動ロード ──
+(async()=>{
+  if(!hasSyncCfg()) return;
   try{
-    const cfg = JSON.parse(localStorage.getItem('hunter_quiz_sync')||'{}');
-    if(!cfg.apiKey||!cfg.binId) return;
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
-      headers:{'X-Master-Key': cfg.apiKey}
-    });
-    if(!res.ok) return;
-    const json = await res.json();
-    const data = json.record;
-    if(data && data['hunter_quiz_v1']){
-      // LocalStorageより新しければクラウドを優先
-      const cloud = data['hunter_quiz_v1'];
-      const local = state;
-      if((cloud.totalAnswered||0) >= (local.totalAnswered||0)){
-        Object.assign(state, cloud);
-        saveState();
-        updateHomeStats();
+    const data=await _fetchBin();
+    if(data&&data['hunter_quiz_v1']){
+      const cloud=data['hunter_quiz_v1'];
+      const localRaw=localStorage.getItem('hunter_quiz_v1');
+      const local=localRaw?JSON.parse(localRaw):{totalAnswered:0};
+      if((cloud.totalAnswered||0)>=(local.totalAnswered||0)){
+        localStorage.setItem('hunter_quiz_v1',JSON.stringify(cloud));
+        state=loadState(); updateHomeStats();
         showToast('☁️ データを復元しました');
       }
     }
-  }catch(e){ /* 起動時エラーは無視 */ }
-})();
-
-showHome();}
-
-function toggleMark(){
-  const id=currentQ.id;
-  if(state.markedIds.includes(id)){state.markedIds=state.markedIds.filter(x=>x!==id);}
-  else{state.markedIds.push(id);}
-  saveState();updateMarkBtn();
-}
-function updateMarkBtn(){
-  const btn=document.getElementById('mark-btn');
-  if(!btn||!currentQ)return;
-  const marked=state.markedIds.includes(currentQ.id);
-  btn.textContent=marked?'★ マーク済':'☆ 重要マーク';
-  btn.style.color=marked?'var(--yellow)':'var(--muted)';
-}
-
-function showResult(){
-  hideAll();
-  document.getElementById('result').style.display='flex';
-  const total=session.qs.length;
-  const correct=session.answers.filter(a=>a.correct).length;
-  const rate=Math.round(correct/total*100);
-  const elapsed=Math.round((Date.now()-session.startTime)/1000);
-  const mins=Math.floor(elapsed/60);const secs=elapsed%60;
-  document.getElementById('res-score').textContent=`${correct}/${total}`;
-  document.getElementById('res-rate').textContent=rate+'%';
-  document.getElementById('res-rate').style.color=rate===100?'#4ade80':rate>=80?'var(--yellow)':'var(--red)';
-  document.getElementById('res-time').textContent=`${mins}分${secs}秒`;
-  const passEl=document.getElementById('res-pass');
-  if(session.mode==='exam'){
-    passEl.style.display='block';
-    passEl.textContent=rate>=70?'🎉 合格ライン達成！（70%以上）':'⚠️ 要復習（合格は70%以上・21問以上正解）';
-    passEl.style.color=rate>=70?'#4ade80':'var(--red)';
-  } else { passEl.style.display='none'; }
-  const catResults={};
-  session.answers.forEach(a=>{
-    const q=QDB.find(x=>x.id===a.id);if(!q)return;
-    if(!catResults[q.cat])catResults[q.cat]={c:0,t:0};
-    catResults[q.cat].t++;if(a.correct)catResults[q.cat].c++;
-  });
-  document.getElementById('cat-results').innerHTML=Object.entries(catResults).map(([k,v])=>{
-    const r=Math.round(v.c/v.t*100);
-    const col=r===100?'#4ade80':r>=70?'var(--yellow)':'var(--red)';
-    return `<div class="cat-result-row">
-      <div class="cat-result-top"><span class="cat-result-name">${CATS[k].icon} ${CATS[k].name}</span><span class="cat-result-score" style="color:${col}">${v.c}/${v.t}問 (${r}%)</span></div>
-      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${r}%;background:${col}"></div></div>
-    </div>`;
-  }).join('');
-  autoSaveAll();
-}
-
-function hideAll(){['home','catscreen','quiz','result'].forEach(id=>{
-  const el=document.getElementById(id);if(el)el.style.display='none';
-});}
-function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
-
-function loadStudyManagerFeedback(){
-  try{
-    const fb=JSON.parse(localStorage.getItem('studyManager_hunter_feedback')||'{}');
-    if(fb.importantTopics&&fb.importantTopics.length>0){
-      const existing=document.getElementById('sm-feedback-note');
-      if(!existing){
-        const el=document.createElement('div');
-        el.id='sm-feedback-note';
-        el.style.cssText='font-size:11px;color:var(--yellow);text-align:center;margin-bottom:4px;max-width:380px;';
-        el.textContent=`📋 学習管理より ${fb.importantTopics.length}件の重要トピックあり`;
-        const home=document.getElementById('home');
-        const mbtns=home.querySelector('.mode-btns');
-        if(mbtns)home.insertBefore(el,mbtns);
-      }
-    }
   }catch(e){}
-}
-
-let state=loadState();
-(async()=>{
-  const ok=await autoLoadFromCloud('hunter_quiz_v1');
-  if(ok){ state=loadState(); updateHomeStats(); showToast('☁️ データを復元しました'); }
 })();
-let session={qs:[],idx:0,answers:[],mode:'',cat:'',startTime:0};
-let currentQ=null;
-let answered=false;
 
-showHome();
-
-// ══════════════════════════════════════════
-// // ═══════════════════════════════════════════════════
-// 共通同期ライブラリ (全アプリ共通)
-// 設定キー: hunting_sync_cfg → {apiKey, binId}
-// ═══════════════════════════════════════════════════
-const SYNC_CFG_KEY = 'hunting_sync_cfg';
-
-function getSyncCfg(){
-  try{ return JSON.parse(localStorage.getItem(SYNC_CFG_KEY)||'{}'); }catch(e){ return {}; }
-}
-function setSyncCfg(cfg){ localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(cfg)); }
-function hasSyncCfg(){ const c=getSyncCfg(); return !!(c.apiKey&&c.binId); }
-
-// クラウドから全データ取得
-async function cloudPull(){
-  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return null;
-  try{
-    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
-      headers:{'X-Master-Key':cfg.apiKey}
-    });
-    if(!res.ok) return null;
-    const j=await res.json(); return j.record||null;
-  }catch(e){ return null; }
-}
-
-// クラウドへ全データ保存（マージ）
-async function cloudPush(appKey, appData){
-  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return false;
-  try{
-    // 既存データ取得してマージ
-    let existing={};
-    const pulled = await cloudPull();
-    if(pulled) existing=pulled;
-    const merged={...existing, [appKey]:appData, updatedAt:new Date().toISOString()};
-    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
-      body:JSON.stringify(merged)
-    });
-    return res.ok;
-  }catch(e){ return false; }
-}
-
-// 起動時自動ロード（クラウドのデータをLocalStorageに反映）
-async function autoLoadFromCloud(appKey){
-  if(!hasSyncCfg()) return false;
-  try{
-    const data=await cloudPull();
-    if(!data||!data[appKey]) return false;
-    const cloud=data[appKey];
-    const localRaw=localStorage.getItem(appKey);
-    const local=localRaw?JSON.parse(localRaw):{totalAnswered:0};
-    // クラウドの方が多く解答していれば上書き
-    if((cloud.totalAnswered||0)>=(local.totalAnswered||0)){
-      localStorage.setItem(appKey, JSON.stringify(cloud));
-      return true;
-    }
-    return false;
-  }catch(e){ return false; }
-}
-
-// ── UI同期設定関数 ──
-function showSyncModal(){
-  const cfg=getSyncCfg();
-  document.getElementById('sync-apikey').value=cfg.apiKey||'';
-  document.getElementById('sync-binid').value=cfg.binId||'';
-  document.getElementById('sync-modal').style.display='flex';
-}
-function hideSyncModal(){ document.getElementById('sync-modal').style.display='none'; }
-function saveSyncSettings(){
-  const apiKey=document.getElementById('sync-apikey').value.trim();
-  const binId=document.getElementById('sync-binid').value.trim();
-  if(!apiKey||!binId){showToast('API KeyとBin IDを入力してください');return;}
-  setSyncCfg({apiKey,binId});
-  hideSyncModal();
-  showToast('設定を保存しました ✅');
-  autoSaveAll();
-}
-
-// ── 自動保存 ──
-async function autoSaveAll(){
+// ── 問題終了時の自動保存 ──
+async function autoSave(){
   if(!hasSyncCfg()) return;
-  const ok=await cloudPush('hunter_quiz_v1', state);
-  const btn=document.getElementById('sync-btn');
-  if(btn){ btn.textContent='☁️ 同期済み'; setTimeout(()=>{btn.textContent='☁️ 同期';},2000); }
+  try{ await syncPush('hunter_quiz_v1', state); }catch(e){}
 }
-
-function loadStudyManagerFeedback(){
-  try{
-    const fb=JSON.parse(localStorage.getItem('studyManager_hunter_feedback')||'{}');
-    if(fb.importantTopics&&fb.importantTopics.length>0){
-      const existing=document.getElementById('sm-feedback-note');
-      if(!existing){
-        const el=document.createElement('div');
-        el.id='sm-feedback-note';
-        el.style.cssText='font-size:11px;color:var(--yellow);text-align:center;margin-bottom:4px;max-width:380px;';
-        el.textContent=`📋 学習管理より ${fb.importantTopics.length}件の重要トピックあり`;
-        const home=document.getElementById('home');
-        const mbtns=home.querySelector('.mode-btns');
-        if(mbtns)home.insertBefore(el,mbtns);
-      }
-    }
-  }catch(e){}
-}
-loadStudyManagerFeedback();</script>
-<!-- SYNC MODAL -->
-<div id="sync-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#0a1a0a;border:1px solid rgba(74,222,128,.25);border-radius:16px;padding:24px;width:100%;max-width:360px;">
-    <div style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:6px;">⚙️ 同期設定</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">※ study-managerで設定済みなら自動共有</div>
-    <div style="margin-bottom:12px;">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">API KEY</div>
-      <input id="sync-apikey" type="password" placeholder="$2a$10$..." style="width:100%;padding:10px;background:#050f0a;border:1px solid rgba(74,222,128,.2);border-radius:8px;color:var(--text);font-size:13px;">
-    </div>
-    <div style="margin-bottom:16px;">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">BIN ID</div>
-      <input id="sync-binid" type="text" placeholder="68xxxxxxxxxxxxxxxx" style="width:100%;padding:10px;background:#050f0a;border:1px solid rgba(74,222,128,.2);border-radius:8px;color:var(--text);font-size:13px;">
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button onclick="saveSyncSettings()" style="flex:1;padding:12px;background:linear-gradient(135deg,#16a34a,#052e16);border:1px solid rgba(74,222,128,.3);border-radius:10px;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;">保存して同期</button>
-      <button onclick="hideSyncModal()" style="flex:1;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:14px;cursor:pointer;">閉じる</button>
-    </div>
-  </div>
-</div>
+</script>
 </body></html>
