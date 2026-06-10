@@ -2,648 +2,632 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="狩猟HQ">
 <title>狩猟試験 HQ</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAliklEQVR4nO3dO24k2ZUG4KhGG4JMQRsYaAt026HbjqANTDnaAiFLxlgDbkEOtYHBOHLp9JjcgjAbGMgU5GmM6lRlkfmIx32e832AAKGTRQYjI87549zI4KeFofziV7/8Z+9tAKjlH3/7+6fe28AX3ojGNHiA6wSEduzoijR7gOOEgjrs1II0fID6BIIy7MQDNHyA/gSCfey0jTR9gHEJA+vZUSto+gDzEQZus3Nu0PgB5icIXGanvKPpA8QlDHxlR/xM4wfIQxAQADR+gMQyB4G0v7jGD8BJxiCQ7hfW+AG4JlMQSPOLavwArJUhCIT/BTV+APaKHATC/mIaPwClRAwC3/XegBo0fwBKithXQiWaiG8QAGOJMg0I8Uto/AC0NnsQmH4JQPMHoIfZ+8/UAWD2nQ/A3GbuQ1OOL2be4QDENNuSwHQTAM0fgBHN1p+mCgCz7VwAcpmpT00xrphphwLAsoy/JDD8BEDzB2BGo/evoQPA6DsPAG4ZuY8NGwBG3mkAsNao/WzIADDqzgKAPUbsa8MFgBF3EgAcNVp/G+YOxdF2DADUMsInBIaYAGj+AGQyQt/rHgBG2AkA0Frv/tc1APT+5QGgp559sFsA0PwBoF8/7L4EAAC01yUAuPoHgK969MXmAUDzB4CPWvfHpgFA8weA61r2yWYBQPMHgPta9csmAUDzB4D1WvTN6gFA8weA7Wr3Tx8DBICEqgYAV/8AsF/NPlotAGj+AHBcrX5aJQBo/gBQTo2+6h4AAEioeABw9Q8A5ZXur0UDgOYPAPWU7LPFAoDmDwD1leq37gEAgISKBABX/wDQTom+awIAAAkdDgCu/gGgvaP991AA0PwBoJ8jfdgSAAAk9GnvP3T1D+N4fHv6YcOXv9x5/fOab/L68PzThp8JVPSPv/19cz8XAGBgGxv7Wi93Xv9c8ocJClBfswCg+UM5lZr8LS93Xv/cYBuWZREOoKStIUAAgEY6NPprXu68/rnBNtwkGMB21QOA5g/3DdTsL3m58/rnBtuwmVAA920JAQIAFDB4w3/v5c7rnxtsw2ECAXxULQBo/vDFZA3/vZc7r39usA3FCQTwxdoQIADACpM3/Pde7rz+ucE2VCcQkFXxAKD5k02wpn/u5c7rnxtsQ1PCANmsCQECAJwJ3PTPvdx5/XODbehGGCCDYgFA8yeyJE3/3Mud1z832IYhCANEdi8ECACklLDpn3u58/rnBtswHGGAaA4HAM2fKKI3/bUN7PHt6a93vs9vVnwP+xImcCsEfN9yQ6C1CI1qxGa0IWxMuf/Pt3vE/Q8lCACENFvjidpkbv1es7xHp+2M+h6R180lAON/ZjJDQxmhiZRYAqjJ+whlXVsGMAFgeiM3DI1iu/f7bMT311SACK5OAFz9M7rRGsMszWD0CcAa3nvY5tIUwASAqYxU+BX9fkabErhpkBkJAEyhd4E/UdzHdP6+9D5WLA8wi4tLAMb/jKJ3MY9YxCMsAWzhGIIv3i8DmAAwpJ5FW8GOpfd0wESAUQkADKVX41ecc+gZBgQBRvNhCcD4nx40/nayLQHc49gjk/NlABMAumtdgBVezvWaCjy+Pf3gWKQnAYBuWhZbhZY1WocBywL0JADQnMbPDE7HjiBAVN/cA2D9n5o0/jG4B2Afxy9RnO4DMAGgiRbFU9GkppbLA+4PoAUBgKo0fiJqsTxgWYDaBACq0PjJQBBgZv+6B8D6P6XUbv4K4THuAajHsc8s/vG3v38yAaAYxY/sak8ETAMo6bveG0AMNZv/68PzTwoeM6l9zPb+A0fEYALAIbUbf63vDS3UnAiYBnCUCQC71Wr+rviJpuYxbRrAXp+WxQ2AbFOz8df4vnzLTYD9OYcYgQkAmyhccJxpACMwAWC1GsVF42/PBGAszit6EQC4S4GKRQAYk/OM1iwBcJOiBG3UOC8sCXCLCQBXlS4eGv8YTADG59yjBQGAD1z1xyYAzMF5SG0CAN9w5RGfADAX5yS1fKf5c6LQwHhKn0fuC+DkkwCAxp+LCcC8nKuU5FMAySkoMA/TAEoyAUis5Mmv8c/DBCAG5y9HmQAkpXjA3EqedyYBOQkACWn+EIMQwBGWAJIpdZJr/GN6fHv6/Yov+8Od1//z1ouvD89/Wr9FtOLcZisBIBEFYm4rm/sahwLAGkJCH85xthAAEjDyn0vBRn9N9QBwjWBQn/OdtQSA4FwRjK1Bs7+kWwC4RCiow7nPPQJAYArAeDo1/PeGCgDvCQTlqAHcIgAE5cQfwyAN/72hA8B7AsExagHXCAABOeH7GrTpn5sqAJwTBvZRE7hEAAjGid7HBE3/3LQB4JwwsI3awHsCQCAlTnAn93qTNf1zIQLAOWFgPXWCEwEgCCd1GxM3/XPhAsA5YeA+9YJlEQBCcDLXNVvTv9cAj/wxoGj7IjN1AwFgck7iekZsdiUaWu2/Bhh1v0WkfuQmAEzMyVvHCA2sZsPq9eeAo+/XWakjeQkAk3LSltWzObVuSr0CwJVtSbPfR6ae5CQATMjJWk6PBtS78YwUAN7L+H6MQl3JRwCYjJO0jNaNZqQmM3IAOJf5PepFfcnl+94bQFvZT85WTUUzOe79Pqz93p2+f+b37vXh+aeSf02QsZkATOToiZm5+bdo/LM0jlkmALd4P+tSa3IQACbhhNyndqOYsUlECADnvMd1qDnxCQATcCLuU7MxzNwUogWAE+93eWpPbALA4JyA29VqBFGaQNQAcM4xUI4aFJcAMDAn3jaK/joZAsCJY6IMtSgmAWBQTrj1ahT5yAU+UwA45zg5Rk2KRwAYkBNtvdJFPUNBzxoAThwz+6lNsXgOQDBZTjBFnL1O73WpYyjT8wM8JyAWE4DBHDm5NP/tMhTt97JPAN5zPG2nTsUgAAzESXWbQl2GAHCZ42sb9Wp+3/XeAL4wVrutVHF+fXj+U4bizHYlj40R/vTxyNS7MQgAAURP0yWbf4nvQ2xCwDrR604GlgAGYJR2mcZfhyWA9RyD96lf8xIAOnPyXFai8EYuukcIANs5Hm9Tx+ZkCaAjJ81lii2jKXE8RV4SOFKP3A/Qj+cATChq89f4GVmJ5wdEfmaAZwTMxwSgEyfKtzR/ZmEaUJ562Id7ADow+v/W0WKo8W/jHoByHLsfqW/zMAFozMnxLQWUmR09/iJOAtwPMA/3AEwiWvPX+Ini6L0BEe8LcD/AHEwAGnJCfKH5E5FpQBnqZDsCQCNG/19o/kQmBHxlKWB8AsDgNP8vPMOfWRw9VoUAWhEAGtibZiOdPEebf8ltgRaEgC/21jFTgPoEgMocxJo/eQkBx6ifdQkAg4py9b+3iBn5E8WRYzlKCIhSz6IRACrKPvo/0vxLbwv0JgRYChiNAFBJ9oNW84ePsoeAvbLX01oEgMFEuPrX/OG6zCEgQn2LRACoIPPoX/OH+4SA7UwByhMAKEbzh/UyhwDGIAAUlvXqX/OH7bKGAFOAMQgABWn+22j+IARsJQSUIwBwiOYPx2UNAfQlABSS8epf84dyMoYAU4C+BICONH/gnBBAS9/33oAIpNF1NP8xvD48/6b3NnDd68Pzn2Zu6K08vj39IDwcYwLQycwH7p7ipPnDenvOl5lDw8z1cGYCwEHZrv41f2gjWwjYI1v9LU0AOCDbjX+aP7SVKQS4IbA9AaAxzR/YQgigFgFgJ6nzNs0fynE+3aYe7yMANDRrut16NaFYQXlbzytTAO759Itf/fKfvTdiNpnW/jX/eT2+Pf2l1Pd6fXj+sdT34pgM52SmGtuT5wA0MuOBOesVRCYlm/zenyMcjO3x7en3s4WA14fnn4z16xMANnJQXjdbkZlNq2a/1aXtEgrq8aCg6zwcaBtLABvtCQAzHpAZxowzGLXpbyEM1JHhHM1Sb3sRADbIsi6VobCMKkLDv0cgKCf6uZql5vbiUwCVzXYgGi328fj29JcMzX9Zcv2uo5nt/J6tfs7GPQArWfu/bLYripFkb4Lnv7+pwD7uB7jMvQDrmABUNNsBGH2cOApXwB/ZJ/tFfz7AbHV0JiYALMui+dfWo7mVvKru8XFDU4H1tk4CZvxoIOUJACu4E5W9WjTOFo3y2s+o+fudvrcgwJ7nAlgGuM+nAFaIHgBc/ZdXqzHO0Awz/+69RT6Xo9fhHgSAO6IfdJELRg81mt/Mjc/+aC/yOR29HrdmCQAK8ez9j85/j1L75/Ht6S9R9g/0ZAJwQ/S0GflKoaVSjS1TU7PP6op8bkevyy2ZALDKTAWipaONLGsDKzUZMA24zPMBWEMASEpxOEbjL+e0L/buU58WOM7HAnPyIKArjJm+Uhi+daT5vz48/6hRXXZ033iQ0Leinrd76qwnuV7mHoArIgeALVf/UYvIHkcbf8ltycD+LiPi+R65PrdkAnBB5IPL6H+fvc3IFf9+R/adacA+s9QHU4AyBACumuVqoLY9zUTjL2fvvhQCvnAec40AUICr/5j2/oEajb+OvSFAENhmljoxS90dmQDwjjHRF9mvGlz1j8k0YJ/s5/OJ+v4tASCJiDcC1eKqf3xCwHZbzutZpgAcIwAcZAwVy9Ym4aq/nz37PnsIiEb9PUYAOBN1POTqf509zb/WtrCeELCeKUDcOr+HAACL5j87IQC2EwAOmGH85Or/vi3NwMh/XFvfm6whINoUYIY6PCoB4GfGQjltbf41t4UyhADuUe+/EAB2miF1uvq/TfOPSwi4zRSAZREASErzj08IgNsEgMU4KNvVv+afhxBwXbbz/r3sdX9ZBIBdZhg3zTC260Hzz0cIOG6GejJDXR6NAJBcpqsAzT8vIeCyTOc/H6UPABHHQDOk9dY0f4SAYyLWlYj1f4v0AWArY6bYNP/YvL+xqc/bCADB+OjfR2uv5jSHHNa+z1mmANE+Esh6qQNA9vFPBpo/lwgBnGTuA6kDQGYZrv41f24RAr7KUA/4SADYYPT1JeO57TT/3Lz/241eZ0av0yMRAAgpw1Ub7TieiChtAMi87hN93Gf0zxaWAr6IXhduydoP0gaArUYfK40+lhuN5s85x8M2o9eb0ev1KASAZKKn/DVXaYo9l6w5Lo5OAR7fnv585N/XFr0+8K3ve28AlBJ9RMsYHt+e/rI1RJ43/tP/f314/vfS2wZbpJwARFvvGX0cNxJX/9xS+vh4fHv687Wr/tGnAfdEqzvR+sIaKQPAVlHWkyKP94z+KaXUUsCaBn8rIPQSpU5Eqds1WQJgekb/9HBtKWBPQ7csQA8mAJOLNoarxdU/W+w5XkpczY84EbhF/ZlbugCQcZ1nWeKM9d4z+qeWtUsBNZp27xAQtV7ck60/pAsAAIX838//q6JksOgdKBiTAHDHyDeSZB+/ufqnthvHT7XGX9qp+ddaXhi5Do1cv0fgJkCA9aZr/Jf+u5sNWRYTgBQirue5+qeVn4+jquP+0u5d6a+ZBkSsG3wr1QQg2w0eQC5bR/w+fvjR49vTD1mWDkwAbhj5IBh53W0Erv4pqVeD3PJzj6zvH70/YOR6NHId700ACC7iGM+Df+Crmp8WiFg/+EoAIBxX/9Qw4pi80l39Uz2MiP0EAKbi6h++0KQ5SgCY0Mjrbb25+qemUaYAIzZ/dWk+aQJAxk8AWL8DjspYR7L0izQBYCt3jo7H+J9B/LrnDx/x6n906vllAgBhGP/TQs/jrFXzH2Wpg7oEAKbg6p/BNJ8CuPKnNAFgMm60AUalPs1FAAgq2407xv+01OJ4Ox/D9776z1ZPshAAAPZpsgzQu/kTV4oAkOUjHVFZ/ycrzb+fDH0jRQDYykdG5mL8Tw8/H3ddPxLIeur6R6n+HDBk9/j2dPdrXh+eG2wJ97j6pzYBYCIZ77A1/j9uTdO/9vXCwCq/Xpbl/3pvxCge355+76bBOQgAAWU6+Yz/L9va9Nd8H2Hgo9eH5x+jhdRrDwF6fXj+U8aLkMjcAwDBlGr+rb5vEO4FYDomABBEiwZ9+hmmATA/EwAIoPXVuWnARaYATEUAYFjR1lZr6dWMhQCYmwDAtNwA2L8J9/75I4h0HPorgLmEDwAZnuZETqM031G2YxDTLgNo/h9F7x/hA8BWnhbFDEZruqNtD9tkaf7q+7cEgEn4/C1MY6opQI3mr17NQQAIJtNDgLIa9Wp71O3iuq3NX32JxXMAYCIlmuwf/+13V1/7j//9r0Pf+/HtyTMCJpBl5M9tJgAM6d5HACPded3KH//tdzeb/9qv4aMLx+OwywCaPycCACSwtakLATFp/pwTAGASe8f/e5v53n/nXoAxaf68JwBAYEev5E0CDhlmGUDz5xIBAIIq1byFgLlp/lwjAMAEZhurz7a9FXWdAmj+3JLhY4AvW7748e3pr5W246g/rPmigbf/g9eH59/03oaoSl+1//Hffnf4I4K0V6kezF6LXnpvwChMAADi+p/eG8C4BACAuoa5GRDOCQAAkJAAABCbZQAuEgAA6rMMwHAEAABISACAgEp/ZM9HAI/zmXxGk+E5AJ+3fPHrw/NPlbbjkMe3p9+v+Tp/rzum14fnqR6u408CD+d/SgWQ2WvR49vTDxv/yZA9oQQTAAiq1FW7q3+ISQCAwI42b82/LMsAjEQAgEnsHavvbeJ7/53x/5ge357+3HsbGIsAAAlsbeau/CE+AYAhvT48/3jr9ce3p7+02pYo/uN//+tuY1/zNXx073g8P54tAzCKDJ8CgDBKfBqgZoM3/h/b49vTnwUQTkwAgln7ER3mNWqTHXW7RjRrE1ZfYhEAJjHqZ2oB3lOv5iAAvLPjIRHQ3GhX26NtD9dl/jSA+v6t8AFg1Cf7wVGjNN1RtmM2sy4DZBK9f4QPAMTlkwD9m2/vnz8CxyGzEgAY1r2PAvJFryas+a8z4nGceRmArwQACKB1M9b8y7AMQE+eAwBBnJpyzb8aqPFDHCYAEEytJq3512EKQC8CQECZHtbhBqzLXh+e//W/Eb5PVDMff1vvA8hUV7KwBDCR14fnP2U7CV8fnn+cuciO4Lx5r1ke0OzLGfEGwNo8BGgeAgAkormP6fXh+d/dmU9rlgAu8LSouZgQ0EOE4y5T6FDXP0oRAKI/zSm6jGNU5ue4nVuGvpEiAACMzqcBaE0ACCrbzYIRxrHMI9LxtmYZIFs9yUIAmIw7bCGu2acA6tNcBACmYD2VmThemYEAQBiRxrKMK+JxlunTAHwlAFzhIyPjcVXFDI4ep7MvA4xIPb8sTQDI8JGO99y4AxyVsY5k6RdpAkAkbrS5LuJ4lnFEPr6OLgOoS/MRAJiKZQBGVur4tAxACwIA4US+SqMfxxXRCADBRVy/MwVgRKWPyxGmABHrB18JADeMfOeo9bbbXK1RUpbjae99ACPXo5HreG+pAkCWOzsB2CdTn0gVALKKOMZbM27NctVGXWuOo1rLUj2XASLWDb4lAADwL54KmIcAcMfI60cjr7u1YApAbT2v/mcxch0auX6PQAAAGNgInwYgpnQBINMNHueirueZAlBL5qv/rMsA2fpDugAQzcjjt5EIAWwx2vFyYQrw6xX/a7Fd6s/EBACmF/UqjLG1PO5+DiRbm/uRQPA/G7+eCQkAK0S5kSTqMsCyWAqgnJFG/49vT38peNyuDQIhmn+Uul1TygAQbZ3HGG49IYBbRjk+Cjf+964GgS03HEarO9H6whopAwAxWQqghdrHWcMQ8k0I8GmDfASAZCIvAyyLpQD26z36r3zVf82vl2X59an5R68PfEsAWGn09aRo47jahADO9T4eZvv5o9eb0ev1KNIGgIzrPSfRU/7aq7TeRZcxrD0Oal39j3IcjrIdPWTtB2kDALG5H4CSojf/M7/tvQG0IwBsMPpYafSx3IgGLMA05P3fbvQ6M3qdHokAkFT0ZYBlsRTAbUb/V/229wbQRuoAkHXdJxMhgEs0/7t+23sDWsncB1IHgIi2jOcyTAGWRQjgW72b/8xGH/+zjQCwkfWl2ISA2EZ4f0fYhpV+23sDtlKft0kfACKOf6T0j7ZczU1UoNlgy/vq6v+jiHUlYv3fIn0AyC7LMsCyCAGZaf7wkQCwwwxjpohpvQQhIJ+Rmv+Ex9Rvl2WOejJDXR6NALAYA2WaAiyLEJDJSM2fsWSv+8siAJCUEBCf5g+3CQA7zTBu8pHA24SAuDT/coz/4xIAfmYclJMQEI/mzz3q/RcCwAEzpE5TgPu2hgBBYExb3xvNP4YZ6vCoBABYtjcDIWAsO/6eveZPegLAmahjIVOAdYSAOWn+bBG1zu8hABxk/BTLnhAgCPSxZ99r/rGov8cIAEmYAqy3p0kIAW3t2d8jNP8RtmGL2baXbQSAd4yHvhAC9oUAQaCuvftYI2NZ1Pf3BIACZhlDzfB53pG8Pjz/aBowjr2NX/OPaZa6OzIBgKuyTwFOTAP6inbVP+p2vTfLdrKfAHDBnjHRLGnUFGCfvcVQENjvyL7TvGLbU2+N/z/69Itf/fKfvTdiRNEPsC1X90LDt440dI3pviz7d+RgOPp+jF6fWxEAboh8kG0d7wsB3zpavEcvsD1k3KcjhoDR92Pkutza9703gD5eH57/ZI1/v1OR3FvAT/9u9GLbQsbGDyNwDwCrCAuXHW0+p3XuEa8Eayr1e8/e/Efb/tG2h7osAdwRfdxkKaCckk08YiG2f64bIQDOsE+j1+PWLAFAIa8Pzz+WKuTn32eGwnxNjcY28/64puSxs/fn9/rZ9GMCsEL01GkKUF6tYj5Doc78u5fQMgjMtE+j1+EeBIAVMhx4QkAdLYp5zyIe/ffrxX79KEMdbk0AWCn6wScA1NVjvFuywM++/bOqtN//e1nmOoej199eBICVMhyAQkAbI9zwNSpN/7JCx8x/n/7PbOduhvrbgwCw0t5H/c52EAoB7QgCX2n826w8dv770n+c7ZzNUnt78CmAlV4fnn+a5Xn/LT2+Pf1+toIyivOmlzEMaPr7nT2IyvM5LtD81/EgoMpmCw2aeR+Z/mxtpt91NLOd37PVz9lYAtgoy1qUpYAxRJgMaPZ1ZDhHs9TbXgSAjTKtR2UoMDOZKQxo+nVlODcz1dpe3AOwkXsBrnM/QF2XmuoIoUCzb8u6/3Wa/zYCQCOPb08/zHZw+ouB47vVfD17n2XJdfXPNpYAdsq0NpVh3AgzyHIuZqqvPfkUQEOzptqtRcTUAMrT/ClNANhJ2rxNCIBynE+3qcf7CACNzZpu91xNKFpw3J7zyNU/awgAB+xNnbMe5EIAtKX53+fqfz8B4KBsB58QAG1kav57Zau/pQkAncw6BVgWIQBqy9b8Z66HM/McgAI8HGgdDwoaw+Pb019vvf768PybVtvCR8LyOq7+jzMB6Gjm0LC3kStucN3e82PmYD1zHZydAFBIthsCl0UIgJI0//Vc/ZchAHCIEADHZWz+9CcAFJRxCrAsQgAckbX5u/rvTwAoTAjYRgggM81/G82/LAGAYoQAWC9r82ccAkAFWacAyyIEwBqZm7+r/3EIAIMRAiA2zZ9RCACVZE+rQgB8lLn5H5G9ntYiAFSUeSlgWYQAOJe9+Rv9j0cAGJQQ8PR7QYAIjhzL2Zs/dQkAlUmvx4qYEMDMjhy/UZr/EepnXQJAA9mXApZFCCAfzf8Lo/9xCQCDEwK+sCTALI4eq5o/rQgAjRxJs5FOoqPFTQhgZEePT83/C1f/bQgADTmovxACiEjzL0OdbOf73hvAOo9vTz9EOjFOxW5v0Tz9O0WT3jT+jyJNLSMzAWjMUsC3TAOYmeb/kdH/PD794le//GfvjcjISfKtEo08YjGt4fHt6a+3Xn99eP5Nq22ZleP1MnVtLiYAnTjYv1WiGJoG0ILmX5562Id7ACYU7X6Ak6P3BZz/WwWW0jT+2yIuUUZnAtCR+wEuMw1gNJr/bUb/c3IPwACcPJeVauKRC+8e7gFYzzF4n/o1LwFgEE6i6xThsgSA+xxz66hbc7MEEEDk5YBlKVdELQuwhua/TvS6k4EAMAhp+LaSIUAQ4JKSx0b05n+UejcGSwCDMVK7r2QDz1ioLQF8y/G0nToVgwAwICfXfaWv4rMU7mURAE4cQ/uoT3F4DkAwUZ8R8F6JZwac8/yAPDT+/az7x2ICMKijJ1qGEHBSY00/clHPOgFwnByjJsUjAAzMCbdNrZv7ohX5TAHAMVGGWhSTADA4J952iv5tGQKAY6AcNSguAWACTsB9an7cb+ZGEDUAeL/LU3tiEwAm4UTcp/Zn/mdsDNECgPe4DjUnPgFgIk7I/Vo8/GeWRhEhAHg/61JrchAAJuPEPKbVUwBHbh6zBgDvXRtqTB6eA5BMlucEXFP6+QHXvP/+2ZvKHq0f2ew98jn/bEwAJlTiJM0cAs71+LsAvRvNyBOAjO/HKNSVfASASTlZy+r5B4JaN6CRAkCm/T4y9SQnAWBiTto6RvhrgTWbU68AEH2/zkodyUsAmJyTt54RGtZ7JRpY7QAQdb9FpH7kJgAE4CSua8SGdsu9ZnckAETbF5mpGwgAQTiZ25itAV7xhzuv/2eTrahE079PvWBZBIBQnNRtTRwGwgUATX89dYITASCYUp/jdYJvM1kYCBEANP1t1AbeEwACcqL3NUEYmDYAaPr7qAlcIgAE5YQfw6BhYKoAoOkfoxZwjQAQmBN/PIMEgqEDgIZfjhrALQJAcArA2DoFgqECgIZfh3OfewSABEr+gQ/FoL4GoaBbANDs63O+s5YAkIgrgrkVDAbVA4BG34dznC0EgGQUiNhWhoRDAUBzH5Nzm60EgISMCHMb6a8Bcpzzmb2+670BtFfyJC9ZfIBtNH+OEACSEgJgbpo/R1kCSK5081ZIxmcJYG7OWUoxAUiu9MlvGgD1aP6UZALAvyguOZgAzMe5SQ3f/eNvf//UeyMYg2kAjEfzp5ZPy7IspgCcq9G4FZ1xmADMwXlIbQIAV7nyiEkAGJ9zjxYEAG5yFRKPADAu5xst+RQAN9UoHu4NgI80f1ozAWA1BSoGE4CxOK/oRQBgk1pX7wpWOwLAGJxL9GYJgE1qFRfLAmSi+TOCfz0DwBSArRSxOZkA9OOcYRT/+NvfP5kAsFvNaYCJAJHUPKY1f/b6vvcGMLdT8alR3E7fU4FjVjWDrPOCo0wAKKJmMTIRYDa1j1nNnxJMACim5jTg/PsqfoyqdlB17FPSN38IyI2AlNLiil0x3MdNgOU53pnJ6Y8AmgBQRe1pwPn3VhjpReNnZgIAVQkCRKTxE4EAQBOvD88/1S6a599f8aS0ljeiOn5p4dP7/+A+AGpTSPtyD8A2jlciOa3/L4sJAB20WBY4sTzAXho/0QkAdNMjCJz/XHiv9fMmHIv0JADQXYv7A84JA5zr9ZApxx69fbgHYFncB0A/inF97gH4wrFGNufr/8tiAsBgWi4LnDMVyKHnI6UdV4xGAGBIvYLA+5+paM+v99+RcAwxqotLAMtiGYCx9C7iJxGKefQlAMcKfPR+/L8sJgBMoudE4JzpwJh6HxfnHBfMQgBgKufFtXfRf//zFf52er/373nvmdHVJYBlsQzAHEZrBudGbAyzLQF4f+GYS+P/ZTEBIIBRlgcuMSXYbsT38T3vIxHcnAAsiykAc5qhiZxr2VBGmQB4j6C+a1f/y2ICQFAjTwUuubWdMzeeWfb/LTPvf7hFACC0kW4a3GvtdjeeIky5L9fS9Mng7hLAslgGIJ7oDeyOlzuvf26wDcPR9Inm1vh/WQQAyBgGXu68/rnBNgxB0yeyIgFgWYQAckgSBl7uvP65wTZ0o+mTwb3mvywCAFwVOAy83Hn9c4NtaErTJ5uiAWBZhADyChYGXu68/rnBNlSn6ZPVmua/LAIA7DJ5IHi58/rnBttQnIYPX1QJAMsiBMAlkwWClzuvf26wDYdp+PDR2ua/LAIAVDF4IHi58/rnBtuwmYYP91UNAMsiBMAeA4WClzuvf26wDTdp9rDdlua/LAIAdNchGLzcef1zg21YlkWjh5KaBIBlEQKghUrh4OXO659L/jBNHurb2vyXRQCAEDYGhZc7r39e8000dhhH0wCwLEIAAPS2p/kvy7J8V3pDAIDxHQoAe1MHAHDckT58eAIgBABAe0f7ryUAAEioSAAwBQCAdkr0XRMAAEioWAAwBQCA+kr126ITACEAAOop2WeLLwEIAQBQXun+6h4AAEioSgAwBQCAcmr01WoTACEAAI6r1U+rLgEIAQCwX80+6h4AAEioegAwBQCA7Wr3zyYTACEAANZr0TebLQEIAQBwX6t+2fQeACEAAK5r2Seb3wQoBADAR637Y5dPAQgBAPBVj77oY4AAkFC3AGAKAAD9+mHXCYAQAEBmPftg9yUAIQCAjHr3v+4BYFn67wQAaGmEvtd9A977xa9++c/e2wAANYzQ+E+GmACcG2nnAEApo/W34QLAsoy3kwDgiBH72pABYFnG3FkAsNWo/WzYALAs4+40AFhj5D42dABYlrF3HgBcM3r/Gnrj3vMJAQBGN3rjPxl+AnBulp0KQE4z9ampAsCyzLVzAchjtv401ca+Z0kAgN5ma/wn000Azs260wGIYeY+NHUAWJa5dz4A85q9/0y98e9ZEgCgttkb/0mIX+I9QQCA0qI0/pPplwAuifYmAdBXxL4S7hd6zzQAgL0iNv6TsL/Ye4IAAGtFbvwn4X/B9wQBAK7J0PhP0vyi7wkCAJxkavwn6X7h9wQBgLwyNv6TtL/4e4IAQB6ZG/9J+h3wniAAEJfG/5UdcYMwADA/Tf8yO2UFQQBgPhr/bXbORsIAwLg0/fXsqAOEAYD+NP197LSCBAKA+jT8MuzEigQCgOM0/Drs1MaEAoDrNPt2/h+d58vBL8DWJAAAAABJRU5ErkJggg==">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAB60lEQVR4nO2bMXLCMBBF154UmZS5Ao0P4BO45T4+hO9D6xP4AGlyBUqGLimCHLGWYhlp9YO1b4ZhZIT4+7WWWCVU5OD1/e3LdX0PXM+Xym7fNfYcOMcYUZsLJQVP9BtvZTdKpF7vsm/qkmefSDNADVAD0ALQqAFoAWjUALQANGoAWgAaNQAtAI0agBaA5gXxod3Un6xmc3v+ICIa2+GYU0uV8zyABW64M8CQy4gsBvDA7eC6qf+8XTus9ZVA3AA7IFcw3IDQ96VCdBGMCYJlievWSYJYBoTOvA3PgpBxYhHfBbhoX8r7Xhvb4fh0GWAEu4J3Be54/6Kfb8xYsn0RCg2e6CcDXLeIBMkN2DJT3dTPjzXMeKlvhywZ4Elp3ueunSsLILWAb8ZDMiE1ErtAQ+Te5h6BjdN4Oz6IVoMCYy6qOp4NYzs4031sB9e1ee2wFsCg3SSELBngWtB4sLy9ZduMIbkBW7arsR3mxxpP/0Voy7aWa/aJMhRDsbXAX2OlQLwY6qb+ZAu3Dj42V4MSiB6IhJSyKxkhfigiugbEHGrkOhHSM0E9FQb8m1yxfxf4jxRfDKkBaAFo1AC0ADRqAFoAGjUALQCNGoAWgEYNQAtAowbw39KWhmYA0fIX1aVwPV+q2m4gxeTGxPsN+a8WGoqAeH0AAAAASUVORK5CYII=">
 <style>
-:root {
-  --bg: #0a0f0a;
-  --bg2: #111811;
-  --bg3: #1a221a;
-  --card: #1e281e;
-  --border: rgba(74,222,128,.15);
-  --text: #e8f0e8;
-  --muted: #6b8a6b;
-  --green: #4ade80;
-  --green2: #16a34a;
-  --yellow: #fbbf24;
-  --red: #f87171;
-  --blue: #60a5fa;
-  --orange: #fb923c;
-  --accent: #4ade80;
-  --font: -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  --mono: 'SF Mono', 'Courier New', monospace;
-  --radius: 14px;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+:root{
+  --bg:#080d08; --bg2:#0f160f; --bg3:#161e16; --card:#1a231a;
+  --border:rgba(74,222,128,.13); --border2:rgba(74,222,128,.25);
+  --text:#ddeedd; --muted:#5a7a5a; --muted2:#8aaa8a;
+  --green:#4ade80; --green2:#16a34a; --green3:#052e16;
+  --yellow:#fbbf24; --red:#f87171; --blue:#60a5fa; --orange:#fb923c;
+  --hunter:#fb923c; --gun:#60a5fa;
+  --font:-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif;
+  --mono:'SF Mono','Courier New',monospace;
+  --r:14px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;}
 
-/* ── SCREENS ── */
-.screen { display: none; position: fixed; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.screen.active { display: flex; flex-direction: column; }
+/* SCREENS */
+.screen{display:none;position:fixed;inset:0;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
 
-/* ── HEADER ── */
-.app-header {
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  padding: calc(var(--safe-top) + 12px) 16px 10px;
-  display: flex; align-items: center; gap: 10px;
-  position: sticky; top: 0; z-index: 50; flex-shrink: 0;
+/* HEADER */
+.hdr{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:calc(var(--st) + 10px) 14px 10px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
 }
-.app-header h1 { font-size: 16px; font-weight: 700; color: var(--green); letter-spacing: .05em; flex: 1; }
-.app-header .sub { font-size: 11px; color: var(--muted); }
-.icon-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+.hdr-title{font-size:16px;font-weight:700;color:var(--green);flex:1;letter-spacing:.04em;}
+.hdr-sub{font-size:11px;color:var(--muted);}
+.icon-btn{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 6px;}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  padding: 6px 0 calc(var(--safe-bottom) + 6px);
-  display: flex;
-  position: sticky; bottom: 0; flex-shrink: 0;
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(var(--sb) + 72px);}
+
+/* BOTTOM NAV */
+.bnav{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:4px 0 calc(var(--sb) + 4px);
+  display:flex;flex-shrink:0;
 }
-.bottom-nav button {
-  flex: 1; background: none; border: none; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 6px 0; color: var(--muted); font-family: var(--font); font-size: 10px;
-  transition: color .15s;
+.bnav button{
+  flex:1;background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 0;color:var(--muted);font-family:var(--font);font-size:10px;
 }
-.bottom-nav button .nav-ic { font-size: 22px; }
-.bottom-nav button.active { color: var(--green); }
+.bnav button .ni{font-size:21px;}
+.bnav button.on{color:var(--green);}
 
-/* ── SCROLL CONTENT ── */
-.scroll-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 14px calc(var(--safe-bottom) + 80px); }
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:10px;}
+.card-t{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
 
-/* ── CARDS ── */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
-.card-title { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
-
-/* ── STATS ROW ── */
-.stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
-.stat-box .val { font-size: 24px; font-weight: 700; font-family: var(--mono); color: var(--green); }
-.stat-box .lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-/* ── EXAM BUTTONS ── */
-.exam-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.exam-btn {
-  background: var(--bg3); border: 2px solid var(--border); border-radius: var(--radius);
-  padding: 16px 10px; cursor: pointer; text-align: center; transition: all .15s;
-  color: var(--text); font-family: var(--font);
+/* EXAM TABS */
+.exam-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.exam-tab{
+  background:var(--bg3);border:2px solid var(--border);border-radius:var(--r);
+  padding:14px 8px;cursor:pointer;text-align:center;font-family:var(--font);color:var(--text);
+  transition:border-color .15s,background .15s;
 }
-.exam-btn.selected { border-color: var(--green); background: rgba(74,222,128,.1); }
-.exam-btn .eic { font-size: 28px; margin-bottom: 6px; }
-.exam-btn .enm { font-size: 13px; font-weight: 700; }
-.exam-btn .esb { font-size: 10px; color: var(--muted); margin-top: 2px; }
-.exam-btn .ert { font-size: 12px; margin-top: 6px; font-family: var(--mono); font-weight: 700; }
+.exam-tab.on.hunter{border-color:var(--hunter);background:rgba(251,146,60,.08);}
+.exam-tab.on.gun{border-color:var(--gun);background:rgba(96,165,250,.08);}
+.exam-tab .eic{font-size:26px;margin-bottom:5px;}
+.exam-tab .enm{font-size:13px;font-weight:700;}
+.exam-tab .esb{font-size:10px;color:var(--muted);margin-top:2px;}
+.exam-tab .ert{font-size:13px;font-weight:700;font-family:var(--mono);margin-top:5px;}
 
-/* ── MODE BUTTONS ── */
-.mode-list { display: flex; flex-direction: column; gap: 8px; }
-.mode-btn {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 14px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px;
-  color: var(--text); font-family: var(--font); text-align: left; transition: all .15s;
+/* MODE BUTTONS */
+.mode-list{display:flex;flex-direction:column;gap:7px;}
+.mbtn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);
+  padding:13px 14px;cursor:pointer;display:flex;align-items:center;gap:11px;
+  color:var(--text);font-family:var(--font);text-align:left;transition:all .12s;
 }
-.mode-btn:active { transform: scale(.98); }
-.mode-btn .mic { font-size: 22px; flex-shrink: 0; }
-.mode-btn .mtx { flex: 1; }
-.mode-btn .mtx .mn { font-size: 14px; font-weight: 700; }
-.mode-btn .mtx .ms { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.mode-btn .mbadge { background: var(--red); color: white; font-size: 11px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
-.mode-btn .mbadge.yellow { background: var(--yellow); color: #000; }
-.mode-btn.highlight { border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.06); }
+.mbtn:active{transform:scale(.98);background:var(--card);}
+.mbtn.hi{border-color:var(--border2);}
+.mbtn .mi{font-size:22px;flex-shrink:0;}
+.mbtn .mt .mn{font-size:14px;font-weight:700;}
+.mbtn .mt .ms{font-size:11px;color:var(--muted);margin-top:1px;}
+.mbadge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;background:var(--red);color:#fff;}
+.mbadge.y{background:var(--yellow);color:#000;}
 
-/* ── QUIZ SCREEN ── */
-.quiz-header {
-  background: var(--bg2); border-bottom: 1px solid var(--border);
-  padding: calc(var(--safe-top) + 10px) 14px 10px;
-  position: sticky; top: 0; z-index: 50; flex-shrink: 0;
+/* COUNTDOWN */
+.cdrow{display:flex;gap:7px;margin-bottom:12px;}
+.cd-chip{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;}
+.cd-days{font-size:26px;font-weight:700;font-family:var(--mono);color:var(--yellow);line-height:1;}
+.cd-lbl{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* QUIZ */
+.q-hdr{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:calc(var(--st)+8px) 14px 10px;flex-shrink:0;
 }
-.quiz-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.q-exit { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 8px; }
-.q-counter { font-size: 12px; color: var(--muted); font-family: var(--mono); }
-.q-cat-badge { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 700; margin-left: auto; }
-.prog-wrap { height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
-.prog-bar { height: 100%; background: var(--green); border-radius: 2px; transition: width .3s; }
+.q-top{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.q-exit{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:4px 8px;}
+.q-cnt{font-size:12px;color:var(--muted);font-family:var(--mono);}
+.q-badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700;margin-left:auto;}
+.prog-bg{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s;}
 
-.quiz-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 14px calc(var(--safe-bottom) + 20px); }
-.q-number { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 8px; }
-.q-text { font-size: 16px; font-weight: 600; line-height: 1.65; margin-bottom: 20px; color: var(--text); }
+.q-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(var(--sb)+20px);}
+.q-no{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:7px;}
+.q-txt{font-size:16px;font-weight:600;line-height:1.65;margin-bottom:18px;}
 
-/* ── 三肢択一 ── */
-.choices { display: flex; flex-direction: column; gap: 10px; }
-.choice {
-  background: var(--bg3); border: 2px solid var(--border); border-radius: 12px;
-  padding: 14px 14px; cursor: pointer; display: flex; align-items: flex-start; gap: 10px;
-  color: var(--text); font-family: var(--font); text-align: left; transition: all .15s;
-  font-size: 14px; line-height: 1.55;
+/* CHOICES */
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choice{
+  background:var(--bg3);border:2px solid var(--border);border-radius:12px;
+  padding:13px 13px;cursor:pointer;display:flex;align-items:flex-start;gap:10px;
+  color:var(--text);font-family:var(--font);text-align:left;font-size:14px;line-height:1.55;
+  transition:border-color .12s,background .12s;
 }
-.choice:active { transform: scale(.98); }
-.choice-label {
-  background: var(--bg); width: 26px; height: 26px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; flex-shrink: 0; border: 1px solid var(--border);
-  font-family: var(--mono);
+.choice:active{transform:scale(.99);}
+.clbl{
+  background:var(--bg);width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;border:1px solid var(--border);
+  font-family:var(--mono);
 }
-.choice.correct { background: rgba(74,222,128,.15); border-color: var(--green); }
-.choice.correct .choice-label { background: var(--green); color: #000; border-color: var(--green); }
-.choice.wrong { background: rgba(248,113,113,.12); border-color: var(--red); }
-.choice.wrong .choice-label { background: var(--red); color: white; border-color: var(--red); }
-.choice.show-correct { background: rgba(74,222,128,.08); border-color: rgba(74,222,128,.4); }
-.choice.show-correct .choice-label { background: rgba(74,222,128,.3); }
-.choice-text { flex: 1; }
+.choice.correct{background:rgba(74,222,128,.12);border-color:var(--green);}
+.choice.correct .clbl{background:var(--green);color:#000;border-color:var(--green);}
+.choice.wrong{background:rgba(248,113,113,.1);border-color:var(--red);}
+.choice.wrong .clbl{background:var(--red);color:#fff;border-color:var(--red);}
+.choice.show-c{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.35);}
+.choice.show-c .clbl{background:rgba(74,222,128,.25);}
 
-/* ── RESULT BOX ── */
-.result-box { margin-top: 16px; background: var(--bg3); border-radius: 12px; padding: 14px; display: none; border: 1px solid var(--border); }
-.result-box.correct-box { border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.06); }
-.result-box.wrong-box { border-color: rgba(248,113,113,.3); background: rgba(248,113,113,.05); }
-.result-icon { font-size: 22px; margin-bottom: 6px; }
-.result-verdict { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-.result-explain { font-size: 13px; line-height: 1.7; color: #c0d0c0; }
-.result-ref { font-size: 10px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-
-.next-btn {
-  width: 100%; margin-top: 14px; padding: 16px;
-  background: linear-gradient(135deg, #16a34a, #052e16);
-  border: 1px solid rgba(74,222,128,.3); border-radius: var(--radius);
-  color: var(--green); font-size: 15px; font-weight: 700; cursor: pointer;
-  font-family: var(--font); display: none;
+/* OX CHOICES */
+.ox-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ox-btn{
+  background:var(--bg3);border:2px solid var(--border);border-radius:14px;
+  padding:22px 10px;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:5px;font-family:var(--font);color:var(--text);
+  transition:all .12s;
 }
-.mark-btn {
-  margin-top: 10px; background: none; border: none; color: var(--muted);
-  font-size: 13px; cursor: pointer; font-family: var(--font); padding: 4px;
+.ox-btn:active{transform:scale(.97);}
+.ox-btn .ox-sym{font-size:40px;line-height:1;}
+.ox-btn .ox-lbl{font-size:11px;color:var(--muted);}
+.ox-btn.correct{background:rgba(74,222,128,.12);border-color:var(--green);}
+.ox-btn.wrong{background:rgba(248,113,113,.1);border-color:var(--red);}
+.ox-btn.show-c{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.35);}
+
+/* RESULT BOX */
+.rbox{margin-top:14px;background:var(--bg3);border-radius:12px;padding:14px;display:none;border:1px solid var(--border);}
+.rbox.ok{border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.05);}
+.rbox.ng{border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.04);}
+.r-icon{font-size:20px;margin-bottom:5px;}
+.r-verdict{font-size:15px;font-weight:700;margin-bottom:7px;}
+.r-explain{font-size:13px;line-height:1.7;color:#b0c8b0;}
+.r-ref{font-size:10px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px solid var(--border);}
+.mark-btn{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:6px 0 0;font-family:var(--font);}
+.next-btn{
+  width:100%;margin-top:12px;padding:15px;
+  background:linear-gradient(135deg,var(--green2),var(--green3));
+  border:1px solid rgba(74,222,128,.3);border-radius:var(--r);
+  color:var(--green);font-size:15px;font-weight:700;cursor:pointer;
+  font-family:var(--font);display:none;
 }
 
-/* ── RESULT SCREEN ── */
-.result-screen { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 20px 14px calc(var(--safe-bottom) + 20px); }
-.result-big { text-align: center; margin-bottom: 20px; }
-.result-score { font-size: 52px; font-weight: 700; font-family: var(--mono); color: var(--green); }
-.result-rate { font-size: 20px; color: var(--muted); margin-top: 4px; }
-.result-pass { font-size: 14px; font-weight: 700; margin-top: 8px; padding: 8px 16px; border-radius: 8px; display: inline-block; }
-.pass-ok { background: rgba(74,222,128,.15); color: var(--green); }
-.pass-ng { background: rgba(248,113,113,.12); color: var(--red); }
-.cat-result-row { padding: 8px 0; border-bottom: 1px solid var(--border); }
-.cat-result-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
-.cat-bar-bg { height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-.cat-bar-fill { height: 100%; border-radius: 3px; }
-.res-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.res-btn { padding: 14px; border-radius: var(--radius); border: none; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 700; }
-.res-btn.primary { background: linear-gradient(135deg,#16a34a,#052e16); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
-.res-btn.secondary { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
+/* RESULT SCREEN */
+.res-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 14px calc(var(--sb)+20px);}
+.res-big{text-align:center;margin-bottom:18px;}
+.res-score{font-size:52px;font-weight:700;font-family:var(--mono);color:var(--green);line-height:1;}
+.res-rate{font-size:20px;color:var(--muted);margin-top:3px;}
+.res-pass{font-size:13px;font-weight:700;margin-top:8px;padding:7px 14px;border-radius:8px;display:inline-block;}
+.p-ok{background:rgba(74,222,128,.13);color:var(--green);}
+.p-ng{background:rgba(248,113,113,.1);color:var(--red);}
+.res-time{font-size:11px;color:var(--muted);margin-top:5px;}
+.cres-row{padding:7px 0;border-bottom:1px solid var(--border);}
+.cres-row:last-child{border-bottom:none;}
+.cres-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
+.cbar-bg{height:4px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.cbar-fill{height:100%;border-radius:3px;}
+.res-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.rb{padding:13px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;}
+.rb.p{background:linear-gradient(135deg,var(--green2),var(--green3));color:var(--green);border:1px solid rgba(74,222,128,.3);}
+.rb.s{background:var(--bg3);color:var(--muted2);border:1px solid var(--border);}
 
-/* ── DASHBOARD ── */
-.progress-row { margin-bottom: 8px; }
-.progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
-.progress-bar { height: 7px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 4px; transition: width .5s; }
-.fill-hunter { background: var(--orange); }
-.fill-gun { background: var(--blue); }
-
-.weak-section { margin-top: 4px; }
-.weak-cat-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
-.weak-cat-row:last-child { border-bottom: none; }
-.weak-pct { font-family: var(--mono); font-size: 13px; font-weight: 700; min-width: 38px; }
-
-/* ── NOTES ── */
-.note-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 8px; position: relative; }
-.note-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; margin-bottom: 6px; font-weight: 600; }
-.tag-h { background: rgba(251,146,60,.15); color: var(--orange); }
-.tag-g { background: rgba(96,165,250,.15); color: var(--blue); }
-.tag-b { background: rgba(251,191,36,.15); color: var(--yellow); }
-.note-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-.note-body { font-size: 12px; color: #a0b4a0; line-height: 1.65; white-space: pre-wrap; }
-.note-del { position: absolute; top: 10px; right: 10px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; }
-.note-meta { font-size: 10px; color: var(--muted); margin-top: 6px; }
-
-/* ── FORMS ── */
-.form-group { margin-bottom: 12px; }
-.form-label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: .05em; }
-input, select, textarea {
-  width: 100%; padding: 11px 12px; background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--text); font-family: var(--font); font-size: 14px;
+/* DASH */
+.dash-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.dtab{
+  flex:1;padding:9px 6px;background:var(--bg3);border:2px solid var(--border);
+  border-radius:10px;cursor:pointer;font-family:var(--font);font-size:12px;
+  color:var(--muted);text-align:center;font-weight:700;
 }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--green); }
-textarea { resize: vertical; min-height: 80px; }
-.btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 700; transition: all .15s; }
-.btn-green { background: linear-gradient(135deg,#16a34a,#052e16); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
-.btn-full { width: 100%; }
-.btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
-.btn-muted { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
-.btn-red { background: rgba(248,113,113,.12); color: var(--red); border: 1px solid rgba(248,113,113,.3); }
+.dtab.on.h{border-color:var(--hunter);color:var(--hunter);background:rgba(251,146,60,.08);}
+.dtab.on.g{border-color:var(--gun);color:var(--gun);background:rgba(96,165,250,.08);}
 
-/* ── SETTINGS ── */
-.setting-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-.setting-row:last-child { border-bottom: none; }
-.setting-label { flex: 1; font-size: 13px; }
-.setting-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.sync-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-ok { background: var(--green); }
-.dot-err { background: var(--red); }
-.dot-idle { background: var(--muted); }
+.stat3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px;}
+.sbox{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 6px;text-align:center;}
+.sval{font-size:24px;font-weight:700;font-family:var(--mono);}
+.slbl{font-size:10px;color:var(--muted);margin-top:2px;}
 
-/* ── ADD QUESTION ── */
-.add-q-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-.tab-btn { flex: 1; padding: 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: var(--font); font-size: 12px; cursor: pointer; }
-.tab-btn.active { border-color: var(--green); color: var(--green); background: rgba(74,222,128,.08); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+.prog-row{margin-bottom:7px;}
+.plabel{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;}
+.pbar{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.pfill{height:100%;border-radius:4px;transition:width .5s;}
 
-/* ── TOAST ── */
-#toast {
-  position: fixed; bottom: calc(var(--safe-bottom) + 75px); left: 50%;
-  transform: translateX(-50%) translateY(40px);
-  background: var(--bg2); color: var(--text); padding: 10px 18px;
-  border-radius: 20px; font-size: 13px; border: 1px solid var(--border);
-  transition: transform .25s; z-index: 999; white-space: nowrap; pointer-events: none;
+.weak-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
+.weak-row:last-child{border-bottom:none;}
+.wpct{font-family:var(--mono);font-size:13px;font-weight:700;min-width:38px;}
+.wbar-bg{width:80px;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.wbar-fill{height:100%;border-radius:3px;}
+
+/* NOTES */
+.ntcard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:8px;position:relative;}
+.nt-tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:7px;margin-bottom:5px;font-weight:700;}
+.tag-h{background:rgba(251,146,60,.15);color:var(--hunter);}
+.tag-g{background:rgba(96,165,250,.15);color:var(--gun);}
+.tag-b{background:rgba(251,191,36,.15);color:var(--yellow);}
+.nt-title{font-size:13px;font-weight:700;margin-bottom:3px;}
+.nt-body{font-size:12px;color:#9ab89a;line-height:1.65;white-space:pre-wrap;}
+.nt-meta{font-size:10px;color:var(--muted);margin-top:5px;}
+.nt-del{position:absolute;top:9px;right:9px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;}
+
+/* ADD QUESTION */
+.atabs{display:flex;gap:6px;margin-bottom:13px;}
+.atab{
+  flex:1;padding:8px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;
+  font-weight:600;
 }
-#toast.show { transform: translateX(-50%) translateY(0); }
+.atab.on{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.07);}
+.tcnt{display:none;}
+.tcnt.on{display:block;}
 
-/* ── SECTION HEADER ── */
-.sec-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.sec-hd h2 { font-size: 16px; font-weight: 700; }
-.sec-hd .count { font-size: 11px; color: var(--muted); background: var(--bg3); padding: 2px 8px; border-radius: 10px; }
+/* FORMS */
+.fg{margin-bottom:11px;}
+.fl{font-size:11px;color:var(--muted);display:block;margin-bottom:4px;font-weight:700;letter-spacing:.04em;}
+input,select,textarea{
+  width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-family:var(--font);font-size:14px;
+  -webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);}
+textarea{resize:vertical;min-height:80px;}
+.btn{padding:12px 18px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;}
+.btn-g{background:linear-gradient(135deg,var(--green2),var(--green3));color:var(--green);border:1px solid rgba(74,222,128,.3);}
+.btn-w{width:100%;}
+.btn-s{padding:8px 13px;font-size:12px;border-radius:8px;}
+.btn-m{background:var(--bg3);color:var(--muted2);border:1px solid var(--border);}
+.btn-r{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.25);}
 
-/* ── COUNTDOWN ── */
-.countdown-row { display: flex; gap: 8px; margin-bottom: 12px; }
-.cd-chip { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
-.cd-days { font-size: 24px; font-weight: 700; font-family: var(--mono); color: var(--yellow); }
-.cd-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+/* SETTINGS */
+.set-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
+.set-row:last-child{border-bottom:none;}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.d-ok{background:var(--green);} .d-err{background:var(--red);} .d-idle{background:var(--muted);}
+
+/* UPLOAD AREA */
+.upload-area{
+  border:2px dashed var(--border2);border-radius:var(--r);padding:28px 16px;
+  text-align:center;cursor:pointer;transition:border-color .15s;margin-bottom:12px;
+}
+.upload-area:hover,.upload-area.drag{border-color:var(--green);background:rgba(74,222,128,.04);}
+.upload-area input[type=file]{display:none;}
+.upload-ic{font-size:32px;margin-bottom:8px;}
+.upload-txt{font-size:13px;color:var(--muted2);}
+.upload-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+.preview-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;max-height:200px;overflow-y:auto;}
+.preview-img{width:100%;border-radius:8px;margin-bottom:8px;}
+.preview-txt{font-size:12px;color:var(--muted2);line-height:1.65;white-space:pre-wrap;}
+
+.ai-gen-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:8px;}
+.ai-q-txt{font-size:13px;font-weight:700;margin-bottom:7px;}
+.ai-c{font-size:12px;padding:3px 0;}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:calc(var(--sb) + 68px);left:50%;
+  transform:translateX(-50%) translateY(40px);
+  background:var(--bg2);color:var(--text);padding:9px 16px;
+  border-radius:20px;font-size:13px;border:1px solid var(--border);
+  transition:transform .22s;z-index:9999;white-space:nowrap;pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* CAT SCREEN */
+#screen-cat .scroll{padding-bottom:30px;}
 </style>
 </head>
 <body>
 
-<!-- ══ HOME SCREEN ══ -->
+<!-- HOME -->
 <div class="screen active" id="screen-home">
-  <div class="app-header">
-    <h1>🎯 狩猟試験 HQ</h1>
-    <span class="sub" id="syncStatus">―</span>
+  <div class="hdr">
+    <div>
+      <div class="hdr-title">🎯 狩猟試験 HQ</div>
+      <div class="hdr-sub" id="syncStatusTxt">―</div>
+    </div>
+    <button class="icon-btn" onclick="doFullSync()" title="同期">🔄</button>
   </div>
-  <div class="scroll-body">
-    <!-- カウントダウン -->
-    <div class="countdown-row" id="countdownRow"></div>
-
-    <!-- 試験選択 -->
+  <div class="scroll">
+    <div class="cdrow" id="countdownRow"></div>
     <div class="card">
-      <div class="card-title">試験を選ぶ</div>
-      <div class="exam-select">
-        <button class="exam-btn selected" id="exam-hunter" onclick="selectExam('hunter')">
-          <div class="eic">🦆</div>
-          <div class="enm">狩猟免許</div>
-          <div class="esb">三肢択一 · 30問 · 70%合格</div>
-          <div class="ert" id="hunter-rate">-%</div>
+      <div class="card-t">試験を選ぶ</div>
+      <div class="exam-tabs">
+        <button class="exam-tab on hunter" id="etab-hunter" onclick="selExam('hunter')">
+          <div class="eic">🦆</div><div class="enm">狩猟免許</div>
+          <div class="esb">三肢択一・70%合格</div>
+          <div class="ert" id="hrate" style="color:var(--hunter)">-%</div>
         </button>
-        <button class="exam-btn" id="exam-gun" onclick="selectExam('gun')">
-          <div class="eic">🔫</div>
-          <div class="enm">猟銃講習会</div>
-          <div class="esb">○× · 50問 · 90%合格</div>
-          <div class="ert" id="gun-rate">-%</div>
+        <button class="exam-tab gun" id="etab-gun" onclick="selExam('gun')">
+          <div class="eic">🔫</div><div class="enm">猟銃講習会</div>
+          <div class="esb">○×式・90%合格</div>
+          <div class="ert" id="grate" style="color:var(--gun)">-%</div>
         </button>
       </div>
     </div>
-
-    <!-- モード選択 -->
     <div class="card">
-      <div class="card-title">学習モード</div>
+      <div class="card-t">学習モード</div>
       <div class="mode-list">
-        <button class="mode-btn highlight" onclick="startMode('random')">
-          <span class="mic">🎯</span>
-          <div class="mtx"><div class="mn">ランダム 20問</div><div class="ms">全分野からランダム出題</div></div>
+        <button class="mbtn hi" onclick="startMode('random')">
+          <span class="mi">🎯</span>
+          <div class="mt"><div class="mn">ランダム 20問</div><div class="ms">全分野からシャッフル出題</div></div>
         </button>
-        <button class="mode-btn highlight" onclick="startMode('exam')">
-          <span class="mic">📝</span>
-          <div class="mtx"><div class="mn">本番模擬試験</div><div class="ms">本番と同じ形式・合格判定あり</div></div>
+        <button class="mbtn hi" onclick="startMode('exam')">
+          <span class="mi">📝</span>
+          <div class="mt"><div class="mn">本番模擬試験</div><div class="ms">本番比率・合格判定つき</div></div>
         </button>
-        <button class="mode-btn" onclick="startMode('wrong')">
-          <span class="mic">❌</span>
-          <div class="mtx"><div class="mn">間違えた問題</div><div class="ms">苦手を集中攻略</div></div>
+        <button class="mbtn" onclick="startMode('wrong')">
+          <span class="mi">❌</span>
+          <div class="mt"><div class="mn">間違えた問題</div><div class="ms">苦手を集中攻略</div></div>
           <span class="mbadge" id="wrongBadge">0</span>
         </button>
-        <button class="mode-btn" onclick="startMode('marked')">
-          <span class="mic">⭐</span>
-          <div class="mtx"><div class="mn">マーク済み問題</div><div class="ms">重要問題を復習</div></div>
-          <span class="mbadge yellow" id="markBadge">0</span>
+        <button class="mbtn" onclick="startMode('marked')">
+          <span class="mi">⭐</span>
+          <div class="mt"><div class="mn">マーク済み</div><div class="ms">重要問題を復習</div></div>
+          <span class="mbadge y" id="markBadge">0</span>
         </button>
-        <button class="mode-btn" onclick="showCatScreen()">
-          <span class="mic">📚</span>
-          <div class="mtx"><div class="mn">分野別に攻める</div><div class="ms">カテゴリを絞って出題</div></div>
+        <button class="mbtn" onclick="showCatScreen()">
+          <span class="mi">📚</span>
+          <div class="mt"><div class="mn">分野別に攻める</div><div class="ms">カテゴリを選んで出題</div></div>
         </button>
       </div>
     </div>
   </div>
-  <div class="bottom-nav">
-    <button class="active" onclick="gotoTab('home')"><span class="nav-ic">🏠</span>ホーム</button>
-    <button onclick="gotoTab('dash')"><span class="nav-ic">📊</span>分析</button>
-    <button onclick="gotoTab('notes')"><span class="nav-ic">📝</span>メモ</button>
-    <button onclick="gotoTab('add')"><span class="nav-ic">➕</span>問題追加</button>
-    <button onclick="gotoTab('settings')"><span class="nav-ic">⚙️</span>設定</button>
+  <div class="bnav" id="bnav-home">
+    <button class="on" onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button onclick="gotoTab('dash')"><span class="ni">📊</span>分析</button>
+    <button onclick="gotoTab('notes')"><span class="ni">📝</span>メモ</button>
+    <button onclick="gotoTab('add')"><span class="ni">➕</span>問題追加</button>
+    <button onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
 
-<!-- ══ CATEGORY SCREEN ══ -->
+<!-- CAT SCREEN -->
 <div class="screen" id="screen-cat">
-  <div class="app-header">
-    <button class="icon-btn" onclick="showScreen('home')">← 戻る</button>
-    <h1>分野を選ぶ</h1>
+  <div class="hdr">
+    <button class="icon-btn" onclick="showScreen('home')">←</button>
+    <div class="hdr-title">分野を選ぶ</div>
   </div>
-  <div class="scroll-body">
+  <div class="scroll" style="padding-bottom:20px;">
     <div class="mode-list" id="catList"></div>
   </div>
 </div>
 
-<!-- ══ QUIZ SCREEN ══ -->
+<!-- QUIZ SCREEN -->
 <div class="screen" id="screen-quiz">
-  <div class="quiz-header">
-    <div class="quiz-top">
-      <button class="q-exit" onclick="exitQuiz()">✕</button>
-      <span class="q-counter" id="qCounter">1/20</span>
-      <span class="q-cat-badge" id="qCatBadge"></span>
+  <div class="q-hdr">
+    <div class="q-top">
+      <button class="q-exit" onclick="exitQuiz()">✕ 終了</button>
+      <span class="q-cnt" id="qCnt">1/20</span>
+      <span class="q-badge" id="qBadge"></span>
     </div>
-    <div class="prog-wrap"><div class="prog-bar" id="progBar" style="width:5%"></div></div>
+    <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:5%"></div></div>
   </div>
-  <div class="quiz-body">
-    <div class="q-number" id="qNumber">Q.001</div>
-    <div class="q-text" id="qText"></div>
-    <div class="choices" id="choicesEl"></div>
-    <div class="result-box" id="resultBox">
-      <div class="result-icon" id="resultIcon"></div>
-      <div class="result-verdict" id="resultVerdict"></div>
-      <div class="result-explain" id="resultExplain"></div>
-      <div class="result-ref" id="resultRef"></div>
+  <div class="q-body">
+    <div class="q-no" id="qNo">Q.001</div>
+    <div class="q-txt" id="qTxt"></div>
+    <div id="choicesWrap"></div>
+    <div class="rbox" id="rbox">
+      <div class="r-icon" id="rIcon"></div>
+      <div class="r-verdict" id="rVerdict"></div>
+      <div class="r-explain" id="rExplain"></div>
+      <div class="r-ref" id="rRef"></div>
       <button class="mark-btn" id="markBtn" onclick="toggleMark()">☆ 重要マーク</button>
     </div>
     <button class="next-btn" id="nextBtn" onclick="nextQ()">次の問題 →</button>
   </div>
 </div>
 
-<!-- ══ RESULT SCREEN ══ -->
+<!-- RESULT SCREEN -->
 <div class="screen" id="screen-result">
-  <div class="app-header">
-    <h1>結果</h1>
-  </div>
-  <div class="result-screen">
-    <div class="result-big">
-      <div class="result-score" id="resScore">0/0</div>
-      <div class="result-rate" id="resRate">0%</div>
-      <div class="result-pass" id="resPass"></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;" id="resTime"></div>
+  <div class="hdr"><div class="hdr-title">結果</div></div>
+  <div class="res-body">
+    <div class="res-big">
+      <div class="res-score" id="resScore">—</div>
+      <div class="res-rate" id="resRate">—</div>
+      <div class="res-pass" id="resPass"></div>
+      <div class="res-time" id="resTime"></div>
     </div>
     <div class="card">
-      <div class="card-title">カテゴリ別</div>
+      <div class="card-t">カテゴリ別</div>
       <div id="catResults"></div>
     </div>
     <div class="res-btns">
-      <button class="res-btn primary" onclick="startMode('random')">🎯 もう一度</button>
-      <button class="res-btn secondary" onclick="startMode('wrong')">❌ 間違えた問題を復習</button>
-      <button class="res-btn secondary" onclick="showScreen('home')">🏠 ホームへ</button>
+      <button class="rb p" onclick="startMode('random')">🎯 もう一度ランダム</button>
+      <button class="rb s" onclick="startMode('wrong')">❌ 間違えた問題を復習</button>
+      <button class="rb s" onclick="showScreen('home')">🏠 ホームへ</button>
     </div>
   </div>
 </div>
 
-<!-- ══ DASHBOARD SCREEN ══ -->
+<!-- DASH SCREEN -->
 <div class="screen" id="screen-dash">
-  <div class="app-header">
-    <h1>📊 学習分析</h1>
-    <button class="icon-btn" onclick="doFullSync()" title="同期">🔄</button>
+  <div class="hdr">
+    <div class="hdr-title">📊 学習分析</div>
+    <button class="icon-btn" onclick="doFullSync()">🔄</button>
   </div>
-  <div class="scroll-body">
-    <!-- 進捗 -->
-    <div class="card">
-      <div class="card-title">試験別 正答率</div>
-      <div class="progress-row">
-        <div class="progress-label"><span>🦆 狩猟免許</span><span id="dashHunterPct" style="color:var(--orange)">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-hunter" id="dashHunterBar" style="width:0%"></div></div>
+  <div class="scroll">
+    <!-- 試験タブ -->
+    <div class="dash-tabs">
+      <button class="dtab on h" id="dt-hunter" onclick="switchDash('hunter')">🦆 狩猟免許</button>
+      <button class="dtab g" id="dt-gun" onclick="switchDash('gun')">🔫 猟銃講習会</button>
+    </div>
+
+    <!-- 狩猟免許 分析 -->
+    <div id="dash-hunter">
+      <div class="stat3">
+        <div class="sbox"><div class="sval" id="dh-ans" style="color:var(--hunter)">0</div><div class="slbl">総回答</div></div>
+        <div class="sbox"><div class="sval" id="dh-wr" style="color:var(--red)">0</div><div class="slbl">要復習</div></div>
+        <div class="sbox"><div class="sval" id="dh-mk" style="color:var(--yellow)">0</div><div class="slbl">マーク</div></div>
       </div>
-      <div style="height:8px"></div>
-      <div class="progress-row">
-        <div class="progress-label"><span>🔫 猟銃講習会</span><span id="dashGunPct" style="color:var(--blue)">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-gun" id="dashGunBar" style="width:0%"></div></div>
+      <div class="card">
+        <div class="card-t">正答率</div>
+        <div class="prog-row">
+          <div class="plabel"><span>🦆 狩猟免許</span><span id="dh-pct" style="color:var(--hunter)">0%</span></div>
+          <div class="pbar"><div class="pfill" id="dh-bar" style="width:0%;background:var(--hunter)"></div></div>
+        </div>
+      </div>
+      <div class="card" id="dh-weak-card">
+        <div class="card-t">カテゴリ別習熟度</div>
+        <div id="dh-weak"></div>
       </div>
     </div>
-    <!-- 統計 -->
-    <div class="stats-row">
-      <div class="stat-box"><div class="val" id="dashTotalQ">0</div><div class="lbl">総回答数</div></div>
-      <div class="stat-box"><div class="val" id="dashWrong" style="color:var(--red)">0</div><div class="lbl">要復習</div></div>
-      <div class="stat-box"><div class="val" id="dashMarked" style="color:var(--yellow)">0</div><div class="lbl">マーク</div></div>
-    </div>
-    <!-- 苦手 -->
-    <div class="card" id="weakCard" style="display:none">
-      <div class="card-title">苦手カテゴリ</div>
-      <div class="weak-section" id="weakSection"></div>
+
+    <!-- 猟銃 分析 -->
+    <div id="dash-gun" style="display:none">
+      <div class="stat3">
+        <div class="sbox"><div class="sval" id="dg-ans" style="color:var(--gun)">0</div><div class="slbl">総回答</div></div>
+        <div class="sbox"><div class="sval" id="dg-wr" style="color:var(--red)">0</div><div class="slbl">要復習</div></div>
+        <div class="sbox"><div class="sval" id="dg-mk" style="color:var(--yellow)">0</div><div class="slbl">マーク</div></div>
+      </div>
+      <div class="card">
+        <div class="card-t">正答率</div>
+        <div class="prog-row">
+          <div class="plabel"><span>🔫 猟銃講習会</span><span id="dg-pct" style="color:var(--gun)">0%</span></div>
+          <div class="pbar"><div class="pfill" id="dg-bar" style="width:0%;background:var(--gun)"></div></div>
+        </div>
+      </div>
+      <div class="card" id="dg-weak-card">
+        <div class="card-t">カテゴリ別習熟度</div>
+        <div id="dg-weak"></div>
+      </div>
     </div>
   </div>
-  <div class="bottom-nav">
-    <button onclick="gotoTab('home')"><span class="nav-ic">🏠</span>ホーム</button>
-    <button class="active" onclick="gotoTab('dash')"><span class="nav-ic">📊</span>分析</button>
-    <button onclick="gotoTab('notes')"><span class="nav-ic">📝</span>メモ</button>
-    <button onclick="gotoTab('add')"><span class="nav-ic">➕</span>問題追加</button>
-    <button onclick="gotoTab('settings')"><span class="nav-ic">⚙️</span>設定</button>
+  <div class="bnav">
+    <button onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button class="on" onclick="gotoTab('dash')"><span class="ni">📊</span>分析</button>
+    <button onclick="gotoTab('notes')"><span class="ni">📝</span>メモ</button>
+    <button onclick="gotoTab('add')"><span class="ni">➕</span>問題追加</button>
+    <button onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
 
-<!-- ══ NOTES SCREEN ══ -->
+<!-- NOTES SCREEN -->
 <div class="screen" id="screen-notes">
-  <div class="app-header"><h1>📝 学習メモ</h1></div>
-  <div class="scroll-body">
+  <div class="hdr"><div class="hdr-title">📝 学習メモ</div></div>
+  <div class="scroll">
     <div class="card">
-      <div class="form-group">
-        <label class="form-label">試験</label>
-        <select id="noteExam">
-          <option value="h">🦆 狩猟免許</option>
-          <option value="g">🔫 猟銃講習会</option>
-          <option value="b">📚 共通</option>
-        </select>
+      <div class="fg">
+        <label class="fl">試験</label>
+        <select id="nt-exam"><option value="h">🦆 狩猟免許</option><option value="g">🔫 猟銃講習会</option><option value="b">📚 共通</option></select>
       </div>
-      <div class="form-group">
-        <label class="form-label">タイトル</label>
-        <input type="text" id="noteTitle" placeholder="例：ゴイサギは令和4年改正で除外">
-      </div>
-      <div class="form-group">
-        <label class="form-label">内容</label>
-        <textarea id="noteBody" placeholder="覚えたこと・頻出ポイントなど"></textarea>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <select id="noteImp" style="flex:1">
-          <option value="3">⭐⭐⭐ 最重要</option>
-          <option value="2">⭐⭐ 重要</option>
-          <option value="1">⭐ 参考</option>
-        </select>
-        <button class="btn btn-green" onclick="addNote()">保存</button>
+      <div class="fg"><label class="fl">タイトル</label><input id="nt-title" type="text" placeholder="例：ゴイサギは令和4年に除外"></div>
+      <div class="fg"><label class="fl">内容</label><textarea id="nt-body" placeholder="覚えたこと・頻出ポイント"></textarea></div>
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <div style="flex:1"><label class="fl">重要度</label>
+          <select id="nt-imp"><option value="3">⭐⭐⭐ 最重要</option><option value="2">⭐⭐ 重要</option><option value="1">⭐ 参考</option></select>
+        </div>
+        <button class="btn btn-g" onclick="addNote()">保存</button>
       </div>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:10px;">
-      <select id="filterExam" onchange="renderNotes()" style="flex:1">
-        <option value="all">すべて</option>
-        <option value="h">狩猟免許</option>
-        <option value="g">猟銃講習会</option>
-        <option value="b">共通</option>
-      </select>
-      <select id="filterSort" onchange="renderNotes()" style="flex:1">
-        <option value="new">新しい順</option>
-        <option value="imp">重要度順</option>
-      </select>
+      <select id="nt-filter" onchange="renderNotes()" style="flex:1"><option value="all">すべて</option><option value="h">狩猟免許</option><option value="g">猟銃講習会</option><option value="b">共通</option></select>
+      <select id="nt-sort" onchange="renderNotes()" style="flex:1"><option value="new">新しい順</option><option value="imp">重要度順</option></select>
     </div>
     <div id="notesList"></div>
   </div>
-  <div class="bottom-nav">
-    <button onclick="gotoTab('home')"><span class="nav-ic">🏠</span>ホーム</button>
-    <button onclick="gotoTab('dash')"><span class="nav-ic">📊</span>分析</button>
-    <button class="active" onclick="gotoTab('notes')"><span class="nav-ic">📝</span>メモ</button>
-    <button onclick="gotoTab('add')"><span class="nav-ic">➕</span>問題追加</button>
-    <button onclick="gotoTab('settings')"><span class="nav-ic">⚙️</span>設定</button>
+  <div class="bnav">
+    <button onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button onclick="gotoTab('dash')"><span class="ni">📊</span>分析</button>
+    <button class="on" onclick="gotoTab('notes')"><span class="ni">📝</span>メモ</button>
+    <button onclick="gotoTab('add')"><span class="ni">➕</span>問題追加</button>
+    <button onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
 
-<!-- ══ ADD QUESTION SCREEN ══ -->
+<!-- ADD QUESTION SCREEN -->
 <div class="screen" id="screen-add">
-  <div class="app-header"><h1>➕ 問題を追加</h1></div>
-  <div class="scroll-body">
-    <div class="add-q-tabs">
-      <button class="tab-btn active" onclick="switchAddTab('manual')">✍️ 手入力</button>
-      <button class="tab-btn" onclick="switchAddTab('ai')">🤖 AI生成</button>
+  <div class="hdr"><div class="hdr-title">➕ 問題を追加</div></div>
+  <div class="scroll">
+    <div class="atabs">
+      <button class="atab on" onclick="switchAddTab('upload')">📷 画像/PDF読み込み</button>
+      <button class="atab" onclick="switchAddTab('manual')">✍️ 手入力</button>
+    </div>
+
+    <!-- 画像/PDFアップロード -->
+    <div class="tcnt on" id="tc-upload">
+      <div class="card">
+        <div class="fg">
+          <label class="fl">対象試験</label>
+          <select id="up-exam"><option value="hunter">🦆 狩猟免許</option><option value="gun">🔫 猟銃講習会</option></select>
+        </div>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()"
+             ondragover="event.preventDefault();this.classList.add('drag')"
+             ondragleave="this.classList.remove('drag')"
+             ondrop="handleDrop(event)">
+          <input type="file" id="fileInput" accept="image/*,.pdf" multiple onchange="handleFiles(this.files)">
+          <div class="upload-ic">📎</div>
+          <div class="upload-txt">タップして選択 / ドラッグ＆ドロップ</div>
+          <div class="upload-sub">JPG・PNG・PDF・HEIC対応</div>
+        </div>
+        <div id="uploadPreview" style="display:none">
+          <div class="preview-box" id="previewBox"></div>
+          <div id="extractedContent" style="display:none">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">読み取り内容（AIに送信）</div>
+            <div class="preview-box"><div class="preview-txt" id="extractedTxt"></div></div>
+          </div>
+          <div class="fg">
+            <label class="fl">生成する問題数</label>
+            <select id="up-count"><option value="3">3問</option><option value="5" selected>5問</option><option value="10">10問</option></select>
+          </div>
+          <button class="btn btn-g btn-w" id="upGenBtn" onclick="generateFromUpload()">🤖 AIで問題を生成</button>
+        </div>
+        <div id="upResult" style="margin-top:12px;"></div>
+      </div>
     </div>
 
     <!-- 手入力 -->
-    <div class="tab-content active" id="tab-manual">
+    <div class="tcnt" id="tc-manual">
       <div class="card">
-        <div class="form-group">
-          <label class="form-label">試験</label>
-          <select id="aqExam">
-            <option value="hunter">🦆 狩猟免許</option>
-            <option value="gun">🔫 猟銃講習会</option>
-          </select>
+        <div class="fg"><label class="fl">試験</label>
+          <select id="mq-exam" onchange="updateMqCat()"><option value="hunter">🦆 狩猟免許</option><option value="gun">🔫 猟銃講習会</option></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">カテゴリ</label>
-          <select id="aqCat"></select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">問題文</label>
-          <textarea id="aqQ" placeholder="問題文を入力"></textarea>
-        </div>
-        <div id="aqChoicesWrap">
-          <div class="form-group">
-            <label class="form-label">選択肢 A（正解）</label>
-            <input type="text" id="aqC0" placeholder="正解の選択肢">
-          </div>
-          <div class="form-group">
-            <label class="form-label">選択肢 B</label>
-            <input type="text" id="aqC1" placeholder="不正解の選択肢">
-          </div>
-          <div class="form-group">
-            <label class="form-label">選択肢 C</label>
-            <input type="text" id="aqC2" placeholder="不正解の選択肢">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">解説</label>
-          <textarea id="aqExplain" placeholder="解説文"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">参照条文（任意）</label>
-          <input type="text" id="aqRef" placeholder="例：鳥獣保護管理法第14条">
-        </div>
-        <button class="btn btn-green btn-full" onclick="addQuestion()">問題を追加</button>
-      </div>
-    </div>
-
-    <!-- AI生成 -->
-    <div class="tab-content" id="tab-ai">
-      <div class="card">
-        <div class="form-group">
-          <label class="form-label">試験</label>
-          <select id="aiExam">
-            <option value="hunter">🦆 狩猟免許</option>
-            <option value="gun">🔫 猟銃講習会</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">テキスト・写真の内容を貼り付け</label>
-          <textarea id="aiText" style="min-height:120px;" placeholder="教科書のテキスト、試験問題の内容、覚えたい内容などを貼り付けてください。AIが問題を自動生成します。"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">生成する問題数</label>
-          <select id="aiCount">
-            <option value="3">3問</option>
-            <option value="5" selected>5問</option>
-            <option value="10">10問</option>
-          </select>
-        </div>
-        <button class="btn btn-green btn-full" onclick="generateAI()" id="aiGenBtn">🤖 AIで問題を生成</button>
-        <div id="aiResult" style="margin-top:12px;"></div>
+        <div class="fg"><label class="fl">カテゴリ</label><select id="mq-cat"></select></div>
+        <div class="fg"><label class="fl">問題文</label><textarea id="mq-q" placeholder="問題文"></textarea></div>
+        <div class="fg"><label class="fl">選択肢 A（正解）</label><input id="mq-c0" type="text" placeholder="正解"></div>
+        <div class="fg"><label class="fl">選択肢 B</label><input id="mq-c1" type="text" placeholder="不正解1"></div>
+        <div class="fg"><label class="fl">選択肢 C</label><input id="mq-c2" type="text" placeholder="不正解2"></div>
+        <div class="fg"><label class="fl">解説</label><textarea id="mq-exp" placeholder="解説文"></textarea></div>
+        <div class="fg"><label class="fl">参照条文（任意）</label><input id="mq-ref" type="text" placeholder="例：鳥獣保護管理法第14条"></div>
+        <button class="btn btn-g btn-w" onclick="addManualQ()">問題を追加</button>
       </div>
     </div>
   </div>
-  <div class="bottom-nav">
-    <button onclick="gotoTab('home')"><span class="nav-ic">🏠</span>ホーム</button>
-    <button onclick="gotoTab('dash')"><span class="nav-ic">📊</span>分析</button>
-    <button onclick="gotoTab('notes')"><span class="nav-ic">📝</span>メモ</button>
-    <button class="active" onclick="gotoTab('add')"><span class="nav-ic">➕</span>問題追加</button>
-    <button onclick="gotoTab('settings')"><span class="nav-ic">⚙️</span>設定</button>
+  <div class="bnav">
+    <button onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button onclick="gotoTab('dash')"><span class="ni">📊</span>分析</button>
+    <button onclick="gotoTab('notes')"><span class="ni">📝</span>メモ</button>
+    <button class="on" onclick="gotoTab('add')"><span class="ni">➕</span>問題追加</button>
+    <button onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
 
-<!-- ══ SETTINGS SCREEN ══ -->
+<!-- SETTINGS SCREEN -->
 <div class="screen" id="screen-settings">
-  <div class="app-header"><h1>⚙️ 設定</h1></div>
-  <div class="scroll-body">
-    <!-- 同期 -->
+  <div class="hdr"><div class="hdr-title">⚙️ 設定</div></div>
+  <div class="scroll">
     <div class="card">
-      <div class="card-title">☁️ クラウド同期 (JSONBin.io)</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
-        ここで1回設定するだけで全データが自動同期されます。PC・モバイル共通。
+      <div class="card-t">☁️ クラウド同期（JSONBin.io）</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:11px;line-height:1.65;">
+        1回設定するだけで全データ自動同期。PC・モバイル共通。
       </div>
-      <div class="setting-row">
-        <div class="sync-dot dot-idle" id="cfgDot"></div>
-        <div style="flex:1"><div class="setting-label" id="cfgStatus">未設定</div></div>
+      <div class="set-row">
+        <div class="sdot d-idle" id="cfgDot"></div>
+        <div style="flex:1;font-size:13px;" id="cfgStatus">未設定</div>
       </div>
-      <div class="form-group">
-        <label class="form-label">API KEY</label>
-        <input type="password" id="cfgApiKey" placeholder="$2a$10$...">
+      <div class="fg"><label class="fl">API KEY</label><input type="password" id="cfg-apikey" placeholder="$2a$10$..."></div>
+      <div class="fg"><label class="fl">BIN ID</label><input type="text" id="cfg-binid" placeholder="68xxxxxxxxxxxxxxxx"></div>
+      <div style="display:flex;gap:7px;margin-bottom:6px;">
+        <button class="btn btn-g" style="flex:2" onclick="saveCfg()">保存して同期</button>
+        <button class="btn btn-m btn-s" style="flex:1" onclick="doFullSync()">↓ 取得</button>
+        <button class="btn btn-m btn-s" style="flex:1" onclick="doPush()">↑ 保存</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">BIN ID</label>
-        <input type="text" id="cfgBinId" placeholder="68xxxxxxxxxxxxxxxx">
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-green" style="flex:2" onclick="saveCfg()">保存して同期</button>
-        <button class="btn btn-muted btn-sm" style="flex:1" onclick="doFullSync()">↓ 取得</button>
-        <button class="btn btn-muted btn-sm" style="flex:1" onclick="doPush()">↑ 保存</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="cfgLog"></div>
+      <div style="font-size:11px;color:var(--muted);" id="cfgLog"></div>
     </div>
-
-    <!-- Claude API -->
     <div class="card">
-      <div class="card-title">🤖 Claude API（問題AI生成用）</div>
-      <div class="form-group">
-        <label class="form-label">Claude API KEY</label>
-        <input type="password" id="cfgClaudeKey" placeholder="sk-ant-...">
-      </div>
-      <button class="btn btn-green btn-full" onclick="saveClaudeKey()">保存</button>
+      <div class="card-t">🤖 Claude API（AI問題生成用）</div>
+      <div class="fg"><label class="fl">Claude API KEY</label><input type="password" id="cfg-claude" placeholder="sk-ant-..."></div>
+      <button class="btn btn-g btn-w" onclick="saveClaudeKey()">保存</button>
     </div>
-
-    <!-- データ管理 -->
     <div class="card">
-      <div class="card-title">データ管理</div>
-      <div class="setting-row">
-        <div style="flex:1"><div class="setting-label">追加問題数</div><div style="font-size:11px;color:var(--muted)">手入力・AI生成した問題</div></div>
-        <div style="font-family:var(--mono);font-size:14px;color:var(--green)" id="customQCount">0問</div>
+      <div class="card-t">データ管理</div>
+      <div class="set-row">
+        <div style="flex:1"><div style="font-size:13px;">追加問題数</div><div style="font-size:11px;color:var(--muted)">手入力・AI生成</div></div>
+        <div style="font-family:var(--mono);font-size:13px;color:var(--green)" id="customQCount">0問</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button class="btn btn-red btn-sm" onclick="resetProgress()">進捗リセット</button>
-        <button class="btn btn-red btn-sm" onclick="resetCustomQ()">追加問題を削除</button>
+      <div style="display:flex;gap:7px;margin-top:8px;">
+        <button class="btn btn-r btn-s" onclick="resetProgress()">進捗リセット</button>
+        <button class="btn btn-r btn-s" onclick="resetCustomQ()">追加問題を削除</button>
       </div>
     </div>
   </div>
-  <div class="bottom-nav">
-    <button onclick="gotoTab('home')"><span class="nav-ic">🏠</span>ホーム</button>
-    <button onclick="gotoTab('dash')"><span class="nav-ic">📊</span>分析</button>
-    <button onclick="gotoTab('notes')"><span class="nav-ic">📝</span>メモ</button>
-    <button onclick="gotoTab('add')"><span class="nav-ic">➕</span>問題追加</button>
-    <button class="active" onclick="gotoTab('settings')"><span class="nav-ic">⚙️</span>設定</button>
+  <div class="bnav">
+    <button onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button onclick="gotoTab('dash')"><span class="ni">📊</span>分析</button>
+    <button onclick="gotoTab('notes')"><span class="ni">📝</span>メモ</button>
+    <button onclick="gotoTab('add')"><span class="ni">➕</span>問題追加</button>
+    <button class="on" onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════
-// 問題データベース
-// ════════════════════════════════════════════
+// ════════════════════════════════════
+// 問題データ
+// ════════════════════════════════════
 const HUNTER_QDB = [
 {id:1,cat:'law',
 q:'鳥獣保護管理法の目的として正しいものはどれか。',
@@ -1115,7 +1099,6 @@ explain:'山形県は独自に過去3か年の知識試験問題を県庁1階行
 ref:'山形県みどり自然課'},
 
 ];
-
 const GUN_QDB = [
 {id:1,cat:'law',
 q:'猟銃の所持許可を与える権限は、都道府県公安委員会にある。',
@@ -1839,704 +1822,665 @@ ref:'野外応急処置テキスト'},
 
 ];
 
-
 const HUNTER_CATS = {
-  law:  {name:'法令・制度',     icon:'⚖️', color:'#fb923c'},
-  bird: {name:'鳥獣識別',       icon:'🦅', color:'#f97316'},
-  gun:  {name:'猟具・銃器',     icon:'🔫', color:'#a78bfa'},
-  safe: {name:'安全・事故防止', icon:'🛡️', color:'#4ade80'},
-  eco:  {name:'生態・保護管理', icon:'🌿', color:'#34d399'},
+  law: {name:'法令・制度',icon:'⚖️',col:'#fb923c'},
+  bird:{name:'鳥獣識別',icon:'🦅',col:'#f97316'},
+  gun: {name:'猟具・銃器',icon:'🔫',col:'#a78bfa'},
+  safe:{name:'安全・事故防止',icon:'🛡️',col:'#4ade80'},
+  eco: {name:'生態・保護管理',icon:'🌿',col:'#34d399'},
 };
 const GUN_CATS = {
-  law:  {name:'銃砲関連法令',     icon:'⚖️', color:'#60a5fa'},
-  safe: {name:'安全な取扱い',     icon:'🛡️', color:'#4ade80'},
-  keep: {name:'保管・携帯・運搬', icon:'🔒', color:'#f97316'},
-  mech: {name:'銃の構造・機能',   icon:'⚙️', color:'#a78bfa'},
-  exp:  {name:'火薬類・実包',     icon:'💥', color:'#f43f5e'},
-  acc:  {name:'事故・応急処置',   icon:'🚨', color:'#fbbf24'},
+  law: {name:'銃砲関連法令',icon:'⚖️',col:'#60a5fa'},
+  safe:{name:'安全な取扱い',icon:'🛡️',col:'#4ade80'},
+  keep:{name:'保管・携帯・運搬',icon:'🔒',col:'#f97316'},
+  mech:{name:'銃の構造・機能',icon:'⚙️',col:'#a78bfa'},
+  exp: {name:'火薬類・実包',icon:'💥',col:'#f43f5e'},
+  acc: {name:'事故・応急処置',icon:'🚨',col:'#fbbf24'},
 };
 
-// ════════════════════════════════════════════
-// 状態管理
-// ════════════════════════════════════════════
-const LS_KEY   = 'huntingHQ_v1';
-const SYNC_KEY = 'hunting_sync_cfg';
-const CLAUDE_KEY = 'huntingHQ_claudeKey';
-
-let appState = {
-  currentExam: 'hunter', // 'hunter' | 'gun'
-  hunter: { totalAnswered:0, totalCorrect:0, wrongIds:[], markedIds:[], catStats:{} },
-  gun:    { totalAnswered:0, totalCorrect:0, wrongIds:[], markedIds:[], catStats:{} },
-  notes:  [],
-  customQ: { hunter:[], gun:[] },
+// ════════════════════════════════════
+// 状態
+// ════════════════════════════════════
+const LS_KEY  = 'huntingHQ_v1';
+const CFG_KEY = 'hunting_sync_cfg';
+const CL_KEY  = 'huntingHQ_claude';
+let S = {
+  exam:'hunter',
+  dashTab:'hunter',
+  hunter:{totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}},
+  gun:   {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}},
+  notes:[],
+  customQ:{hunter:[],gun:[]},
 };
 
-function saveLocal() {
-  localStorage.setItem(LS_KEY, JSON.stringify(appState));
-}
-function loadLocal() {
-  try {
-    const d = localStorage.getItem(LS_KEY);
-    if (d) appState = {...appState, ...JSON.parse(d)};
-    // 後方互換: 旧キーから移行
-    const oldH = localStorage.getItem('hunter_quiz_v1');
-    const oldG = localStorage.getItem('gun_quiz_v1');
-    if (oldH && appState.hunter.totalAnswered === 0) {
-      try { const p = JSON.parse(oldH); appState.hunter = {...appState.hunter, ...p}; } catch(e){}
-    }
-    if (oldG && appState.gun.totalAnswered === 0) {
-      try { const p = JSON.parse(oldG); appState.gun = {...appState.gun, ...p}; } catch(e){}
-    }
-  } catch(e) {}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
+function load(){
+  try{
+    const d=localStorage.getItem(LS_KEY);
+    if(d) S={...S,...JSON.parse(d)};
+    // 旧データ移行
+    ['hunter','gun'].forEach(t=>{
+      const old=localStorage.getItem(t+'_quiz_v1');
+      if(old && S[t].totalAnswered===0){
+        try{ const p=JSON.parse(old); S[t]={...S[t],...p}; }catch(e){}
+      }
+    });
+    if(!S.customQ) S.customQ={hunter:[],gun:[]};
+    if(!S.hunter.catStats) S.hunter.catStats={};
+    if(!S.gun.catStats)    S.gun.catStats={};
+  }catch(e){}
 }
 
-function getExamState() { return appState[appState.currentExam]; }
-function getQDB() {
-  const base = appState.currentExam === 'hunter' ? HUNTER_QDB : GUN_QDB;
-  const custom = (appState.customQ[appState.currentExam]||[]);
-  return [...base, ...custom];
-}
-function getCats() { return appState.currentExam === 'hunter' ? HUNTER_CATS : GUN_CATS; }
+function getQDB(){ return [...(S.exam==='hunter'?HUNTER_QDB:GUN_QDB), ...(S.customQ[S.exam]||[])]; }
+function getCats(){ return S.exam==='hunter'?HUNTER_CATS:GUN_CATS; }
+function getSt(){ return S[S.exam]; }
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // 同期
-// ════════════════════════════════════════════
-function getSyncCfg() { try { return JSON.parse(localStorage.getItem(SYNC_KEY)||'{}'); } catch(e) { return {}; } }
-function setSyncCfg(cfg) { localStorage.setItem(SYNC_KEY, JSON.stringify(cfg)); }
-function hasSyncCfg() { const c=getSyncCfg(); return !!(c.apiKey&&c.binId); }
+// ════════════════════════════════════
+function getCfg(){ try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}');}catch(e){return{};} }
+function setCfg(c){ localStorage.setItem(CFG_KEY,JSON.stringify(c)); }
+function hasCfg(){ const c=getCfg(); return !!(c.apiKey&&c.binId); }
 
-async function _fetchBin() {
-  const {apiKey,binId} = getSyncCfg();
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {headers:{'X-Master-Key':apiKey}});
-  if (!r.ok) throw new Error('HTTP '+r.status);
-  const j = await r.json(); return j.record||{};
+async function fetchBin(){
+  const {apiKey,binId}=getCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`,{headers:{'X-Master-Key':apiKey}});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return (await r.json()).record||{};
 }
-async function _putBin(data) {
-  const {apiKey,binId} = getSyncCfg();
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+async function putBin(data){
+  const {apiKey,binId}=getCfg();
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}`,{
     method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':apiKey},
-    body: JSON.stringify(data)
+    body:JSON.stringify(data)
   });
   return r.ok;
 }
 
-async function doPush() {
-  if (!hasSyncCfg()) { toast('設定タブでAPI KeyとBin IDを入力してください'); return; }
-  setCfgStatus('saving');
-  try {
-    const existing = await _fetchBin().catch(()=>({}));
-    const ok = await _putBin({...existing, huntingHQ_v1: appState, _updated: Date.now()});
-    if (ok) { setCfgStatus('ok','保存完了'); toast('☁️ 保存しました'); }
-    else { setCfgStatus('err','保存失敗'); toast('❌ 保存エラー'); }
-  } catch(e) { setCfgStatus('err', e.message); toast('❌ '+e.message); }
+async function doPush(){
+  if(!hasCfg()){toast('設定タブでAPI KeyとBin IDを入力してください');return;}
+  setSync('saving');
+  try{
+    const ex=await fetchBin().catch(()=>({}));
+    const ok=await putBin({...ex, huntingHQ_v1:S, _u:Date.now()});
+    setSync(ok?'ok':'err', ok?'保存完了':'保存失敗');
+    if(ok) toast('☁️ 保存しました');
+  }catch(e){ setSync('err',e.message); toast('❌ '+e.message); }
 }
 
-async function doFullSync() {
-  if (!hasSyncCfg()) { toast('設定タブでAPI KeyとBin IDを入力してください'); return; }
-  setCfgStatus('loading');
-  const btn = document.getElementById('syncStatus');
-  if (btn) btn.textContent = '同期中…';
-  try {
-    const data = await _fetchBin();
-    if (data && data.huntingHQ_v1) {
-      const cloud = data.huntingHQ_v1;
-      // クラウドの方が新しければ上書き
-      const localTotal = (appState.hunter.totalAnswered||0) + (appState.gun.totalAnswered||0);
-      const cloudTotal = ((cloud.hunter||{}).totalAnswered||0) + ((cloud.gun||{}).totalAnswered||0);
-      if (cloudTotal >= localTotal) {
-        appState = {...appState, ...cloud};
-        saveLocal();
-        updateAllUI();
-        toast('☁️ データを取得しました');
-      } else {
-        toast('ローカルが最新です');
-      }
-    } else {
-      toast('クラウドにデータがありません');
-    }
-    setCfgStatus('ok','取得完了');
-  } catch(e) { setCfgStatus('err', e.message); toast('❌ '+e.message); }
-  if (btn) btn.textContent = hasSyncCfg() ? '同期済み' : '―';
+async function doFullSync(){
+  if(!hasCfg()) return;
+  setSync('loading'); setSyncTxt('同期中…');
+  try{
+    const data=await fetchBin();
+    if(data&&data.huntingHQ_v1){
+      const cloud=data.huntingHQ_v1;
+      const lt=(S.hunter.totalAnswered||0)+(S.gun.totalAnswered||0);
+      const ct=((cloud.hunter||{}).totalAnswered||0)+((cloud.gun||{}).totalAnswered||0);
+      if(ct>=lt){ S={...S,...cloud}; save(); updateAll(); toast('☁️ データを取得しました'); }
+      else toast('ローカルが最新です');
+    } else toast('クラウドにデータなし');
+    setSync('ok','取得完了');
+  }catch(e){ setSync('err',e.message); toast('❌ '+e.message); }
+  setSyncTxt(hasCfg()?'同期済み':'―');
 }
 
-// ════════════════════════════════════════════
+async function autoSave(){
+  if(!hasCfg()) return;
+  try{ const ex=await fetchBin().catch(()=>({})); await putBin({...ex, huntingHQ_v1:S, _u:Date.now()}); }catch(e){}
+}
+
+function setSync(s,msg){
+  const map={ok:['d-ok','同期済み'],err:['d-err','エラー'],saving:['d-idle','保存中…'],loading:['d-idle','取得中…']};
+  const[cls,lbl]=map[s]||['d-idle','未設定'];
+  const dot=document.getElementById('cfgDot'),st=document.getElementById('cfgStatus');
+  if(dot) dot.className='sdot '+cls;
+  if(st)  st.textContent=lbl;
+  const log=document.getElementById('cfgLog');
+  if(log&&msg) log.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
+}
+function setSyncTxt(t){ const el=document.getElementById('syncStatusTxt'); if(el) el.textContent=t; }
+
+// ════════════════════════════════════
 // クイズロジック
-// ════════════════════════════════════════════
-let session = {qs:[], idx:0, answers:[], mode:'', startTime:0};
-let currentQ = null;
-let answered = false;
-let shuffledAnswerIdx = 0;
+// ════════════════════════════════════
+let sess={qs:[],idx:0,ans:[],mode:'',t0:0};
+let cQ=null, cAnswered=false, cShuffled=0;
 
-function getPool(mode, catKey) {
-  const qdb = getQDB();
-  const st = getExamState();
-  if (mode==='random') return shuffle([...qdb]);
-  if (mode==='exam') return shuffleExam(qdb);
-  if (mode==='wrong') {
-    const p = qdb.filter(q=>st.wrongIds.includes(q.id));
-    if (!p.length) { toast('間違えた問題がありません 🎉'); return null; }
+function getPool(mode,cat){
+  const db=getQDB(), st=getSt();
+  if(mode==='random') return shuffle([...db]);
+  if(mode==='exam') return makeExam(db);
+  if(mode==='wrong'){
+    const p=db.filter(q=>st.wrongIds.includes(q.id));
+    if(!p.length){toast('間違えた問題がありません 🎉');return null;}
     return shuffle(p);
   }
-  if (mode==='marked') {
-    const p = qdb.filter(q=>st.markedIds.includes(q.id));
-    if (!p.length) { toast('マーク済み問題がありません'); return null; }
+  if(mode==='marked'){
+    const p=db.filter(q=>st.markedIds.includes(q.id));
+    if(!p.length){toast('マーク済みがありません');return null;}
     return shuffle(p);
   }
-  if (mode==='cat') return shuffle(qdb.filter(q=>q.cat===catKey));
-  return shuffle([...qdb]);
+  if(mode==='cat') return shuffle(db.filter(q=>q.cat===cat));
+  return shuffle([...db]);
 }
 
-function shuffleExam(qdb) {
-  if (appState.currentExam === 'hunter') {
-    const law  = shuffle(qdb.filter(q=>q.cat==='law')).slice(0,13);
-    const bird = shuffle(qdb.filter(q=>q.cat==='bird')).slice(0,9);
-    const gun  = shuffle(qdb.filter(q=>q.cat==='gun')).slice(0,6);
-    const rest = shuffle(qdb.filter(q=>!['law','bird','gun'].includes(q.cat))).slice(0,2);
-    return shuffle([...law,...bird,...gun,...rest]);
+function makeExam(db){
+  if(S.exam==='hunter'){
+    return shuffle([
+      ...shuffle(db.filter(q=>q.cat==='law')).slice(0,13),
+      ...shuffle(db.filter(q=>q.cat==='bird')).slice(0,9),
+      ...shuffle(db.filter(q=>q.cat==='gun')).slice(0,6),
+      ...shuffle(db.filter(q=>!['law','bird','gun'].includes(q.cat))).slice(0,2),
+    ]);
   } else {
-    const law  = shuffle(qdb.filter(q=>q.cat==='law')).slice(0,25);
-    const rest = shuffle(qdb.filter(q=>q.cat!=='law')).slice(0,25);
-    return shuffle([...law,...rest]);
+    return shuffle([
+      ...shuffle(db.filter(q=>q.cat==='law')).slice(0,25),
+      ...shuffle(db.filter(q=>q.cat!=='law')).slice(0,25),
+    ]);
   }
 }
 
-function startMode(mode, catKey='') {
-  const pool = getPool(mode, catKey);
-  if (!pool) return;
-  const examCount = appState.currentExam==='hunter' ? 30 : 50;
-  const count = (mode==='exam') ? Math.min(examCount, pool.length) : Math.min(20, pool.length);
-  session = {qs: pool.slice(0,count), idx:0, answers:[], mode, startTime: Date.now()};
-  showScreen('quiz');
-  renderQ();
+function startMode(mode,cat=''){
+  const pool=getPool(mode,cat);
+  if(!pool) return;
+  const maxQ=mode==='exam'?(S.exam==='hunter'?30:50):20;
+  sess={qs:pool.slice(0,maxQ),idx:0,ans:[],mode,t0:Date.now()};
+  showScreen('quiz'); renderQ();
 }
 
-function renderQ() {
-  const q = session.qs[session.idx];
-  currentQ = q; answered = false;
-  const cats = getCats();
-  const ci = cats[q.cat] || {name:q.cat, color:'#888'};
+function renderQ(){
+  const q=sess.qs[sess.idx]; cQ=q; cAnswered=false;
+  const cats=getCats(), ci=cats[q.cat]||{name:q.cat,col:'#888',icon:''};
+  document.getElementById('qBadge').textContent=ci.name;
+  document.getElementById('qBadge').style.cssText=`background:${ci.col}22;color:${ci.col};border:1px solid ${ci.col}44;`;
+  document.getElementById('qNo').textContent=`Q.${String(q.id).padStart(3,'0')}`;
+  document.getElementById('qTxt').textContent=q.q;
+  document.getElementById('qCnt').textContent=`${sess.idx+1} / ${sess.qs.length}`;
+  document.getElementById('progFill').style.width=((sess.idx+1)/sess.qs.length*100)+'%';
 
-  document.getElementById('qCatBadge').textContent = ci.name;
-  document.getElementById('qCatBadge').style.cssText = `background:${ci.color}22;color:${ci.color};border:1px solid ${ci.color}44;`;
-  document.getElementById('qNumber').textContent = `Q.${String(q.id).padStart(3,'0')}`;
-  document.getElementById('qText').textContent = q.q;
-  document.getElementById('qCounter').textContent = `${session.idx+1} / ${session.qs.length}`;
-  document.getElementById('progBar').style.width = ((session.idx+1)/session.qs.length*100)+'%';
-
-  // 三肢択一
-  if (q.choices && Array.isArray(q.choices)) {
-    const indexed = q.choices.map((text,i)=>({text, isCorrect: i===q.answer}));
-    for (let i=indexed.length-1;i>0;i--) {
-      const j=Math.floor(Math.random()*(i+1));
-      [indexed[i],indexed[j]]=[indexed[j],indexed[i]];
-    }
-    shuffledAnswerIdx = indexed.findIndex(c=>c.isCorrect);
-    document.getElementById('choicesEl').innerHTML = indexed.map((c,i)=>`
-      <button class="choice" onclick="answerQ(${i})">
-        <span class="choice-label">${['A','B','C','D'][i]}</span>
-        <span class="choice-text">${c.text}</span>
-      </button>`).join('');
+  const wrap=document.getElementById('choicesWrap');
+  if(q.choices&&Array.isArray(q.choices)){
+    // 三肢択一
+    const items=q.choices.map((t,i)=>({t,ok:i===q.answer}));
+    for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+    cShuffled=items.findIndex(c=>c.ok);
+    wrap.innerHTML=`<div class="choices">${items.map((c,i)=>`
+      <button class="choice" onclick="ansQ(${i})">
+        <span class="clbl">${['A','B','C','D'][i]}</span>
+        <span>${c.t}</span>
+      </button>`).join('')}</div>`;
   } else {
-    // ○×式（gun-quiz等）
-    shuffledAnswerIdx = q.answer ? 0 : 1; // true=○=0, false=×=1
-    document.getElementById('choicesEl').innerHTML = `
-      <button class="choice" style="justify-content:center;min-height:80px;" onclick="answerQ(0)">
-        <span style="font-size:3rem;">○</span>
-      </button>
-      <button class="choice" style="justify-content:center;min-height:80px;" onclick="answerQ(1)">
-        <span style="font-size:3rem;">×</span>
-      </button>`;
+    // ○×
+    cShuffled=q.answer===true?0:1;
+    wrap.innerHTML=`<div class="ox-row">
+      <button class="ox-btn" onclick="ansQ(0)"><span class="ox-sym">○</span><span class="ox-lbl">正しい</span></button>
+      <button class="ox-btn" onclick="ansQ(1)"><span class="ox-sym">×</span><span class="ox-lbl">誤り</span></button>
+    </div>`;
   }
 
-  document.getElementById('resultBox').style.display = 'none';
-  document.getElementById('nextBtn').style.display = 'none';
-  updateMarkBtn();
+  document.getElementById('rbox').style.display='none';
+  document.getElementById('nextBtn').style.display='none';
+  updMarkBtn();
 }
 
-function answerQ(idx) {
-  if (answered) return;
-  answered = true;
-  const q = currentQ;
-  const correct = (idx === shuffledAnswerIdx);
-  session.answers.push({id:q.id, correct});
+function ansQ(idx){
+  if(cAnswered) return;
+  cAnswered=true;
+  const q=cQ, ok=(idx===cShuffled);
+  sess.ans.push({id:q.id,ok});
+  const st=getSt();
+  st.totalAnswered++; if(ok) st.totalCorrect++;
+  if(!st.catStats[q.cat]) st.catStats[q.cat]={a:0,c:0};
+  st.catStats[q.cat].a++; if(ok) st.catStats[q.cat].c++;
+  if(!ok){if(!st.wrongIds.includes(q.id)) st.wrongIds.push(q.id);}
+  else st.wrongIds=st.wrongIds.filter(id=>id!==q.id);
+  save();
 
-  const st = getExamState();
-  st.totalAnswered++;
-  if (correct) st.totalCorrect++;
-  if (!st.catStats[q.cat]) st.catStats[q.cat] = {a:0,c:0};
-  st.catStats[q.cat].a++;
-  if (correct) st.catStats[q.cat].c++;
-  if (!correct) { if (!st.wrongIds.includes(q.id)) st.wrongIds.push(q.id); }
-  else { st.wrongIds = st.wrongIds.filter(id=>id!==q.id); }
-  saveLocal();
+  const isOX = !(q.choices&&Array.isArray(q.choices));
+  if(!isOX){
+    document.querySelectorAll('.choice').forEach((el,i)=>{
+      el.style.pointerEvents='none';
+      if(i===cShuffled) el.classList.add(ok&&i===idx?'correct':'show-c');
+      else if(i===idx) el.classList.add('wrong');
+    });
+  } else {
+    document.querySelectorAll('.ox-btn').forEach((el,i)=>{
+      el.style.pointerEvents='none';
+      if(i===cShuffled) el.classList.add(ok&&i===idx?'correct':'show-c');
+      else if(i===idx) el.classList.add('wrong');
+    });
+  }
 
-  const choices = document.querySelectorAll('.choice');
-  choices.forEach((el,i) => {
-    el.style.pointerEvents = 'none';
-    if (i===shuffledAnswerIdx) el.classList.add(correct&&i===idx ? 'correct' : 'show-correct');
-    else if (i===idx) el.classList.add('wrong');
-  });
-
-  const rb = document.getElementById('resultBox');
-  rb.style.display = 'block';
-  rb.className = 'result-box ' + (correct ? 'correct-box' : 'wrong-box');
-  document.getElementById('resultIcon').textContent = correct ? '✅' : '❌';
-  document.getElementById('resultVerdict').textContent = correct ? '正解！' : '不正解';
-  document.getElementById('resultExplain').textContent = q.explain || '';
-  document.getElementById('resultRef').textContent = q.ref ? '📖 '+q.ref : '';
-  document.getElementById('nextBtn').style.display = 'block';
-  updateMarkBtn();
+  const rb=document.getElementById('rbox');
+  rb.style.display='block'; rb.className='rbox '+(ok?'ok':'ng');
+  document.getElementById('rIcon').textContent=ok?'✅':'❌';
+  document.getElementById('rVerdict').textContent=ok?'正解！':'不正解';
+  document.getElementById('rExplain').textContent=q.explain||'';
+  document.getElementById('rRef').textContent=q.ref?'📖 '+q.ref:'';
+  document.getElementById('nextBtn').style.display='block';
+  updMarkBtn();
 }
 
-function nextQ() {
-  session.idx++;
-  if (session.idx >= session.qs.length) { showResult(); return; }
-  renderQ();
-}
+function nextQ(){ sess.idx++; if(sess.idx>=sess.qs.length){showResult();return;} renderQ(); }
+function exitQuiz(){ if(confirm('終了しますか？')){showScreen('home');updateAll();} }
 
-function exitQuiz() {
-  if (confirm('終了しますか？')) { showScreen('home'); updateAllUI(); }
-}
-
-function toggleMark() {
-  if (!currentQ) return;
-  const st = getExamState();
-  const id = currentQ.id;
-  if (st.markedIds.includes(id)) st.markedIds = st.markedIds.filter(x=>x!==id);
+function toggleMark(){
+  if(!cQ) return;
+  const st=getSt(), id=cQ.id;
+  if(st.markedIds.includes(id)) st.markedIds=st.markedIds.filter(x=>x!==id);
   else st.markedIds.push(id);
-  saveLocal(); updateMarkBtn();
+  save(); updMarkBtn();
 }
-function updateMarkBtn() {
-  if (!currentQ) return;
-  const st = getExamState();
-  const marked = st.markedIds.includes(currentQ.id);
-  const btn = document.getElementById('markBtn');
-  btn.textContent = marked ? '★ マーク済み' : '☆ 重要マーク';
-  btn.style.color = marked ? 'var(--yellow)' : 'var(--muted)';
+function updMarkBtn(){
+  if(!cQ) return;
+  const marked=getSt().markedIds.includes(cQ.id);
+  const btn=document.getElementById('markBtn');
+  btn.textContent=marked?'★ マーク済み':'☆ 重要マーク';
+  btn.style.color=marked?'var(--yellow)':'var(--muted)';
 }
 
-function showResult() {
+function showResult(){
   showScreen('result');
-  const total = session.qs.length;
-  const correct = session.answers.filter(a=>a.correct).length;
-  const rate = Math.round(correct/total*100);
-  const elapsed = Math.round((Date.now()-session.startTime)/1000);
-
-  document.getElementById('resScore').textContent = `${correct}/${total}`;
-  document.getElementById('resRate').textContent = rate+'%';
-  document.getElementById('resRate').style.color = rate>=90?'var(--green)':rate>=70?'var(--yellow)':'var(--red)';
-  document.getElementById('resTime').textContent = `${Math.floor(elapsed/60)}分${elapsed%60}秒`;
-
-  const passEl = document.getElementById('resPass');
-  const threshold = appState.currentExam==='hunter' ? 70 : 90;
-  if (session.mode==='exam') {
-    passEl.textContent = rate>=threshold ? '🎉 合格ライン達成！' : `⚠️ 要復習 (${threshold}%以上で合格)`;
-    passEl.className = 'result-pass ' + (rate>=threshold ? 'pass-ok' : 'pass-ng');
-  } else { passEl.textContent=''; passEl.className='result-pass'; }
-
-  const cats = getCats();
-  const catR = {};
-  session.answers.forEach(a=>{
-    const q = getQDB().find(x=>x.id===a.id); if(!q) return;
-    if(!catR[q.cat]) catR[q.cat]={c:0,t:0};
-    catR[q.cat].t++; if(a.correct) catR[q.cat].c++;
+  const total=sess.qs.length, cor=sess.ans.filter(a=>a.ok).length;
+  const rate=Math.round(cor/total*100);
+  const sec=Math.round((Date.now()-sess.t0)/1000);
+  document.getElementById('resScore').textContent=`${cor}/${total}`;
+  document.getElementById('resRate').textContent=rate+'%';
+  document.getElementById('resRate').style.color=rate>=90?'var(--green)':rate>=70?'var(--yellow)':'var(--red)';
+  document.getElementById('resTime').textContent=`${Math.floor(sec/60)}分${sec%60}秒`;
+  const thr=S.exam==='hunter'?70:90, passEl=document.getElementById('resPass');
+  if(sess.mode==='exam'){
+    passEl.textContent=rate>=thr?'🎉 合格ライン達成！':`⚠️ 要復習（${thr}%以上で合格）`;
+    passEl.className='res-pass '+(rate>=thr?'p-ok':'p-ng');
+  } else { passEl.textContent=''; passEl.className='res-pass'; }
+  const cats=getCats(), db=getQDB(), cr={};
+  sess.ans.forEach(a=>{
+    const q=db.find(x=>x.id===a.id); if(!q) return;
+    if(!cr[q.cat]) cr[q.cat]={c:0,t:0};
+    cr[q.cat].t++; if(a.ok) cr[q.cat].c++;
   });
-  document.getElementById('catResults').innerHTML = Object.entries(catR).map(([k,v])=>{
+  document.getElementById('catResults').innerHTML=Object.entries(cr).map(([k,v])=>{
     const r=Math.round(v.c/v.t*100);
     const col=r>=80?'var(--green)':r>=60?'var(--yellow)':'var(--red)';
-    return `<div class="cat-result-row">
-      <div class="cat-result-top"><span>${(cats[k]||{icon:'',name:k}).icon} ${(cats[k]||{name:k}).name}</span><span style="color:${col};font-family:var(--mono)">${v.c}/${v.t} (${r}%)</span></div>
-      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${r}%;background:${col}"></div></div>
+    const ci=cats[k]||{icon:'',name:k};
+    return `<div class="cres-row">
+      <div class="cres-top"><span>${ci.icon} ${ci.name}</span><span style="color:${col};font-family:var(--mono)">${v.c}/${v.t} (${r}%)</span></div>
+      <div class="cbar-bg"><div class="cbar-fill" style="width:${r}%;background:${col}"></div></div>
     </div>`;
   }).join('');
-
-  // 終了後に自動保存
   autoSave();
 }
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // UI更新
-// ════════════════════════════════════════════
-function updateAllUI() {
-  updateHomeUI();
-  updateDashUI();
-  renderNotes();
-  updateCatDisplay();
-}
+// ════════════════════════════════════
+function updateAll(){ updHome(); updDash(); renderNotes(); updCustomCount(); }
 
-function updateHomeUI() {
-  const h = appState.hunter;
-  const g = appState.gun;
-  const hr = h.totalAnswered>0 ? Math.round(h.totalCorrect/h.totalAnswered*100) : null;
-  const gr = g.totalAnswered>0 ? Math.round(g.totalCorrect/g.totalAnswered*100) : null;
-  document.getElementById('hunter-rate').textContent = hr!==null ? hr+'%' : '-%';
-  document.getElementById('hunter-rate').style.color = hr===100?'var(--green)':hr>=70?'var(--yellow)':'var(--red)';
-  document.getElementById('gun-rate').textContent = gr!==null ? gr+'%' : '-%';
-  document.getElementById('gun-rate').style.color = gr===100?'var(--green)':gr>=90?'var(--yellow)':'var(--red)';
-  const st = getExamState();
-  document.getElementById('wrongBadge').textContent = st.wrongIds.length;
-  document.getElementById('markBadge').textContent = st.markedIds.length;
+function updHome(){
+  const h=S.hunter, g=S.gun;
+  const hr=h.totalAnswered>0?Math.round(h.totalCorrect/h.totalAnswered*100):null;
+  const gr=g.totalAnswered>0?Math.round(g.totalCorrect/g.totalAnswered*100):null;
+  document.getElementById('hrate').textContent=hr!=null?hr+'%':'-%';
+  document.getElementById('grate').textContent=gr!=null?gr+'%':'-%';
+  const st=getSt();
+  document.getElementById('wrongBadge').textContent=st.wrongIds.length;
+  document.getElementById('markBadge').textContent=st.markedIds.length;
   renderCountdown();
 }
 
-function updateDashUI() {
-  const h = appState.hunter;
-  const g = appState.gun;
-  const hr = h.totalAnswered>0?Math.round(h.totalCorrect/h.totalAnswered*100):0;
-  const gr = g.totalAnswered>0?Math.round(g.totalCorrect/g.totalAnswered*100):0;
-  document.getElementById('dashHunterPct').textContent = hr+'%';
-  document.getElementById('dashHunterBar').style.width = hr+'%';
-  document.getElementById('dashGunPct').textContent = gr+'%';
-  document.getElementById('dashGunBar').style.width = gr+'%';
-  const st = getExamState();
-  document.getElementById('dashTotalQ').textContent = st.totalAnswered;
-  document.getElementById('dashWrong').textContent = st.wrongIds.length;
-  document.getElementById('dashMarked').textContent = st.markedIds.length;
-  renderWeakSection();
+function updDash(){
+  // hunter
+  const h=S.hunter;
+  const hp=h.totalAnswered>0?Math.round(h.totalCorrect/h.totalAnswered*100):0;
+  document.getElementById('dh-ans').textContent=h.totalAnswered;
+  document.getElementById('dh-wr').textContent=h.wrongIds.length;
+  document.getElementById('dh-mk').textContent=h.markedIds.length;
+  document.getElementById('dh-pct').textContent=hp+'%';
+  document.getElementById('dh-bar').style.width=hp+'%';
+  renderWeakCats('dh-weak', h.catStats, HUNTER_CATS);
+  // gun
+  const g=S.gun;
+  const gp=g.totalAnswered>0?Math.round(g.totalCorrect/g.totalAnswered*100):0;
+  document.getElementById('dg-ans').textContent=g.totalAnswered;
+  document.getElementById('dg-wr').textContent=g.wrongIds.length;
+  document.getElementById('dg-mk').textContent=g.markedIds.length;
+  document.getElementById('dg-pct').textContent=gp+'%';
+  document.getElementById('dg-bar').style.width=gp+'%';
+  renderWeakCats('dg-weak', g.catStats, GUN_CATS);
 }
 
-function renderWeakSection() {
-  const st = getExamState();
-  const cats = getCats();
-  const entries = Object.entries(st.catStats||{}).filter(([,v])=>v.a>0).sort(([,a],[,b])=>{
-    const ra=Math.round(a.c/a.a*100), rb=Math.round(b.c/b.a*100); return ra-rb;
-  });
-  if (!entries.length) { document.getElementById('weakCard').style.display='none'; return; }
-  document.getElementById('weakCard').style.display='block';
-  document.getElementById('weakSection').innerHTML = entries.map(([k,v])=>{
-    const pct = Math.round(v.c/v.a*100);
-    const col = pct<50?'var(--red)':pct<80?'var(--yellow)':'var(--green)';
-    return `<div class="weak-cat-row">
-      <span class="weak-pct" style="color:${col}">${pct}%</span>
-      <span style="flex:1;font-size:13px;">${(cats[k]||{icon:'',name:k}).icon} ${(cats[k]||{name:k}).name}</span>
-      <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">${v.c}/${v.a}</span>
+function renderWeakCats(elId, catStats, cats){
+  const entries=Object.entries(catStats||{}).filter(([,v])=>v.a>0)
+    .sort(([,a],[,b])=>Math.round(a.c/a.a*100)-Math.round(b.c/b.a*100));
+  const el=document.getElementById(elId);
+  if(!entries.length){ el.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 0;">まだデータがありません</div>'; return; }
+  el.innerHTML=entries.map(([k,v])=>{
+    const pct=Math.round(v.c/v.a*100);
+    const col=pct<50?'var(--red)':pct<80?'var(--yellow)':'var(--green)';
+    const ci=cats[k]||{icon:'',name:k};
+    return `<div class="weak-row">
+      <span class="wpct" style="color:${col}">${pct}%</span>
+      <span style="flex:1;font-size:13px;">${ci.icon} ${ci.name}</span>
+      <div class="wbar-bg"><div class="wbar-fill" style="width:${pct}%;background:${col}"></div></div>
+      <span style="font-size:10px;color:var(--muted);font-family:var(--mono);min-width:36px;text-align:right">${v.c}/${v.a}</span>
     </div>`;
   }).join('');
 }
 
-function updateCatDisplay() {
-  const cats = getCats();
-  const qdb = getQDB();
-  const st = getExamState();
-  document.getElementById('catList').innerHTML = Object.entries(cats).map(([k,v])=>{
-    const qs = qdb.filter(q=>q.cat===k);
-    const cs = st.catStats[k]||{a:0,c:0};
-    const rate = cs.a>0 ? Math.round(cs.c/cs.a*100) : null;
-    const col = rate===null?'var(--muted)':rate===100?'var(--green)':rate>=70?'var(--yellow)':'var(--red)';
-    return `<button class="mode-btn" onclick="startMode('cat','${k}')">
-      <span class="mic">${v.icon}</span>
-      <div class="mtx"><div class="mn">${v.name}</div><div class="ms">${qs.length}問</div></div>
-      <span style="font-family:var(--mono);font-size:13px;color:${col}">${rate!==null?rate+'%':'--'}</span>
+function switchDash(tab){
+  S.dashTab=tab;
+  document.getElementById('dash-hunter').style.display=tab==='hunter'?'block':'none';
+  document.getElementById('dash-gun').style.display=tab==='gun'?'block':'none';
+  ['hunter','gun'].forEach(t=>{
+    document.getElementById('dt-'+t).className='dtab '+(t===tab?'on ':'')+t;
+  });
+}
+
+// ════════════════════════════════════
+// 試験選択
+// ════════════════════════════════════
+function selExam(exam){
+  S.exam=exam;
+  ['hunter','gun'].forEach(t=>{
+    document.getElementById('etab-'+t).className='exam-tab '+t+(t===exam?' on':'');
+  });
+  updHome();
+}
+
+// ════════════════════════════════════
+// カウントダウン
+// ════════════════════════════════════
+function renderCountdown(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const exams=[{l:'初心者講習',d:new Date('2025-07-25')},{l:'狩猟試験',d:new Date('2025-09-12')}];
+  document.getElementById('countdownRow').innerHTML=exams.map(e=>{
+    const diff=Math.ceil((e.d-today)/86400000);
+    return `<div class="cd-chip"><div class="cd-days">${diff>0?diff:0}</div><div class="cd-lbl">${e.l}</div></div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════
+// カテゴリ画面
+// ════════════════════════════════════
+function showCatScreen(){
+  const cats=getCats(), db=getQDB(), st=getSt();
+  document.getElementById('catList').innerHTML=Object.entries(cats).map(([k,v])=>{
+    const cnt=db.filter(q=>q.cat===k).length;
+    const cs=st.catStats[k]||{a:0,c:0};
+    const rate=cs.a>0?Math.round(cs.c/cs.a*100):null;
+    const col=rate===null?'var(--muted)':rate>=80?'var(--green)':rate>=60?'var(--yellow)':'var(--red)';
+    return `<button class="mbtn" onclick="startMode('cat','${k}')">
+      <span class="mi">${v.icon}</span>
+      <div class="mt"><div class="mn">${v.name}</div><div class="ms">${cnt}問</div></div>
+      <span style="font-family:var(--mono);font-size:13px;color:${col}">${rate!=null?rate+'%':'--'}</span>
     </button>`;
   }).join('');
+  showScreen('cat');
 }
 
-// ════════════════════════════════════════════
-// 試験切り替え
-// ════════════════════════════════════════════
-function selectExam(exam) {
-  appState.currentExam = exam;
-  document.getElementById('exam-hunter').classList.toggle('selected', exam==='hunter');
-  document.getElementById('exam-gun').classList.toggle('selected', exam==='gun');
-  updateHomeUI();
-}
-
-// ════════════════════════════════════════════
-// カウントダウン
-// ════════════════════════════════════════════
-function renderCountdown() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const exams = [{label:'初心者講習',date:new Date('2025-07-25')},{label:'狩猟試験',date:new Date('2025-09-12')}];
-  document.getElementById('countdownRow').innerHTML = exams.map(e=>{
-    const diff = Math.ceil((e.date-today)/86400000);
-    return `<div class="cd-chip"><div class="cd-days">${diff>0?diff:0}</div><div class="cd-label">${e.label}</div></div>`;
-  }).join('');
-}
-
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // メモ
-// ════════════════════════════════════════════
-function addNote() {
-  const tag = document.getElementById('noteExam').value;
-  const title = document.getElementById('noteTitle').value.trim();
-  const body = document.getElementById('noteBody').value.trim();
-  const imp = parseInt(document.getElementById('noteImp').value);
-  if (!title||!body) { toast('タイトルと内容を入力してください'); return; }
-  appState.notes.unshift({id:Date.now(),tag,title,body,imp,date:new Date().toISOString().slice(0,10)});
-  saveLocal(); renderNotes(); autoSave();
-  document.getElementById('noteTitle').value='';
-  document.getElementById('noteBody').value='';
+// ════════════════════════════════════
+function addNote(){
+  const tag=document.getElementById('nt-exam').value;
+  const title=document.getElementById('nt-title').value.trim();
+  const body=document.getElementById('nt-body').value.trim();
+  const imp=parseInt(document.getElementById('nt-imp').value);
+  if(!title||!body){toast('タイトルと内容を入力してください');return;}
+  S.notes.unshift({id:Date.now(),tag,title,body,imp,date:new Date().toISOString().slice(0,10)});
+  save(); renderNotes(); autoSave();
+  document.getElementById('nt-title').value='';
+  document.getElementById('nt-body').value='';
   toast('メモを保存しました');
 }
 
-function renderNotes() {
-  const fe = document.getElementById('filterExam').value;
-  const fs = document.getElementById('filterSort').value;
-  let notes = [...appState.notes];
-  if (fe!=='all') notes = notes.filter(n=>n.tag===fe);
-  if (fs==='imp') notes.sort((a,b)=>b.imp-a.imp);
-  const tagMap = {h:'tag-h',g:'tag-g',b:'tag-b'};
-  const tagLabel = {h:'狩猟免許',g:'猟銃講習会',b:'共通'};
-  const el = document.getElementById('notesList');
-  if (!notes.length) { el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">まだメモがありません</div>'; return; }
-  el.innerHTML = notes.map(n=>`<div class="note-card">
-    <button class="note-del" onclick="deleteNote(${n.id})">✕</button>
-    <span class="note-tag ${tagMap[n.tag]}">${tagLabel[n.tag]}</span>
+function renderNotes(){
+  const fe=document.getElementById('nt-filter').value;
+  const fs=document.getElementById('nt-sort').value;
+  let notes=[...(S.notes||[])];
+  if(fe!=='all') notes=notes.filter(n=>n.tag===fe);
+  if(fs==='imp') notes.sort((a,b)=>b.imp-a.imp);
+  const tmap={h:'tag-h',g:'tag-g',b:'tag-b'}, tlbl={h:'狩猟免許',g:'猟銃講習会',b:'共通'};
+  const el=document.getElementById('notesList');
+  if(!notes.length){el.innerHTML='<div style="text-align:center;padding:28px;color:var(--muted);font-size:13px;">まだメモがありません</div>';return;}
+  el.innerHTML=notes.map(n=>`<div class="ntcard">
+    <button class="nt-del" onclick="delNote(${n.id})">✕</button>
+    <span class="nt-tag ${tmap[n.tag]}">${tlbl[n.tag]}</span>
     <span style="font-size:11px;color:var(--yellow);margin-left:4px">${'⭐'.repeat(n.imp||1)}</span>
-    <div class="note-title">${n.title}</div>
-    <div class="note-body">${n.body}</div>
-    <div class="note-meta">${n.date}</div>
+    <div class="nt-title">${n.title}</div>
+    <div class="nt-body">${n.body}</div>
+    <div class="nt-meta">${n.date}</div>
   </div>`).join('');
 }
 
-function deleteNote(id) {
-  appState.notes = appState.notes.filter(n=>n.id!==id);
-  saveLocal(); renderNotes(); autoSave();
+function delNote(id){ S.notes=S.notes.filter(n=>n.id!==id); save(); renderNotes(); autoSave(); }
+
+// ════════════════════════════════════
+// 問題追加（アップロード）
+// ════════════════════════════════════
+let uploadedFiles=[], uploadedImages=[];
+
+function handleFiles(files){ processFiles(Array.from(files)); }
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('drag');
+  processFiles(Array.from(e.dataTransfer.files));
 }
 
-// ════════════════════════════════════════════
-// 問題追加
-// ════════════════════════════════════════════
-function updateAqCat() {
-  const exam = document.getElementById('aqExam').value;
-  const cats = exam==='hunter' ? HUNTER_CATS : GUN_CATS;
-  document.getElementById('aqCat').innerHTML = Object.entries(cats).map(([k,v])=>`<option value="${k}">${v.icon} ${v.name}</option>`).join('');
-}
+async function processFiles(files){
+  uploadedFiles=files; uploadedImages=[];
+  const prev=document.getElementById('previewBox');
+  prev.innerHTML='';
+  document.getElementById('uploadPreview').style.display='block';
+  document.getElementById('extractedContent').style.display='none';
 
-function addQuestion() {
-  const exam = document.getElementById('aqExam').value;
-  const cat  = document.getElementById('aqCat').value;
-  const q    = document.getElementById('aqQ').value.trim();
-  const c0   = document.getElementById('aqC0').value.trim();
-  const c1   = document.getElementById('aqC1').value.trim();
-  const c2   = document.getElementById('aqC2').value.trim();
-  const exp  = document.getElementById('aqExplain').value.trim();
-  const ref  = document.getElementById('aqRef').value.trim();
-  if (!q||!c0||!c1||!c2) { toast('問題文と選択肢3つを入力してください'); return; }
-  if (!appState.customQ) appState.customQ = {hunter:[],gun:[]};
-  if (!appState.customQ[exam]) appState.customQ[exam] = [];
-  const newId = 90000 + Date.now() % 100000;
-  appState.customQ[exam].push({id:newId, cat, q, choices:[c0,c1,c2], answer:0, explain:exp, ref});
-  saveLocal(); autoSave();
-  document.getElementById('aqQ').value='';
-  document.getElementById('aqC0').value='';
-  document.getElementById('aqC1').value='';
-  document.getElementById('aqC2').value='';
-  document.getElementById('aqExplain').value='';
-  document.getElementById('aqRef').value='';
-  toast(`問題を追加しました（${exam==='hunter'?'狩猟':'銃'}）`);
-  updateCustomQCount();
-}
-
-function updateCustomQCount() {
-  const hc = (appState.customQ?.hunter||[]).length;
-  const gc = (appState.customQ?.gun||[]).length;
-  const el = document.getElementById('customQCount');
-  if (el) el.textContent = `狩猟${hc}問 / 銃${gc}問`;
-}
-
-// ════════════════════════════════════════════
-// AI問題生成
-// ════════════════════════════════════════════
-function switchAddTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['manual','ai'][i]===tab));
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-}
-
-async function generateAI() {
-  const claudeKey = localStorage.getItem(CLAUDE_KEY)||'';
-  if (!claudeKey) { toast('設定タブでClaude API Keyを入力してください'); gotoTab('settings'); return; }
-  const text = document.getElementById('aiText').value.trim();
-  if (!text) { toast('テキストを入力してください'); return; }
-  const exam = document.getElementById('aiExam').value;
-  const count = document.getElementById('aiCount').value;
-  const cats = exam==='hunter' ? HUNTER_CATS : GUN_CATS;
-  const catNames = Object.entries(cats).map(([k,v])=>`${k}: ${v.name}`).join(', ');
-
-  const btn = document.getElementById('aiGenBtn');
-  btn.textContent = '生成中…'; btn.disabled = true;
-  document.getElementById('aiResult').innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">AIが問題を生成しています...</div>';
-
-  try {
-    const prompt = `以下のテキストから、${exam==='hunter'?'狩猟免許試験':'猟銃等講習会考査'}の練習問題を${count}問生成してください。
-
-テキスト:
-${text}
-
-カテゴリ一覧: ${catNames}
-
-以下のJSON配列形式のみで返答してください（説明文・コードブロック不要）:
-[{"cat":"カテゴリキー","q":"問題文","choices":["正解","不正解1","不正解2"],"answer":0,"explain":"解説文","ref":"参照条文（任意）"}]
-
-条件:
-- answer は必ず 0（choices[0]が正解）
-- 選択肢は3つ（三肢択一）
-- 本番試験のひっかけ問題スタイルで難しく
-- 日本語で出力`;
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': claudeKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{ role:'user', content: prompt }]
-      })
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message||'API Error');
-    const txt = data.content.map(b=>b.text||'').join('');
-    const jsonMatch = txt.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error('JSONが見つかりません');
-    const questions = JSON.parse(jsonMatch[0]);
-
-    if (!appState.customQ) appState.customQ = {hunter:[],gun:[]};
-    if (!appState.customQ[exam]) appState.customQ[exam] = [];
-    const added = [];
-    questions.forEach(q=>{
-      const newId = 90000 + Date.now()%100000 + Math.floor(Math.random()*1000);
-      const newQ = {id:newId, cat:q.cat||Object.keys(cats)[0], q:q.q, choices:q.choices, answer:0, explain:q.explain, ref:q.ref||''};
-      appState.customQ[exam].push(newQ);
-      added.push(newQ);
-    });
-    saveLocal(); autoSave(); updateCustomQCount();
-
-    document.getElementById('aiResult').innerHTML = `
-      <div style="color:var(--green);font-size:13px;font-weight:700;margin-bottom:10px;">✅ ${added.length}問を生成しました</div>
-      ${added.map(q=>`<div class="card" style="margin-bottom:8px;">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">${(cats[q.cat]||{icon:'',name:q.cat}).icon} ${(cats[q.cat]||{name:q.cat}).name}</div>
-        <div style="font-size:13px;font-weight:600;margin-bottom:6px;">${q.q}</div>
-        ${q.choices.map((c,i)=>`<div style="font-size:12px;padding:4px 0;color:${i===0?'var(--green)':'var(--muted)'};">${['A','B','C'][i]}. ${c}</div>`).join('')}
-      </div>`).join('')}`;
-    toast(`${added.length}問を追加しました`);
-  } catch(e) {
-    document.getElementById('aiResult').innerHTML = `<div style="color:var(--red);font-size:13px;">❌ エラー: ${e.message}</div>`;
-    toast('❌ 生成エラー: '+e.message);
+  for(const file of files){
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(['jpg','jpeg','png','gif','webp','heic'].includes(ext)||file.type.startsWith('image/')){
+      const b64=await fileToBase64(file);
+      uploadedImages.push({type:'image',b64,mime:file.type||'image/jpeg',name:file.name});
+      prev.innerHTML+=`<img src="data:${file.type||'image/jpeg'};base64,${b64}" class="preview-img">`;
+    } else if(ext==='pdf'){
+      prev.innerHTML+=`<div style="padding:12px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--muted2);">📄 ${file.name}（PDF）</div>`;
+      const b64=await fileToBase64(file);
+      uploadedImages.push({type:'pdf',b64,mime:'application/pdf',name:file.name});
+    }
   }
-  btn.textContent = '🤖 AIで問題を生成'; btn.disabled = false;
+  toast(`${files.length}ファイルを読み込みました`);
 }
 
-// ════════════════════════════════════════════
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result.split(',')[1]);
+    r.onerror=()=>rej(new Error('読み込み失敗'));
+    r.readAsDataURL(file);
+  });
+}
+
+async function generateFromUpload(){
+  const claudeKey=localStorage.getItem(CL_KEY)||'';
+  if(!claudeKey){toast('設定タブでClaude API Keyを入力してください');gotoTab('settings');return;}
+  if(!uploadedImages.length){toast('ファイルを選択してください');return;}
+
+  const exam=document.getElementById('up-exam').value;
+  const count=document.getElementById('up-count').value;
+  const cats=exam==='hunter'?HUNTER_CATS:GUN_CATS;
+  const catNames=Object.entries(cats).map(([k,v])=>`${k}:${v.name}`).join(', ');
+
+  const btn=document.getElementById('upGenBtn');
+  btn.textContent='生成中…'; btn.disabled=true;
+  document.getElementById('upResult').innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">AIが問題を生成しています…</div>';
+
+  try{
+    // メッセージ構築（画像/PDF付き）
+    const contents=[];
+    for(const img of uploadedImages){
+      if(img.type==='image'){
+        contents.push({type:'image',source:{type:'base64',media_type:img.mime,data:img.b64}});
+      } else if(img.type==='pdf'){
+        contents.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:img.b64}});
+      }
+    }
+    contents.push({type:'text',text:`この画像/ドキュメントの内容から、${exam==='hunter'?'狩猟免許試験（三肢択一30問形式）':'猟銃等講習会考査（○×50問形式・ただし今回は三肢択一で）'}の練習問題を${count}問生成してください。
+
+カテゴリ: ${catNames}
+
+以下のJSON配列のみを返してください（コードブロック不要）:
+[{"cat":"カテゴリキー","q":"問題文（本番試験スタイルで難しく・ひっかけあり）","choices":["正解","不正解1","不正解2"],"answer":0,"explain":"詳しい解説（なぜ他の選択肢が違うかも）","ref":"参照条文（任意）"}]
+
+必ずanswer=0（choices[0]が正解）にしてください。`});
+
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':claudeKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,messages:[{role:'user',content:contents}]})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||'API Error');
+    const txt=data.content.map(b=>b.text||'').join('');
+    const jm=txt.match(/\[[\s\S]*\]/);
+    if(!jm) throw new Error('JSONが見つかりません');
+    const questions=JSON.parse(jm[0]);
+
+    if(!S.customQ) S.customQ={hunter:[],gun:[]};
+    if(!S.customQ[exam]) S.customQ[exam]=[];
+    const added=[];
+    questions.forEach(q=>{
+      const nid=90000+Date.now()%100000+Math.floor(Math.random()*9000);
+      const nq={id:nid,cat:q.cat||Object.keys(cats)[0],q:q.q,choices:q.choices,answer:0,explain:q.explain||'',ref:q.ref||''};
+      S.customQ[exam].push(nq); added.push(nq);
+    });
+    save(); autoSave(); updCustomCount();
+
+    document.getElementById('upResult').innerHTML=`
+      <div style="color:var(--green);font-size:13px;font-weight:700;margin-bottom:10px;">✅ ${added.length}問を生成しました</div>
+      ${added.map(q=>`<div class="ai-gen-card">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">${(cats[q.cat]||{icon:'',name:q.cat}).icon} ${(cats[q.cat]||{name:q.cat}).name}</div>
+        <div class="ai-q-txt">${q.q}</div>
+        ${q.choices.map((c,i)=>`<div class="ai-c" style="color:${i===0?'var(--green)':'var(--muted2)'};">${['A','B','C'][i]}. ${c}</div>`).join('')}
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">${q.explain}</div>
+      </div>`).join('')}
+      <button class="btn btn-g btn-w" style="margin-top:8px;" onclick="startMode('cat','${Object.keys(cats)[0]}')">今すぐ出題してみる</button>`;
+    toast(`${added.length}問を追加しました`);
+  }catch(e){
+    document.getElementById('upResult').innerHTML=`<div style="color:var(--red);font-size:13px;">❌ ${e.message}</div>`;
+    toast('❌ '+e.message);
+  }
+  btn.textContent='🤖 AIで問題を生成'; btn.disabled=false;
+}
+
+// ════════════════════════════════════
+// 手入力問題追加
+// ════════════════════════════════════
+function updateMqCat(){
+  const exam=document.getElementById('mq-exam').value;
+  const cats=exam==='hunter'?HUNTER_CATS:GUN_CATS;
+  document.getElementById('mq-cat').innerHTML=Object.entries(cats).map(([k,v])=>`<option value="${k}">${v.icon} ${v.name}</option>`).join('');
+}
+
+function addManualQ(){
+  const exam=document.getElementById('mq-exam').value;
+  const cat=document.getElementById('mq-cat').value;
+  const q=document.getElementById('mq-q').value.trim();
+  const c0=document.getElementById('mq-c0').value.trim();
+  const c1=document.getElementById('mq-c1').value.trim();
+  const c2=document.getElementById('mq-c2').value.trim();
+  const exp=document.getElementById('mq-exp').value.trim();
+  const ref=document.getElementById('mq-ref').value.trim();
+  if(!q||!c0||!c1||!c2){toast('問題文と選択肢3つを入力してください');return;}
+  if(!S.customQ) S.customQ={hunter:[],gun:[]};
+  if(!S.customQ[exam]) S.customQ[exam]=[];
+  S.customQ[exam].push({id:90000+Date.now()%100000,cat,q,choices:[c0,c1,c2],answer:0,explain:exp,ref});
+  save(); autoSave(); updCustomCount();
+  ['mq-q','mq-c0','mq-c1','mq-c2','mq-exp','mq-ref'].forEach(id=>document.getElementById(id).value='');
+  toast(`問題を追加しました`);
+}
+
+function updCustomCount(){
+  const hc=(S.customQ?.hunter||[]).length, gc=(S.customQ?.gun||[]).length;
+  const el=document.getElementById('customQCount');
+  if(el) el.textContent=`狩猟${hc}・銃${gc}問`;
+}
+
+// ════════════════════════════════════
 // 設定
-// ════════════════════════════════════════════
-function saveCfg() {
-  const apiKey = document.getElementById('cfgApiKey').value.trim();
-  const binId  = document.getElementById('cfgBinId').value.trim();
-  if (!apiKey||!binId) { toast('API KeyとBin IDを入力してください'); return; }
-  setSyncCfg({apiKey,binId});
-  setCfgStatus('ok','設定を保存しました');
-  toast('設定を保存しました');
-  doPush();
+// ════════════════════════════════════
+function saveCfg(){
+  const apiKey=document.getElementById('cfg-apikey').value.trim();
+  const binId=document.getElementById('cfg-binid').value.trim();
+  if(!apiKey||!binId){toast('API KeyとBin IDを入力してください');return;}
+  setCfg({apiKey,binId}); setSync('ok','設定を保存しました'); toast('設定を保存しました'); doPush();
+}
+function saveClaudeKey(){
+  const k=document.getElementById('cfg-claude').value.trim();
+  if(!k){toast('API Keyを入力してください');return;}
+  localStorage.setItem(CL_KEY,k); toast('Claude API Keyを保存しました');
+}
+function resetProgress(){
+  if(!confirm('進捗をリセットしますか？（問題・メモは残ります）')) return;
+  S.hunter={totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
+  S.gun   ={totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
+  save(); updateAll(); toast('進捗をリセットしました');
+}
+function resetCustomQ(){
+  if(!confirm('追加した問題をすべて削除しますか？')) return;
+  S.customQ={hunter:[],gun:[]}; save(); updCustomCount(); toast('追加問題を削除しました');
 }
 
-function saveClaudeKey() {
-  const key = document.getElementById('cfgClaudeKey').value.trim();
-  if (!key) { toast('API Keyを入力してください'); return; }
-  localStorage.setItem(CLAUDE_KEY, key);
-  toast('Claude API Keyを保存しました');
+// ════════════════════════════════════
+// タブ切り替え
+// ════════════════════════════════════
+function switchAddTab(tab){
+  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',['upload','manual'][i]===tab));
+  document.querySelectorAll('.tcnt').forEach(c=>c.classList.remove('on'));
+  document.getElementById('tc-'+tab).classList.add('on');
+  if(tab==='manual') updateMqCat();
 }
 
-function setCfgStatus(s, msg) {
-  const map = {ok:['dot-ok','同期済み'],err:['dot-err','エラー'],saving:['dot-idle','保存中…'],loading:['dot-idle','取得中…']};
-  const [cls,label] = map[s]||['dot-idle','未設定'];
-  const dot = document.getElementById('cfgDot');
-  const st  = document.getElementById('cfgStatus');
-  if (dot) { dot.className='sync-dot '+cls; }
-  if (st)  { st.textContent=label; }
-  const log = document.getElementById('cfgLog');
-  if (log && msg) log.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-  const topStatus = document.getElementById('syncStatus');
-  if (topStatus) topStatus.textContent = s==='ok'?'同期済み':s==='err'?'エラー':'';
-}
-
-function resetProgress() {
-  if (!confirm('進捗データをリセットしますか？（問題・メモは残ります）')) return;
-  appState.hunter = {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
-  appState.gun    = {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
-  saveLocal(); updateAllUI(); toast('進捗をリセットしました');
-}
-
-function resetCustomQ() {
-  if (!confirm('追加した問題をすべて削除しますか？')) return;
-  appState.customQ = {hunter:[],gun:[]};
-  saveLocal(); updateCustomQCount(); toast('追加問題を削除しました');
-}
-
-// ════════════════════════════════════════════
-// 自動保存
-// ════════════════════════════════════════════
-async function autoSave() {
-  if (!hasSyncCfg()) return;
-  try {
-    const existing = await _fetchBin().catch(()=>({}));
-    await _putBin({...existing, huntingHQ_v1: appState, _updated: Date.now()});
-  } catch(e) {}
-}
-
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // 画面遷移
-// ════════════════════════════════════════════
-function showScreen(id) {
+// ════════════════════════════════════
+function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
 }
 
-function showCatScreen() {
-  updateCatDisplay();
-  showScreen('cat');
-}
-
-function gotoTab(tab) {
+function gotoTab(tab){
   showScreen(tab);
-  if (tab==='dash') updateDashUI();
-  if (tab==='add') { updateAqCat(); updateCustomQCount(); }
-  if (tab==='settings') {
-    const cfg = getSyncCfg();
-    if (cfg.apiKey) {
-      document.getElementById('cfgApiKey').value = cfg.apiKey;
-      document.getElementById('cfgBinId').value  = cfg.binId;
-      setCfgStatus('ok','設定済み');
-    }
-    const ck = localStorage.getItem(CLAUDE_KEY)||'';
-    if (ck) document.getElementById('cfgClaudeKey').value = ck;
-    updateCustomQCount();
+  const navs=document.querySelectorAll('.bnav');
+  navs.forEach(nav=>nav.querySelectorAll('button').forEach((b,i)=>{
+    const tabs=['home','dash','notes','add','settings'];
+    b.classList.toggle('on',tabs[i]===tab);
+  }));
+  if(tab==='dash'){ updDash(); switchDash(S.dashTab||'hunter'); }
+  if(tab==='notes') renderNotes();
+  if(tab==='settings'){
+    const cfg=getCfg();
+    if(cfg.apiKey){ document.getElementById('cfg-apikey').value=cfg.apiKey; document.getElementById('cfg-binid').value=cfg.binId; setSync('ok','設定済み'); }
+    const ck=localStorage.getItem(CL_KEY)||'';
+    if(ck) document.getElementById('cfg-claude').value=ck;
+    updCustomCount();
   }
 }
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // ユーティリティ
-// ════════════════════════════════════════════
-function shuffle(arr) {
-  for (let i=arr.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
-  }
-  return arr;
-}
+// ════════════════════════════════════
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
-}
-
-// ════════════════════════════════════════════
+// ════════════════════════════════════
 // 初期化
-// ════════════════════════════════════════════
-loadLocal();
-updateAllUI();
-// 設定済みなら自動同期
-if (hasSyncCfg()) {
-  const cfg = getSyncCfg();
-  setCfgStatus('ok','設定済み');
-  document.getElementById('syncStatus').textContent = '同期中…';
+// ════════════════════════════════════
+load();
+updateAll();
+if(hasCfg()){
+  const cfg=getCfg();
+  document.getElementById('cfg-apikey').value=cfg.apiKey;
+  document.getElementById('cfg-binid').value=cfg.binId;
+  setSync('ok','設定済み'); setSyncTxt('同期中…');
   doFullSync();
 }
 </script>
