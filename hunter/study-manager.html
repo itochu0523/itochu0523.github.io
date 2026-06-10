@@ -533,6 +533,7 @@
 
     <!-- App Links -->
     <div class="section-title">クイズアプリ</div>
+    <button onclick="pullFromCloud()" style="width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:6px;font-family:'Josefin Sans',sans-serif;font-size:0.8rem;letter-spacing:0.05em;cursor:pointer;margin-bottom:12px;">☁️ クラウドから最新データを取得</button>
     <div class="app-links">
       <a href="hunter-quiz.html" class="app-link-card hunter">
         <div class="al-icon">🦆</div>
@@ -765,11 +766,15 @@ function init() {
   document.getElementById('hunterStratNote').value = state.stratNotes.hunter || '';
   document.getElementById('gunStratNote').value = state.stratNotes.gun || '';
   updateDashboard();
-  if (state.apiKey) {
-    document.getElementById('apiKeyInput').value = state.apiKey;
-    document.getElementById('binIdInput').value = state.binId;
+  // 共通設定キーから自動読み込み
+  const cfg = getSyncCfg();
+  if(cfg.apiKey){
+    document.getElementById('apiKeyInput').value = cfg.apiKey;
+    document.getElementById('binIdInput').value = cfg.binId;
     document.getElementById('syncStatusText').textContent = '設定済み';
     document.getElementById('syncDot').className = 'dot dot-ok';
+    // 起動時に自動でクラウドから取得
+    setTimeout(()=>pullFromCloud(), 500);
   }
   setTodayDate();
 }
@@ -1095,90 +1100,114 @@ async function saveAndSync() {
   await pushToCloud();
 }
 
-async function pushToCloud() {
-  if (!state.apiKey || !state.binId) { toast('API KeyとBin IDを入力してください'); return; }
-  setSyncStatus('saving');
-  try {
-    const payload = { notes: state.notes, events: state.events, stratNotes: state.stratNotes, progress: state.progress };
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': state.apiKey },
-      body: JSON.stringify(payload)
+// ═══════════════════════════════════════════════════
+// 共通同期ライブラリ (全アプリ共通)
+// 設定キー: hunting_sync_cfg → {apiKey, binId}
+// ═══════════════════════════════════════════════════
+const SYNC_CFG_KEY = 'hunting_sync_cfg';
+
+function getSyncCfg(){
+  try{ return JSON.parse(localStorage.getItem(SYNC_CFG_KEY)||'{}'); }catch(e){ return {}; }
+}
+function setSyncCfg(cfg){ localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(cfg)); }
+function hasSyncCfg(){ const c=getSyncCfg(); return !!(c.apiKey&&c.binId); }
+
+// クラウドから全データ取得
+async function cloudPull(){
+  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return null;
+  try{
+    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,{
+      headers:{'X-Master-Key':cfg.apiKey}
     });
-    if (res.ok) { setSyncStatus('ok', 'クラウドに保存しました'); toast('☁️ 保存完了'); }
-    else throw new Error(res.status);
-  } catch(e) {
-    setSyncStatus('err', 'エラー: ' + e.message);
-    toast('同期エラー');
-  }
+    if(!res.ok) return null;
+    const j=await res.json(); return j.record||null;
+  }catch(e){ return null; }
 }
 
-async function pullFromCloud() {
-  if (!state.apiKey || !state.binId) { toast('API KeyとBin IDを入力してください'); return; }
-  setSyncStatus('loading');
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
-      headers: { 'X-Master-Key': state.apiKey }
+// クラウドへ全データ保存（マージ）
+async function cloudPush(appKey, appData){
+  const cfg=getSyncCfg(); if(!cfg.apiKey||!cfg.binId) return false;
+  try{
+    // 既存データ取得してマージ
+    let existing={};
+    const pulled = await cloudPull();
+    if(pulled) existing=pulled;
+    const merged={...existing, [appKey]:appData, updatedAt:new Date().toISOString()};
+    const res=await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},
+      body:JSON.stringify(merged)
     });
-    const json = await res.json();
-    const data = json.record;
-    if (data.notes) state.notes = data.notes;
-    if (data.events) state.events = data.events;
-    if (data.stratNotes) state.stratNotes = data.stratNotes;
-    saveLocal();
-    renderNotes();
-    renderSchedule();
-    updateDashboard();
-    setSyncStatus('ok', 'クラウドから取得しました');
-    toast('☁️ 取得完了');
-  } catch(e) {
-    setSyncStatus('err', 'エラー: ' + e.message);
-  }
+    return res.ok;
+  }catch(e){ return false; }
 }
 
-function setSyncStatus(status, msg) {
-  const dot = document.getElementById('syncDot');
-  const txt = document.getElementById('syncStatusText');
-  const log = document.getElementById('syncLog');
-  const map = { ok: ['dot-ok','同期済み'], err: ['dot-err','エラー'], saving: ['dot-idle','保存中…'], loading: ['dot-idle','取得中…'], idle: ['dot-idle','未設定'] };
-  const [cls, label] = map[status] || map.idle;
-  dot.className = 'dot ' + cls;
-  txt.textContent = label;
-  if (msg) log.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+// 起動時自動ロード（クラウドのデータをLocalStorageに反映）
+async function autoLoadFromCloud(appKey){
+  if(!hasSyncCfg()) return false;
+  try{
+    const data=await cloudPull();
+    if(!data||!data[appKey]) return false;
+    const cloud=data[appKey];
+    const localRaw=localStorage.getItem(appKey);
+    const local=localRaw?JSON.parse(localRaw):{totalAnswered:0};
+    // クラウドの方が多く解答していれば上書き
+    if((cloud.totalAnswered||0)>=(local.totalAnswered||0)){
+      localStorage.setItem(appKey, JSON.stringify(cloud));
+      return true;
+    }
+    return false;
+  }catch(e){ return false; }
 }
 
-function resetAll() {
-  if (!confirm('学習データをすべて削除しますか？')) return;
-  state.notes = [];
-  state.events = [];
-  state.progress = { hunter: 0, gun: 0 };
-  state.stratNotes = { hunter: '', gun: '' };
+// ── study-manager 同期UI ──
+function saveAndSync(){
+  const apiKey=document.getElementById('apiKeyInput').value.trim();
+  const binId=document.getElementById('binIdInput').value.trim();
+  if(!apiKey||!binId){toast('API KeyとBin IDを入力してください');return;}
+  setSyncCfg({apiKey,binId});
+  // localStateも保存
+  state.apiKey=apiKey; state.binId=binId;
   saveLocal();
-  renderNotes();
-  renderSchedule();
-  updateDashboard();
-  toast('リセットしました');
+  setSyncStatus('ok','設定を保存しました');
+  pushToCloud();
 }
 
-// ── NAV ──
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
-  if (id === 'dash') loadFromQuizApps();
-  if (id === 'strategy') renderStrategyCategories();
+async function pushToCloud(){
+  if(!hasSyncCfg()){toast('API KeyとBin IDを設定してください');return;}
+  setSyncStatus('saving');
+  // まず既存クラウドデータを取得してマージ
+  const existing = await cloudPull() || {};
+  // study-managerのデータをマージ
+  const smData = {notes:state.notes, events:state.events, stratNotes:state.stratNotes, progress:state.progress};
+  const ok = await cloudPush('studyManager_v1', smData);
+  if(ok){ setSyncStatus('ok',`保存完了 (${new Date().toLocaleTimeString()})`); toast('☁️ 保存完了'); }
+  else { setSyncStatus('err','保存エラー'); toast('❌ 保存エラー'); }
 }
 
-// ── TOAST ──
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
+async function pullFromCloud(){
+  if(!hasSyncCfg()){toast('API KeyとBin IDを設定してください');return;}
+  setSyncStatus('loading');
+  const data = await cloudPull();
+  if(!data){ setSyncStatus('err','取得エラー'); return; }
 
-init();
-</script>
+  // study-managerデータを復元
+  if(data.studyManager_v1){
+    const sm=data.studyManager_v1;
+    if(sm.notes) state.notes=sm.notes;
+    if(sm.events) state.events=sm.events;
+    if(sm.stratNotes) state.stratNotes=sm.stratNotes;
+  }
+  // クイズデータをLocalStorageに反映
+  if(data.hunter_quiz_v1) localStorage.setItem('hunter_quiz_v1', JSON.stringify(data.hunter_quiz_v1));
+  if(data.gun_quiz_v1) localStorage.setItem('gun_quiz_v1', JSON.stringify(data.gun_quiz_v1));
+
+  saveLocal();
+  renderNotes(); renderSchedule(); updateDashboard();
+  document.getElementById('weakSection').innerHTML='<div class="empty-state">読み込み中…</div>';
+  loadFromQuizApps();
+  setSyncStatus('ok',`取得完了 (${new Date().toLocaleTimeString()})`);
+  toast('☁️ 取得完了！クイズデータも反映しました');
+}</script>
 </body>
 </html>
