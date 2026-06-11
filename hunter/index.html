@@ -27,13 +27,19 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;}
 
 /* SCREENS */
-.screen{display:none;position:fixed;inset:0;flex-direction:column;overflow:hidden;}
+.screen{
+  display:none;
+  position:fixed;
+  inset:0;
+  flex-direction:column;
+  overflow:hidden;
+}
 .screen.active{display:flex;}
 
 /* HEADER */
 .hdr{
   background:var(--bg2);border-bottom:1px solid var(--border);
-  padding:calc(var(--st) + 10px) 14px 10px;
+  padding:max(12px, calc(env(safe-area-inset-top, 0px) + 10px)) 14px 10px;
   display:flex;align-items:center;gap:10px;flex-shrink:0;
 }
 .hdr-title{font-size:16px;font-weight:700;color:var(--green);flex:1;letter-spacing:.04em;}
@@ -41,12 +47,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .icon-btn{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 6px;}
 
 /* SCROLL */
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(var(--sb) + 72px);}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(env(safe-area-inset-bottom, 0px) + 72px);min-height:0;}
 
 /* BOTTOM NAV */
 .bnav{
   background:var(--bg2);border-top:1px solid var(--border);
-  padding:4px 0 calc(var(--sb) + 4px);
+  padding:4px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
   display:flex;flex-shrink:0;
 }
 .bnav button{
@@ -277,7 +283,7 @@ textarea{resize:vertical;min-height:80px;}
 
 /* TOAST */
 #toast{
-  position:fixed;bottom:calc(var(--sb) + 68px);left:50%;
+  position:fixed;bottom:calc(env(safe-area-inset-bottom, 0px) + 68px);left:50%;
   transform:translateX(-50%) translateY(40px);
   background:var(--bg2);color:var(--text);padding:9px 16px;
   border-radius:20px;font-size:13px;border:1px solid var(--border);
@@ -1898,14 +1904,15 @@ async function putBin(data){
 }
 
 async function doPush(){
-  if(!hasCfg()){toast('設定タブでAPI KeyとBin IDを入力してください');return;}
-  setSync('saving');
+  if(!hasCfg()){toast('⚙️ 設定タブでAPI Key/Bin IDを入力してください');gotoTab('settings');return;}
+  setSync('saving'); setSyncTxt('保存中…');
   try{
     const ex=await fetchBin().catch(()=>({}));
     const ok=await putBin({...ex, huntingHQ_v1:S, _u:Date.now()});
-    setSync(ok?'ok':'err', ok?'保存完了':'保存失敗');
-    if(ok) toast('☁️ 保存しました');
-  }catch(e){ setSync('err',e.message); toast('❌ '+e.message); }
+    setSync(ok?'ok':'err', ok?`保存完了 ${new Date().toLocaleTimeString()}`:'保存失敗');
+    setSyncTxt(ok?'同期済み':'エラー');
+    toast(ok?'☁️ 保存しました':'❌ 保存失敗');
+  }catch(e){ setSync('err',e.message); setSyncTxt('エラー'); toast('❌ '+e.message); }
 }
 
 async function doFullSync(){
@@ -1914,20 +1921,43 @@ async function doFullSync(){
   try{
     const data=await fetchBin();
     if(data&&data.huntingHQ_v1){
+      // クラウドを常に優先（起動時・手動取得）
       const cloud=data.huntingHQ_v1;
-      const lt=(S.hunter.totalAnswered||0)+(S.gun.totalAnswered||0);
-      const ct=((cloud.hunter||{}).totalAnswered||0)+((cloud.gun||{}).totalAnswered||0);
-      if(ct>=lt){ S={...S,...cloud}; save(); updateAll(); toast('☁️ データを取得しました'); }
-      else toast('ローカルが最新です');
-    } else toast('クラウドにデータなし');
-    setSync('ok','取得完了');
-  }catch(e){ setSync('err',e.message); toast('❌ '+e.message); }
+      if(!S.customQ) S.customQ={hunter:[],gun:[]};
+      // マージ：クラウドのデータで上書き（customQはローカルとマージ）
+      const mergedCustomH=[...new Map([...(cloud.customQ?.hunter||[]),...(S.customQ.hunter||[])].map(q=>[q.id,q])).values()];
+      const mergedCustomG=[...new Map([...(cloud.customQ?.gun||[]),...(S.customQ.gun||[])].map(q=>[q.id,q])).values()];
+      S={...S,...cloud};
+      S.customQ={hunter:mergedCustomH,gun:mergedCustomG};
+      save(); updateAll();
+      toast('☁️ データを取得しました');
+    } else {
+      // クラウドにデータなし→ローカルをクラウドに保存
+      await doPushSilent();
+      toast('☁️ 初回同期完了');
+    }
+    setSync('ok',`取得完了 ${new Date().toLocaleTimeString()}`);
+  }catch(e){ setSync('err',e.message); toast('❌ 取得エラー: '+e.message); }
   setSyncTxt(hasCfg()?'同期済み':'―');
 }
 
 async function autoSave(){
   if(!hasCfg()) return;
-  try{ const ex=await fetchBin().catch(()=>({})); await putBin({...ex, huntingHQ_v1:S, _u:Date.now()}); }catch(e){}
+  try{
+    const ex=await fetchBin().catch(()=>({}));
+    const ok=await putBin({...ex, huntingHQ_v1:S, _u:Date.now()});
+    if(ok){ setSync('ok',`自動保存 ${new Date().toLocaleTimeString()}`); }
+    else   { setSync('err','保存失敗'); }
+  }catch(e){ setSync('err',e.message); }
+}
+
+// サイレントPUSH（初回同期用）
+async function doPushSilent(){
+  if(!hasCfg()) return;
+  try{
+    const ex=await fetchBin().catch(()=>({}));
+    await putBin({...ex, huntingHQ_v1:S, _u:Date.now()});
+  }catch(e){}
 }
 
 function setSync(s,msg){
@@ -2070,7 +2100,7 @@ function toggleMark(){
   const st=getSt(), id=cQ.id;
   if(st.markedIds.includes(id)) st.markedIds=st.markedIds.filter(x=>x!==id);
   else st.markedIds.push(id);
-  save(); updMarkBtn();
+  save(); autoSave(); updMarkBtn();
 }
 function updMarkBtn(){
   if(!cQ) return;
@@ -2193,7 +2223,7 @@ function selExam(exam){
 // ════════════════════════════════════
 function renderCountdown(){
   const today=new Date(); today.setHours(0,0,0,0);
-  const exams=[{l:'初心者講習',d:new Date('2025-07-25')},{l:'狩猟試験',d:new Date('2025-09-12')}];
+  const exams=[{l:'初心者講習',d:new Date('2025-07-15')},{l:'狩猟試験',d:new Date('2025-09-12')}];
   document.getElementById('countdownRow').innerHTML=exams.map(e=>{
     const diff=Math.ceil((e.d-today)/86400000);
     return `<div class="cd-chip"><div class="cd-days">${diff>0?diff:0}</div><div class="cd-lbl">${e.l}</div></div>`;
@@ -2422,11 +2452,11 @@ function resetProgress(){
   if(!confirm('進捗をリセットしますか？（問題・メモは残ります）')) return;
   S.hunter={totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
   S.gun   ={totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}};
-  save(); updateAll(); toast('進捗をリセットしました');
+  save(); autoSave(); updateAll(); toast('進捗をリセットしました');
 }
 function resetCustomQ(){
   if(!confirm('追加した問題をすべて削除しますか？')) return;
-  S.customQ={hunter:[],gun:[]}; save(); updCustomCount(); toast('追加問題を削除しました');
+  S.customQ={hunter:[],gun:[]}; save(); autoSave(); updCustomCount(); toast('追加問題を削除しました');
 }
 
 // ════════════════════════════════════
@@ -2478,10 +2508,16 @@ load();
 updateAll();
 if(hasCfg()){
   const cfg=getCfg();
-  document.getElementById('cfg-apikey').value=cfg.apiKey;
-  document.getElementById('cfg-binid').value=cfg.binId;
+  // 設定画面の入力欄に反映（gotoTab('settings')で再セットされるが念のため）
+  const ak=document.getElementById('cfg-apikey');
+  const bi=document.getElementById('cfg-binid');
+  if(ak) ak.value=cfg.apiKey;
+  if(bi) bi.value=cfg.binId;
   setSync('ok','設定済み'); setSyncTxt('同期中…');
-  doFullSync();
+  // 起動時クラウド取得（非同期・UIブロックしない）
+  doFullSync().catch(e=>console.log('sync err',e));
+} else {
+  setSyncTxt('⚙️ 設定が必要');
 }
 </script>
 </body>
