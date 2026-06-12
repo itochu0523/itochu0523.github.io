@@ -530,6 +530,54 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 
+
+<!-- ══════════════════════════════════
+     PHASE 2-B : ECカテゴリー調査・マッピング（2026-06-12 追加）
+════════════════════════════════════ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#9333EA;color:#fff;">Phase 2-B</span>
+  <span class="phase-title">ECカテゴリー調査 — 森井標準L1×ECサイトのカテゴリーマッピング</span>
+  <span class="phase-line"></span>
+  <span class="badge badge-green">実装済</span>
+</div>
+
+<div class="flow">
+  <div class="section t-cat">
+    <div class="step-col"><div class="step-num">10</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">dmc-ops.master.ec_category_research — EC調査マスタ</p>
+      <p class="card-title">森井L1（25分類）を基軸に、ECサイトのカテゴリー体系をツリーでぶら下げる</p>
+      <p class="card-body">「当社L1マスタ（EC調査25分類）」と森井カテゴリマスタのL1は<strong>完全一致</strong>を確認済み。各ECサイト（Amazon・楽天・ヨドバシ・ニトリ・モノタロウ等 約130サイト×L1）のカテゴリー体系を森井L1の直下に紐づけて蓄積する。</p>
+      <div style="margin-top:12px;background:#FAF5FF;border:1px solid #E9D5FF;border-radius:10px;padding:14px 18px;">
+        <p style="font-size:11px;font-weight:700;color:#9333EA;margin-bottom:8px;letter-spacing:0.08em;">ツリー構造とデータソース</p>
+        <p style="font-size:12px;color:#1E3A5F;line-height:1.8;">
+        森井L1「食品・飲料」 ├─ カクヤス → お酒／飲料・割り材／食品…（L2リスト付き）<br>
+        　　　　　　　　　　 ├─ 成城石井 → お菓子／生鮮食品・米…<br>
+        　　　　　　　　　　 └─ 🤖 AI補完（Gemini推定・llm_generatedフラグで区別）<br>
+        データソース: ①アルバイト調査CSVインポート ②AI自動補完（未調査サイトを一括推定）</p>
+      </div>
+      <div class="tags" style="margin-top:10px;">
+        <span class="tbl tbl-cat"><span class="tbl-dot"></span>dmc-ops.master.ec_category_research</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-row"><span>↓</span><span>商品は森井L5でマッピング → L1経由でECカテゴリへ自動変換</span></div>
+
+  <div class="section t-cat">
+    <div class="step-col"><div class="step-num">11</div><div class="step-line"></div></div>
+    <div class="card">
+      <p class="card-label">商品 × カテゴリ表示切替・統合エクスポート</p>
+      <p class="card-title">「基本（森井）はこれ、ECサイトではこれ」を切り替え表示・一括出力</p>
+      <p class="card-body">商品は森井カテゴリ（L5）でマッピングすれば、L1経由でツリーが繋がっているため、各ECサイトのカテゴリ表現へ自動変換できる。商品マッピング画面でカテゴリ表示を「基本（森井）⇔ ECサイト別」に切り替え可能。統合Excel（色付き・カテゴリ×EC対応表シート付き）でダウンロードできる。</p>
+      <div class="tags" style="margin-top:10px;">
+        <span class="tbl tbl-jan"><span class="tbl-dot"></span>GET /api/products/export-rich（統合Excel）</span>
+        <span class="tbl tbl-brand"><span class="tbl-dot"></span>GET /api/brands/export（ブランド一括Excel）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════════════════════
      FINAL GOAL
 ════════════════════════════════════ -->
@@ -588,8 +636,8 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v4</span>
-  <span>dmc-ops.master · 2026-06</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v5（EC調査反映）</span>
+  <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
 </div>
