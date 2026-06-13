@@ -669,6 +669,23 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <li><strong>商品統合</strong>（/products）: 商品×森井×EC×raw属性</li>
   </ul>
 </div>
+
+<!-- ═══ BACKGROUND JOBS（2026-06-13 追加） ═══ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#0EA5E9;color:#fff;">運用</span>
+  <span class="phase-title">大量取込のバックグラウンド処理＋ジョブ監視</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    9万件級のCSVも<strong>画面と処理を切り分け</strong>てタイムアウトを回避。アップロード後すぐ応答を返し、
+    裏で5000件ずつチャンク処理。進捗は <code>sync_log</code> に逐次反映され、
+    ダッシュボードの<strong>ジョブ監視</strong>で進捗バー＋件数をリアルタイム表示（実行中は3秒更新）。
+  </p>
+  <p style="font-size:12px;color:var(--gray-500);line-height:1.8;margin-top:8px;">
+    Cloud Run: 2Gi / 2CPU / timeout 900s / CPU常時ON / min-instances=1（背景処理がスケールインで中断されない）
+  </p>
+</div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -691,7 +708,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v7（DL/透明性）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v8（背景処理/ジョブ監視）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
