@@ -686,6 +686,24 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     Cloud Run: 2Gi / 2CPU / timeout 900s / CPU常時ON / min-instances=1（背景処理がスケールインで中断されない）
   </p>
 </div>
+
+<!-- ═══ PRODUCT OPS SCREEN（2026-06-13 追加） ═══ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#DC2626;color:#fff;">重要</span>
+  <span class="phase-title">商品マッピング画面 — 運用センター（100万件規模）</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    100万件以上の商品を<strong>確認・フィルタ・ダウンロード・再マッピング</strong>できる中核画面。
+  </p>
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>フィルタ</strong>: フリーワード（JAN/商品名/メーカー/ブランド）、マッピング有無、基本カテゴリL1、stage、source。カテゴリ表示は基本(森井)⇔EC各サイトを切替</li>
+    <li><strong>条件一致への一括アクション</strong>: CSV出力 / 属性付きExcel出力（基本・EC・raw属性を色分け）/ 未マッピングを再マッピング（1万件・raw属性をヒントにLLM分類）</li>
+    <li><strong>取込ジョブ状態</strong>: 画面上部バナーに進捗（実行中/完了/失敗＋件数%）、完了で自動再読込</li>
+    <li><strong>大規模対応</strong>: 総件数別クエリ化、ページング、条件一致分のみDL</li>
+  </ul>
+</div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -708,7 +726,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v8（背景処理/ジョブ監視）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v9（商品運用センター）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
