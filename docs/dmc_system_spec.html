@@ -3,93 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DMC 商品マスター整備 システム仕様書</title>
+<title>DMC 商品マスター整備 システム仕様書 v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gs1:#1A56DB; --gs1-lt:#EBF1FF;
-  --dmc:#0F7673; --dmc-lt:#E0F5F4;
-  --brand:#6B41C8; --brand-lt:#F0EAFF;
-  --cat:#0F4C81; --cat-lt:#E8F1FB;
-  --llm:#0369A1; --llm-lt:#E0F2FE;
-  --lazuli:#1D4ED8; --lazuli-lt:#EFF6FF;
-  --amazon:#FF9900; --amazon-lt:#FFF7ED;
-  --ok:#065F46; --ok-lt:#ECFDF5;
-  --warn:#92400E; --warn-lt:#FEF3C7;
-  --err:#991B1B; --err-lt:#FEF2F2;
-  --gray-900:#111827; --gray-700:#374151; --gray-500:#6B7280;
-  --gray-300:#D1D5DB; --gray-200:#E5E7EB; --gray-100:#F9FAFB;
+  --gs1:#1A56DB;--gs1-lt:#EBF1FF;
+  --gcp:#E37400;--gcp-lt:#FFF3CD;
+  --dmc:#0F7673;--dmc-lt:#E0F5F4;
+  --brand:#6B41C8;--brand-lt:#F0EAFF;
+  --cat:#0F4C81;--cat-lt:#E8F1FB;
+  --lazuli:#1D4ED8;--lazuli-lt:#EFF6FF;
+  --llm:#0369A1;--llm-lt:#E0F2FE;
+  --ok:#065F46;--ok-lt:#ECFDF5;
+  --warn:#92400E;--warn-lt:#FEF3C7;
+  --err:#991B1B;--err-lt:#FEF2F2;
+  --gray-900:#111827;--gray-700:#374151;--gray-500:#6B7280;
+  --gray-300:#D1D5DB;--gray-200:#E5E7EB;--gray-100:#F9FAFB;
   --white:#fff;
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'Noto Sans JP',sans-serif;
+  --mono:'IBM Plex Mono',monospace;--sans:'Noto Sans JP',sans-serif;
 }
 body{font-family:var(--sans);background:#EEF1F7;color:var(--gray-900);padding:40px 16px 80px}
 .page{max-width:1040px;margin:0 auto}
 
-/* nav back */
+/* nav */
 .back-nav{margin-bottom:20px}
 .back-nav a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--gray-500);text-decoration:none;padding:5px 12px;border:1px solid var(--gray-300);border-radius:20px;background:var(--white)}
 .back-nav a:hover{border-color:var(--dmc);color:var(--dmc)}
 
-/* Header */
+/* header */
 .hd{margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--gray-300)}
 .hd-eye{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px}
 .hd-title{font-size:28px;font-weight:700;line-height:1.2;margin-bottom:8px}
-.hd-sub{font-size:13.5px;color:var(--gray-500);line-height:1.75;max-width:640px}
+.hd-sub{font-size:13.5px;color:var(--gray-500);line-height:1.75;max-width:680px}
 .hd-badges{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .badge{font-size:11px;font-weight:600;padding:3px 11px;border-radius:20px}
 .b-dark{background:var(--gray-900);color:#fff}
-.b-blue{background:var(--lazuli);color:#fff}
 .b-green{background:var(--ok);color:#fff}
+.b-blue{background:var(--lazuli);color:#fff}
 .b-warn{background:var(--warn-lt);color:var(--warn);border:1px solid #FDE68A}
 
-/* Section */
-.sec{margin-bottom:48px}
+/* sections */
+.sec{margin-bottom:52px}
 .sec-eye{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gray-500);margin-bottom:6px}
-.sec-title{font-size:20px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.sec-title-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff}
+.sec-title{font-size:19px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
 
-/* Cards */
+/* cards */
 .card{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-bottom:14px}
 .card-title{font-size:14px;font-weight:700;margin-bottom:8px}
 .card-body{font-size:13px;color:var(--gray-700);line-height:1.8}
 code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1px solid var(--gray-200);padding:1px 5px;border-radius:4px;white-space:nowrap}
 
-/* Flow diagram */
-.flow-box{background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:24px 28px;margin-bottom:14px;overflow-x:auto}
-.flow-title{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);margin-bottom:18px}
+/* big flywheel goal */
+.goal-dark{background:var(--gray-900);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:20px}
+.goal-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#9CA3AF;margin-bottom:8px}
+.goal-text{font-size:17px;font-weight:700;line-height:1.5;margin-bottom:8px}
+.goal-sub{font-size:13px;color:#D1D5DB;line-height:1.75}
 
-/* Horizontal flow */
-.hflow{display:flex;align-items:stretch;gap:0;min-width:600px}
+/* flywheel diagram */
+.flywheel{display:flex;align-items:center;justify-content:center;gap:0;margin:20px 0;flex-wrap:wrap}
+.fw-node{text-align:center;flex:1;min-width:130px;padding:0 4px}
+.fw-box{border-radius:10px;padding:14px 10px;border:2px solid;font-size:12px;font-weight:700;line-height:1.4}
+.fw-sub{font-size:10px;color:var(--gray-500);margin-top:5px;line-height:1.5}
+.fw-arrow{font-size:20px;color:var(--gray-300);padding:0 4px;margin-top:-20px}
+
+/* horizontal flow */
+.flow-box{background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:22px 26px;margin-bottom:14px;overflow-x:auto}
+.flow-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);margin-bottom:16px}
+.hflow{display:flex;align-items:stretch;gap:0;min-width:620px}
 .hf-node{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.hf-box{border-radius:10px;padding:12px 10px;text-align:center;font-size:12px;font-weight:600;border:1.5px solid;width:100%;line-height:1.4}
+.hf-box{border-radius:10px;padding:12px 8px;text-align:center;font-size:11.5px;font-weight:600;border:1.5px solid;width:100%;line-height:1.4}
 .hf-label{font-size:10px;color:var(--gray-500);text-align:center;line-height:1.4;margin-top:4px}
-.hf-arrow{display:flex;align-items:center;padding:0 6px;color:var(--gray-400);font-size:18px;flex-shrink:0;margin-top:-16px}
+.hf-arr{display:flex;align-items:center;padding:0 5px;color:var(--gray-400);font-size:16px;flex-shrink:0;margin-top:-16px}
 
-/* LLM triple comparison */
-.llm-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
-.llm-card{border-radius:10px;padding:12px 14px;border:1.5px solid;text-align:center}
-.llm-name{font-size:13px;font-weight:700;margin-bottom:4px}
-.llm-desc{font-size:11px;line-height:1.6}
+/* steps */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:18px;align-items:stretch}
+.step-col{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;z-index:1}
+.step-line{width:2px;flex:1;min-height:12px;opacity:.3}
+.step-card{flex:1;border-radius:10px;padding:14px 18px;margin-bottom:8px;border:1px solid var(--gray-200);background:var(--white)}
+.step-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.step-title{font-size:13.5px;font-weight:700;margin-bottom:6px}
+.step-body{font-size:12.5px;color:var(--gray-700);line-height:1.75}
 
-/* Category source grid */
-.cat-sources{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
-.cat-src{border-radius:10px;padding:12px 14px;border:1.5px solid}
-.cat-src-name{font-size:12px;font-weight:700;margin-bottom:4px}
-.cat-src-desc{font-size:11px;line-height:1.6;color:var(--gray-700)}
-
-/* Schema */
+/* schema */
 .schema-box{background:var(--gray-100);border:1px solid var(--gray-300);border-radius:10px;overflow:hidden;margin-top:12px;font-family:var(--mono);font-size:11.5px}
-.schema-hd{background:var(--gray-200);padding:7px 14px;font-weight:600;font-size:11px;color:var(--gray-700);letter-spacing:0.06em}
+.schema-hd{background:var(--gray-200);padding:7px 14px;font-weight:600;font-size:11px;color:var(--gray-700);letter-spacing:0.06em;display:flex;align-items:center;justify-content:space-between}
 .schema-row{display:flex;align-items:center;padding:6px 14px;border-top:1px solid var(--gray-200)}
 .s-pk{color:#92400E;font-weight:700;min-width:44px;font-size:10px}
 .s-col{flex:1;color:var(--gray-900)}
-.s-type{color:var(--gray-500);font-size:10.5px;min-width:100px;text-align:right}
+.s-type{color:var(--gray-500);font-size:10.5px;min-width:110px;text-align:right}
 .s-note{font-size:10px;margin-left:10px;white-space:nowrap}
-.s-ok{color:#059669} .s-warn{color:#D97706} .s-err{color:#DC2626} .s-blue{color:#1D4ED8}
+.s-ok{color:#059669}.s-warn{color:#D97706}.s-err{color:#DC2626}.s-blue{color:#1D4ED8}
 
-/* Tag strips */
+/* tags */
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .tag{font-size:11px;padding:3px 9px;border-radius:6px;border:1px solid;white-space:nowrap}
 .t-dmc{background:var(--dmc-lt);border-color:var(--dmc);color:#064E4B;font-family:var(--mono);font-size:10.5px}
@@ -99,69 +108,64 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 .t-warn{background:var(--warn-lt);border-color:#FDE68A;color:var(--warn)}
 .t-ok{background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok)}
 .t-gray{background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-500)}
+.t-brand{background:var(--brand-lt);border-color:#C4B5FD;color:var(--brand)}
 
-/* Boxes */
-.box-llm{background:var(--llm-lt);border:1px solid #7DD3FC;border-radius:10px;padding:14px 18px;margin-top:10px}
-.box-llm-label{font-size:10px;font-weight:700;color:var(--llm);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
+/* tbl chip */
+.tbl{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 5px 8px;border-radius:8px;font-size:11px;font-weight:500;font-family:var(--mono);margin:3px 4px 0 0;border:1px solid transparent}
+.tbl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tbl-dmc{background:var(--dmc-lt);border-color:var(--dmc);color:#064E4B}
+.tbl-dmc .tbl-dot{background:var(--dmc)}
+.tbl-gcp{background:var(--gcp-lt);border-color:#F59E0B;color:#92400E}
+.tbl-gcp .tbl-dot{background:var(--gcp)}
+
+/* boxes */
 .box-ok{background:var(--ok-lt);border:1.5px solid #6EE7B7;border-radius:10px;padding:14px 18px;margin-top:10px}
 .box-ok-label{font-size:10px;font-weight:700;color:var(--ok);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px}
 .box-warn{background:var(--warn-lt);border:1.5px dashed #F59E0B;border-radius:10px;padding:14px 18px;margin-top:10px}
 .box-warn-label{font-size:10px;font-weight:700;color:var(--warn);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px}
-.box-dark{background:var(--gray-900);border-radius:12px;padding:18px 22px;margin-top:10px;color:#fff}
+.box-llm{background:var(--llm-lt);border:1px solid #7DD3FC;border-radius:10px;padding:14px 18px;margin-top:10px}
+.box-llm-label{font-size:10px;font-weight:700;color:var(--llm);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
 
-/* Step list */
-.steps{display:flex;flex-direction:column;gap:0}
-.step{display:flex;gap:18px;align-items:stretch}
-.step-col{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
-.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;z-index:1}
-.step-line{width:2px;flex:1;min-height:12px}
-.step-card{flex:1;border-radius:10px;padding:14px 18px;margin-bottom:8px;border:1px solid var(--gray-200);background:var(--white)}
-.step-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
-.step-title{font-size:14px;font-weight:700;margin-bottom:6px}
-.step-body{font-size:12.5px;color:var(--gray-700);line-height:1.75}
-
-/* Highlight */
-.hl-blue{border-left:3px solid var(--lazuli)}
-.hl-green{border-left:3px solid var(--dmc)}
-.hl-purple{border-left:3px solid var(--brand)}
-.hl-orange{border-left:3px solid var(--amazon)}
-.hl-cat{border-left:3px solid var(--cat)}
-
-/* Big goal */
-.goal-final{background:var(--gray-900);color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:20px}
-.goal-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#9CA3AF;margin-bottom:6px}
-.goal-text{font-size:16px;font-weight:700;line-height:1.5}
-.goal-sub{font-size:13px;color:#D1D5DB;margin-top:6px;line-height:1.7}
-
-/* 2-col / 3-col grids */
+/* grid */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
 .inner{border-radius:10px;padding:14px 16px;border:1px solid}
 
-/* Claude code section */
-.cc-box{background:#0D1117;border-radius:14px;padding:24px 28px;margin-top:14px;color:#E6EDF3}
-.cc-title{font-size:14px;font-weight:700;color:#58A6FF;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.cc-step{display:flex;gap:12px;margin-bottom:12px;font-size:12.5px;line-height:1.7}
-.cc-num{background:#21262D;border:1px solid #30363D;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#58A6FF;flex-shrink:0;margin-top:1px}
-.cc-file{background:#161B22;border:1px solid #30363D;border-radius:6px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:#8B949E;margin-top:8px;line-height:2}
-.cc-dir{color:#58A6FF;font-weight:600}
-.cc-py{color:#79C0FF}
-.cc-yaml{color:#A5D6FF}
-.cc-md{color:#7EE787}
-.cc-comment{color:#6E7681}
+/* llm trio */
+.llm-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.llm-card{border-radius:10px;padding:12px 14px;border:1.5px solid}
+
+/* vendor grid */
+.vendor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.vendor-card{border-radius:10px;padding:12px 14px;border:1.5px solid}
+
+/* pill */
+.pill-daily{display:inline-flex;align-items:center;gap:5px;background:#ECFDF5;border:1px solid #6EE7B7;color:#065F46;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.pulse{width:7px;height:7px;border-radius:50%;background:#10B981;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pill-trunc{display:inline-flex;align-items:center;gap:6px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:6px 12px;font-size:12px;color:#9A3412;font-weight:500;margin-top:10px}
+
+/* code block */
+.code-block{background:#0D1117;border-radius:10px;padding:14px 18px;font-family:var(--mono);font-size:11.5px;color:#E6EDF3;line-height:2;margin-top:10px;overflow-x:auto}
+.c-green{color:#7EE787}.c-blue{color:#79C0FF}.c-gray{color:#6E7681}.c-teal{color:#56D364}
+
+/* highlight borders */
+.hl-gs1{border-left:3px solid var(--gs1)}
+.hl-brand{border-left:3px solid var(--brand)}
+.hl-cat{border-left:3px solid var(--cat)}
+.hl-dmc{border-left:3px solid var(--dmc)}
+.hl-ok{border-left:3px solid var(--ok)}
 
 /* divider */
-.divider{height:1px;background:var(--gray-200);margin:32px 0}
+.divider{height:1px;background:var(--gray-200);margin:40px 0}
 
-/* related docs */
-.related{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-top:40px}
-.related-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px}
+/* related */
+.related{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;margin-top:44px}
 .rel-link{display:flex;align-items:center;gap:14px;background:var(--gray-100);border:1px solid var(--gray-200);border-radius:10px;padding:12px 16px;text-decoration:none;margin-bottom:8px}
 .rel-link:hover{border-color:var(--dmc)}
 .rel-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.rel-arrow{margin-left:auto;color:var(--gray-400);font-size:16px}
+.rel-arr{margin-left:auto;color:var(--gray-400);font-size:16px}
 
-/* Footer */
 .footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--gray-300);display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500)}
 </style>
 </head>
@@ -174,44 +178,78 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 
 <!-- HEADER -->
 <div class="hd">
-  <p class="hd-eye">System Specification · v1.0</p>
+  <p class="hd-eye">System Specification · v2.0</p>
   <h1 class="hd-title">DMC 商品マスター整備<br>システム仕様書</h1>
-  <p class="hd-sub">ブランドマスター構築・Lazuli カテゴリー標準化・商品マッピングの 3 フローを統合したシステム全体仕様。Claude Code によるシステム化の下地として確定させる。</p>
+  <p class="hd-sub">GS1メーカーリスト・ブランドマスター・Lazuliカテゴリー標準化の3フローを統合し、データを蓄積するほど精度とボリュームが向上するフライホイール型アーキテクチャの完全仕様。セールス資料・MTG資料を踏まえた確定版。</p>
   <div class="hd-badges">
-    <span class="badge b-green">フロー 1：ブランド — 仕様確定</span>
-    <span class="badge b-blue">フロー 2：Lazuli カテゴリー — 仕様確定</span>
-    <span class="badge b-dark">フロー 3：商品マッピング — 設計確定</span>
-    <span class="badge b-warn">Claude Code 移行：次フェーズ</span>
+    <span class="badge b-green">フロー1：メーカー/ブランド — 確定</span>
+    <span class="badge b-blue">フロー2：Lazuliカテゴリー — 確定</span>
+    <span class="badge b-dark">フロー3：商品マッピング — 確定</span>
+    <span class="badge b-warn">Claude Code実装：次フェーズ</span>
   </div>
 </div>
 
-<!-- ═══ 最終ゴール ═══ -->
+
+<!-- ═══ 全体ゴール & フライホイール ═══ -->
 <div class="sec">
-  <div class="goal-final">
-    <p class="goal-label">🎯 システム全体ゴール</p>
-    <p class="goal-text">すべての商品（JAN コード）に対して、メーカー・ブランド・Lazuli 標準カテゴリーを正確にマッピングし、<br>顧客・EC プラットフォームごとに必要なカテゴリーを即座に引き出せる状態を作る。</p>
+  <div class="goal-dark">
+    <p class="goal-label">🎯 システム全体ゴール — フライホイール型データ資産</p>
+    <p class="goal-text">すべての商品（JAN コード）に対してメーカー・ブランド・Lazuli標準カテゴリーを正確にマッピングし、<br>データを食わせるほど精度とボリュームが上がる自己強化型マスターを構築する。</p>
     <p class="goal-sub">
-      ブランドリストは Claude / Gemini / ChatGPT の 3 LLM で最適化。<br>
-      カテゴリーは Amazon・楽天・AEON・量販店・ドラッグストア等の各カテゴリーを Lazuli 標準カテゴリーに集約し、常にアップデートし続ける。
+      「AI生成」ではなく「DMCが丁寧に作り上げた資産」としてブランド化（農家の野菜戦略）。<br>
+      顧客・EC・業界ごとに必要なカテゴリーを即座に引き出せる構造を実現する。<br>
+      下流案件（商品名+JANのみ）でもマスターから正確な属性を補完できる状態を目指す。
     </p>
+  </div>
+
+  <!-- フライホイール図 -->
+  <div class="flow-box">
+    <p class="flow-title">FLYWHEEL — データ蓄積による自己強化サイクル</p>
+    <div class="flywheel">
+      <div class="fw-node">
+        <div class="fw-box" style="background:var(--gs1-lt);border-color:var(--gs1);color:var(--gs1);">GS1 / メーカーサイト<br>データ取込</div>
+        <p class="fw-sub">日次更新<br>納品データ蓄積</p>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">
+        <div class="fw-box" style="background:var(--llm-lt);border-color:#0EA5E9;color:var(--llm);">LLM 3社<br>並列処理・正規化</div>
+        <p class="fw-sub">Claude / Gemini<br>ChatGPT</p>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">
+        <div class="fw-box" style="background:var(--dmc-lt);border-color:var(--dmc);color:var(--dmc);">DMCマスター<br>標準化・蓄積</div>
+        <p class="fw-sub">BQ: dmc-ops<br>継続アップデート</p>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">
+        <div class="fw-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);">商品マッピング<br>精度向上</div>
+        <p class="fw-sub">Lazuli PDP<br>EC・顧客へ出力</p>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">
+        <div class="fw-box" style="background:#FEF3C7;border-color:#F59E0B;color:#92400E;">フィードバック<br>再学習</div>
+        <p class="fw-sub">納品データ・<br>レビュー蓄積</p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--gray-500);margin-top:6px;">↑ このサイクルが回るほど、マスターの精度・ボリュームが向上する</p>
   </div>
 
   <!-- 3フロー概観 -->
   <div class="g3">
     <div class="inner" style="background:var(--brand-lt);border-color:#C4B5FD;">
-      <p style="font-size:10px;font-weight:700;color:var(--brand);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;">フロー 1</p>
-      <p style="font-size:13px;font-weight:700;color:#3B0764;margin-bottom:5px;">ブランドマスター構築</p>
-      <p style="font-size:11.5px;color:#4C1D95;line-height:1.65;">GS1 メーカーリスト → 3 LLM でブランドリスト生成 → 統合・正規化 → maker_brand_master</p>
+      <p style="font-size:10px;font-weight:700;color:var(--brand);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">フロー 1</p>
+      <p style="font-size:13px;font-weight:700;color:#3B0764;margin-bottom:5px;">メーカー / ブランドマスター</p>
+      <p style="font-size:11.5px;color:#4C1D95;line-height:1.65;">GS1メーカーリスト → メーカーサイトからブランドリスト → 3LLM統合 → maker_brand_master</p>
     </div>
     <div class="inner" style="background:var(--cat-lt);border-color:#93C5FD;">
-      <p style="font-size:10px;font-weight:700;color:var(--cat);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;">フロー 2</p>
-      <p style="font-size:13px;font-weight:700;color:var(--cat);margin-bottom:5px;">Lazuli カテゴリー構築</p>
-      <p style="font-size:11.5px;color:#1E3A5F;line-height:1.65;">各 EC・量販店カテゴリー + 森井マスタ → LLM 平準化 → Lazuli 標準カテゴリー（L1〜L5）</p>
+      <p style="font-size:10px;font-weight:700;color:var(--cat);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">フロー 2</p>
+      <p style="font-size:13px;font-weight:700;color:var(--cat);margin-bottom:5px;">Lazuli カテゴリーマスター</p>
+      <p style="font-size:11.5px;color:#1E3A5F;line-height:1.65;">森井カテゴリ（基軸） + 各媒体カテゴリー紐づけ → Lazuli標準 → 商品マッピング</p>
     </div>
     <div class="inner" style="background:var(--ok-lt);border-color:#6EE7B7;">
-      <p style="font-size:10px;font-weight:700;color:var(--ok);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;">フロー 3</p>
-      <p style="font-size:13px;font-weight:700;color:#064E4B;margin-bottom:5px;">商品マッピング</p>
-      <p style="font-size:11.5px;color:#065F46;line-height:1.65;">JAN × maker_brand_master × Lazuli カテゴリー → 商品マッピングマスター完成</p>
+      <p style="font-size:10px;font-weight:700;color:var(--ok);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">フロー 3</p>
+      <p style="font-size:13px;font-weight:700;color:#064E4B;margin-bottom:5px;">商品マッピングマスター</p>
+      <p style="font-size:11.5px;color:#065F46;line-height:1.65;">JAN × maker_brand_master × Lazuliカテゴリー → product_mapping_master → Lazuli PDP出力</p>
     </div>
   </div>
 </div>
@@ -219,121 +257,146 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 <div class="divider"></div>
 
 
-<!-- ═══ フロー 1: ブランドマスター ═══ -->
+<!-- ═══ フロー 1: メーカー/ブランドマスター ═══ -->
 <div class="sec">
   <p class="sec-eye">フロー 1</p>
   <div class="sec-title">
-    <span class="sec-title-num" style="background:var(--brand);">1</span>
-    ブランドマスター構築パイプライン
+    <span class="sec-num" style="background:var(--brand);">1</span>
+    メーカー / ブランドマスター構築パイプライン
   </div>
 
-  <!-- フロー概要図 -->
+  <!-- 全体フロー -->
   <div class="flow-box">
-    <p class="flow-title">FLOW 1 — GS1 メーカーリスト → 3 LLM → 統合 → maker_brand_master</p>
+    <p class="flow-title">FLOW 1 全体 — GS1 → メーカーサイト → 3LLM → maker_brand_master</p>
     <div class="hflow">
       <div class="hf-node">
         <div class="hf-box" style="background:var(--gs1-lt);border-color:var(--gs1);color:var(--gs1);">GS1<br>メーカーリスト</div>
-        <p class="hf-label">standard_gs1_<br>company_code<br>company_name</p>
+        <p class="hf-label">日次取得<br>company_code<br>company_name</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--llm-lt);border-color:#0EA5E9;color:var(--llm);">3 LLM<br>並列処理</div>
-        <p class="hf-label">Claude / Gemini<br>ChatGPT<br>バッチ投入</p>
+        <div class="hf-box" style="background:#FFF7ED;border-color:#FB923C;color:#9A3412;">メーカーサイト<br>ブランド抽出</div>
+        <p class="hf-label">サイトURL特定<br>ブランドリスト<br>LLM生成</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:#FFF7ED;border-color:#FB923C;color:#9A3412;">ブランドリスト<br>統合・正規化</div>
-        <p class="hf-label">多数決 / 信頼度<br>スコアリング<br>表記揺れ統一</p>
+        <div class="hf-box" style="background:var(--llm-lt);border-color:#0EA5E9;color:var(--llm);">3LLM<br>並列処理</div>
+        <p class="hf-label">Claude<br>Gemini<br>ChatGPT</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
+      <div class="hf-node">
+        <div class="hf-box" style="background:#FFF7ED;border-color:#FDBA74;color:#9A3412;">多数決<br>スコアリング</div>
+        <p class="hf-label">HIGH/MEDIUM<br>/LOW判定<br>正規化ルール適用</p>
+      </div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
         <div class="hf-box" style="background:var(--brand-lt);border-color:var(--brand);color:var(--brand);">maker_brand<br>_master</div>
-        <p class="hf-label">BQ: dmc-ops<br>.master<br>確定テーブル</p>
+        <p class="hf-label">BQ:dmc-ops<br>継続アップデート</p>
       </div>
     </div>
   </div>
 
-  <!-- 3 LLM の役割 -->
-  <div class="card hl-purple">
-    <p class="card-title">3 LLM の役割分担</p>
-    <div class="llm-trio">
-      <div class="llm-card" style="background:#FFF7F0;border-color:#FDBA74;">
-        <p class="llm-name" style="color:#C2410C;">Claude（Anthropic）</p>
-        <p class="llm-desc" style="color:#9A3412;">日本語ブランド情報の精度が高い。コスト最適化（Haiku + Prompt Caching）で大量バッチ処理向き。信頼度スコアを JSON で返す。</p>
-        <div style="margin-top:8px"><span class="tag t-llm" style="font-size:10px;">Haiku: 一次処理</span> <span class="tag t-llm" style="font-size:10px;">Sonnet: 低信頼度再処理</span></div>
-      </div>
-      <div class="llm-card" style="background:#F0FDF4;border-color:#6EE7B7;">
-        <p class="llm-name" style="color:#065F46;">Gemini（Google）</p>
-        <p class="llm-desc" style="color:#064E4B;">検索連動で最新情報に強い。EC サイト・量販店のブランドページ URL 検出に有効。グラウンディング機能を活用。</p>
-        <div style="margin-top:8px"><span class="tag t-ok" style="font-size:10px;">URL 検証</span> <span class="tag t-ok" style="font-size:10px;">最新情報補完</span></div>
-      </div>
-      <div class="llm-card" style="background:#EFF6FF;border-color:#93C5FD;">
-        <p class="llm-name" style="color:#1D4ED8;">ChatGPT（OpenAI）</p>
-        <p class="llm-desc" style="color:#1E40AF;">ブランド知識の網羅性が高い。Claude / Gemini と結果が乖離した場合のタイブレーカーとして使用。</p>
-        <div style="margin-top:8px"><span class="tag t-lazuli" style="font-size:10px;">タイブレーカー</span> <span class="tag t-lazuli" style="font-size:10px;">網羅性補完</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 統合ロジック -->
-  <div class="card hl-purple">
-    <p class="card-title">ブランドリスト統合・正規化ロジック</p>
+  <!-- Step1-A: GS1取込 -->
+  <div class="card hl-gs1">
+    <p class="card-title">Step 1-A：GS1 → BQ取込（既存フロー・確定）</p>
     <div class="steps">
       <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--brand);">1</div><div class="step-line" style="background:var(--brand);opacity:.3"></div></div>
+        <div class="step-col"><div class="step-num" style="background:var(--gs1);">1</div><div class="step-line" style="background:var(--gs1)"></div></div>
         <div class="step-card">
-          <p class="step-label" style="color:var(--brand);">LLM 3社 並列バッチ投入</p>
-          <p class="step-title">メーカーリストを一括投入</p>
-          <p class="step-body">GS1 メーカーリストを N 件ずつのチャンクに分割し、3 LLM に同一プロンプトで並列投入。出力は統一 JSON スキーマで受け取る。<br><code>{"maker_code":"xxx","maker_name":"xxx","brands":[{"name":"xxx","site_url":"xxx","confidence":"high"}]}</code></p>
+          <div class="pill-daily"><span class="pulse"></span>Daily 定期取得</div>
+          <p class="step-title">GS1 → grandline-dev.gs1.gs1_maker_name_standard_info</p>
+          <p class="step-body">GS1が毎日用意するメーカー名標準情報をLazuliバッチで取得。使用カラムは <code>standard_gs1_company_code</code> と <code>company_name</code> の2つのみ。</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--brand);">2</div><div class="step-line" style="background:var(--brand);opacity:.3"></div></div>
+        <div class="step-col"><div class="step-num" style="background:var(--gcp);">2</div><div class="step-line" style="background:var(--gcp)"></div></div>
         <div class="step-card">
-          <p class="step-label" style="color:var(--brand);">多数決スコアリング</p>
-          <p class="step-title">3 LLM の結果を突合して信頼度を決定</p>
-          <p class="step-body">
-            <strong>3社一致</strong>：confidence = HIGH → 自動採用<br>
-            <strong>2社一致</strong>：confidence = MEDIUM → 自動採用 + レビューフラグ<br>
-            <strong>1社のみ</strong>：confidence = LOW → DMC 手動確認キュー<br>
-            <strong>全社不一致</strong>：UNKNOWN → 手動確認必須
-          </p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--brand);">3</div><div class="step-line" style="background:var(--brand);opacity:.3"></div></div>
-        <div class="step-card">
-          <p class="step-label" style="color:var(--brand);">brand_name 正規化ルール適用</p>
-          <p class="step-title">表記揺れを統一して格納</p>
-          <p class="step-body">
-            ① メーカー名を除去（「キリン一番搾り」→「一番搾り」）<br>
-            ② 英語ブランドは英語表記を正とする（BOSS, iMUSE）<br>
-            ③ サブブランドは L1 ブランドに統一（「生茶 ほうじ煎茶」→「生茶」）<br>
-            ④ 重複排除（「オールフリー」「All-Free」→「オールフリー」に統一）
-          </p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--brand);">4</div></div>
-        <div class="step-card">
-          <p class="step-label" style="color:var(--brand);">maker_brand_master へ書き込み</p>
-          <p class="step-title">差分のみ UPDATE / INSERT</p>
-          <p class="step-body">confidence = HIGH / MEDIUM を自動挿入。LOW / UNKNOWN は <code>review_queue</code> テーブルに保留。DMC 承認後にマスターへ昇格。</p>
+          <p class="step-title">dmc-ops.master.temp_gs1_maker_name_standard_info へコピー</p>
+          <p class="step-body">毎日 TRUNCATE → 全件 INSERT（洗い替え）。差分を <code>maker_code_master</code> / <code>maker_name_master</code> へ反映。</p>
+          <div class="pill-trunc">↻ 毎日 TRUNCATE → 全件 INSERT</div>
         </div>
       </div>
     </div>
 
-    <div class="schema-box" style="margin-top:16px">
-      <div class="schema-hd">dmc-ops.master.maker_brand_master — 確定スキーマ</div>
-      <div class="schema-row"><span class="s-pk">UK①</span><span class="s-col">maker_code</span><span class="s-type">STRING</span><span class="s-note s-blue">GS1 company_code</span></div>
-      <div class="schema-row"><span class="s-pk">UK①②</span><span class="s-col">brand_name</span><span class="s-type">STRING</span><span class="s-note s-blue">正規化済み（必須）</span></div>
+    <!-- 重要課題：事業者コード1対多問題 -->
+    <div class="box-warn" style="margin-top:14px">
+      <p class="box-warn-label">⚠️ 重要課題：事業者コードの1対多問題（MTGで確認済み）</p>
+      <p style="font-size:12.5px;color:#78350F;line-height:1.8;">
+        GS1マスター上は事業者コード:メーカー名が1対1に見えるが、<strong>実際は1メーカーが複数の事業者コードを持つ</strong>ケースが多い。<br>
+        → コードだけでマッチングすると「全く当たらない」状態になる。<br>
+        → 対策：<code>company_name</code> による名寄せ処理を必須とし、同一メーカーの複数コードを統合する。
+      </p>
+      <div class="tags"><span class="t-warn">名寄せテーブル必須</span><span class="t-warn">company_name正規化</span><span class="t-warn">maker_code統合ロジック</span></div>
+    </div>
+  </div>
+
+  <!-- Step1-B: ブランド取得 -->
+  <div class="card hl-brand">
+    <p class="card-title">Step 1-B：メーカーサイト → ブランドリスト生成（3LLM並列）</p>
+    <p class="card-body" style="margin-bottom:12px;">メーカー（事業者）1件 = ブランドサイト1件を目標。クローリング不要で<strong>LLMによるブランドリスト生成</strong>を主軸とする。</p>
+
+    <div class="llm-trio">
+      <div class="llm-card" style="background:#FFF7F0;border-color:#FDBA74;">
+        <p style="font-size:12px;font-weight:700;color:#C2410C;margin-bottom:4px;">Claude（Anthropic）</p>
+        <p style="font-size:11.5px;color:#9A3412;line-height:1.65;">日本語ブランド情報精度が高い。Haiku + Prompt Cachingで大量バッチ処理。信頼度スコアをJSON返却。</p>
+        <div class="tags" style="margin-top:6px"><span class="t-llm" style="font-size:10px;">一次処理: Haiku</span><span class="t-llm" style="font-size:10px;">再処理: Sonnet</span></div>
+      </div>
+      <div class="llm-card" style="background:#F0FDF4;border-color:#6EE7B7;">
+        <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:4px;">Gemini（Google）</p>
+        <p style="font-size:11.5px;color:#064E4B;line-height:1.65;">検索グラウンディングで最新情報に強い。ブランドサイトURL検出・最新情報補完に有効。</p>
+        <div class="tags" style="margin-top:6px"><span class="t-ok" style="font-size:10px;">URL検証</span><span class="t-ok" style="font-size:10px;">最新情報補完</span></div>
+      </div>
+      <div class="llm-card" style="background:#EFF6FF;border-color:#93C5FD;">
+        <p style="font-size:12px;font-weight:700;color:#1D4ED8;margin-bottom:4px;">ChatGPT（OpenAI）</p>
+        <p style="font-size:11.5px;color:#1E40AF;line-height:1.65;">ブランド知識の網羅性が高い。ClaudeとGeminiが不一致の場合のタイブレーカー。</p>
+        <div class="tags" style="margin-top:6px"><span class="t-lazuli" style="font-size:10px;">タイブレーカー</span><span class="t-lazuli" style="font-size:10px;">網羅性補完</span></div>
+      </div>
+    </div>
+
+    <!-- 統合ロジック -->
+    <div style="background:var(--gray-100);border-radius:10px;padding:14px 18px;margin-top:12px;">
+      <p style="font-size:11px;font-weight:700;color:var(--gray-700);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">統合スコアリングロジック</p>
+      <div class="g2" style="margin-top:0">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-200);font-size:12px;"><span style="background:var(--ok-lt);border:1px solid #6EE7B7;color:var(--ok);padding:2px 8px;border-radius:12px;font-weight:700;font-size:10px;">HIGH</span><span>3社一致 → 自動採用</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-200);font-size:12px;"><span style="background:var(--warn-lt);border:1px solid #FDE68A;color:var(--warn);padding:2px 8px;border-radius:12px;font-weight:700;font-size:10px;">MED</span><span>2社一致 → 自動採用 + レビューフラグ</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-200);font-size:12px;"><span style="background:var(--err-lt);border:1px solid #FECACA;color:var(--err);padding:2px 8px;border-radius:12px;font-weight:700;font-size:10px;">LOW</span><span>1社のみ → DMC手動確認キュー</span></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px;"><span style="background:var(--gray-200);color:var(--gray-600);padding:2px 8px;border-radius:12px;font-weight:700;font-size:10px;">UNK</span><span>全社不一致 → 手動確認必須</span></div>
+        </div>
+        <div>
+          <p style="font-size:11px;font-weight:700;color:var(--gray-700);margin-bottom:8px;">brand_name 正規化ルール</p>
+          <p style="font-size:12px;color:var(--gray-700);line-height:1.8;">① メーカー名を除去（「キリン一番搾り」→「一番搾り」）<br>② 英語ブランドは英語表記を正とする（BOSS, iMUSE）<br>③ サブブランドはL1ブランドに統一（「生茶 ほうじ煎茶」→「生茶」）<br>④ 重複排除（「オールフリー」「All-Free」→「オールフリー」）</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-box" style="margin-top:14px">
+      <div class="schema-hd">dmc-ops.master.maker_brand_master</div>
+      <div class="schema-row"><span class="s-pk">UK①</span><span class="s-col">maker_code</span><span class="s-type">STRING</span><span class="s-note s-blue">GS1 company_code（名寄せ済み）</span></div>
+      <div class="schema-row"><span class="s-pk">UK①②</span><span class="s-col">brand_name</span><span class="s-type">STRING</span><span class="s-note s-blue">正規化済みブランド名（必須）</span></div>
       <div class="schema-row"><span class="s-pk">UK②</span><span class="s-col">maker_name</span><span class="s-type">STRING</span><span class="s-note s-blue">名寄せ済み</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_site_url</span><span class="s-type">STRING</span><span class="s-note">LLM 生成</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_site_url</span><span class="s-type">STRING</span><span class="s-note">メーカーサイト URL</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">llm_sources</span><span class="s-type">JSON</span><span class="s-note">{"claude":..,"gemini":..,"chatgpt":..}</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">confidence</span><span class="s-type">ENUM</span><span class="s-note">HIGH / MEDIUM / LOW / UNKNOWN</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_attributes</span><span class="s-type">JSON</span><span class="s-note">クローリング取得属性（拡張用）</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_attributes</span><span class="s-type">JSON</span><span class="s-note">拡張属性（UIからカラム追加可能）</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">review_status</span><span class="s-type">ENUM</span><span class="s-note">auto_approved / pending / approved / rejected</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">created_at / updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note"></span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">created_at / updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note">継続アップデート管理</span></div>
+    </div>
+  </div>
+
+  <!-- 継続アップデート -->
+  <div class="card hl-brand">
+    <p class="card-title">Step 1-C：継続アップデート方針</p>
+    <p class="card-body">データを食わせるほど精度とボリュームが上がる仕組みを実現する。</p>
+    <div class="g2" style="margin-top:12px">
+      <div class="inner" style="background:var(--brand-lt);border-color:#C4B5FD;">
+        <p style="font-size:12px;font-weight:700;color:var(--brand);margin-bottom:5px;">トリガー更新</p>
+        <p style="font-size:12px;color:#4C1D95;line-height:1.7;">① GS1日次取込で新メーカー検出 → 自動でブランド生成キューに追加<br>② 納品データから未登録ブランドを検出 → 差分追加<br>③ DMC手動追加 → UI画面から直接登録</p>
+      </div>
+      <div class="inner" style="background:var(--brand-lt);border-color:#C4B5FD;">
+        <p style="font-size:12px;font-weight:700;color:var(--brand);margin-bottom:5px;">正規化の継続強化</p>
+        <p style="font-size:12px;color:#4C1D95;line-height:1.7;">① 同一ブランドの別表記を検出したら自動マージ候補に追加<br>② confidence LOW → HIGH への昇格はDMC承認後<br>③ JAN陳腐化対応：新データ到着時に自動書き換え</p>
+      </div>
     </div>
   </div>
 </div>
@@ -341,151 +404,162 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 <div class="divider"></div>
 
 
-<!-- ═══ フロー 2: Lazuli カテゴリー ═══ -->
+<!-- ═══ フロー 2: Lazuliカテゴリー ═══ -->
 <div class="sec">
   <p class="sec-eye">フロー 2</p>
   <div class="sec-title">
-    <span class="sec-title-num" style="background:var(--cat);">2</span>
+    <span class="sec-num" style="background:var(--cat);">2</span>
     Lazuli 標準カテゴリー構築パイプライン
   </div>
 
-  <!-- フロー概要図 -->
   <div class="flow-box">
-    <p class="flow-title">FLOW 2 — 各ソースカテゴリー + 森井マスタ → LLM 平準化 → Lazuli カテゴリー</p>
+    <p class="flow-title">FLOW 2 全体 — 森井カテゴリ（基軸）+ 各媒体カテゴリー → LLM平準化 → Lazuli標準カテゴリー</p>
     <div class="hflow">
       <div class="hf-node">
-        <div class="hf-box" style="background:#FFF7ED;border-color:#FB923C;color:#9A3412;font-size:11px;">各 EC・業界<br>カテゴリー収集</div>
-        <p class="hf-label">Amazon / 楽天<br>AEON / 量販店<br>ドラッグストア</p>
+        <div class="hf-box" style="background:var(--cat-lt);border-color:#93C5FD;color:var(--cat);font-size:11px;">森井カテゴリマスタ<br>（基軸・確定済み）</div>
+        <p class="hf-label">L1〜L5<br>2,735件<br>L4別カラム575種</p>
       </div>
-      <div class="hf-arrow">+</div>
+      <div class="hf-arr">+</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--cat-lt);border-color:#93C5FD;color:var(--cat);font-size:11px;">森井カテゴリ<br>マスタ</div>
-        <p class="hf-label">L1〜L5<br>2,735件<br>（実データ）</p>
+        <div class="hf-box" style="background:#FFF7ED;border-color:#FDBA74;color:#9A3412;font-size:11px;">各媒体<br>カテゴリー収集</div>
+        <p class="hf-label">Amazon/楽天<br>AEON/量販店<br>ドラッグストア</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--llm-lt);border-color:#0EA5E9;color:var(--llm);font-size:11px;">LLM<br>平準化処理</div>
-        <p class="hf-label">共通概念を抽出<br>L1〜L5 設計<br>Claude 主軸</p>
+        <div class="hf-box" style="background:var(--llm-lt);border-color:#0EA5E9;color:var(--llm);font-size:11px;">LLM<br>平準化・マッピング</div>
+        <p class="hf-label">共通概念抽出<br>L5追加提案<br>媒体間紐づけ</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
         <div class="hf-box" style="background:var(--lazuli-lt);border-color:var(--lazuli);color:var(--lazuli);font-size:11px;">Lazuli<br>標準カテゴリー</div>
-        <p class="hf-label">L1〜L5<br>継続アップデート</p>
+        <p class="hf-label">L1〜L5<br>継続追加</p>
       </div>
-      <div class="hf-arrow">↓</div>
+      <div class="hf-arr">↓</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);font-size:11px;">カテゴリー<br>マッピング DB</div>
-        <p class="hf-label">Lazuli ↔ 各ベンダー<br>カテゴリーを紐づけ<br>即時引き出し可能</p>
+        <div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);font-size:11px;">vendor_mapping<br>DB</div>
+        <p class="hf-label">Lazuli ↔ 各媒体<br>カテゴリー紐づけ<br>即時引き出し可能</p>
       </div>
     </div>
   </div>
 
-  <!-- カテゴリーソース -->
+  <!-- 森井カテゴリ説明 -->
   <div class="card hl-cat">
-    <p class="card-title">収集するカテゴリーソース（計 6 ソース + 森井マスタ）</p>
-    <div class="cat-sources">
-      <div class="cat-src" style="background:#FFF7ED;border-color:#FDBA74;">
-        <p class="cat-src-name" style="color:#C2410C;">🛒 Amazon カテゴリー</p>
-        <p class="cat-src-desc">日本版 Amazon の商品分類ツリー。ECの事実上の標準で最も網羅的。</p>
-      </div>
-      <div class="cat-src" style="background:#FEF2F2;border-color:#FECACA;">
-        <p class="cat-src-name" style="color:#991B1B;">🏪 楽天カテゴリー</p>
-        <p class="cat-src-desc">楽天市場の商品分類。Amazon と概念が異なる点が多く補完的。</p>
-      </div>
-      <div class="cat-src" style="background:#F0FDF4;border-color:#6EE7B7;">
-        <p class="cat-src-name" style="color:#065F46;">🏬 AEON カテゴリー</p>
-        <p class="cat-src-desc">総合スーパーの食品・日用品中心の分類。実店舗視点が強い。</p>
-      </div>
-      <div class="cat-src" style="background:#EFF6FF;border-color:#BFDBFE;">
-        <p class="cat-src-name" style="color:#1E40AF;">📺 量販店カテゴリー<br><span style="font-weight:400;font-size:10px;">（ヤマダ・ビックカメラ等）</span></p>
-        <p class="cat-src-desc">家電・PC・カメラ等のカテゴリーが詳細。</p>
-      </div>
-      <div class="cat-src" style="background:#FDF4FF;border-color:#E879F9;">
-        <p class="cat-src-name" style="color:#86198F;">💊 ドラッグストアカテゴリー<br><span style="font-weight:400;font-size:10px;">（マツキヨ・ウエルシア等）</span></p>
-        <p class="cat-src-desc">医薬品・美容・健康カテゴリーが詳細。</p>
-      </div>
-      <div class="cat-src" style="background:var(--cat-lt);border-color:#93C5FD;">
-        <p class="cat-src-name" style="color:var(--cat);">📚 森井カテゴリマスタ</p>
-        <p class="cat-src-desc">L1〜L5 実データ（2,735 件・575 L4）。平準化の軸として活用。</p>
-      </div>
+    <p class="card-title">森井カテゴリマスタ — Lazuliカテゴリーの基軸（実データ確認済み）</p>
+    <p class="card-body" style="margin-bottom:12px;">プロジェクトファイルとして実データが読み込まれています。このデータを Lazuliカテゴリーの軸として使用します。</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;">
+      <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:10px;text-align:center;"><p style="font-size:12px;font-weight:700;color:var(--cat);">L1</p><p style="font-size:11px;color:#1E3A5F;">大分類<br>25種</p></div>
+      <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:10px;text-align:center;"><p style="font-size:12px;font-weight:700;color:var(--cat);">L2</p><p style="font-size:11px;color:#1E3A5F;">中分類</p></div>
+      <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:10px;text-align:center;"><p style="font-size:12px;font-weight:700;color:var(--cat);">L3</p><p style="font-size:11px;color:#1E3A5F;">小分類</p></div>
+      <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:10px;text-align:center;"><p style="font-size:12px;font-weight:700;color:var(--cat);">L4</p><p style="font-size:11px;color:#1E3A5F;">細分類<br>575種</p></div>
+      <div style="background:var(--cat);border-radius:8px;padding:10px;text-align:center;"><p style="font-size:12px;font-weight:700;color:#fff;">L5</p><p style="font-size:11px;color:#BAE6FD;">最小分類<br>2,735件</p></div>
     </div>
-  </div>
-
-  <!-- Lazuli カテゴリー設計 -->
-  <div class="card hl-cat">
-    <p class="card-title">Lazuli 標準カテゴリー — データモデル設計</p>
-    <p style="font-size:13px;color:var(--gray-700);line-height:1.8;margin-bottom:12px;">
-      Lazuli カテゴリーは <strong>L1〜L5 の階層構造</strong>を持ち、各ノードに各ベンダー・EC のカテゴリーを紐づける。
-      顧客や用途に応じて、必要なマッピングを即座に引き出せる。
+    <p style="font-size:12px;color:var(--gray-700);line-height:1.7;margin-bottom:8px;">
+      <strong>L4別カラムセット定義</strong>（29,222行）：L4カテゴリーごとに必須・任意のプリセットカラムが定義されており、1L4あたり平均50.8カラム。これがLazuli PDPの「プリセットカラム自動付与」の根幹。
     </p>
+    <div class="tags">
+      <span class="t-cat">食品・飲料: L5=436件</span>
+      <span class="t-cat">ファッション: L5=206件</span>
+      <span class="t-cat">美容・健康: L5=163件</span>
+      <span class="t-cat">家電: L5=154件</span>
+      <span class="t-cat">スポーツ: L5=138件</span>
+      <span class="t-gray">+ 20 L1カテゴリー</span>
+    </div>
+  </div>
+
+  <!-- 各媒体カテゴリー収集 -->
+  <div class="card hl-cat">
+    <p class="card-title">収集する媒体カテゴリー（6ソース）と取得方法</p>
+    <div class="vendor-grid">
+      <div class="vendor-card" style="background:#FFF7ED;border-color:#FDBA74;">
+        <p style="font-size:12px;font-weight:700;color:#C2410C;margin-bottom:4px;">🛒 Amazon</p>
+        <p style="font-size:11px;color:#9A3412;line-height:1.6;">Product Advertising API または定期クローリング。最も網羅的なEC分類。</p>
+        <span class="tag t-warn" style="font-size:10px;margin-top:6px;display:inline-block;">API優先</span>
+      </div>
+      <div class="vendor-card" style="background:#FEF2F2;border-color:#FECACA;">
+        <p style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:4px;">🏪 楽天</p>
+        <p style="font-size:11px;color:#991B1B;line-height:1.6;">楽天商品検索API（Rakuten API）。L1主要カテゴリーから取得。</p>
+        <span class="tag" style="font-size:10px;margin-top:6px;display:inline-block;background:#FEF2F2;border-color:#FECACA;color:#991B1B;">API優先</span>
+      </div>
+      <div class="vendor-card" style="background:#F0FDF4;border-color:#6EE7B7;">
+        <p style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:4px;">🏬 AEON</p>
+        <p style="font-size:11px;color:#064E4B;line-height:1.6;">イオンネットスーパーAPI or クローリング。食品・日用品中心。年75万件案件あり。</p>
+        <span class="tag t-ok" style="font-size:10px;margin-top:6px;display:inline-block;">API or クローリング</span>
+      </div>
+      <div class="vendor-card" style="background:#EFF6FF;border-color:#BFDBFE;">
+        <p style="font-size:12px;font-weight:700;color:#1E40AF;margin-bottom:4px;">📺 量販店（ヤマダ等）</p>
+        <p style="font-size:11px;color:#1E40AF;line-height:1.6;">家電・PC・カメラ等が詳細。API未提供の場合は過去データ or クローリング。</p>
+        <span class="tag t-lazuli" style="font-size:10px;margin-top:6px;display:inline-block;">過去データ or クローリング</span>
+      </div>
+      <div class="vendor-card" style="background:#FDF4FF;border-color:#E879F9;">
+        <p style="font-size:12px;font-weight:700;color:#86198F;margin-bottom:4px;">💊 ドラッグストア（マツキヨ等）</p>
+        <p style="font-size:11px;color:#86198F;line-height:1.6;">医薬品・美容・健康が詳細。API未提供の場合は過去データ or クローリング。</p>
+        <span class="tag" style="font-size:10px;margin-top:6px;display:inline-block;background:#FDF4FF;border-color:#E879F9;color:#86198F;">過去データ or クローリング</span>
+      </div>
+      <div class="vendor-card" style="background:var(--cat-lt);border-color:#93C5FD;">
+        <p style="font-size:12px;font-weight:700;color:var(--cat);margin-bottom:4px;">📚 森井カテゴリマスタ</p>
+        <p style="font-size:11px;color:var(--cat);line-height:1.6;">L1〜L5実データ（2,735件）。Lazuliカテゴリーの基軸。<strong>既に読み込み済み。</strong></p>
+        <span class="tag t-ok" style="font-size:10px;margin-top:6px;display:inline-block;">✓ 利用可能</span>
+      </div>
+    </div>
+    <div class="box-warn">
+      <p class="box-warn-label">⚠️ 未確定：各媒体API有無の確認</p>
+      <p style="font-size:12.5px;color:#78350F;line-height:1.8;">Amazon: Product Advertising API要確認。楽天: Rakuten APIは公開済み。AEON・量販店・ドラッグストア: APIなければ過去納品データからカテゴリーを逆引きするか、クローリングで対応。<br>→ <strong>まず楽天API + 森井マスタで先行実装し、他媒体を順次追加する方針が現実的。</strong></p>
+    </div>
+  </div>
+
+  <!-- データモデル -->
+  <div class="card hl-cat">
+    <p class="card-title">Lazuliカテゴリー データモデル</p>
 
     <div class="schema-box">
-      <div class="schema-hd">dmc-ops.master.lazuli_category_master — Lazuli 標準カテゴリー</div>
+      <div class="schema-hd">dmc-ops.master.lazuli_category_master — Lazuli標準カテゴリー（森井ベース）</div>
       <div class="schema-row"><span class="s-pk">PK</span><span class="s-col">lazuli_category_code</span><span class="s-type">STRING</span><span class="s-note s-blue">例: LC-1-5-2-2-1</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">l1_name / l2_name / l3_name / l4_name / l5_name</span><span class="s-type">STRING</span><span class="s-note">階層名称</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">l1_name〜l5_name</span><span class="s-type">STRING×5</span><span class="s-note">階層名称（森井カテゴリ準拠）</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">mori_category_code</span><span class="s-type">STRING FK</span><span class="s-note">森井カテゴリマスタとの紐づけ</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">llm_generated</span><span class="s-type">BOOLEAN</span><span class="s-note">LLM 生成フラグ</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">created_at / updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note">継続アップデート管理</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">preset_columns</span><span class="s-type">JSON</span><span class="s-note">L4別カラムセット定義（プリセット）</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">llm_generated</span><span class="s-type">BOOLEAN</span><span class="s-note">LLMによるL5追加フラグ</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note">継続アップデート</span></div>
     </div>
 
     <div class="schema-box" style="margin-top:10px">
-      <div class="schema-hd">dmc-ops.master.category_vendor_mapping — ベンダーカテゴリー紐づけテーブル</div>
-      <div class="schema-row"><span class="s-pk">PK</span><span class="s-col">lazuli_category_code</span><span class="s-type">STRING FK</span><span class="s-note s-blue">Lazuli 標準カテゴリー</span></div>
-      <div class="schema-row"><span class="s-pk">PK</span><span class="s-col">vendor_type</span><span class="s-type">ENUM</span><span class="s-note">amazon / rakuten / aeon / yamada / matsukiyo / mori / custom</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">vendor_category_code</span><span class="s-type">STRING</span><span class="s-note">各ベンダーのカテゴリーコード</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">vendor_category_name</span><span class="s-type">STRING</span><span class="s-note">各ベンダーのカテゴリー名称</span></div>
+      <div class="schema-hd">dmc-ops.master.category_vendor_mapping — 媒体カテゴリー紐づけテーブル</div>
+      <div class="schema-row"><span class="s-pk">PK①</span><span class="s-col">lazuli_category_code</span><span class="s-type">STRING FK</span><span class="s-note s-blue">Lazuli標準カテゴリー</span></div>
+      <div class="schema-row"><span class="s-pk">PK②</span><span class="s-col">vendor_type</span><span class="s-type">ENUM</span><span class="s-note">amazon / rakuten / aeon / yamada / matsukiyo / mori / custom</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">vendor_category_code</span><span class="s-type">STRING</span><span class="s-note">各媒体のカテゴリーコード</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">vendor_category_name</span><span class="s-type">STRING</span><span class="s-note">各媒体のカテゴリー名称</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">mapping_confidence</span><span class="s-type">ENUM</span><span class="s-note">HIGH / MEDIUM / LOW</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note">継続アップデート</span></div>
     </div>
 
     <div class="box-ok" style="margin-top:14px">
-      <p class="box-ok-label">💡 欲しいカテゴリーを欲しい時に引き出すクエリイメージ</p>
-      <div style="font-family:var(--mono);font-size:11.5px;background:#fff;border:1px solid #6EE7B7;border-radius:8px;padding:12px 14px;margin-top:6px;line-height:2;color:#064E4B;">
-        <span style="color:#059669">-- 商品の Lazuli カテゴリーから Amazon カテゴリーを取得</span><br>
-        SELECT vm.vendor_category_name<br>
+      <p class="box-ok-label">💡 顧客・用途別カテゴリーを即時引き出すクエリ</p>
+      <div class="code-block">
+        <span class="c-green">-- 商品のLazuliカテゴリーから任意の媒体カテゴリーを取得</span><br>
+        SELECT vm.vendor_type, vm.vendor_category_name<br>
         FROM product_mapping_master pm<br>
         JOIN category_vendor_mapping vm<br>
         &nbsp;&nbsp;ON pm.lazuli_category_code = vm.lazuli_category_code<br>
-        WHERE pm.jan_code = '4901085123456'<br>
-        &nbsp;&nbsp;AND vm.vendor_type = 'amazon';<br><br>
-        <span style="color:#059669">-- 顧客ごとに必要なカテゴリーを切り替えるだけ</span><br>
-        <span style="color:#059669">-- vendor_type = 'rakuten' / 'aeon' / 'matsukiyo' / ...</span>
+        WHERE pm.jan_code = <span class="c-blue">'4901085123456'</span><br>
+        &nbsp;&nbsp;AND vm.vendor_type IN (<span class="c-blue">'amazon','rakuten','aeon'</span>);<br><br>
+        <span class="c-green">-- vendor_type を変えるだけで楽天/AEON/量販店カテゴリーを切り替え可能</span>
       </div>
     </div>
-  </div>
 
-  <!-- Lazuliカテゴリー継続アップデート -->
-  <div class="card hl-cat">
-    <p class="card-title">Lazuli カテゴリー — 継続アップデートフロー</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--cat);">A</div><div class="step-line" style="background:var(--cat);opacity:.3"></div></div>
-        <div class="step-card">
-          <p class="step-title">各ベンダーカテゴリーの定期収集</p>
-          <p class="step-body">Amazon・楽天・AEON 等のカテゴリーツリーを定期（月次推奨）でクローリング or API 取得。変更差分を検出する。</p>
-        </div>
+    <!-- L5拡張フロー -->
+    <div style="margin-top:14px;background:var(--cat-lt);border:1px solid #93C5FD;border-radius:10px;padding:14px 18px;">
+      <p style="font-size:11px;font-weight:700;color:var(--cat);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">カテゴリー継続拡張フロー（評価サイクル：約13週）</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:100px;background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;font-size:11px;"><strong style="color:var(--cat);display:block;margin-bottom:3px;">4週</strong>データ準備<br>サンプリング</div>
+        <div style="align-self:center;color:var(--gray-400)">→</div>
+        <div style="flex:1;min-width:100px;background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;font-size:11px;"><strong style="color:var(--cat);display:block;margin-bottom:3px;">1週</strong>LLM<br>データ学習</div>
+        <div style="align-self:center;color:var(--gray-400)">→</div>
+        <div style="flex:1;min-width:100px;background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;font-size:11px;"><strong style="color:var(--cat);display:block;margin-bottom:3px;">1週</strong>テスト<br>精度測定</div>
+        <div style="align-self:center;color:var(--gray-400)">→</div>
+        <div style="flex:1;min-width:100px;background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;font-size:11px;"><strong style="color:var(--cat);display:block;margin-bottom:3px;">2週</strong>評価<br>完全一致確認</div>
+        <div style="align-self:center;color:var(--gray-400)">→</div>
+        <div style="flex:1;min-width:100px;background:var(--cat);border-radius:8px;padding:8px;text-align:center;font-size:11px;"><strong style="color:#fff;display:block;margin-bottom:3px;">1週</strong><span style="color:#BAE6FD;">改善<br>再学習</span></div>
       </div>
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--cat);">B</div><div class="step-line" style="background:var(--cat);opacity:.3"></div></div>
-        <div class="step-card">
-          <p class="step-title">LLM による Lazuli カテゴリーへのマッピング提案</p>
-          <p class="step-body">新規・変更カテゴリーを LLM に投入し、既存 Lazuli カテゴリーへの対応を提案させる。既存 L5 に合致するなら紐づけ更新、新規 L5 が必要なら追加候補として出力。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--cat);">C</div><div class="step-line" style="background:var(--cat);opacity:.3"></div></div>
-        <div class="step-card">
-          <p class="step-title">承認フロー → マスター反映</p>
-          <p class="step-body">HIGH 信頼度は自動反映。MEDIUM / LOW は DMC レビュー後に承認。Lazuli カテゴリーが追加された場合は全ベンダーマッピングを自動補完提案。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-col"><div class="step-num" style="background:var(--cat);">D</div></div>
-        <div class="step-card">
-          <p class="step-title">商品マッピングへの自動反映</p>
-          <p class="step-body">Lazuli カテゴリー更新後、対象商品のカテゴリー再マッピングを差分実行。常に最新状態を維持する。</p>
-        </div>
-      </div>
+      <p style="font-size:11.5px;color:#1E3A5F;margin-top:8px;">→ このサイクルを繰り返すことでカテゴリー精度が向上。学習データの抽出を丁寧に行うことが後続検証をスムーズにする鍵。</p>
     </div>
   </div>
 </div>
@@ -497,45 +571,70 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 <div class="sec">
   <p class="sec-eye">フロー 3</p>
   <div class="sec-title">
-    <span class="sec-title-num" style="background:var(--ok);">3</span>
+    <span class="sec-num" style="background:var(--ok);">3</span>
     商品マッピングマスター — 統合フロー
   </div>
 
   <div class="flow-box">
-    <p class="flow-title">FLOW 3 — 商品（JAN） × フロー1 × フロー2 → 商品マッピングマスター</p>
+    <p class="flow-title">FLOW 3 — 商品（JAN+商品名）× フロー1 × フロー2 → product_mapping_master → Lazuli PDP</p>
     <div class="hflow">
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--jan-lt);border-color:#FECACA;color:#991B1B;">商品データ<br>（JAN + 商品名）</div>
+        <div class="hf-box" style="background:#FEF2F2;border-color:#FECACA;color:#991B1B;font-size:11px;">商品データ<br>JAN+商品名</div>
+        <p class="hf-label">上流：メーカー起点<br>下流：JAN+商品名のみ<br>（分析系・POS等）</p>
       </div>
-      <div class="hf-arrow">×</div>
+      <div class="hf-arr">×</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--brand-lt);border-color:var(--brand);color:var(--brand);">maker_brand<br>_master</div>
-        <p class="hf-label">JAN先頭 XX<br>→ maker確定<br>LLM → brand確定</p>
+        <div class="hf-box" style="background:var(--brand-lt);border-color:var(--brand);color:var(--brand);font-size:11px;">maker_brand<br>_master</div>
+        <p class="hf-label">JAN先頭→maker確定<br>LLM→brand確定</p>
       </div>
-      <div class="hf-arrow">×</div>
+      <div class="hf-arr">×</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--lazuli-lt);border-color:var(--lazuli);color:var(--lazuli);">Lazuli<br>カテゴリー</div>
-        <p class="hf-label">商品名 → LLM<br>→ L5 マッピング</p>
+        <div class="hf-box" style="background:var(--lazuli-lt);border-color:var(--lazuli);color:var(--lazuli);font-size:11px;">Lazuli<br>カテゴリー</div>
+        <p class="hf-label">商品名→LLM<br>→L5マッピング<br>プリセットカラム付与</p>
       </div>
-      <div class="hf-arrow">→</div>
+      <div class="hf-arr">→</div>
       <div class="hf-node">
-        <div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);">product_mapping<br>_master</div>
-        <p class="hf-label">最終統合テーブル<br>全属性マッピング済み</p>
+        <div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);font-size:11px;">product_mapping<br>_master</div>
+        <p class="hf-label">全属性マッピング済み</p>
+      </div>
+      <div class="hf-arr">→</div>
+      <div class="hf-node">
+        <div class="hf-box" style="background:var(--lazuli-lt);border-color:var(--lazuli);color:var(--lazuli);font-size:11px;">Lazuli PDP<br>EC出力</div>
+        <p class="hf-label">Amazon/楽天/AEON<br>顧客別フォーマット<br>AIレディデータ</p>
       </div>
     </div>
   </div>
 
-  <div class="card hl-green">
+  <!-- 上流/下流の使い分け -->
+  <div class="card hl-ok">
+    <p class="card-title">上流案件 vs 下流案件 — マスターの使い方の違い（MTGで確認済み）</p>
+    <div class="g2">
+      <div class="inner" style="background:var(--gray-100);border-color:var(--gray-300);">
+        <p style="font-size:12px;font-weight:700;color:var(--gray-700);margin-bottom:6px;">上流案件（登録系・メーカー起点）</p>
+        <p style="font-size:12px;color:var(--gray-700);line-height:1.75;">メーカーからデータを受領。PDF・Excelを構造化。メーカー名・ブランド名は元データに含まれるため<strong>マスター参照は補完的</strong>。</p>
+        <span class="t-gray" style="font-size:10px;margin-top:6px;display:inline-block;">マスター：原則不要</span>
+      </div>
+      <div class="inner" style="background:var(--ok-lt);border-color:#6EE7B7;">
+        <p style="font-size:12px;font-weight:700;color:var(--ok);margin-bottom:6px;">下流案件（分析系・POS・メルカリ等）</p>
+        <p style="font-size:12px;color:#065F46;line-height:1.75;">商品名とJANコードしか残っていない。<strong>マスターで補完し精度を高めることが必須</strong>。ここがマスターの最大の価値。</p>
+        <span class="t-ok" style="font-size:10px;margin-top:6px;display:inline-block;">マスター：必須</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最終テーブル -->
+  <div class="card hl-ok">
     <div class="schema-box">
       <div class="schema-hd">dmc-ops.master.product_mapping_master — 最終統合テーブル</div>
       <div class="schema-row"><span class="s-pk">PK</span><span class="s-col">jan_code</span><span class="s-type">STRING</span><span class="s-note s-blue">商品識別子</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">product_name</span><span class="s-type">STRING</span><span class="s-note">商品名</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">maker_code</span><span class="s-type">STRING FK</span><span class="s-note s-ok">✅ フロー 1 — JAN prefix マッチング</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">maker_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー 1 — 確定</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー 1 — LLM ブランド判定</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_site_url</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー 1 — maker_brand_master から</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">lazuli_category_code</span><span class="s-type">STRING FK</span><span class="s-note s-ok">✅ フロー 2 — Lazuli 標準カテゴリー</span></div>
-      <div class="schema-row"><span class="s-pk"></span><span class="s-col">lazuli_l5_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー 2 — L5 最小分類</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">maker_code</span><span class="s-type">STRING FK</span><span class="s-note s-ok">✅ フロー1 — JAN prefix + 名寄せ</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">maker_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー1 — 確定</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー1 — LLMブランド判定</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">brand_site_url</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー1 — maker_brand_masterから</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">lazuli_category_code</span><span class="s-type">STRING FK</span><span class="s-note s-ok">✅ フロー2 — Lazuli標準カテゴリー</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">lazuli_l5_name</span><span class="s-type">STRING</span><span class="s-note s-ok">✅ フロー2 — L5最小分類</span></div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">preset_columns_data</span><span class="s-type">JSON</span><span class="s-note">L4プリセットカラムの実データ</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">mapping_confidence</span><span class="s-type">JSON</span><span class="s-note">{"brand":"HIGH","category":"MEDIUM"}</span></div>
       <div class="schema-row"><span class="s-pk"></span><span class="s-col">mapping_updated_at</span><span class="s-type">TIMESTAMP</span><span class="s-note">最終マッピング更新日時</span></div>
     </div>
@@ -545,128 +644,349 @@ code{font-family:var(--mono);font-size:11px;background:var(--gray-100);border:1p
 <div class="divider"></div>
 
 
-<!-- ═══ Claude Code 移行計画 ═══ -->
+<!-- ═══ UI仕様 ═══ -->
 <div class="sec">
-  <p class="sec-eye">システム化</p>
+  <p class="sec-eye">管理UI</p>
   <div class="sec-title">
-    <span class="sec-title-num" style="background:#1F2937;">CC</span>
-    Claude Code 移行計画
+    <span class="sec-num" style="background:#374151;">UI</span>
+    専用管理UI — 画面仕様
   </div>
 
   <div class="card">
-    <p class="card-title" style="margin-bottom:12px;">推奨プロジェクト構造</p>
-    <div class="cc-box">
-      <p class="cc-title">📁 dmc-master-pipeline/</p>
-      <div class="cc-file">
-        <span class="cc-dir">dmc-master-pipeline/</span><br>
-        &nbsp;├── <span class="cc-dir">flow1_brand/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">batch_llm_brand.py</span> &nbsp;<span class="cc-comment"># 3 LLM 並列バッチ処理</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">merge_brand_results.py</span> &nbsp;<span class="cc-comment"># 多数決スコアリング・正規化</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-py">write_maker_brand_master.py</span> &nbsp;<span class="cc-comment"># BQ への書き込み</span><br>
-        &nbsp;├── <span class="cc-dir">flow2_category/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">collect_vendor_categories.py</span> &nbsp;<span class="cc-comment"># 各ベンダーカテゴリー収集</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">build_lazuli_category.py</span> &nbsp;<span class="cc-comment"># LLM 平準化 → Lazuli カテゴリー生成</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-py">update_vendor_mapping.py</span> &nbsp;<span class="cc-comment"># ベンダーマッピング更新</span><br>
-        &nbsp;├── <span class="cc-dir">flow3_mapping/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">jan_maker_match.py</span> &nbsp;<span class="cc-comment"># JAN prefix → maker_code マッチング</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">llm_brand_classify.py</span> &nbsp;<span class="cc-comment"># 商品名 → ブランド名 LLM 判定</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">llm_category_classify.py</span> &nbsp;<span class="cc-comment"># 商品名 → Lazuli L5 LLM 判定</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-py">build_product_mapping.py</span> &nbsp;<span class="cc-comment"># 統合マッピングマスター生成</span><br>
-        &nbsp;├── <span class="cc-dir">common/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">bq_client.py</span> &nbsp;<span class="cc-comment"># BigQuery 共通クライアント</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-py">llm_client.py</span> &nbsp;<span class="cc-comment"># Claude / Gemini / ChatGPT 統一 I/F</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-py">normalizer.py</span> &nbsp;<span class="cc-comment"># brand_name / category 正規化ルール</span><br>
-        &nbsp;├── <span class="cc-yaml">config/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-yaml">prompts_brand.yaml</span> &nbsp;<span class="cc-comment"># ブランド生成プロンプト定義</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-yaml">prompts_category.yaml</span> &nbsp;<span class="cc-comment"># カテゴリーマッピングプロンプト定義</span><br>
-        &nbsp;├── <span class="cc-yaml">schemas/</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-yaml">maker_brand_master.yaml</span><br>
-        &nbsp;│&nbsp;&nbsp; ├── <span class="cc-yaml">lazuli_category_master.yaml</span><br>
-        &nbsp;│&nbsp;&nbsp; └── <span class="cc-yaml">product_mapping_master.yaml</span><br>
-        &nbsp;└── <span class="cc-md">SPEC.md</span> &nbsp;<span class="cc-comment"># ← この仕様書をベースに</span>
+    <p class="card-title" style="margin-bottom:12px;">画面構成（確定要件）</p>
+    <div class="g2">
+      <div class="inner" style="border-color:var(--dmc);background:var(--dmc-lt);">
+        <p style="font-size:12px;font-weight:700;color:var(--dmc);margin-bottom:6px;">📋 マスターリスト画面</p>
+        <p style="font-size:12px;color:#064E4B;line-height:1.75;">検索・フィルター・ソート機能付きのデータ一覧。各カラムの正規化ルールをUI上で変更可能。confidence別の色分け表示。</p>
+      </div>
+      <div class="inner" style="border-color:var(--brand);background:var(--brand-lt);">
+        <p style="font-size:12px;font-weight:700;color:var(--brand);margin-bottom:6px;">✏️ データ編集・承認画面</p>
+        <p style="font-size:12px;color:#4C1D95;line-height:1.75;">DMCレビューキューの表示・承認/却下操作。ブランド名の手動修正・マージ。カラム追加をUIから実施。</p>
+      </div>
+      <div class="inner" style="border-color:var(--cat);background:var(--cat-lt);">
+        <p style="font-size:12px;font-weight:700;color:var(--cat);margin-bottom:6px;">🗂 カテゴリー管理画面</p>
+        <p style="font-size:12px;color:#1E3A5F;line-height:1.75;">L1〜L5ツリー表示。各媒体カテゴリーとのマッピング確認・修正。L5追加申請フロー。</p>
+      </div>
+      <div class="inner" style="border-color:var(--ok);background:var(--ok-lt);">
+        <p style="font-size:12px;font-weight:700;color:var(--ok);margin-bottom:6px;">🔗 商品マッピング画面</p>
+        <p style="font-size:12px;color:#065F46;line-height:1.75;">JAN検索で商品の全マッピング属性を確認。メーカー・ブランド・カテゴリーを画面から手動修正可能。</p>
       </div>
     </div>
+    <div class="box-warn" style="margin-top:14px">
+      <p class="box-warn-label">⚠️ 未確定：UI実装技術選定</p>
+      <p style="font-size:12.5px;color:#78350F;line-height:1.75;">フロントエンドフレームワーク（React / Vue 等）・ホスティング先・認証方式（Google OAuth等）を決定する必要あり。Cloud Run上でバックエンドAPIを立て、フロントから呼び出す構成が自然。</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<!-- ═══ システム化ロードマップ ═══ -->
+<div class="sec">
+  <p class="sec-eye">実装計画</p>
+  <div class="sec-title">
+    <span class="sec-num" style="background:#1F2937;">🚀</span>
+    Claude Code 移行 — 実装ロードマップ
   </div>
 
   <div class="card">
-    <p class="card-title">Claude Code 移行 — 実装優先順位</p>
     <div class="steps">
       <div class="step">
         <div class="step-col"><div class="step-num" style="background:#1F2937;">P1</div><div class="step-line" style="background:#374151;"></div></div>
-        <div class="step-card hl-green">
-          <p class="step-label" style="color:var(--dmc);">最優先 — まず動くものを作る</p>
-          <p class="step-title">フロー 1：ブランドマスター構築バッチ</p>
-          <p class="step-body">GS1 メーカーリスト CSV → Claude バッチ API → JSON 出力 → BQ 書き込み。まず Claude 1 社で動かし、後から Gemini / ChatGPT を追加する。</p>
-          <div class="tags"><span class="t-llm">llm_client.py</span><span class="t-dmc">write_maker_brand_master.py</span><span class="t-warn">所要：1〜2 週</span></div>
+        <div class="step-card hl-dmc">
+          <p class="step-label" style="color:var(--dmc);">最優先 — 2〜3週</p>
+          <p class="step-title">フロー1：GS1取込 + Claudeでブランドリスト生成</p>
+          <p class="step-body">GS1メーカーリストCSV → Claude Haiku バッチAPI → JSON出力 → BQ書き込み。まずClaude1社で動かし、Gemini/ChatGPTを後から追加。名寄せロジックも並行実装。</p>
+          <div class="tags"><span class="t-dmc">flow1_brand/batch_llm_brand.py</span><span class="t-dmc">bq_client.py</span><span class="t-warn">所要：2〜3週</span></div>
         </div>
       </div>
       <div class="step">
         <div class="step-col"><div class="step-num" style="background:#1F2937;">P2</div><div class="step-line" style="background:#374151;"></div></div>
         <div class="step-card hl-cat">
-          <p class="step-label" style="color:var(--cat);">第 2 フェーズ</p>
-          <p class="step-title">フロー 2：Lazuli カテゴリー初期構築</p>
-          <p class="step-body">森井カテゴリマスタ（実データ）を軸に LLM で Lazuli カテゴリーを初期生成。Amazon・楽天カテゴリーのマッピングを先行実装。</p>
-          <div class="tags"><span class="t-cat">build_lazuli_category.py</span><span class="t-cat">update_vendor_mapping.py</span><span class="t-warn">所要：2〜3 週</span></div>
+          <p class="step-label" style="color:var(--cat);">第2フェーズ — 2〜3週</p>
+          <p class="step-title">フロー2：Lazuliカテゴリー初期構築（森井マスタ + 楽天API）</p>
+          <p class="step-body">森井カテゴリマスタ（実データ・即使用可能）を軸にLazuliカテゴリーを初期生成。楽天APIから取得したカテゴリーをLLMで平準化・マッピング。</p>
+          <div class="tags"><span class="t-cat">flow2_category/build_lazuli_category.py</span><span class="t-cat">update_vendor_mapping.py</span><span class="t-warn">所要：2〜3週</span></div>
         </div>
       </div>
       <div class="step">
         <div class="step-col"><div class="step-num" style="background:#1F2937;">P3</div><div class="step-line" style="background:#374151;"></div></div>
-        <div class="step-card hl-blue">
-          <p class="step-label" style="color:var(--lazuli);">第 3 フェーズ</p>
-          <p class="step-title">フロー 3：商品マッピング統合</p>
-          <p class="step-body">P1・P2 完了後、JAN コード商品データを入力として商品マッピングマスターを生成。LLM によるブランド・カテゴリー判定を統合実装。</p>
-          <div class="tags"><span class="t-lazuli">jan_maker_match.py</span><span class="t-lazuli">build_product_mapping.py</span><span class="t-warn">所要：2〜3 週</span></div>
+        <div class="step-card hl-ok">
+          <p class="step-label" style="color:var(--ok);">第3フェーズ — 2〜3週</p>
+          <p class="step-title">フロー3：商品マッピング統合 + 管理UI基礎</p>
+          <p class="step-body">P1・P2完了後、JAN商品データを入力として統合マッピングマスターを生成。管理UI（リスト画面・編集画面）の基礎実装。Cloud Run上にAPI展開。</p>
+          <div class="tags"><span class="t-ok">flow3_mapping/build_product_mapping.py</span><span class="t-ok">UI基礎実装</span><span class="t-warn">所要：2〜3週</span></div>
         </div>
       </div>
       <div class="step">
         <div class="step-col"><div class="step-num" style="background:#1F2937;">P4</div></div>
         <div class="step-card">
           <p class="step-label" style="color:var(--gray-500);">継続フェーズ</p>
-          <p class="step-title">継続アップデート・精度向上</p>
-          <p class="step-body">Gemini / ChatGPT の追加統合。カテゴリーの継続アップデートフロー稼働。DMC レビューキューの UI 実装。精度モニタリングの自動化。</p>
+          <p class="step-title">Gemini / ChatGPT追加 + 全媒体カテゴリー拡張 + 精度向上サイクル稼働</p>
+          <p class="step-body">3LLM統合・各媒体カテゴリー順次追加・DMCレビューUI拡充・精度モニタリング自動化・フライホイールサイクルの本格稼働。</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 未確定事項 -->
-  <div class="box-warn">
-    <p class="box-warn-label">⚠️ Claude Code 移行前に確定が必要な事項</p>
-    <div style="font-size:12.5px;color:#78350F;line-height:2;">
-      ① <strong>GCP 認証・BQ プロジェクト権限</strong>：grandline-dev / dmc-ops 両プロジェクトへの書き込み権限<br>
-      ② <strong>LLM API キー管理</strong>：Claude / Gemini / ChatGPT の API キーを Secret Manager で管理<br>
-      ③ <strong>各ベンダーカテゴリーの取得方法</strong>：Amazon / 楽天は公式 API or クローリングのどちらか<br>
-      ④ <strong>DMC レビューキューの UI</strong>：Spreadsheet で代替するか、専用 UI を作るか<br>
-      ⑤ <strong>バッチ実行基盤</strong>：Cloud Run / Cloud Scheduler / Airflow のどれを使うか
+    <!-- 推奨ディレクトリ構成 -->
+    <div style="background:#0D1117;border-radius:12px;padding:20px 24px;margin-top:16px;">
+      <p style="font-size:12px;font-weight:700;color:#58A6FF;margin-bottom:12px;">📁 推奨プロジェクト構成</p>
+      <div style="font-family:var(--mono);font-size:11px;color:#8B949E;line-height:2;">
+        <span style="color:#58A6FF;">dmc-master-pipeline/</span><br>
+        &nbsp;├── <span style="color:#58A6FF;">flow1_brand/</span> &nbsp;<span style="color:#6E7681;"># メーカー/ブランド</span><br>
+        &nbsp;├── <span style="color:#58A6FF;">flow2_category/</span> &nbsp;<span style="color:#6E7681;"># Lazuliカテゴリー</span><br>
+        &nbsp;├── <span style="color:#58A6FF;">flow3_mapping/</span> &nbsp;<span style="color:#6E7681;"># 商品マッピング</span><br>
+        &nbsp;├── <span style="color:#58A6FF;">ui/</span> &nbsp;<span style="color:#6E7681;"># 管理UI（React推奨）</span><br>
+        &nbsp;├── <span style="color:#58A6FF;">common/</span> &nbsp;<span style="color:#6E7681;"># BQ/LLM共通クライアント・正規化ルール</span><br>
+        &nbsp;├── <span style="color:#A5D6FF;">config/</span> &nbsp;<span style="color:#6E7681;"># プロンプト定義YAML</span><br>
+        &nbsp;├── <span style="color:#A5D6FF;">schemas/</span> &nbsp;<span style="color:#6E7681;"># BQスキーマ定義</span><br>
+        &nbsp;└── <span style="color:#7EE787;">SPEC.md</span> &nbsp;<span style="color:#6E7681;"># ← この仕様書をベースに生成</span>
+      </div>
+    </div>
+
+    <!-- Claude Code移行前確定事項 -->
+    <div class="box-warn" style="margin-top:14px">
+      <p class="box-warn-label">⚠️ Claude Code移行前に確定が必要な事項</p>
+      <p style="font-size:12.5px;color:#78350F;line-height:2;">
+        ① <strong>GCP認証・BQ権限</strong>：grandline-dev / dmc-ops 両プロジェクトへの書き込み権限確認<br>
+        ② <strong>LLM APIキー管理</strong>：Claude / Gemini / ChatGPT を Secret Manager で管理<br>
+        ③ <strong>各媒体カテゴリーAPI有無確認</strong>：Amazon / 楽天 / AEON のAPI取得可否<br>
+        ④ <strong>UI技術選定</strong>：フロントエンドフレームワーク・認証方式<br>
+        ⑤ <strong>brand_name正規化ルール細則</strong>：英語/日本語混在・サブブランドの具体的なルール定義
+      </p>
     </div>
   </div>
 </div>
 
 
 <!-- RELATED DOCS -->
+
+<!-- ═══ v2 MTG 追加・変更仕様 ═══ -->
+<div class="sec">
+  <p class="sec-eye">v2 MTG 更新 · 2026-06-11</p>
+  <div class="sec-title">
+    <span class="sec-num" style="background:#0F4C81;">v2</span>
+    6/5・6/11 MTG 統合版 — 追加・変更仕様
+  </div>
+
+  <!-- バッジ凡例 -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+    <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;">NEW 新規追加</span>
+    <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;">更新 変更・拡充</span>
+    <span style="background:#6B7280;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;">継続 v1から変更なし</span>
+  </div>
+
+  <!-- 全体方針 3本柱 -->
+  <div class="card hl-dmc">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">NEW</span>
+      全体方針：3本柱（6/11確定）
+    </p>
+    <div class="g3" style="margin-top:10px;">
+      <div class="inner" style="background:var(--dmc-lt);border-color:var(--dmc);">
+        <p style="font-size:11px;font-weight:700;color:var(--dmc);margin-bottom:5px;">① 差別化と運用課題</p>
+        <p style="font-size:12px;color:#064E4B;line-height:1.65;">カテゴリーマスター運用体制を顧客に見せること自体が競合優位性。現行プロダクトの機能制約で手動作業が残る点が課題。</p>
+      </div>
+      <div class="inner" style="background:var(--brand-lt);border-color:#C4B5FD;">
+        <p style="font-size:11px;font-weight:700;color:var(--brand);margin-bottom:5px;">② 機能統合・資産化</p>
+        <p style="font-size:12px;color:#4C1D95;line-height:1.65;">属人的な手動マッピングを廃止。ClaudeやLLMで培ったノウハウを製品機能として統合し、会社の資産として蓄積する。</p>
+      </div>
+      <div class="inner" style="background:var(--cat-lt);border-color:#93C5FD;">
+        <p style="font-size:11px;font-weight:700;color:var(--cat);margin-bottom:5px;">③ 標準化と将来展開</p>
+        <p style="font-size:12px;color:#1E3A5F;line-height:1.65;">属性マッピングの標準化とECサイトごとのカラム構造調査を通じ、汎用デモ環境を構築する。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 一時受けフロー -->
+  <div class="card hl-ok">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">NEW</span>
+      「一時受け」による効率化フロー（6/11追加）
+    </p>
+    <div class="box-warn" style="margin-bottom:12px;">
+      <p class="box-warn-label">📌 課題</p>
+      <p style="font-size:12.5px;color:#78350F;line-height:1.75;">カテゴリー推定はできるが「どこに当てるか」のマスターが無く、顧客からマスター提供を受ける必要がある。複数パターンを手動で当てる非効率が発生。</p>
+    </div>
+    <div class="flow-box" style="margin-bottom:12px;">
+      <p class="flow-title">一時受けフロー</p>
+      <div class="hflow">
+        <div class="hf-node">
+          <div class="hf-box" style="background:#FEF2F2;border-color:#FECACA;color:#991B1B;font-size:11px;">顧客の<br>商品データ</div>
+          <p class="hf-label">新ジャンルでも<br>そのまま投入</p>
+        </div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node">
+          <div class="hf-box" style="background:var(--dmc-lt);border-color:var(--dmc);color:var(--dmc);font-size:11px;">ラズリ標準で<br>一次構造化</div>
+          <p class="hf-label">「一時受け」<br>mapping_stage:<br>first_reception</p>
+        </div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node">
+          <div class="hf-box" style="background:var(--cat-lt);border-color:#93C5FD;color:var(--cat);font-size:11px;">柔軟に<br>マッピング</div>
+          <p class="hf-label">顧客フォーマット<br>へ当て込み<br>mapping_stage:<br>mapped</p>
+        </div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node">
+          <div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);font-size:11px;">差別化<br>要因に</div>
+          <p class="hf-label">LLM × AI<br>ハイブリッド運用<br>を営業トークに</p>
+        </div>
+      </div>
+    </div>
+    <div class="schema-box">
+      <div class="schema-hd">product_mapping_master — 追加カラム</div>
+      <div class="schema-row"><span class="s-pk">追加</span><span class="s-col">mapping_stage</span><span class="s-type">STRING</span><span class="s-note s-blue">first_reception / mapped / verified</span></div>
+      <div class="schema-row"><span class="s-pk">追加</span><span class="s-col">target_vendor</span><span class="s-type">STRING</span><span class="s-note">マッピング先媒体（amazon / rakuten / aeon / ...）</span></div>
+    </div>
+  </div>
+
+  <!-- AS-IS → TO-BE -->
+  <div class="card hl-brand">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">NEW</span>
+      プロダクトへの機能統合・資産化（6/11確定）
+    </p>
+    <div class="g2" style="margin-top:10px;">
+      <div class="inner" style="background:var(--err-lt);border-color:#FECACA;">
+        <p style="font-size:12px;font-weight:700;color:var(--err);margin-bottom:6px;">❌ AS-IS（属人的）</p>
+        <p style="font-size:12px;color:#7F1D1D;line-height:1.75;">・個人（Toshihiro）がClaudeで手動マッピング<br>・1商品に複数パターンを手で当てる非効率<br>・ノウハウが個人に依存し属人化</p>
+      </div>
+      <div class="inner" style="background:var(--ok-lt);border-color:#6EE7B7;">
+        <p style="font-size:12px;font-weight:700;color:var(--ok);margin-bottom:6px;">✅ TO-BE（製品機能化）</p>
+        <p style="font-size:12px;color:#065F46;line-height:1.75;">・手動マッピングを廃止し製品機能として統合<br>・ノウハウを会社の資産として蓄積<br>・属人性を排除し、誰でも同じ品質で運用</p>
+      </div>
+    </div>
+    <div class="box-ok" style="margin-top:12px;">
+      <p class="box-ok-label">💡 このシステム自体がTO-BEの実装体</p>
+      <p style="font-size:12.5px;color:#065F46;line-height:1.75;">dmc-ops-master-dataの構築により、手動マッピング作業をUI＋バッチ処理に置き換え、知識をBQマスターとして蓄積する。</p>
+    </div>
+  </div>
+
+  <!-- 属性マッピング標準化 -->
+  <div class="card hl-cat">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">NEW</span>
+      属性マッピングの標準化（6/11）
+    </p>
+    <p class="card-body" style="margin-bottom:12px;">L1〜L5の階層構造に基づき、<strong>L4のカテゴリーごとに項目セット（属性）を定義・抽出</strong>する。森井カテゴリマスタのL4別カラムセット定義（29,222行・575種類）が基盤。</p>
+    <div class="g2">
+      <div class="inner" style="background:var(--cat-lt);border-color:#93C5FD;">
+        <p style="font-size:12px;font-weight:700;color:var(--cat);margin-bottom:5px;">LLM比較検証（次のアクション）</p>
+        <p style="font-size:12px;color:#1E3A5F;line-height:1.65;">同じマスター運用をGemini / ChatGPTでも検証。一貫した結果が得られるか・性能・精度の差を把握する。</p>
+      </div>
+      <div class="inner" style="background:var(--cat-lt);border-color:#93C5FD;">
+        <p style="font-size:12px;font-weight:700;color:var(--cat);margin-bottom:5px;">今後：L1・L2カラム調査</p>
+        <p style="font-size:12px;color:#1E3A5F;line-height:1.65;">L1・L2の必要項目を調査し、カラムマッピングを設計。Amazon等のL1・L2カラム構造を蓄積する。</p>
+      </div>
+    </div>
+    <div class="schema-box" style="margin-top:12px;">
+      <div class="schema-hd">category_vendor_mapping — 追加カラム</div>
+      <div class="schema-row"><span class="s-pk">追加</span><span class="s-col">vendor_column_structure</span><span class="s-type">JSON</span><span class="s-note s-blue">各媒体のL1・L2カラム構造情報（Amazon調査結果等）</span></div>
+    </div>
+  </div>
+
+  <!-- EC対応更新 -->
+  <div class="card hl-cat">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">更新</span>
+      カテゴリーマスター × ECサイト対応（6/11更新）
+    </p>
+    <p class="card-body" style="margin-bottom:12px;">AmazonのL1・L2カラム構造調査が新規タスクとして追加。</p>
+    <div style="overflow-x:auto;margin-top:8px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+        <thead><tr style="background:var(--gray-100);">
+          <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;border-bottom:1.5px solid var(--gray-300);">媒体</th>
+          <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;border-bottom:1.5px solid var(--gray-300);">ステータス</th>
+          <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;border-bottom:1.5px solid var(--gray-300);">内容</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);">楽天</td><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);"><span class="t-ok" style="font-size:10px;">優先対応</span></td><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);">L1主要カテゴリー紐づけ</td></tr>
+          <tr style="background:#FFFBEB;"><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);">Amazon</td><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);"><span class="t-warn" style="font-size:10px;">NEW: カラム調査追加</span></td><td style="padding:7px 12px;border-bottom:1px solid var(--gray-200);">L1・L2カラム構造を調査・蓄積（<code>vendor_column_structure</code>に格納）</td></tr>
+          <tr><td style="padding:7px 12px;">イオンネットスーパー</td><td style="padding:7px 12px;"><span class="t-gray" style="font-size:10px;">対応予定</span></td><td style="padding:7px 12px;">プラットフォーム向けマッピング</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 下流案件×過去データ -->
+  <div class="card hl-ok">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">更新</span>
+      下流案件：過去データ・POSデータ活用（6/11更新）
+    </p>
+    <p class="card-body" style="margin-bottom:12px;">
+      下流（火流）案件での補完方法が具体化。過去の構造化データ・<strong>POSデータ</strong>で商品名/ブランド/シリーズを特定する。
+    </p>
+    <div class="schema-box">
+      <div class="schema-hd">product_mapping_master — mapping_source 選択肢追加</div>
+      <div class="schema-row"><span class="s-pk"></span><span class="s-col">mapping_source</span><span class="s-type">STRING</span><span class="s-note s-blue">llm_auto / manual / imported / <strong>pos_data</strong> / <strong>past_structured_data</strong></span></div>
+    </div>
+  </div>
+
+  <!-- パイロットシナリオ -->
+  <div class="card hl-dmc">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#0F7673;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">NEW</span>
+      パイロット提案シナリオ（味の素）
+    </p>
+    <p class="card-body" style="margin-bottom:12px;">味の素のメーカーデータを例に、ラズリ標準カテゴリーで整えてから特定プラットフォーム向けにマッピングする運用イメージを顧客に具体的に提示する。</p>
+    <div class="flow-box">
+      <p class="flow-title">パイロットフロー</p>
+      <div class="hflow">
+        <div class="hf-node"><div class="hf-box" style="background:var(--gs1-lt);border-color:var(--gs1);color:var(--gs1);font-size:11px;">味の素の<br>メーカーデータ</div><p class="hf-label">メーカー提供<br>データを起点</p></div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node"><div class="hf-box" style="background:var(--dmc-lt);border-color:var(--dmc);color:var(--dmc);font-size:11px;">ラズリ標準で<br>標準化</div><p class="hf-label">標準カテゴリーで<br>一次構造化・整形</p></div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node"><div class="hf-box" style="background:var(--cat-lt);border-color:#93C5FD;color:var(--cat);font-size:11px;">プラットフォーム<br>向けにマッピング</div><p class="hf-label">イオンネットスーパー<br>等の形式へ当て込み</p></div>
+        <div class="hf-arr">→</div>
+        <div class="hf-node"><div class="hf-box" style="background:var(--ok-lt);border-color:#6EE7B7;color:var(--ok);font-size:11px;">具体的な<br>運用イメージ提示</div><p class="hf-label">複数フォーマット<br>対応デモで<br>提案強化</p></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">実装：P3フェーズで <code>scripts/load_demo_data.py</code> として味の素デモデータを初期投入スクリプトに追加。</p>
+  </div>
+
+  <!-- 次のステップ -->
+  <div class="card">
+    <p class="card-title" style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;">更新</span>
+      次のステップ（6/11 アクション）
+    </p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:10px 16px;font-size:12.5px;color:var(--gray-700);line-height:1.65;">
+        <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;flex-shrink:0;margin-top:1px;">Ayano</span>
+        <div><strong>LLM比較調査</strong>：カテゴリーマスターの運用結果をGemini / ChatGPTで比較検証し、性能・精度の差を確認する。→ P2の3LLM統合フェーズで反映済み</div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:10px 16px;font-size:12.5px;color:var(--gray-700);line-height:1.65;">
+        <span style="background:#1D4ED8;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;flex-shrink:0;margin-top:1px;">Ayano</span>
+        <div><strong>カテゴリーカラム調査</strong>：L1・L2のカテゴリー構造の必要項目を調査し、カラムマッピングを設計する。→ <code>vendor_column_structure</code> JSONカラムに格納（18-5反映済み）</div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:10px 16px;font-size:12.5px;color:var(--gray-700);line-height:1.65;">
+        <span style="background:#6B7280;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;flex-shrink:0;margin-top:1px;">継続</span>
+        <div><strong>カテゴリーマスター拡充</strong>：L5階層の拡張を最優先で継続し、DMCが構築・維持する体制を確立する。→ P3継続タスク（変更なし）</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /v2 MTG sec -->
+
+<div class="divider"></div>
 <div class="related">
-  <p class="related-label">📎 関連ドキュメント</p>
+  <p style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px;">📎 関連ドキュメント</p>
   <a href="dmc_product_master_pipeline.html" class="rel-link">
     <div class="rel-icon" style="background:var(--dmc-lt);">📋</div>
-    <div>
-      <p style="font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">パイプライン設計書 v4</p>
-      <p style="font-size:11.5px;color:var(--gray-500);">GS1 取込からメーカー・ブランドマスター整備のデータフロー詳細</p>
-    </div>
-    <div class="rel-arrow">→</div>
+    <div><p style="font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">パイプライン設計書 v4</p><p style="font-size:11.5px;color:var(--gray-500);">GS1取込からメーカー・ブランドマスター整備のデータフロー詳細</p></div>
+    <div class="rel-arr">→</div>
   </a>
   <a href="dmc_master_sample.html" class="rel-link">
     <div class="rel-icon" style="background:var(--llm-lt);">🔬</div>
-    <div>
-      <p style="font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">サンプルデータ評価ツール</p>
-      <p style="font-size:11.5px;color:var(--gray-500);">リアルサンプルで未決定事項を可視化・議論するインタラクティブツール</p>
-    </div>
-    <div class="rel-arrow">→</div>
+    <div><p style="font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:2px;">サンプルデータ評価ツール</p><p style="font-size:11.5px;color:var(--gray-500);">リアルサンプルで未決定事項を可視化・議論するインタラクティブツール</p></div>
+    <div class="rel-arr">→</div>
   </a>
 </div>
 
 <div class="footer">
-  <span>DMC 商品マスター整備 システム仕様書 — v1.0</span>
-  <span>dmc-ops · 2026-06</span>
+  <span>DMC 商品マスター整備 システム仕様書 — v2.0</span>
+  <span>dmc-ops · 2026-06-12</span>
 </div>
 
 </div>
