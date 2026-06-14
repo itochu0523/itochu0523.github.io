@@ -740,6 +740,21 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <li>次回ルールベースで同種商品が自動マッチ → AI/手動の手間が逓減（ルール・AI・人手の三層が互いを強化）</li>
   </ol>
 </div>
+
+<!-- ═══ PRODUCT OPS DASHBOARD（2026-06-13） ═══ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#0EA5E9;color:#fff;">運用</span>
+  <span class="phase-title">商品運用ダッシュボード（可視化・修正・メーカー付与）</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:0 0 0 18px;">
+    <li><strong>状況グラフ</strong>: 付与率・マッピング手段内訳(ルール/AI/手動)・L1分布・未マッピング理由を商品ページ上部に常時表示</li>
+    <li><strong>✏️ 簡単インライン修正＋学習</strong>: 間違ったカテゴリをその場で検索選択→修正。任意キーワードを学習辞書へ→同種商品が次回自動修正</li>
+    <li><strong>🏭 メーカー・ブランド付与</strong>: JAN先頭のGS1企業コードを前方一致でメーカー特定（無料・正確）。単一ブランドは同時付与。実績95,069件付与</li>
+  </ul>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">運用: ①取込 → ②🏭メーカー付与 → ③🤖再マッピング → ④✏️修正/👤DMC手動 → グラフで可視化。ルール・AI・人手の三層が学習辞書を介して互いを強化。</p>
+</div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -762,7 +777,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v11（DMC手動作業ループ）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v12（商品運用ダッシュボード）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
