@@ -219,7 +219,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <div class="goal-pillar" style="background:var(--cat-lt);border-color:#93C5FD;">
       <p class="goal-pillar-num" style="color:var(--cat);">フロー B</p>
       <p class="goal-pillar-title" style="color:var(--cat);">商品 × カテゴリー</p>
-      <p class="goal-pillar-desc" style="color:#1E3A5F;">森井カテゴリマスタ（L1〜L5）を整備し、商品（JAN コード + 商品名）に対してカテゴリーをマッピングする。カテゴリーは継続的に追加・精度向上させていく。</p>
+      <p class="goal-pillar-desc" style="color:#1E3A5F;">Lazuli標準カテゴリ（L1〜L5）を整備し、商品（JAN コード + 商品名）に対してカテゴリーをマッピングする。カテゴリーは継続的に追加・精度向上させていく。</p>
     </div>
     <div class="goal-pillar" style="background:#F5F3FF;border-color:#C4B5FD;">
       <p class="goal-pillar-num" style="color:var(--brand);">統合</p>
@@ -478,13 +478,13 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <div class="step-col"><div class="step-num">8</div><div class="step-line"></div></div>
     <div class="card">
       <p class="card-label">dmc-ops.master — カテゴリーマスター整備</p>
-      <p class="card-title">森井カテゴリマスタ（L1〜L5）を整備・確定する</p>
+      <p class="card-title">Lazuli標準カテゴリ（L1〜L5）を整備・確定する</p>
       <p class="card-body">カテゴリーはメーカー・ブランドとは<strong>独立したフロー</strong>として設計する。まず起点となるカテゴリーマスターを整備し、その後に商品へのマッピング処理を設計する。カテゴリーは継続的に追加・精度向上させていく。</p>
       <div class="tags" style="margin-top:10px;">
         <span class="tbl tbl-cat"><span class="tbl-dot"></span>dmc-ops.master.category_master（L1〜L5）</span>
       </div>
       <div style="margin-top:12px;background:var(--cat-lt);border:1px solid #93C5FD;border-radius:10px;padding:14px 18px;">
-        <p style="font-size:11px;font-weight:700;color:var(--cat);margin-bottom:8px;letter-spacing:0.08em;">森井カテゴリマスタの構造</p>
+        <p style="font-size:11px;font-weight:700;color:var(--cat);margin-bottom:8px;letter-spacing:0.08em;">Lazuli標準カテゴリの構造</p>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
           <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;"><p style="font-size:11px;font-weight:700;color:var(--cat);">L1</p><p style="font-size:10px;color:#1E3A5F;">大分類<br>26件</p></div>
           <div style="background:#fff;border:1px solid #93C5FD;border-radius:8px;padding:8px;text-align:center;"><p style="font-size:11px;font-weight:700;color:var(--cat);">L2</p><p style="font-size:10px;color:#1E3A5F;">中分類</p></div>
@@ -536,7 +536,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 ════════════════════════════════════ -->
 <div class="phase-header" style="margin-top:44px;">
   <span class="phase-pill" style="background:#9333EA;color:#fff;">Phase 2-B</span>
-  <span class="phase-title">ECカテゴリー調査 — 森井標準L1×ECサイトのカテゴリーマッピング</span>
+  <span class="phase-title">ECカテゴリー調査 — Lazuli標準L1×ECサイトのカテゴリーマッピング</span>
   <span class="phase-line"></span>
   <span class="badge badge-green">実装済</span>
 </div>
@@ -546,12 +546,12 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <div class="step-col"><div class="step-num">10</div><div class="step-line"></div></div>
     <div class="card">
       <p class="card-label">dmc-ops.master.ec_category_research — EC調査マスタ</p>
-      <p class="card-title">森井L1（25分類）を基軸に、ECサイトのカテゴリー体系をツリーでぶら下げる</p>
-      <p class="card-body">「当社L1マスタ（EC調査25分類）」と森井カテゴリマスタのL1は<strong>完全一致</strong>を確認済み。各ECサイト（Amazon・楽天・ヨドバシ・ニトリ・モノタロウ等 約130サイト×L1）のカテゴリー体系を森井L1の直下に紐づけて蓄積する。</p>
+      <p class="card-title">Lazuli標準L1（25分類）を基軸に、ECサイトのカテゴリー体系をツリーでぶら下げる</p>
+      <p class="card-body">「当社L1マスタ（EC調査25分類）」とLazuli標準カテゴリのL1は<strong>完全一致</strong>を確認済み。各ECサイト（Amazon・楽天・ヨドバシ・ニトリ・モノタロウ等 約130サイト×L1）のカテゴリー体系をLazuli標準L1の直下に紐づけて蓄積する。</p>
       <div style="margin-top:12px;background:#FAF5FF;border:1px solid #E9D5FF;border-radius:10px;padding:14px 18px;">
         <p style="font-size:11px;font-weight:700;color:#9333EA;margin-bottom:8px;letter-spacing:0.08em;">ツリー構造とデータソース</p>
         <p style="font-size:12px;color:#1E3A5F;line-height:1.8;">
-        森井L1「食品・飲料」 ├─ カクヤス → お酒／飲料・割り材／食品…（L2リスト付き）<br>
+        Lazuli標準L1「食品・飲料」 ├─ カクヤス → お酒／飲料・割り材／食品…（L2リスト付き）<br>
         　　　　　　　　　　 ├─ 成城石井 → お菓子／生鮮食品・米…<br>
         　　　　　　　　　　 └─ 🤖 AI補完（Gemini推定・llm_generatedフラグで区別）<br>
         データソース: ①アルバイト調査CSVインポート ②AI自動補完（未調査サイトを一括推定）</p>
@@ -562,14 +562,14 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     </div>
   </div>
 
-  <div class="arrow-row"><span>↓</span><span>商品は森井L5でマッピング → L1経由でECカテゴリへ自動変換</span></div>
+  <div class="arrow-row"><span>↓</span><span>商品はLazuli標準L5でマッピング → L1経由でECカテゴリへ自動変換</span></div>
 
   <div class="section t-cat">
     <div class="step-col"><div class="step-num">11</div><div class="step-line"></div></div>
     <div class="card">
       <p class="card-label">商品 × カテゴリ表示切替・統合エクスポート</p>
-      <p class="card-title">「基本（森井）はこれ、ECサイトではこれ」を切り替え表示・一括出力</p>
-      <p class="card-body">商品は森井カテゴリ（L5）でマッピングすれば、L1経由でツリーが繋がっているため、各ECサイトのカテゴリ表現へ自動変換できる。商品マッピング画面でカテゴリ表示を「基本（森井）⇔ ECサイト別」に切り替え可能。統合Excel（色付き・カテゴリ×EC対応表シート付き）でダウンロードできる。</p>
+      <p class="card-title">「基本（Lazuli標準）はこれ、ECサイトではこれ」を切り替え表示・一括出力</p>
+      <p class="card-body">商品はLazuli標準カテゴリ（L5）でマッピングすれば、L1経由でツリーが繋がっているため、各ECサイトのカテゴリ表現へ自動変換できる。商品マッピング画面でカテゴリ表示を「基本（Lazuli標準）⇔ ECサイト別」に切り替え可能。統合Excel（色付き・カテゴリ×EC対応表シート付き）でダウンロードできる。</p>
       <div class="tags" style="margin-top:10px;">
         <span class="tbl tbl-jan"><span class="tbl-dot"></span>GET /api/products/export-rich（統合Excel）</span>
         <span class="tbl tbl-brand"><span class="tbl-dot"></span>GET /api/brands/export（ブランド一括Excel）</span>
@@ -626,19 +626,19 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 
 <div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:22px 26px;">
   <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
-    <strong>データモデル（ツリー）</strong>：商品(JAN) → 森井カテゴリ <strong>L5（最小分類）</strong> に1点紐づく。
-    L5→L4→L3→L2→L1 と一意に遡れ、<strong>森井L1でECサイトと接続</strong>する。
-    ECカテゴリは森井L1経由の<strong>派生ビュー</strong>であり、「基本はこれ・Amazonではこれ・楽天ではこれ」と切替表示する。
+    <strong>データモデル（ツリー）</strong>：商品(JAN) → Lazuli標準カテゴリ <strong>L5（最小分類）</strong> に1点紐づく。
+    L5→L4→L3→L2→L1 と一意に遡れ、<strong>Lazuli標準L1でECサイトと接続</strong>する。
+    ECカテゴリはLazuli標準L1経由の<strong>派生ビュー</strong>であり、「基本はこれ・Amazonではこれ・楽天ではこれ」と切替表示する。
   </p>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;">
     <div style="background:#ECFDF5;border:1px solid #6EE7B7;border-radius:10px;padding:14px 18px;">
-      <p style="font-size:12px;font-weight:700;color:#047857;margin-bottom:6px;">① 商品 → 森井カテゴリ（精度: 高）</p>
+      <p style="font-size:12px;font-weight:700;color:#047857;margin-bottom:6px;">① 商品 → Lazuli標準カテゴリ（精度: 高）</p>
       <p style="font-size:12px;color:#1E3A5F;line-height:1.8;">LLM 2段階。Stage1: 商品名＋<strong>raw属性（容量/規格等）</strong>＋メーカー/ブランド → L1判定。Stage2: L1配下のL4/L5候補（最大1200件）→ L5コード確定。</p>
     </div>
     <div style="background:#FDF4FF;border:1px solid #E9D5FF;border-radius:10px;padding:14px 18px;">
-      <p style="font-size:12px;font-weight:700;color:#9333EA;margin-bottom:6px;">② 森井L1 → ECカテゴリ（精度: 粗い→改善中）</p>
-      <p style="font-size:12px;color:#1E3A5F;line-height:1.8;">現状L1単位のため、食品の商品は全てAmazon「食品・飲料・お酒」を表示していた（"ツナがお酒"問題）。画面側で森井L5〜L2ワードとECサブカテゴリを突合し最も近い分類を表示するよう改善。</p>
+      <p style="font-size:12px;font-weight:700;color:#9333EA;margin-bottom:6px;">② Lazuli標準L1 → ECカテゴリ（精度: 粗い→改善中）</p>
+      <p style="font-size:12px;color:#1E3A5F;line-height:1.8;">現状L1単位のため、食品の商品は全てAmazon「食品・飲料・お酒」を表示していた（"ツナがお酒"問題）。画面側でLazuli標準L5〜L2ワードとECサブカテゴリを突合し最も近い分類を表示するよう改善。</p>
     </div>
   </div>
 
@@ -647,7 +647,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <p style="font-size:12px;color:#1E3A5F;line-height:1.9;">
       <strong>即効</strong>: raw属性ヒント活用 / 候補1200件確保 / ECサブカテゴリ絞り込み（実装済）<br>
       <strong>中期（本丸）</strong>: ④ category_vendor_mapping を<strong>L2/L4粒度</strong>で構築（L1のみ→中分類レベルへ精緻化） ／ ⑤ <strong>3 LLM多数決</strong>（Claude/Gemini/ChatGPT一致でHIGH確定、不一致はレビュー行き） ／ ⑥ 人手修正をfew-shot例として蓄積する<strong>フィードバックループ</strong><br>
-      <strong>訂正方法</strong>: 商品はPATCHで森井カテゴリ修正（manual化）。EC紐付けはEC調査画面で削除→正しいL1で再追加、または割当バッチ再実行（差分のみ）。
+      <strong>訂正方法</strong>: 商品はPATCHでLazuli標準カテゴリ修正（manual化）。EC紐付けはEC調査画面で削除→正しいL1で再追加、または割当バッチ再実行（差分のみ）。
     </p>
   </div>
 </div>
@@ -665,8 +665,8 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
   </p>
   <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:10px 0 0 18px;">
     <li><strong>メーカー×ブランド</strong>（/makers）: GS1メーカー＋紐づくブランド一覧、confidence色分け</li>
-    <li><strong>基本×ECカテゴリ</strong>（/categories）: 森井L1 × <strong>選択したECサイト</strong>の対応カテゴリを横並び。詳細シートにL2サブ・出典（人手/🤖AI）。ECサイトはチェックボックスで選択可</li>
-    <li><strong>商品統合</strong>（/products）: 商品×森井×EC×raw属性</li>
+    <li><strong>基本×ECカテゴリ</strong>（/categories）: Lazuli標準L1 × <strong>選択したECサイト</strong>の対応カテゴリを横並び。詳細シートにL2サブ・出典（人手/🤖AI）。ECサイトはチェックボックスで選択可</li>
+    <li><strong>商品統合</strong>（/products）: 商品×Lazuli標準×EC×raw属性</li>
   </ul>
 </div>
 
@@ -698,7 +698,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     100万件以上の商品を<strong>確認・フィルタ・ダウンロード・再マッピング</strong>できる中核画面。
   </p>
   <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
-    <li><strong>フィルタ</strong>: フリーワード（JAN/商品名/メーカー/ブランド）、マッピング有無、基本カテゴリL1、stage、source。カテゴリ表示は基本(森井)⇔EC各サイトを切替</li>
+    <li><strong>フィルタ</strong>: フリーワード（JAN/商品名/メーカー/ブランド）、マッピング有無、基本カテゴリL1、stage、source。カテゴリ表示は基本(Lazuli標準)⇔EC各サイトを切替</li>
     <li><strong>条件一致への一括アクション</strong>: CSV出力 / 属性付きExcel出力（基本・EC・raw属性を色分け）/ 未マッピングを再マッピング（1万件・raw属性をヒントにLLM分類）</li>
     <li><strong>取込ジョブ状態</strong>: 画面上部バナーに進捗（実行中/完了/失敗＋件数%）、完了で自動再読込</li>
     <li><strong>大規模対応</strong>: 総件数別クエリ化、ページング、条件一致分のみDL</li>
@@ -716,11 +716,29 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     速く・安く・安定を満たしつつ精度を継続的に上げる仕組み。<strong>使うほどAIに聞く回数が減る</strong>フライホイール。
   </p>
   <ol style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
-    <li><strong>Phase1 ルールベース（無料・即時）</strong>: メモリ辞書＋bigram索引で商品名→森井カテゴリ。学習辞書のキーワードは最優先で即マッチ</li>
+    <li><strong>Phase1 ルールベース（無料・即時）</strong>: メモリ辞書＋bigram索引で商品名→Lazuli標準カテゴリ。学習辞書のキーワードは最優先で即マッチ</li>
     <li><strong>Phase2 Geminiバッチ（残りのみ・50件/回・並列4）</strong>: GeminiはL1判定＋代表キーワードだけ返し、L1内でローカル索引によりL5確定（AI最小化）</li>
     <li><strong>Phase3 学習</strong>: Geminiが当てた keyword→code を学習辞書に自動蓄積 → 次回はPhase1で即マッチ＝冗長AI削減</li>
   </ol>
   <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">効率設計: 辞書1回ロード／更新はMERGE一括／Gemini呼び出しは旧来の1/50以下。実績: 1万件のルール処理=約36秒・コスト0・マッチ率42%、残りをGeminiで補完。</p>
+</div>
+
+<!-- ═══ DMC MANUAL LOOP（2026-06-13 追加） ═══ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#DC2626;color:#fff;">本丸</span>
+  <span class="phase-title">DMC手動作業フロー — ノウハウの資産化</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    ルール・AIで分類できなかった商品を人手に回し、その判断を取り込んで精度を継続改善するループ。<strong>データ資産化の核心。</strong>
+  </p>
+  <ol style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>理由付与</strong>: 未マッピング商品に理由（プライベートブランド / 新商品でWeb情報なし / 商品名が曖昧 / 該当なし）をGeminiが分類</li>
+    <li><strong>👤 DMC手動作業用 出力</strong>: 未マッピング＋理由＋参考属性(容量/価格)付きCSV。DMCがカテゴリと確定キーワードを記入</li>
+    <li><strong>📥 DMC結果 取込</strong>: 商品へ反映(manual/verified)＋確定キーワードを学習辞書へフィードバック</li>
+    <li>次回ルールベースで同種商品が自動マッチ → AI/手動の手間が逓減（ルール・AI・人手の三層が互いを強化）</li>
+  </ol>
 </div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
@@ -744,7 +762,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v10（ハイブリッドマッピング）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v11（DMC手動作業ループ）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
