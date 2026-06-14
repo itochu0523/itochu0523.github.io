@@ -704,6 +704,24 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     <li><strong>大規模対応</strong>: 総件数別クエリ化、ページング、条件一致分のみDL</li>
   </ul>
 </div>
+
+<!-- ═══ HYBRID MAPPING（2026-06-13 追加） ═══ -->
+<div class="phase-header" style="margin-top:44px;">
+  <span class="phase-pill" style="background:#0F7673;color:#fff;">中核</span>
+  <span class="phase-title">ハイブリッド・マッピング（ルール＋Gemini＋学習）</span>
+  <span class="phase-line"></span>
+</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    速く・安く・安定を満たしつつ精度を継続的に上げる仕組み。<strong>使うほどAIに聞く回数が減る</strong>フライホイール。
+  </p>
+  <ol style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>Phase1 ルールベース（無料・即時）</strong>: メモリ辞書＋bigram索引で商品名→森井カテゴリ。学習辞書のキーワードは最優先で即マッチ</li>
+    <li><strong>Phase2 Geminiバッチ（残りのみ・50件/回・並列4）</strong>: GeminiはL1判定＋代表キーワードだけ返し、L1内でローカル索引によりL5確定（AI最小化）</li>
+    <li><strong>Phase3 学習</strong>: Geminiが当てた keyword→code を学習辞書に自動蓄積 → 次回はPhase1で即マッチ＝冗長AI削減</li>
+  </ol>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">効率設計: 辞書1回ロード／更新はMERGE一括／Gemini呼び出しは旧来の1/50以下。実績: 1万件のルール処理=約36秒・コスト0・マッチ率42%、残りをGeminiで補完。</p>
+</div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -726,7 +744,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v9（商品運用センター）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v10（ハイブリッドマッピング）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
