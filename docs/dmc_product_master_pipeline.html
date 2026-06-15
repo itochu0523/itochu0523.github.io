@@ -755,6 +755,15 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
   </ul>
   <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">運用: ①取込 → ②🏭メーカー付与 → ③🤖再マッピング → ④✏️修正/👤DMC手動 → グラフで可視化。ルール・AI・人手の三層が学習辞書を介して互いを強化。</p>
 </div>
+
+<!-- ═══ MAPPING FIX（2026-06-13） ═══ -->
+<div class="phase-header" style="margin-top:44px;"><span class="phase-pill" style="background:#DC2626;color:#fff;">精度</span><span class="phase-title">マッピング精度の修正＋絞り込み再マッピング</span><span class="phase-line"></span></div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+<ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:0 0 0 18px;">
+<li><strong>致命バグ修正</strong>: 短い語の偶発部分一致（「ジャックダニエル」→「ダニ」対策シート）を排除。含有マッチは4文字以上、学習辞書は人手のみ。精度優先で取りこぼしはGemini/手動へ</li>
+<li><strong>🔁 絞り込み再マッピング</strong>: 検索・フィルタした商品を一括再評価（既存をクリアして再マップ）。誤りの一括修正に使う</li>
+<li><strong>✏️ 1件修正＋学習</strong>: 個別の誤りはその場で正しいカテゴリに修正、人手ルールとして学習</li>
+</ul></div>
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -777,7 +786,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v12（商品運用ダッシュボード）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v13（精度修正）</span>
   <span>dmc-ops.master · 2026-06-12 更新</span>
 </div>
 
