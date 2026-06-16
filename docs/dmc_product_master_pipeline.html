@@ -190,7 +190,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 
 <!-- ═══ HEADER ═══ -->
 <div class="doc-header">
-  <p class="doc-eyebrow">Data Architecture · Draft v4</p>
+  <p class="doc-eyebrow">Data Architecture · Draft v16 · 2026-06-17 更新</p>
   <h1 class="doc-title">商品マスター整備<br>パイプライン設計書</h1>
   <p class="doc-subtitle">GS1 データを起点に、すべての商品（JAN コード）に対して<strong>メーカー・ブランド・カテゴリー</strong>を正確にマッピングするためのデータフロー全体設計。</p>
   <div class="doc-badges">
@@ -764,6 +764,51 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 <li><strong>🔁 絞り込み再マッピング</strong>: 検索・フィルタした商品を一括再評価（既存をクリアして再マップ）。誤りの一括修正に使う</li>
 <li><strong>✏️ 1件修正＋学習</strong>: 個別の誤りはその場で正しいカテゴリに修正、人手ルールとして学習</li>
 </ul></div>
+<!-- ═══ ANALYTICS SCREEN（2026-06-17） ═══ -->
+<div class="phase-header" style="margin-top:44px;"><span class="phase-pill" style="background:#0F7673;color:#fff;">可視化</span><span class="phase-title">分析画面 — カテゴリ × メーカー/ブランド分布＋規模3分類</span><span class="phase-line"></span></div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    全体数が多すぎて見にくい問題に対し、<strong>「大きい/有名な部分 → 詳細」へ辿れる俯瞰画面</strong>を提供。
+    「冷蔵庫のメーカーは？」「飲料メーカーのシェアは？」を一目で把握する。
+  </p>
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>カテゴリ→メーカー/ブランド分布</strong>: 基本カテゴリ(L1)を選ぶと、その配下商品のメーカー/ブランドを<strong>商品数（シェア）順</strong>に表示。構成比バー（<strong>単色</strong>＝メーカー青/ブランドティール。レインボー不可・視認性重視）＋構成比%</li>
+    <li><strong>規模3分類（有名/中堅/マイナー）</strong>: 商品数で客観ランク付け → <strong>Geminiで知名度・企業規模を補正</strong>。tierバッジ表示・フィルタ。大きい所から詳細へ絞り込める</li>
+    <li><strong>L1セレクタは数値順</strong>（1,2,3…。文字列ソートの 1,10,11 を回避）</li>
+  </ul>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">テーブル: entity_tier_master（name/kind/product_count/tier/source）。API: /api/analytics/distribution・tier-summary・l1-categories。分類バッチ: /api/batch/classify-tier</p>
+</div>
+
+<!-- ═══ PRECISION OVERHAUL + BULK FIX（2026-06-17） ═══ -->
+<div class="phase-header" style="margin-top:44px;"><span class="phase-pill" style="background:#DC2626;color:#fff;">精度</span><span class="phase-title">マッピング精度の抜本改善（語境界判定）＋誤りの一括修正</span><span class="phase-line"></span></div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    マッピング率は90%あったが中身は誤爆だらけ＝<strong>「率は高いが精度が低い」</strong>状態だった。
+    原因は<strong>LLMではなくルールマッチャ</strong>のカタカナ語中誤一致（ミルク⊂ヴィナミルク、ベース⊂トーンアップベース、タイ⊂タイプ）。
+    結論: <strong>GeminiをClaudeに替えても解決しない</strong>（モデルの問題ではない）。Gemini 2.5 Flash 継続でよい。
+  </p>
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>語境界判定の導入</strong>: 文字種（カナ/かな/漢字/英数/区切り）で語の両端を判定し、同種文字に挟まれた語中一致を排除。漢字短語（牛乳/紅茶/醤油）は語境界出現なら採用しrecall回復。「牛乳石鹸」は牛乳と誤認しない</li>
+    <li><strong>純ルール層は精度最優先</strong>: 緩い非含有ratioパスを廃止。取りこぼしはGemini/人手へ</li>
+    <li><strong>✏️ 選択を一括修正</strong>: 過去の誤りを大量に直すUI。複数商品を一括で正しいカテゴリへ修正（＋学習）／未マッピングへ戻す。直すほど学習辞書が育つ</li>
+  </ul>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">実施: rule_based 68,253件を再評価し約46,800件の誤マッピングを除去（高精度21,469件のみ残存）。率は見かけ90%→42%だが正味の数字。API: /api/products/bulk-correct</p>
+</div>
+
+<!-- ═══ DRAIN MODE（2026-06-17） ═══ -->
+<div class="phase-header" style="margin-top:44px;"><span class="phase-pill" style="background:#0EA5E9;color:#fff;">運用</span><span class="phase-title">Geminiマッピングの大量・裏側処理（ドレインモード）</span><span class="phase-line"></span></div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <p style="font-size:13px;color:var(--gray-700);line-height:1.9;">
+    15分毎1000件ずつの定期実行を待つ運用が辛い問題に対し、<strong>1回起動するだけで未マッピングが尽きるまで処理し続ける</strong>ドレインモードを新設。
+  </p>
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
+    <li><strong>スループット向上</strong>: Gemini同時実行 4→8 / バッチ 50→60件</li>
+    <li><strong>🚀 未マッピングを全部処理（裏で実行）</strong>: wave(既定3000)件ずつ ルール→Gemini で消化。起動後は画面を閉じてOK、進捗はダッシュボードのジョブ監視で確認。started_atハートビートでリーパ誤クローズ防止</li>
+    <li><strong>競合回避</strong>: ドレイン中は定期スケジューラを一時停止（完了後resume）</li>
+  </ul>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">Gemini実測マッチ率は新規未マッピングに対し約60〜68%。残りは理由付きで未マッピングに残しDMC手動・一括修正へ。API: /api/batch/product-mapping-drain</p>
+</div>
+
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -786,8 +831,8 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v13（精度修正）</span>
-  <span>dmc-ops.master · 2026-06-12 更新</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v16（分析画面・精度抜本改善・ドレインモード）</span>
+  <span>dmc-ops.master · 2026-06-17 更新</span>
 </div>
 
 </div>
