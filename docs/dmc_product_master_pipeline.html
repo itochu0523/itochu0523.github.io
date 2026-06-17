@@ -190,7 +190,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 
 <!-- ═══ HEADER ═══ -->
 <div class="doc-header">
-  <p class="doc-eyebrow">Data Architecture · Draft v16 · 2026-06-17 更新</p>
+  <p class="doc-eyebrow">Data Architecture · Draft v17 · 2026-06-17 更新</p>
   <h1 class="doc-title">商品マスター整備<br>パイプライン設計書</h1>
   <p class="doc-subtitle">GS1 データを起点に、すべての商品（JAN コード）に対して<strong>メーカー・ブランド・カテゴリー</strong>を正確にマッピングするためのデータフロー全体設計。</p>
   <div class="doc-badges">
@@ -809,6 +809,17 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
   <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">Gemini実測マッチ率は新規未マッピングに対し約60〜68%。残りは理由付きで未マッピングに残しDMC手動・一括修正へ。API: /api/batch/product-mapping-drain</p>
 </div>
 
+<!-- ═══ VERTEX AI + LEARNING DICT（2026-06-17） ═══ -->
+<div class="phase-header" style="margin-top:44px;"><span class="phase-pill" style="background:#0F7673;color:#fff;">基盤</span><span class="phase-title">Vertex AI移行＋学習辞書の一括構築（フライホイール加速）</span><span class="phase-line"></span></div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px 24px;">
+  <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:0 0 0 18px;">
+    <li><strong>Vertex AIへ移行</strong>: Cloud RunのSA認証で動作＝<strong>APIキー不要・ティアの曖昧さ解消・高クォータ</strong>。location=asia-northeast1。実測マッチ率66〜75%</li>
+    <li><strong>学習辞書の一括構築</strong>: 8万件の成功マッピングから商品名をトークン化し、<strong>出現8回以上・純度92%以上</strong>の高品質キーワードだけを学習辞書へ（カタカナ4字/漢字2字以上＋語境界＋純度ゲートでノイズ排除）。0件→400ルール</li>
+    <li><strong>効果</strong>: 学習辞書で未マッピングを再評価し新規一致。以後の新規商品も<strong>無料・即時にルール分類</strong>され、人手修正(✏️一括修正)で辞書が継続成長＝AIを呼ぶ回数が逓減</li>
+  </ul>
+  <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">例: サラダクラブ→サラダ / ベビースターラーメン→袋ラーメン / スライスチーズ→プロセスチーズ。API: /api/batch/build-learning-dict</p>
+</div>
+
 <!-- ═══ RELATED DOCS LINK ═══ -->
 <div style="margin-top:40px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px 24px;">
   <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">📎 関連ドキュメント</p>
@@ -831,7 +842,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
 </div>
 
 <div class="footer">
-  <span>商品マッピングマスター パイプライン設計書 — Draft v16（分析画面・精度抜本改善・ドレインモード）</span>
+  <span>商品マッピングマスター パイプライン設計書 — Draft v17（Vertex AI移行・学習辞書構築）</span>
   <span>dmc-ops.master · 2026-06-17 更新</span>
 </div>
 
