@@ -772,8 +772,8 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     「冷蔵庫のメーカーは？」「飲料メーカーのシェアは？」を一目で把握する。
   </p>
   <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
-    <li><strong>カテゴリ→メーカー/ブランド分布</strong>: 基本カテゴリ(L1)を選ぶと、その配下商品のメーカー/ブランドを<strong>商品数（シェア）順</strong>に表示。構成比バー（<strong>単色</strong>＝メーカー青/ブランドティール。レインボー不可・視認性重視）＋構成比%</li>
-    <li><strong>規模3分類（有名/中堅/マイナー）</strong>: 商品数で客観ランク付け → <strong>Geminiで知名度・企業規模を補正</strong>。tierバッジ表示・フィルタ。大きい所から詳細へ絞り込める</li>
+    <li><strong>カテゴリ→メーカー/ブランド分布</strong>: 基本カテゴリ(L1)を選ぶと、その配下商品のメーカー/ブランドを<strong>商品数（シェア）順</strong>に表示。構成比バーは<strong>各バー単色＋全体は調和した多色パレット</strong>（Tableau系・非レインボー）＋構成比%</li>
+    <li><strong>規模3分類（エンタープライズ/ミッドマーケット/スタートアップ）</strong>: 商品数で客観ランク付け → <strong>Geminiで知名度・企業規模を補正</strong>。バッジ表示・フィルタで大きい所から詳細へ絞り込める。<span style="color:var(--gray-500);">※相手に配慮し従来の「有名/中堅/マイナー」をスマートな一般用語に改称（DB値は famous/mid/minor）</span></li>
     <li><strong>L1セレクタは数値順</strong>（1,2,3…。文字列ソートの 1,10,11 を回避）</li>
   </ul>
   <p style="font-size:12px;color:var(--gray-500);margin-top:8px;">テーブル: entity_tier_master（name/kind/product_count/tier/source）。API: /api/analytics/distribution・tier-summary・l1-categories。分類バッチ: /api/batch/classify-tier</p>
@@ -802,7 +802,7 @@ code { font-family:var(--mono); font-size:11px; background:var(--gray-100); bord
     15分毎1000件ずつの定期実行を待つ運用が辛い問題に対し、<strong>1回起動するだけで未マッピングが尽きるまで処理し続ける</strong>ドレインモードを新設。
   </p>
   <ul style="font-size:13px;color:var(--gray-700);line-height:1.9;margin:8px 0 0 18px;">
-    <li><strong>スループット向上</strong>: Gemini同時実行 4→8 / バッチ 50→60件</li>
+    <li><strong>スループット＋安定性</strong>: Geminiリクエストに<strong>60秒タイムアウト二重防御</strong>を追加（レート制限で固まりジョブ全体が無限待機する事故を防止）。同時実行は安全値5（8はハング多発で差し戻し）＋APIキーキャッシュ</li>
     <li><strong>🚀 未マッピングを全部処理（裏で実行）</strong>: wave(既定3000)件ずつ ルール→Gemini で消化。起動後は画面を閉じてOK、進捗はダッシュボードのジョブ監視で確認。started_atハートビートでリーパ誤クローズ防止</li>
     <li><strong>競合回避</strong>: ドレイン中は定期スケジューラを一時停止（完了後resume）</li>
   </ul>
