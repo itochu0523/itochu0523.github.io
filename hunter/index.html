@@ -590,8 +590,11 @@ textarea{resize:vertical;min-height:80px;}
   <div class="scroll">
     <div class="card">
       <div class="card-t">☁️ クラウド同期（JSONBin.io）</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:11px;line-height:1.65;">
-        1回設定するだけで全データ自動同期。PC・モバイル共通。
+      <div style="font-size:12px;color:var(--orange);background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:8px;padding:10px;margin-bottom:11px;line-height:1.7;">
+        ⚠️ iPhoneでアプリをホーム画面から削除すると設定とデータが消えます。<br>
+        削除後はここでAPI KeyとBin IDを再入力→「保存してデータ復元」でクラウドから復元できます。<br>
+        <strong>アプリは削除しないでキャッシュ更新する方法：</strong><br>
+        Safari→アドレスバー長押し→「キャッシュなしで再読み込み」
       </div>
       <div class="set-row">
         <div class="sdot d-idle" id="cfgDot"></div>
@@ -599,10 +602,12 @@ textarea{resize:vertical;min-height:80px;}
       </div>
       <div class="fg"><label class="fl">API KEY</label><input type="password" id="cfg-apikey" placeholder="$2a$10$..."></div>
       <div class="fg"><label class="fl">BIN ID</label><input type="text" id="cfg-binid" placeholder="68xxxxxxxxxxxxxxxx"></div>
+      <div style="display:flex;gap:7px;margin-bottom:8px;">
+        <button class="btn btn-g" style="flex:1" onclick="saveCfg()">💾 保存してデータ復元</button>
+      </div>
       <div style="display:flex;gap:7px;margin-bottom:6px;">
-        <button class="btn btn-g" style="flex:2" onclick="saveCfg()">保存して同期</button>
-        <button class="btn btn-m btn-s" style="flex:1" onclick="doFullSync()">↓ 取得</button>
-        <button class="btn btn-m btn-s" style="flex:1" onclick="doPush()">↑ 保存</button>
+        <button class="btn btn-m btn-s" style="flex:1" onclick="doFullSync()">☁️↓ クラウドから取得</button>
+        <button class="btn btn-m btn-s" style="flex:1" onclick="doPush()">☁️↑ クラウドに保存</button>
       </div>
       <div style="font-size:11px;color:var(--muted);" id="cfgLog"></div>
     </div>
@@ -3028,7 +3033,18 @@ function saveCfg(){
   const apiKey=document.getElementById('cfg-apikey').value.trim();
   const binId=document.getElementById('cfg-binid').value.trim();
   if(!apiKey||!binId){toast('API KeyとBin IDを入力してください');return;}
-  setCfg({apiKey,binId}); setSync('ok','設定を保存しました'); toast('設定を保存しました'); doPush();
+  setCfg({apiKey,binId});
+  // バナーを削除
+  const banner=document.getElementById('setup-banner');
+  if(banner) banner.remove();
+  setSync('ok','設定を保存しました');
+  toast('設定を保存中…');
+  // 保存後すぐにクラウドから全データ取得（データ復元）
+  doFullSync().then(()=>{
+    toast('☁️ データを復元しました！');
+  }).catch(()=>{
+    doPush(); // 取得失敗なら保存を試みる
+  });
 }
 function saveClaudeKey(){
   const k=document.getElementById('cfg-claude').value.trim();
@@ -3105,6 +3121,23 @@ if(hasCfg()){
   doFullSync().catch(e=>console.log('sync err',e));
 } else {
   setSyncTxt('⚙️ 設定が必要');
+  // 設定がない場合、設定画面へ誘導するバナーを表示
+  showSetupBanner();
+}
+
+function showSetupBanner(){
+  const banner = document.createElement('div');
+  banner.id = 'setup-banner';
+  banner.style.cssText = `
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    background:rgba(251,146,60,.95);color:#000;
+    padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;
+    font-size:13px;font-weight:700;text-align:center;
+    cursor:pointer;
+  `;
+  banner.innerHTML = '⚙️ データ復元のためAPI KeyとBin IDを設定してください → タップ';
+  banner.onclick = () => gotoTab('settings');
+  document.body.appendChild(banner);
 }
 </script>
 </body>
