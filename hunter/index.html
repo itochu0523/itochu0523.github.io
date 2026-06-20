@@ -625,6 +625,9 @@ textarea{resize:vertical;min-height:80px;}
         <button class="btn btn-m btn-s" style="flex:1" onclick="doFullSync()">☁️↓ クラウドから取得</button>
         <button class="btn btn-m btn-s" style="flex:1" onclick="doPush()">☁️↑ クラウドに保存</button>
       </div>
+      <div style="display:flex;gap:7px;margin-bottom:6px;">
+        <button class="btn btn-m btn-s" style="flex:1" onclick="testConnection()">🔍 接続診断（詳細チェック）</button>
+      </div>
       <div style="font-size:11px;color:var(--muted);" id="cfgLog"></div>
     </div>
     <div class="card">
@@ -3125,19 +3128,85 @@ function getCfg(){ try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}');}c
 function setCfg(c){ localStorage.setItem(CFG_KEY,JSON.stringify(c)); }
 function hasCfg(){ const c=getCfg(); return !!(c.apiKey&&c.binId); }
 
+// タイムアウト付きfetch（iOSのLoad Failed対策）
+function fetchWithTimeout(url, options, timeoutMs=15000){
+  return new Promise((resolve,reject)=>{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>{ controller.abort(); }, timeoutMs);
+    fetch(url, {...options, signal: controller.signal})
+      .then(res=>{ clearTimeout(timer); resolve(res); })
+      .catch(err=>{ clearTimeout(timer); reject(err); });
+  });
+}
+
+// リトライ付きfetch（iOS Safariのネットワーク瞬断対策）
+async function fetchWithRetry(url, options, retries=2){
+  let lastErr;
+  for(let i=0;i<=retries;i++){
+    try{
+      const res = await fetchWithTimeout(url, options, 15000);
+      return res;
+    }catch(err){
+      lastErr = err;
+      console.warn(`Fetch attempt ${i+1} failed:`, err.message);
+      if(i < retries){
+        await new Promise(r=>setTimeout(r, 800*(i+1))); // 0.8s, 1.6s と間隔を空けて再試行
+      }
+    }
+  }
+  throw lastErr;
+}
+
 async function fetchBin(){
   const {apiKey,binId}=getCfg();
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`,{headers:{'X-Master-Key':apiKey}});
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  return (await r.json()).record||{};
+  if(!apiKey||!binId) throw new Error('API KeyまたはBin IDが未設定です');
+  try{
+    const r = await fetchWithRetry(
+      `https://api.jsonbin.io/v3/b/${binId}/latest`,
+      {headers:{'X-Master-Key':apiKey}, cache:'no-store'}
+    );
+    if(!r.ok){
+      if(r.status===404) throw new Error('Bin IDが見つかりません（404）。Bin IDを確認してください');
+      if(r.status===401||r.status===403) throw new Error('API Keyが無効です（'+r.status+'）。API Keyを確認してください');
+      throw new Error('サーバーエラー HTTP '+r.status);
+    }
+    const j = await r.json();
+    return j.record || {};
+  }catch(err){
+    if(err.name==='AbortError') throw new Error('通信がタイムアウトしました。電波状況を確認して再試行してください');
+    if(err.message==='Failed to fetch' || err.message==='Load failed'){
+      throw new Error('ネットワークに接続できません。Wi-Fi/モバイル通信をご確認の上、再試行してください');
+    }
+    throw err;
+  }
 }
+
 async function putBin(data){
   const {apiKey,binId}=getCfg();
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}`,{
-    method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':apiKey},
-    body:JSON.stringify(data)
-  });
-  return r.ok;
+  if(!apiKey||!binId) throw new Error('API KeyまたはBin IDが未設定です');
+  try{
+    const r = await fetchWithRetry(
+      `https://api.jsonbin.io/v3/b/${binId}`,
+      {
+        method:'PUT',
+        headers:{'Content-Type':'application/json','X-Master-Key':apiKey},
+        body:JSON.stringify(data),
+        cache:'no-store'
+      }
+    );
+    if(!r.ok){
+      if(r.status===404) throw new Error('Bin IDが見つかりません（404）');
+      if(r.status===401||r.status===403) throw new Error('API Keyが無効です（'+r.status+'）');
+      throw new Error('サーバーエラー HTTP '+r.status);
+    }
+    return true;
+  }catch(err){
+    if(err.name==='AbortError') throw new Error('通信がタイムアウトしました');
+    if(err.message==='Failed to fetch' || err.message==='Load failed'){
+      throw new Error('ネットワークに接続できません');
+    }
+    throw err;
+  }
 }
 
 async function doPush(){
@@ -3207,6 +3276,80 @@ function setSync(s,msg){
   if(log&&msg) log.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
 }
 function setSyncTxt(t){ const el=document.getElementById('syncStatusTxt'); if(el) el.textContent=t; }
+
+// ── 接続診断（ユーザーが自分で原因を特定できるように）──
+async function testConnection(){
+  const log=document.getElementById('cfgLog');
+  const cfg=getCfg();
+
+  if(!cfg.apiKey||!cfg.binId){
+    log.innerHTML='<span style="color:var(--red)">❌ API KeyまたはBin IDが入力されていません</span>';
+    return;
+  }
+
+  log.innerHTML='<span style="color:var(--muted)">🔍 診断中…</span>';
+
+  // Step1: ネットワーク疎通確認
+  let step1ok=false;
+  try{
+    const r=await fetchWithTimeout('https://api.jsonbin.io/v3/b', {method:'HEAD'}, 8000);
+    step1ok=true;
+  }catch(e){
+    log.innerHTML=`<div style="color:var(--red);line-height:1.6;">
+      ❌ <b>Step1: ネットワーク接続NG</b><br>
+      JSONBin.ioのサーバーに到達できません。<br>
+      ・Wi-Fi/モバイル通信がオフになっていないか確認<br>
+      ・機内モードがオフか確認<br>
+      ・しばらく時間を置いて再試行してください<br>
+      <span style="font-size:10px;color:var(--muted);">詳細: ${e.message}</span>
+    </div>`;
+    return;
+  }
+
+  // Step2: API Key・Bin IDの有効性確認
+  try{
+    const r=await fetchWithTimeout(
+      `https://api.jsonbin.io/v3/b/${cfg.binId}/latest`,
+      {headers:{'X-Master-Key':cfg.apiKey}, cache:'no-store'},
+      10000
+    );
+    if(r.status===200){
+      const j=await r.json();
+      const hasData = j.record && Object.keys(j.record).length>0;
+      log.innerHTML=`<div style="color:var(--green);line-height:1.6;">
+        ✅ <b>診断OK！正常に接続できています</b><br>
+        ・ネットワーク接続: 正常<br>
+        ・API Key: 有効<br>
+        ・Bin ID: 有効<br>
+        ・クラウドデータ: ${hasData?'あり ✅':'まだありません（初回は「保存」してください）'}
+      </div>`;
+    } else if(r.status===404){
+      log.innerHTML=`<div style="color:var(--red);line-height:1.6;">
+        ❌ <b>Step2: Bin IDが見つかりません（404）</b><br>
+        JSONBin.ioのBin IDが間違っているか、削除されている可能性があります。<br>
+        JSONBin.ioのサイトでBin IDを再確認してください。
+      </div>`;
+    } else if(r.status===401||r.status===403){
+      log.innerHTML=`<div style="color:var(--red);line-height:1.6;">
+        ❌ <b>Step2: API Keyが無効です（${r.status}）</b><br>
+        API Keyが間違っているか、有効期限切れの可能性があります。<br>
+        JSONBin.ioのサイトでAPI Keyを再確認してください。
+      </div>`;
+    } else {
+      log.innerHTML=`<div style="color:var(--red);line-height:1.6;">
+        ❌ <b>Step2: サーバーエラー (HTTP ${r.status})</b><br>
+        JSONBin.io側で問題が発生している可能性があります。時間を置いて再試行してください。
+      </div>`;
+    }
+  }catch(e){
+    log.innerHTML=`<div style="color:var(--red);line-height:1.6;">
+      ⚠️ <b>Step1は通過、Step2でエラー</b><br>
+      ネットワークは繋がっていますが、JSONBin.ioへのリクエストでエラーが発生しました。<br>
+      <span style="font-size:10px;color:var(--muted);">詳細: ${e.message}</span><br>
+      しばらく時間を置いて再試行するか、API Key/Bin IDを再確認してください。
+    </div>`;
+  }
+}
 
 // ════════════════════════════════════
 // クイズロジック
