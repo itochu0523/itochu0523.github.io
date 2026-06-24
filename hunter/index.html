@@ -702,297 +702,50 @@ textarea{resize:vertical;min-height:80px;}
   </div>
 
 <!-- SUMMARY SCREEN -->
-<div class="screen" id="screen-summary">
-  <div class="hdr"><div class="hdr-title">📖 重要まとめ</div></div>
-  <div class="scroll" style="padding-bottom:20px;max-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 48px - 56px);box-sizing:border-box;">
-
-    <div id="sum-nav" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
-      <button onclick="showSum('numbers')" id="sn-numbers" style="padding:7px 12px;border-radius:20px;border:2px solid #4ade80;background:rgba(74,222,128,.1);color:#4ade80;font-size:12px;font-weight:700;cursor:pointer;">🔢 数字・期間</button>
-      <button onclick="showSum('license')" id="sn-license" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">📋 所持許可</button>
-      <button onclick="showSum('gun')" id="sn-gun" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🔫 銃の種類</button>
-      <button onclick="showSum('storage')" id="sn-storage" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🔒 保管・運搬</button>
-      <button onclick="showSum('safety')" id="sn-safety" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🛡️ 安全</button>
-      <button onclick="showSum('ammo')" id="sn-ammo" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">💥 火薬</button>
+<div id="screen-summary" style="display:none;position:fixed;inset:0;background:#080d08;color:#ddeedd;font-family:-apple-system,'Hiragino Sans',sans-serif;flex-direction:column;">
+  <div style="background:#0f160f;border-bottom:1px solid rgba(74,222,128,.15);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 10px;font-size:16px;font-weight:700;color:#4ade80;flex-shrink:0;">📖 重要まとめ</div>
+  <div id="smbtns" style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#0f160f;border-bottom:1px solid rgba(74,222,128,.1);flex-shrink:0;">
+    <button id="smb0" onclick="smTab(0)" style="padding:6px 11px;border-radius:20px;border:2px solid #4ade80;background:rgba(74,222,128,.12);color:#4ade80;font-size:12px;font-weight:700;cursor:pointer;">🔢 数字・期間</button>
+    <button id="smb1" onclick="smTab(1)" style="padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">📋 所持許可</button>
+    <button id="smb2" onclick="smTab(2)" style="padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🔫 銃の種類</button>
+    <button id="smb3" onclick="smTab(3)" style="padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🔒 保管</button>
+    <button id="smb4" onclick="smTab(4)" style="padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">🛡️ 安全</button>
+    <button id="smb5" onclick="smTab(5)" style="padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;">💥 火薬</button>
+  </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(env(safe-area-inset-bottom,0px)+64px);">
+    <div id="sm0">
+      <div style="background:#1e0a0a;border:1px solid rgba(248,113,113,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">⏰ 期間・日数（ひっかけ頻出）</div><div style="font-size:13px;line-height:2.1;"><div>✅ 所持許可の有効期間 → <b style="color:#4ade80;">3回目の誕生日まで</b> <span style="color:#f87171;font-size:11px;">❌「3年間」は誤り</span></div><div>✅ 更新申請期間 → <b style="color:#4ade80;">満了2か月前〜1か月前</b></div><div>✅ 譲受け後の確認 → <b style="color:#4ade80;">14日以内</b> <span style="color:#f87171;font-size:11px;">❌「30日」は誤り</span></div><div>✅ 住所変更の届出 → <b style="color:#4ade80;">30日以内</b> <span style="color:#f87171;font-size:11px;">❌「14日」は誤り</span></div><div>✅ 失効後の処分 → <b style="color:#4ade80;">50日以内</b> <span style="color:#f87171;font-size:11px;">❌「30日」「60日」は誤り</span></div><div>✅ 許可後に未所持で失効 → <b style="color:#4ade80;">3か月</b></div><div>✅ 所持者死亡時の返納 → <b style="color:#4ade80;">10日以内</b></div><div>✅ 銃砲検査 → <b style="color:#4ade80;">年1回</b> <span style="color:#f87171;font-size:11px;">❌「2年に1回」は誤り</span></div><div>✅ 考査合格証明書 → <b style="color:#4ade80;">有効期間1年</b> <span style="color:#f87171;font-size:11px;">❌「3年」は誤り</span></div><div>✅ 技能講習修了証明書 → <b style="color:#4ade80;">有効期間3年</b> <span style="color:#f87171;font-size:11px;">❌3年超はどんな事情でも無効</span></div><div>✅ 眠り銃の取消（令和7年改正後） → <b style="color:#4ade80;">2年以上不使用</b></div></div></div>
+      <div style="background:#1a120a;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:10px;">📦 数量の上限</div><div style="font-size:13px;line-height:2.1;"><div>✅ 実包・空包（自宅保管） → <b style="color:#4ade80;">合計800個</b> <span style="color:#f87171;font-size:11px;">❌「各々800個」は誤り！</span></div><div>✅ 無煙火薬・黒色猟用火薬 → <b style="color:#4ade80;">合計5kg以内</b></div><div>✅ 銃用雷管 → <b style="color:#4ade80;">2,000個以内</b></div><div>✅ 標的射撃の無許可消費 → <b style="color:#4ade80;">1日400個以下</b></div><div>✅ 狩猟・有害鳥獣の無許可消費 → <b style="color:#4ade80;">1日100個以下</b></div><div>✅ 帳簿の保存期間 → <b style="color:#4ade80;">最終記載日から3年</b></div></div></div>
+      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#60a5fa;font-weight:700;font-size:13px;margin-bottom:10px;">⚖️ 欠格事由の期間</div><div style="font-size:13px;line-height:2.1;"><div>✅ 禁錮以上の刑（執行後） → <b style="color:#4ade80;">5年間</b></div><div>✅ 凶悪な違法行為 → <b style="color:#4ade80;">行為日から10年間</b></div><div>✅ DV禁止命令 → <b style="color:#4ade80;">3年間</b></div><div>✅ 猟銃の最低年齢 → <b style="color:#4ade80;">20歳以上</b></div><div>✅ 空気銃の最低年齢 → <b style="color:#4ade80;">18歳以上</b></div><div>✅ 認知機能検査が必要な年齢 → <b style="color:#4ade80;">75歳以上</b></div></div></div>
+      <div style="background:#0a1a10;border:2px solid rgba(74,222,128,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#4ade80;font-weight:700;font-size:13px;margin-bottom:8px;">🌍 やむを得ない事情の特例（超頻出）</div><div style="font-size:13px;line-height:1.9;"><div style="color:#4ade80;font-weight:700;">対象：海外旅行・海外出張・災害・病気</div><div style="color:#f87171;font-size:12px;">❌ 国内旅行は対象外！</div><div style="margin-top:6px;">✅ 条件①：交付後 <b style="color:#fbbf24;">3年以内</b> の技能講習修了証明書</div><div>✅ 条件②：帰国後 <b style="color:#fbbf24;">1か月以内</b> に申請</div><div style="color:#f87171;font-size:12px;margin-top:4px;">❌「2か月以内」❌「5年以内の証明書」は誤り</div></div></div>
+      <div style="background:#0d0a1a;border:1px solid rgba(167,139,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:10px;">🎯 射程距離の数値</div><div style="font-size:13px;line-height:2.1;"><div>✅ 散弾の有効射程 → <b style="color:#4ade80;">約40〜50m</b>　最大到達距離：200〜500m以上</div><div>✅ スラッグ弾の有効射程 → <b style="color:#4ade80;">約50〜100m</b>　最大到達距離：<b style="color:#fbbf24;">約700m</b></div><div>✅ 空気銃の最大到達距離 → <b style="color:#4ade80;">約300m</b></div><div>✅ ライフル弾の最大到達距離 → <b style="color:#4ade80;">約4,000m</b></div><div>✅ 最大飛距離の発射角 → 散弾:<b style="color:#fbbf24;">約20〜35度</b>　ライフル:<b style="color:#fbbf24;">約32〜35度</b></div><div style="color:#f87171;font-size:12px;">❌「45度で最大」は真空中の理論値、実弾では誤り</div></div></div>
     </div>
-
-    <!-- 数字・期間 -->
-    <div id="ss-numbers">
-
-      <div style="background:#1e0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(248,113,113,.2);">⏰ 最重要！期間・日数（数値ひっかけ頻出）</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>✅ <strong>所持許可の有効期間</strong> → <span style="color:#4ade80;font-weight:700;">3回目の誕生日まで</span><span style="color:#f87171;font-size:11px;">　❌「3年間」は誤り</span></div>
-          <div>✅ <strong>更新申請期間</strong> → <span style="color:#4ade80;font-weight:700;">満了2か月前〜1か月前</span><span style="color:#f87171;font-size:11px;">　❌「3か月前から」は誤り</span></div>
-          <div>✅ <strong>譲受け後の確認期限</strong> → <span style="color:#4ade80;font-weight:700;">14日以内</span><span style="color:#f87171;font-size:11px;">　❌「30日」は誤り</span></div>
-          <div>✅ <strong>住所変更の届出</strong> → <span style="color:#4ade80;font-weight:700;">30日以内</span><span style="color:#f87171;font-size:11px;">　❌「14日」は誤り（譲受けと逆）</span></div>
-          <div>✅ <strong>失効後の処分期限</strong> → <span style="color:#4ade80;font-weight:700;">50日以内</span><span style="color:#f87171;font-size:11px;">　❌「30日」「60日」は誤り</span></div>
-          <div>✅ <strong>許可後に銃を所持しないと失効</strong> → <span style="color:#4ade80;font-weight:700;">3か月以内</span></div>
-          <div>✅ <strong>所持者死亡時の許可証返納</strong> → <span style="color:#4ade80;font-weight:700;">10日以内</span></div>
-          <div>✅ <strong>銃砲検査</strong> → <span style="color:#4ade80;font-weight:700;">年1回</span><span style="color:#f87171;font-size:11px;">　❌「2年に1回」は誤り</span></div>
-          <div>✅ <strong>考査合格証明書の有効期間</strong> → <span style="color:#4ade80;font-weight:700;">1年</span><span style="color:#f87171;font-size:11px;">　❌「3年」は誤り</span></div>
-          <div>✅ <strong>技能講習修了証明書の有効期間</strong> → <span style="color:#4ade80;font-weight:700;">3年</span><span style="color:#f87171;font-size:11px;">　❌「5年」は誤り。3年超はどんな事情でも無効</span></div>
-          <div>✅ <strong>眠り銃の取消要件（令和7年改正後）</strong> → <span style="color:#4ade80;font-weight:700;">2年以上不使用</span><span style="color:#f87171;font-size:11px;">　❌「3年」は改正前</span></div>
-        </div>
-      </div>
-
-      <div style="background:#1a120a;border:1px solid rgba(251,146,60,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#fb923c;font-weight:700;font-size:14px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(251,146,60,.2);">📦 数量の上限（保管・消費）</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>✅ <strong>実包・空包（自宅保管）</strong> → <span style="color:#4ade80;font-weight:700;">合計800個</span><span style="color:#f87171;font-size:11px;">　❌「各々800個」は誤り！「合計」に注意</span></div>
-          <div>✅ <strong>無煙火薬・黒色猟用火薬</strong> → <span style="color:#4ade80;font-weight:700;">合計5kg以内</span></div>
-          <div>✅ <strong>銃用雷管</strong> → <span style="color:#4ade80;font-weight:700;">2,000個以内</span></div>
-          <div>✅ <strong>標的射撃の無許可消費</strong> → <span style="color:#4ade80;font-weight:700;">1日400個以下</span><span style="color:#f87171;font-size:11px;">　❌「200個」は誤り</span></div>
-          <div>✅ <strong>狩猟・有害鳥獣の無許可消費</strong> → <span style="color:#4ade80;font-weight:700;">1日100個以下</span><span style="color:#f87171;font-size:11px;">　❌「標的射撃と同じ400個」は誤り</span></div>
-          <div>✅ <strong>帳簿の保存期間</strong> → <span style="color:#4ade80;font-weight:700;">最終記載日から3年</span><span style="color:#f87171;font-size:11px;">　❌「1年」は誤り</span></div>
-        </div>
-      </div>
-
-      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#60a5fa;font-weight:700;font-size:14px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(96,165,250,.2);">⚖️ 欠格事由の期間</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>✅ <strong>禁錮以上の刑（執行終了後）</strong> → <span style="color:#4ade80;font-weight:700;">5年間</span></div>
-          <div>✅ <strong>凶悪な違法行為（強盗・傷害等）</strong> → <span style="color:#4ade80;font-weight:700;">行為日から10年間</span></div>
-          <div>✅ <strong>DV禁止命令</strong> → <span style="color:#4ade80;font-weight:700;">3年間</span></div>
-          <div>✅ <strong>猟銃所持の最低年齢</strong> → <span style="color:#4ade80;font-weight:700;">20歳以上</span></div>
-          <div>✅ <strong>空気銃所持の最低年齢</strong> → <span style="color:#4ade80;font-weight:700;">18歳以上</span></div>
-          <div>✅ <strong>認知機能検査が必要な年齢</strong> → <span style="color:#4ade80;font-weight:700;">75歳以上</span></div>
-        </div>
-      </div>
-
-      <div style="background:#0a1a0f;border:2px solid rgba(74,222,128,.5);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#4ade80;font-weight:700;font-size:14px;margin-bottom:10px;">🌍 やむを得ない事情の特例（超頻出！）</div>
-        <div style="background:rgba(74,222,128,.08);border-radius:8px;padding:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:700;color:#4ade80;">対象：海外旅行・海外出張・災害・病気</div>
-          <div style="color:#f87171;font-size:12px;margin-top:3px;">❌ 国内旅行は対象外！</div>
-        </div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>✅ 条件①：交付後 <strong style="color:#fbbf24;">3年以内</strong> の技能講習修了証明書を持っている</div>
-          <div>✅ 条件②：帰国後 <strong style="color:#fbbf24;">1か月以内</strong> に申請する</div>
-          <div style="color:#f87171;margin-top:6px;font-size:12px;">❌「2か月以内」 ❌「5年以内の証明書」</div>
-          <div style="color:#4ade80;margin-top:6px;font-size:12px;">→ 2条件を満たすと射撃教習なしで所持許可を受けられる</div>
-        </div>
-      </div>
-
-      <div style="background:#0d0a1a;border:1px solid rgba(167,139,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#a78bfa;font-weight:700;font-size:14px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(167,139,250,.2);">🎯 射程距離の数値</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>✅ <strong>散弾の有効射程</strong> → <span style="color:#4ade80;font-weight:700;">約40〜50m</span>　最大到達距離：約200〜500m以上</div>
-          <div>✅ <strong>スラッグ弾の有効射程</strong> → <span style="color:#4ade80;font-weight:700;">約50〜100m</span>　最大到達距離：<span style="color:#fbbf24;font-weight:700;">約700m</span></div>
-          <div>✅ <strong>空気銃の最大到達距離</strong> → <span style="color:#4ade80;font-weight:700;">約300m</span></div>
-          <div>✅ <strong>ライフル弾の最大到達距離</strong> → <span style="color:#4ade80;font-weight:700;">約4,000m</span></div>
-          <div>✅ <strong>最大飛距離になる発射角</strong> → 散弾:<span style="color:#fbbf24;font-weight:700;">約20〜35度</span>　ライフル:<span style="color:#fbbf24;font-weight:700;">約32〜35度</span></div>
-          <div style="color:#f87171;font-size:12px;">❌「45度で最大」は真空中の理論値。実弾は空気抵抗があるため誤り</div>
-        </div>
-      </div>
-
+    <div id="sm1" style="display:none;">
+      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#60a5fa;font-weight:700;font-size:13px;margin-bottom:12px;">📋 申請フロー</div><div style="font-size:13px;"><div style="background:#161e2a;border-radius:8px;padding:9px 11px;margin-bottom:4px;">① 猟銃等講習会受講<span style="color:#6b8a6b;font-size:11px;"> ○×50問・60分・90%以上で合格</span></div><div style="text-align:center;color:#4ade80;">↓</div><div style="background:#161e2a;border-radius:8px;padding:9px 11px;margin-bottom:4px;">② 考査合格証明書取得（有効：<b style="color:#fbbf24;">1年</b>）</div><div style="text-align:center;color:#4ade80;">↓</div><div style="background:#161e2a;border-radius:8px;padding:9px 11px;margin-bottom:4px;">③ 射撃教習（教習修了証明書：有効<b style="color:#fbbf24;">1年</b>）</div><div style="text-align:center;color:#4ade80;">↓</div><div style="background:#161e2a;border-radius:8px;padding:9px 11px;margin-bottom:4px;">④ 所持許可申請（住所地の警察署→公安委員会）</div><div style="text-align:center;color:#4ade80;">↓</div><div style="background:#162a16;border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:9px 11px;color:#4ade80;font-weight:700;">⑤ 所持許可証交付（有効：3回目の誕生日まで）</div></div></div>
+      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">❌ 欠格事由</div><div style="font-size:13px;line-height:1.9;"><div>• 精神障害・認知症・薬物中毒・アルコール中毒</div><div>• 自殺のおそれがある者・住居不定者・暴力団員</div><div>• 禁錮以上の刑の執行後5年未満</div><div>• 凶悪な違法行為から10年未満</div><div>• DV禁止命令から3年未満</div><div>• 20歳未満（猟銃）／18歳未満（空気銃）</div><div style="color:#f87171;font-weight:700;font-size:12px;margin-top:6px;">→「程度が軽い」「医師の診断書」「家族の同意」でも認められない！</div></div></div>
+      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:8px;">⚠️ 失効 vs 取消し</div><div style="font-size:13px;line-height:1.9;"><div><b style="color:#fbbf24;">失効</b>：有効期間満了等による自動的な効力消滅</div><div><b style="color:#fb923c;">取消し</b>：違反行為等を理由とした行政処分</div><div style="color:#4ade80;font-size:12px;margin-top:6px;">両方とも失効後50日以内に譲渡・廃棄等の措置が必要</div></div></div>
+      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.3);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#60a5fa;font-weight:700;font-size:13px;margin-bottom:10px;">🏛️ 申請窓口</div><div style="font-size:13px;line-height:2.0;"><div>• 所持許可申請 → <b style="color:#4ade80;">住所地の警察署</b></div><div>• 火薬類譲受許可 → <b style="color:#4ade80;">住所地の警察署</b></div><div>• 消費許可申請 → <b style="color:#4ade80;">消費する場所の警察署</b></div><div>• 狩猟者登録 → <b style="color:#4ade80;">猟を行う都道府県知事</b></div></div></div>
     </div>
-
-    <!-- 所持許可 -->
-    <div id="ss-license" style="display:none;">
-      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#60a5fa;font-weight:700;font-size:14px;margin-bottom:12px;">📋 申請フロー</div>
-        <div style="display:flex;flex-direction:column;gap:2px;">
-          <div style="background:#161e2a;border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 12px;font-size:13px;">① 猟銃等講習会（初心者）受講<br><span style="font-size:11px;color:#6b8a6b;">○×式50問・60分・<strong>90%以上</strong>で合格</span></div>
-          <div style="text-align:center;color:#4ade80;font-size:18px;">↓</div>
-          <div style="background:#161e2a;border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 12px;font-size:13px;">② 考査合格証明書取得（有効期間：<strong style="color:#fbbf24;">1年</strong>）</div>
-          <div style="text-align:center;color:#4ade80;font-size:18px;">↓</div>
-          <div style="background:#161e2a;border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 12px;font-size:13px;">③ 射撃教習（指定射撃場）<br><span style="font-size:11px;color:#6b8a6b;">教習修了証明書：有効期間<strong style="color:#fbbf24;">1年</strong></span></div>
-          <div style="text-align:center;color:#4ade80;font-size:18px;">↓</div>
-          <div style="background:#161e2a;border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px 12px;font-size:13px;">④ 所持許可申請（住所地の警察署→公安委員会）</div>
-          <div style="text-align:center;color:#4ade80;font-size:18px;">↓</div>
-          <div style="background:#162a16;border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:10px 12px;font-size:13px;color:#4ade80;font-weight:700;">⑤ 所持許可証交付（有効期間：3回目の誕生日まで）</div>
-        </div>
-      </div>
-
-      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">❌ 欠格事由（許可を受けられない人）</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>• 精神障害者・認知症・薬物中毒・アルコール中毒</div>
-          <div>• 自殺のおそれがある者</div>
-          <div>• 住居不定者・暴力団員</div>
-          <div>• 禁錮以上の刑の執行後5年未満</div>
-          <div>• 凶悪な違法行為から10年未満</div>
-          <div>• DV禁止命令から3年未満</div>
-          <div>• 20歳未満（猟銃）／18歳未満（空気銃）</div>
-          <div style="color:#f87171;margin-top:6px;font-weight:700;font-size:12px;">→「程度が軽い」「医師の診断書」「家族の同意」があっても認められない！</div>
-        </div>
-      </div>
-
-      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">⚠️ 失効 vs 取消し</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div><strong style="color:#fbbf24;">失効</strong>：有効期間満了・所持しない等による<strong>自動的</strong>な効力消滅</div>
-          <div><strong style="color:#fb923c;">取消し</strong>：違反行為等を理由とした<strong>行政処分</strong>による効力消滅</div>
-          <div style="margin-top:8px;color:#4ade80;">両方とも失効後は50日以内に譲渡・廃棄等の措置が必要</div>
-        </div>
-      </div>
-
-      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#60a5fa;font-weight:700;font-size:14px;margin-bottom:10px;">🏛️ 申請窓口の整理</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>• 所持許可申請 → <strong style="color:#4ade80;">住所地の警察署</strong>（公安委員会が許可）</div>
-          <div>• 火薬類譲受許可 → <strong style="color:#4ade80;">住所地の警察署</strong></div>
-          <div>• 消費許可申請 → <strong style="color:#4ade80;">消費する場所の警察署</strong></div>
-          <div>• 狩猟者登録 → <strong style="color:#4ade80;">猟を行う都道府県知事</strong></div>
-        </div>
-      </div>
+    <div id="sm2" style="display:none;">
+      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#60a5fa;font-weight:700;font-size:13px;margin-bottom:10px;">🔫 装填上限・銃身基準</div><div style="font-size:13px;line-height:2.1;"><div>✅ 散弾銃の装填上限 → <b style="color:#4ade80;">計3発</b>（弾倉2＋薬室1）</div><div>✅ ライフル銃・空気銃の装填上限 → <b style="color:#4ade80;">計6発</b>（弾倉5＋薬室1）</div><div>✅ 猟銃の全長 → <b style="color:#4ade80;">94cm以上</b>、銃身長 <b style="color:#4ade80;">48.8cm以上</b></div><div>✅ 空気銃の全長 → <b style="color:#4ade80;">80cm以上</b></div><div>✅ ライフル銃の所持要件 → <b style="color:#4ade80;">継続10年以上の猟銃所持</b></div></div></div>
+      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:10px;">🎯 口径の表し方（超頻出）</div><div style="font-size:13px;line-height:1.9;"><div><b>ゲージ（番）</b>＝銃の口径。<b style="color:#4ade80;">番号が小さいほど口径が大きい</b></div><div>12番 ＞ 16番 ＞ 20番 ＞ 410番</div><div style="color:#f87171;font-size:12px;">❌「番号が大きいほど口径が大きい」←逆！</div><div style="margin-top:8px;"><b>号（ショット号数）</b>＝散弾の粒の大きさ。<b style="color:#4ade80;">号数が大きいほど粒が小さい</b></div><div>9号（小粒・小型鳥向き） ↔ バックショット（大粒・大型獣向き）</div></div></div>
+      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">⚙️ 撃発機構の順序（必須暗記）</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:8px 0;font-size:13px;font-weight:700;"><span style="background:#1e1a2a;border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:7px;">引き金</span><span style="color:#4ade80;">→</span><span style="background:#1e1a2a;border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:7px;">逆鉤</span><span style="color:#4ade80;">→</span><span style="background:#1e1a2a;border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:7px;">撃鉄</span><span style="color:#4ade80;">→</span><span style="background:#1e1a2a;border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:7px;">撃針</span><span style="color:#f87171;">→</span><span style="background:#2a0a0a;border:1px solid #f87171;padding:7px 10px;border-radius:7px;color:#f87171;">発火！</span></div><div style="font-size:12px;color:#8aaa8a;line-height:1.7;">✅ 引き金は「逆鉤」を作動させる（撃鉄を直接動かすのではない）<br>✅ 所持の形態：<b style="color:#fbbf24;">携帯・運搬・保管の3つ</b>（「2つ」は誤り）</div></div>
+      <div style="background:#0d0a1a;border:1px solid rgba(167,139,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:10px;">🔧 主要部品まとめ</div><div style="font-size:13px;line-height:2.0;"><div>• <b>安全装置（安全子）</b>→ 引き金の動きを止める補助。振動・衝撃には無効</div><div>• <b>ベンチレーテッドリブ</b>→ 銃身上部の溝付きレール。①陽炎逃がし②照準</div><div>• <b>チョーク</b>→ フルチョーク＝絞り強＝遠距離。シリンダー＝無絞り＝近距離</div><div>• <b>引き金の「遊び」</b>→ 適度に必要。なさすぎると暴発しやすい</div><div>• <b>引き金の重さ目安</b>→ 狩猟用：2kg以上、射撃用：1.5kg以上</div></div></div>
     </div>
-
-    <!-- 銃の種類・構造 -->
-    <div id="ss-gun" style="display:none;">
-      <div style="background:#0a0f1a;border:1px solid rgba(96,165,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#60a5fa;font-weight:700;font-size:14px;margin-bottom:10px;">🔫 装填上限と全長基準</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>• 散弾銃 → <strong style="color:#4ade80;">計3発</strong>（弾倉2発＋薬室1発）</div>
-          <div>• ライフル銃・空気銃 → <strong style="color:#4ade80;">計6発</strong>（弾倉5発＋薬室1発）</div>
-          <div style="margin-top:6px;">• 猟銃の全長 → <strong style="color:#4ade80;">94cm以上</strong>、銃身長 <strong style="color:#4ade80;">48.8cm以上</strong></div>
-          <div>• 空気銃の全長 → <strong style="color:#4ade80;">80cm以上</strong>（銃身長制限なし）</div>
-        </div>
-      </div>
-
-      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#fb923c;font-weight:700;font-size:14px;margin-bottom:10px;">🎯 口径の表し方（超頻出！）</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div><strong>ゲージ（番）</strong>＝銃の口径を表す</div>
-          <div style="color:#4ade80;font-weight:700;">番号が小さいほど口径（直径）が大きい</div>
-          <div>12番 ＞ 16番 ＞ 20番 ＞ 410番</div>
-          <div style="color:#f87171;font-size:12px;margin-top:3px;">❌「番号が大きいほど口径が大きい」←逆！</div>
-          <div style="margin-top:8px;"><strong>号（ショット号数）</strong>＝散弾の粒の大きさを表す</div>
-          <div style="color:#4ade80;font-weight:700;">号数が大きいほど粒が小さい</div>
-          <div>9号（小粒・小型鳥向き）〜 バックショット（大粒・大型獣向き）</div>
-        </div>
-      </div>
-
-      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">⚙️ 撃発機構の順序（必須暗記）</div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0;">
-          <span style="background:#1e1e2a;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;">引き金</span>
-          <span style="color:#4ade80;font-size:18px;">→</span>
-          <span style="background:#1e1e2a;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;">逆鉤<br><span style="font-size:10px;font-weight:400;">(シアー)</span></span>
-          <span style="color:#4ade80;font-size:18px;">→</span>
-          <span style="background:#1e1e2a;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;">撃鉄<br><span style="font-size:10px;font-weight:400;">(ハンマー)</span></span>
-          <span style="color:#4ade80;font-size:18px;">→</span>
-          <span style="background:#1e1e2a;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;">撃針</span>
-          <span style="color:#f87171;font-size:18px;">→</span>
-          <span style="background:#2a0a0a;border:1px solid rgba(248,113,113,.4);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:700;color:#f87171;">発火！</span>
-        </div>
-        <div style="font-size:12px;color:#6b8a6b;line-height:1.7;">
-          ✅ 引き金は「逆鉤」を作動させる（撃鉄を直接動かすのではない）<br>
-          ✅ 所持の形態：携帯・運搬・保管の<strong style="color:#fbbf24;">3つ</strong>（「2つ」は誤り）
-        </div>
-      </div>
-
-      <div style="background:#0d0a1a;border:1px solid rgba(167,139,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#a78bfa;font-weight:700;font-size:14px;margin-bottom:10px;">🔧 主要部品まとめ</div>
-        <div style="font-size:13px;line-height:2.0;">
-          <div>• <strong>安全装置（安全子）</strong>→ 引き金の動きを止める補助装置。振動・衝撃の暴発は防げない</div>
-          <div>• <strong>ベンチレーテッドリブ</strong>→ 銃身上部の溝付きレール。①陽炎逃がし②照準レール</div>
-          <div>• <strong>チョーク</strong>→ フルチョーク＝絞り強＝遠距離。シリンダー＝無絞り＝近距離</div>
-          <div>• <strong>引き金の「遊び」</strong>→ 適度に必要。なさすぎると暴発しやすい</div>
-          <div>• <strong>引き金の重さ</strong>→ 狩猟用：2kg以上、射撃用：1.5kg以上</div>
-        </div>
-      </div>
+    <div id="sm3" style="display:none;">
+      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">🔒 ガンロッカーの基準</div><div style="font-size:13px;line-height:2.0;"><div>✅ スチール板厚：<b style="color:#4ade80;">1.0mm以上</b></div><div>✅ 床または壁に<b style="color:#4ade80;">ボルト等で固定</b></div><div>✅ かんぬき構造・鍵違い<b style="color:#4ade80;">120種類以上</b></div><div style="color:#f87171;font-size:12px;margin-top:4px;">❌「車のトランク」は保管設備ではない</div><div style="color:#f87171;font-size:12px;">❌「家族に鍵を渡す」は「自ら保管」にならない</div><div style="color:#f87171;font-size:12px;">❌「同じロッカーの別引き出し」も共同保管とみなされる</div></div></div>
+      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:10px;">🚗 携帯・運搬のルール</div><div style="font-size:13px;line-height:2.0;"><div>✅ 装填の有無にかかわらず<b style="color:#4ade80;">常に覆い・容器に入れる</b></div><div style="color:#f87171;font-size:12px;">❌「装填している場合のみ覆いが必要」←誤り</div><div>✅ 所持許可証を<b style="color:#4ade80;">常時携帯</b></div><div>✅ 許可を持たない家族に持たせることは禁止</div></div></div>
     </div>
-
-    <!-- 保管・運搬 -->
-    <div id="ss-storage" style="display:none;">
-      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">🔒 ガンロッカーの技術基準</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>✅ スチール板厚：<strong style="color:#4ade80;">1.0mm以上</strong></div>
-          <div>✅ 床または壁に<strong style="color:#4ade80;">ボルト等で固定</strong>すること</div>
-          <div>✅ かんぬき構造（施錠時に扉を外せない）</div>
-          <div>✅ 鍵違い：<strong style="color:#4ade80;">120種類以上</strong></div>
-          <div>✅ 鍵かけ忘れ防止装置付き</div>
-          <div style="color:#f87171;margin-top:6px;font-size:12px;">❌「車のトランク」は保管設備ではない</div>
-          <div style="color:#f87171;font-size:12px;">❌「家族に鍵を渡す」は「自ら保管」にならない</div>
-          <div style="color:#f87171;font-size:12px;">❌「同じロッカーの別引き出し」も共同保管とみなされる</div>
-        </div>
-      </div>
-
-      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#fb923c;font-weight:700;font-size:14px;margin-bottom:10px;">🚗 携帯・運搬時のルール</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>✅ 装填の有無にかかわらず<strong style="color:#4ade80;">常に覆い・容器に入れる</strong></div>
-          <div style="color:#f87171;font-size:12px;">❌「装填している場合のみ覆いが必要」←誤り</div>
-          <div>✅ 所持許可証を<strong style="color:#4ade80;">常時携帯</strong>（提示要求に応じる義務）</div>
-          <div>✅ 許可を持たない家族に持たせることは禁止</div>
-        </div>
-      </div>
+    <div id="sm4" style="display:none;">
+      <div style="background:#1a0a0a;border:2px solid rgba(248,113,113,.5);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">🛡️ 安全4原則</div><div style="font-size:13px;line-height:2.2;"><div>① <b style="color:#fbbf24;">すべての銃は常に装填されているものとして扱う</b></div><div>② <b style="color:#fbbf24;">銃口は常に安全な方向（人のいない方向）に向ける</b></div><div>③ <b style="color:#fbbf24;">引き金には発射直前まで指をかけない</b></div><div>④ <b style="color:#fbbf24;">目標と背景の安全を確認してから発射</b></div></div><div style="color:#f87171;font-size:12px;margin-top:8px;line-height:1.7;">❌「分解して銃身のみなら銃口を人に向けてよい」←絶対NG<br>❌「安全装置をかければ振動しても暴発しない」←補助のみ<br>❌「おそらく獲物だろう」で発射→絶対禁止</div></div>
+      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:10px;">⚡ 不発 vs 遅発</div><div style="font-size:13px;line-height:1.9;"><div><b>不発</b>：全く発射されない　<b>遅発</b>：時間を置いて発射される</div><div style="color:#4ade80;margin-top:6px;">✅ 両方とも：銃口を安全方向に向けたまま<b style="color:#fbbf24;">10秒（30秒）待機</b>後に慎重に開放</div><div style="color:#f87171;font-size:12px;margin-top:4px;">❌「直ちに薬室を開放する」←遅発の危険！</div></div></div>
+      <div style="background:#0a1a10;border:1px solid rgba(74,222,128,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#4ade80;font-weight:700;font-size:13px;margin-bottom:10px;">✅ その他重要ポイント</div><div style="font-size:13px;line-height:2.0;"><div>• 休憩・移動時は必ず薬室を開放して実包を抜く</div><div>• 銃身内異物（雪・泥・葉）のまま発射→銃身破裂の危険</div><div>• 転倒時：銃口方向と引き金から指を離すことを優先</div><div>• 人に銃を渡す時：自分が確認→相手も確認→渡す</div><div>• 跳弾：コンクリート・岩だけでなく竹・水面・地面でも発生</div><div>• 肩付け＝銃床を肩と密着（反動吸収・次弾装填の確実化）</div></div></div>
     </div>
-
-    <!-- 安全取扱い -->
-    <div id="ss-safety" style="display:none;">
-      <div style="background:#1a0a0a;border:2px solid rgba(248,113,113,.5);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">🛡️ 安全4原則（絶対に覚える！）</div>
-        <div style="font-size:14px;line-height:2.2;">
-          <div>① <strong style="color:#fbbf24;">すべての銃は常に装填されているものとして扱う</strong></div>
-          <div>② <strong style="color:#fbbf24;">銃口は常に安全な方向（人のいない方向）に向ける</strong></div>
-          <div>③ <strong style="color:#fbbf24;">引き金には発射直前まで指をかけない</strong></div>
-          <div>④ <strong style="color:#fbbf24;">目標を確実に確認し、背景の安全を確認してから発射</strong></div>
-        </div>
-        <div style="color:#f87171;margin-top:8px;font-size:12px;line-height:1.7;">
-          ❌「分解して銃身のみになっていれば銃口を人に向けてよい」←絶対にNG<br>
-          ❌「安全装置をかければ振動しても暴発しない」←安全装置は補助のみ<br>
-          ❌「おそらく獲物だろう」で発射→絶対禁止
-        </div>
-      </div>
-
-      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#fb923c;font-weight:700;font-size:14px;margin-bottom:10px;">⚡ 不発 vs 遅発（重要！）</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div><strong>不発（ミスファイア）</strong>：全く発射されない</div>
-          <div><strong>遅発（スローファイア）</strong>：時間を置いて発射される</div>
-          <div style="margin-top:8px;color:#4ade80;">✅ どちらも：銃口を安全方向に向けたまま<strong style="color:#fbbf24;">10秒（30秒）待機</strong>してから慎重に開放</div>
-          <div style="color:#f87171;font-size:12px;margin-top:4px;">❌「直ちに薬室を開放する」←遅発の危険！最も危険な行為</div>
-        </div>
-      </div>
-
-      <div style="background:#0a1a0f;border:1px solid rgba(74,222,128,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#4ade80;font-weight:700;font-size:14px;margin-bottom:10px;">✅ その他重要ポイント</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>• 休憩・移動時は<strong>必ず薬室を開放</strong>して実包を抜く</div>
-          <div>• 銃身内異物（雪・泥・木の葉）のまま発射→<strong>銃身破裂の危険</strong></div>
-          <div>• 転倒時は銃口の方向と引き金から指を離すことを優先</div>
-          <div>• 人に銃を渡す時：<strong>自分が確認→相手も確認→渡す</strong></div>
-          <div>• 跳弾はコンクリート・岩だけでなく、竹・水面・地面でも発生</div>
-          <div>• 清掃前は<strong>必ず全実包除去・薬室開放確認</strong></div>
-          <div>• 肩付け＝銃床を肩と密着させること（反動吸収・次弾装填確実化）</div>
-        </div>
-      </div>
+    <div id="sm5" style="display:none;">
+      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#fb923c;font-weight:700;font-size:13px;margin-bottom:10px;">💥 実包の構造と注意事項</div><div style="font-size:13px;line-height:2.0;"><div>• ワッズの3機能：①推進薬と散弾の分離②ガス漏れ防止③散弾を束ねる</div><div>• グラム表示（例:24g）→ 散弾全体の重量</div><div style="color:#f87171;font-size:12px;margin-top:4px;">❌ 薬室長より長い実包は使用禁止→銃身破裂</div></div></div>
+      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:10px;">⚠️ 実包の廃棄ルール</div><div style="font-size:13px;line-height:2.0;"><div>✅ 廃棄方法：<b style="color:#4ade80;">銃砲火薬店または警察署に持込</b></div><div style="color:#f87171;font-size:12px;">❌ 燃えるゴミとして廃棄→違法！</div><div style="color:#f87171;font-size:12px;">❌ 水で濡れた実包を乾燥させて使用→禁止</div><div style="color:#f87171;font-size:12px;">❌ 変形した実包を使用→禁止</div></div></div>
+      <div style="background:#0a0a1a;border:1px solid rgba(96,165,250,.4);border-radius:10px;padding:13px;margin-bottom:10px;"><div style="color:#60a5fa;font-weight:700;font-size:13px;margin-bottom:10px;">🌿 鉛弾の環境問題</div><div style="font-size:13px;line-height:2.0;"><div>• 水鳥：水底の鉛散弾を砂と間違えて飲み込む→砂嚢内で溶けて鉛中毒</div><div>• 猛禽類：残滓の鉛弾を食べる→鉛中毒</div><div style="color:#4ade80;font-size:12px;margin-top:4px;">→ 非鉛弾への切り替えが推奨・義務化</div></div></div>
     </div>
-
-    <!-- 火薬・実包 -->
-    <div id="ss-ammo" style="display:none;">
-      <div style="background:#1a100a;border:1px solid rgba(251,146,60,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#fb923c;font-weight:700;font-size:14px;margin-bottom:10px;">💥 実包の構造と注意事項</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div><strong>ワッズ（Wad）</strong>の3機能：①推進薬と散弾の分離　②ガス漏れ防止　③散弾を束ねて運ぶ</div>
-          <div><strong>グラム表示（例：24g）</strong>→ 装填されている散弾全体の重量</div>
-          <div style="color:#f87171;margin-top:6px;font-size:12px;">❌ 薬室長より長い実包は使用禁止→閉鎖不完全→銃身破裂</div>
-        </div>
-      </div>
-
-      <div style="background:#1a0a0a;border:1px solid rgba(248,113,113,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:10px;">⚠️ 実包の廃棄ルール</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>✅ 廃棄方法：<strong style="color:#4ade80;">銃砲火薬店または警察署に持込</strong></div>
-          <div style="color:#f87171;font-size:12px;">❌ 燃えるゴミとして廃棄→違法！</div>
-          <div style="color:#f87171;font-size:12px;">❌ 水で濡れた実包を乾燥させて使用→使用禁止</div>
-          <div style="color:#f87171;font-size:12px;">❌ 変形した実包を使用→使用禁止</div>
-        </div>
-      </div>
-
-      <div style="background:#0a0a1a;border:1px solid rgba(96,165,250,.4);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="color:#60a5fa;font-weight:700;font-size:14px;margin-bottom:10px;">🌿 鉛弾の環境問題</div>
-        <div style="font-size:13px;line-height:1.9;">
-          <div>• <strong>水鳥</strong>：水底の鉛散弾を砂と間違えて飲み込む→砂嚢内で溶けて鉛中毒</div>
-          <div>• <strong>猛禽類</strong>：残滓（内臓等）に残留する鉛弾を食べる→鉛中毒</div>
-          <div style="color:#4ade80;margin-top:4px;">→ 非鉛弾（スチール弾等）への切り替えが推奨・義務化</div>
-        </div>
-      </div>
-    </div>
-
   </div>
   <div class="bnav">
     <button onclick="gotoTab('home')"><span class="ni">🏠</span>ホーム</button>
@@ -1002,6 +755,7 @@ textarea{resize:vertical;min-height:80px;}
     <button onclick="gotoTab('settings')"><span class="ni">⚙️</span>設定</button>
   </div>
 </div>
+
 
 <div id="toast"></div>
 
@@ -4491,8 +4245,16 @@ function switchAddTab(tab){
 
 
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
+  // 全スクリーンを非表示
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  var el=document.getElementById('screen-'+id);
+  if(el){
+    el.classList.add('active');
+    el.style.display='flex';
+  }
 }
 
 
@@ -4516,6 +4278,34 @@ function showSum(id){
   });
 }
 
+
+function smTab(idx){
+  for(var i=0;i<6;i++){
+    var el=document.getElementById('sm'+i);
+    if(el) el.style.display=(i===idx?'block':'none');
+    var btn=document.getElementById('smb'+i);
+    if(btn){
+      if(i===idx){
+        btn.style.borderWidth='2px';
+        btn.style.borderColor='#4ade80';
+        btn.style.background='rgba(74,222,128,.12)';
+        btn.style.color='#4ade80';
+      } else {
+        btn.style.borderWidth='1px';
+        btn.style.borderColor='rgba(255,255,255,.2)';
+        btn.style.background='rgba(255,255,255,.05)';
+        btn.style.color='#6b8a6b';
+      }
+    }
+  }
+}
+
+// showSumを呼ぶ場合も smTab(0) にリダイレクト
+function showSum(id){
+  var map={'numbers':0,'license':1,'gun':2,'storage':3,'safety':4,'ammo':5};
+  smTab(map[id]||0);
+}
+
 function gotoTab(tab){
   showScreen(tab);
   const navs=document.querySelectorAll('.bnav');
@@ -4525,7 +4315,7 @@ function gotoTab(tab){
   }));
   if(tab==='dash'){ updDash(); switchDash(S.dashTab||'hunter'); }
   if(tab==='notes') renderNotes();
-  if(tab==='summary') showSum('numbers'); // まとめタブ：最初のセクションを表示
+  if(tab==='summary') smTab(0); // まとめタブ：最初のセクションを表示
   if(tab==='settings'){
     const cfg=getCfg();
     if(cfg.apiKey){ document.getElementById('cfg-apikey').value=cfg.apiKey; document.getElementById('cfg-binid').value=cfg.binId; setSync('ok','設定済み'); }
