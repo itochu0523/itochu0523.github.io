@@ -55,6 +55,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   background:var(--bg2);border-top:1px solid var(--border);
   padding:4px 0 max(8px, calc(env(safe-area-inset-bottom, 0px) + 4px));
   display:flex;flex-shrink:0;
+  position:sticky;bottom:0;z-index:10;
 }
 .bnav button{
   flex:1;background:none;border:none;cursor:pointer;
@@ -415,7 +416,7 @@ textarea{resize:vertical;min-height:80px;}
     <button class="icon-btn" onclick="showScreen('home')">←</button>
     <div class="hdr-title">分野を選ぶ</div>
   </div>
-  <div class="scroll" style="padding-bottom:20px;">
+  <div class="scroll" style="padding-bottom:20px;max-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 48px - 56px);box-sizing:border-box;">
     <div class="mode-list" id="catList"></div>
   </div>
 </div>
@@ -701,9 +702,9 @@ textarea{resize:vertical;min-height:80px;}
   </div>
 
 <!-- SUMMARY SCREEN -->
-<div class="screen" id="screen-summary">
+<div class="screen" id="screen-summary" style="display:none;flex-direction:column;">
   <div class="hdr"><div class="hdr-title">📖 重要まとめ</div></div>
-  <div class="scroll">
+  <div class="scroll" style="padding-bottom:20px;max-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 48px - 56px);box-sizing:border-box;">
 
     <div id="sum-nav" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
       <button onclick="showSum('numbers')" id="sn-numbers" style="padding:7px 12px;border-radius:20px;border:2px solid #4ade80;background:rgba(74,222,128,.1);color:#4ade80;font-size:12px;font-weight:700;cursor:pointer;">🔢 数字・期間</button>
