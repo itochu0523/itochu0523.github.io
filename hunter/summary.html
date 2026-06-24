@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>重要まとめ｜狩猟試験HQ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#080d08;color:#ddeedd;font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
+.hdr{background:#0f160f;border-bottom:1px solid rgba(74,222,128,.2);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;position:sticky;top:0;z-index:10;}
+.hdr h1{font-size:17px;font-weight:700;color:#4ade80;}
+.hdr a{color:#6b8a6b;font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#0f160f;border-bottom:1px solid rgba(74,222,128,.1);position:sticky;top:52px;z-index:9;}
+.tab{padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;}
+.tab.on{border:2px solid #4ade80;background:rgba(74,222,128,.12);color:#4ade80;}
+.sec{display:none;padding:12px;}
+.sec.on{display:block;}
+.card{border-radius:10px;padding:14px;margin-bottom:12px;}
+.card h2{font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08);}
+.card p,.card li{font-size:13px;line-height:2.0;list-style:none;}
+.ok{color:#4ade80;font-weight:700;}
+.ng{color:#f87171;font-size:11px;}
+.warn{color:#f87171;font-size:12px;margin-top:4px;}
+.c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}
+.c-red h2{color:#f87171;}
+.c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}
+.c-ora h2{color:#fb923c;}
+.c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}
+.c-blu h2{color:#60a5fa;}
+.c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.4);}
+.c-grn h2{color:#4ade80;}
+.c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}
+.c-pur h2{color:#a78bfa;}
+.flow-step{background:#161e2a;border-radius:8px;padding:9px 12px;margin-bottom:4px;font-size:13px;}
+.flow-arrow{text-align:center;color:#4ade80;font-size:18px;line-height:1.2;}
+.chain{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:8px 0;}
+.chain span{background:#1e1a2a;border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:7px;font-size:13px;font-weight:700;}
+.chain .fire{background:#2a0a0a;border-color:#f87171;color:#f87171;}
+.back-btn{display:block;text-align:center;padding:14px;background:#0f160f;border-top:1px solid rgba(74,222,128,.15);color:#4ade80;font-size:14px;font-weight:700;text-decoration:none;position:sticky;bottom:0;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>📖 重要まとめ</h1>
+  <a href="index.html">← アプリに戻る</a>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="show('s0',this)">🔢 数字・期間</button>
+  <button class="tab" onclick="show('s1',this)">📋 所持許可</button>
+  <button class="tab" onclick="show('s2',this)">🔫 銃の種類</button>
+  <button class="tab" onclick="show('s3',this)">🔒 保管・運搬</button>
+  <button class="tab" onclick="show('s4',this)">🛡️ 安全</button>
+  <button class="tab" onclick="show('s5',this)">💥 火薬</button>
+</div>
+
+<!-- ① 数字・期間 -->
+<div id="s0" class="sec on">
+  <div class="card c-red">
+    <h2>⏰ 期間・日数（ひっかけ頻出）</h2>
+    <ul>
+      <li>✅ 所持許可の有効期間 → <span class="ok">3回目の誕生日まで</span> <span class="ng">❌「3年間」は誤り</span></li>
+      <li>✅ 更新申請期間 → <span class="ok">満了2か月前〜1か月前</span></li>
+      <li>✅ 譲受け後の確認 → <span class="ok">14日以内</span> <span class="ng">❌「30日」は誤り</span></li>
+      <li>✅ 住所変更の届出 → <span class="ok">30日以内</span> <span class="ng">❌「14日」は誤り（譲受けと逆）</span></li>
+      <li>✅ 失効後の処分期限 → <span class="ok">50日以内</span> <span class="ng">❌「30日」「60日」は誤り</span></li>
+      <li>✅ 許可後に未所持で失効 → <span class="ok">3か月以内</span></li>
+      <li>✅ 所持者死亡時の返納 → <span class="ok">10日以内</span></li>
+      <li>✅ 銃砲検査 → <span class="ok">年1回</span> <span class="ng">❌「2年に1回」は誤り</span></li>
+      <li>✅ 考査合格証明書の有効期間 → <span class="ok">1年</span> <span class="ng">❌「3年」は誤り</span></li>
+      <li>✅ 技能講習修了証明書の有効期間 → <span class="ok">3年</span> <span class="ng">❌3年超はどんな事情でも無効</span></li>
+      <li>✅ 眠り銃の取消（令和7年改正後） → <span class="ok">2年以上不使用</span></li>
+    </ul>
+  </div>
+
+  <div class="card c-ora">
+    <h2>📦 数量の上限</h2>
+    <ul>
+      <li>✅ 実包・空包（自宅保管） → <span class="ok">合計800個</span> <span class="ng">❌「各々800個」は誤り！「合計」</span></li>
+      <li>✅ 無煙火薬・黒色猟用火薬 → <span class="ok">合計5kg以内</span></li>
+      <li>✅ 銃用雷管 → <span class="ok">2,000個以内</span></li>
+      <li>✅ 標的射撃の無許可消費 → <span class="ok">1日400個以下</span></li>
+      <li>✅ 狩猟・有害鳥獣の無許可消費 → <span class="ok">1日100個以下</span></li>
+      <li>✅ 帳簿の保存期間 → <span class="ok">最終記載日から3年</span> <span class="ng">❌「1年」は誤り</span></li>
+    </ul>
+  </div>
+
+  <div class="card c-blu">
+    <h2>⚖️ 欠格事由の期間</h2>
+    <ul>
+      <li>✅ 禁錮以上の刑（執行後） → <span class="ok">5年間</span></li>
+      <li>✅ 凶悪な違法行為 → <span class="ok">行為日から10年間</span></li>
+      <li>✅ DV禁止命令 → <span class="ok">3年間</span></li>
+      <li>✅ 猟銃の最低年齢 → <span class="ok">20歳以上</span></li>
+      <li>✅ 空気銃の最低年齢 → <span class="ok">18歳以上</span></li>
+      <li>✅ 認知機能検査が必要な年齢 → <span class="ok">75歳以上</span></li>
+    </ul>
+  </div>
+
+  <div class="card c-grn">
+    <h2>🌍 やむを得ない事情の特例（超頻出）</h2>
+    <p style="color:#4ade80;font-weight:700;">対象：海外旅行・海外出張・災害・病気</p>
+    <p class="warn">❌ 国内旅行は対象外！</p>
+    <ul style="margin-top:8px;">
+      <li>✅ 条件①：交付後 <span style="color:#fbbf24;font-weight:700;">3年以内</span> の技能講習修了証明書</li>
+      <li>✅ 条件②：帰国後 <span style="color:#fbbf24;font-weight:700;">1か月以内</span> に申請</li>
+    </ul>
+    <p class="warn">❌「2か月以内」❌「5年以内の証明書」は誤り</p>
+    <p style="color:#4ade80;font-size:12px;margin-top:6px;">→ 2条件を満たすと射撃教習なしで所持許可を受けられる</p>
+  </div>
+
+  <div class="card c-pur">
+    <h2>🎯 射程距離の数値</h2>
+    <ul>
+      <li>✅ 散弾の有効射程 → <span class="ok">約40〜50m</span>　最大到達距離：200〜500m以上</li>
+      <li>✅ スラッグ弾の有効射程 → <span class="ok">約50〜100m</span>　最大到達距離：<span style="color:#fbbf24;font-weight:700;">約700m</span></li>
+      <li>✅ 空気銃の最大到達距離 → <span class="ok">約300m</span></li>
+      <li>✅ ライフル弾の最大到達距離 → <span class="ok">約4,000m</span></li>
+      <li>✅ 最大飛距離の発射角 → 散弾:<span style="color:#fbbf24;font-weight:700;">約20〜35度</span>　ライフル:<span style="color:#fbbf24;font-weight:700;">約32〜35度</span></li>
+    </ul>
+    <p class="warn">❌「45度で最大」は真空中の理論値。実弾では誤り</p>
+  </div>
+</div>
+
+<!-- ② 所持許可 -->
+<div id="s1" class="sec">
+  <div class="card c-blu">
+    <h2>📋 申請フロー</h2>
+    <div class="flow-step">① 猟銃等講習会（初心者）受講<br><span style="color:#6b8a6b;font-size:11px;">○×式50問・60分・90%以上で合格</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">② 考査合格証明書取得（有効期間：<span style="color:#fbbf24;font-weight:700;">1年</span>）</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">③ 射撃教習（教習修了証明書：有効<span style="color:#fbbf24;font-weight:700;">1年</span>）</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">④ 所持許可申請（住所地の警察署→公安委員会）</div>
+    <div class="flow-arrow">↓</div>
+    <div style="background:#162a16;border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:9px 12px;color:#4ade80;font-weight:700;font-size:13px;">⑤ 所持許可証交付（有効：3回目の誕生日まで）</div>
+  </div>
+
+  <div class="card c-blu" style="margin-top:0;">
+    <h2>🔄 更新フロー</h2>
+    <ul>
+      <li>• 技能講習修了証明書（有効<span style="color:#fbbf24;font-weight:700;">3年</span>）が必要</li>
+      <li>• 更新申請は満了<span style="color:#fbbf24;font-weight:700;">2か月前〜1か月前</span>の間</li>
+    </ul>
+    <p class="warn">❌ 技能講習証明書が3年を超えたら、どんな事情でも無効。射撃教習からやり直し</p>
+  </div>
+
+  <div class="card c-red">
+    <h2>❌ 欠格事由（許可を受けられない人）</h2>
+    <ul>
+      <li>• 精神障害・認知症・薬物中毒・アルコール中毒</li>
+      <li>• 自殺のおそれがある者・住居不定者・暴力団員</li>
+      <li>• 禁錮以上の刑の執行後5年未満</li>
+      <li>• 凶悪な違法行為から10年未満</li>
+      <li>• DV禁止命令から3年未満</li>
+      <li>• 20歳未満（猟銃）／18歳未満（空気銃）</li>
+    </ul>
+    <p style="color:#f87171;font-weight:700;font-size:12px;margin-top:8px;">→「程度が軽い」「医師の診断書」「家族の同意」があっても認められない！</p>
+  </div>
+
+  <div class="card c-ora">
+    <h2>⚠️ 失効 vs 取消し</h2>
+    <ul>
+      <li><span style="color:#fbbf24;font-weight:700;">失効</span>：有効期間満了等による自動的な効力消滅</li>
+      <li><span style="color:#fb923c;font-weight:700;">取消し</span>：違反行為等を理由とした行政処分による消滅</li>
+    </ul>
+    <p style="color:#4ade80;font-size:12px;margin-top:6px;">両方とも失効後50日以内に譲渡・廃棄等の措置が必要</p>
+  </div>
+
+  <div class="card c-blu">
+    <h2>🏛️ 申請窓口</h2>
+    <ul>
+      <li>• 所持許可申請 → <span class="ok">住所地の警察署</span></li>
+      <li>• 火薬類譲受許可 → <span class="ok">住所地の警察署</span></li>
+      <li>• 消費許可申請 → <span class="ok">消費する場所の警察署</span></li>
+      <li>• 狩猟者登録 → <span class="ok">猟を行う都道府県知事</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ③ 銃の種類・構造 -->
+<div id="s2" class="sec">
+  <div class="card c-blu">
+    <h2>🔫 装填上限・銃身基準</h2>
+    <ul>
+      <li>✅ 散弾銃の装填上限 → <span class="ok">計3発</span>（弾倉2＋薬室1）</li>
+      <li>✅ ライフル銃・空気銃の装填上限 → <span class="ok">計6発</span>（弾倉5＋薬室1）</li>
+      <li>✅ 猟銃の全長 → <span class="ok">94cm以上</span>、銃身長 <span class="ok">48.8cm以上</span></li>
+      <li>✅ 空気銃の全長 → <span class="ok">80cm以上</span></li>
+      <li>✅ ライフル銃の所持要件 → <span class="ok">継続10年以上の猟銃所持</span></li>
+    </ul>
+  </div>
+
+  <div class="card c-ora">
+    <h2>🎯 口径の表し方（超頻出！）</h2>
+    <p><strong>ゲージ（番）</strong>＝銃の口径</p>
+    <p style="color:#4ade80;font-weight:700;">番号が小さいほど口径（直径）が大きい</p>
+    <p>12番 ＞ 16番 ＞ 20番 ＞ 410番</p>
+    <p class="warn">❌「番号が大きいほど口径が大きい」←逆！</p>
+    <p style="margin-top:10px;"><strong>号（ショット号数）</strong>＝散弾の粒の大きさ</p>
+    <p style="color:#4ade80;font-weight:700;">号数が大きいほど粒が小さい</p>
+    <p>9号（小粒・小型鳥向き） ↔ バックショット（大粒・大型獣向き）</p>
+  </div>
+
+  <div class="card c-red">
+    <h2>⚙️ 撃発機構の順序（必須暗記）</h2>
+    <div class="chain">
+      <span>引き金</span>
+      <span style="background:none;border:none;color:#4ade80;padding:0;">→</span>
+      <span>逆鉤</span>
+      <span style="background:none;border:none;color:#4ade80;padding:0;">→</span>
+      <span>撃鉄</span>
+      <span style="background:none;border:none;color:#4ade80;padding:0;">→</span>
+      <span>撃針</span>
+      <span style="background:none;border:none;color:#f87171;padding:0;">→</span>
+      <span class="fire">発火！</span>
+    </div>
+    <ul>
+      <li style="font-size:12px;color:#8aaa8a;">✅ 引き金は「逆鉤」を作動させる（撃鉄を直接動かすのではない）</li>
+      <li style="font-size:12px;color:#8aaa8a;">✅ 所持の形態：<span style="color:#fbbf24;font-weight:700;">携帯・運搬・保管の3つ</span>（「2つ」は誤り）</li>
+    </ul>
+  </div>
+
+  <div class="card c-pur">
+    <h2>🔧 主要部品まとめ</h2>
+    <ul>
+      <li>• <strong>安全装置（安全子）</strong>→ 引き金の動きを止める補助。振動・衝撃には無効</li>
+      <li>• <strong>ベンチレーテッドリブ</strong>→ 銃身上部の溝付きレール。①陽炎逃がし②照準レール</li>
+      <li>• <strong>チョーク</strong>→ フルチョーク＝絞り強＝遠距離。シリンダー＝無絞り＝近距離</li>
+      <li>• <strong>引き金の「遊び」</strong>→ 適度に必要。なさすぎると暴発しやすい</li>
+      <li>• <strong>引き金の重さ目安</strong>→ 狩猟用：2kg以上、射撃用：1.5kg以上</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ④ 保管・運搬 -->
+<div id="s3" class="sec">
+  <div class="card c-red">
+    <h2>🔒 ガンロッカーの基準</h2>
+    <ul>
+      <li>✅ スチール板厚：<span class="ok">1.0mm以上</span></li>
+      <li>✅ 床または壁に<span class="ok">ボルト等で固定</span></li>
+      <li>✅ かんぬき構造・鍵違い<span class="ok">120種類以上</span></li>
+    </ul>
+    <p class="warn">❌「車のトランク」は保管設備ではない</p>
+    <p class="warn">❌「家族に鍵を渡す」は「自ら保管」にならない</p>
+    <p class="warn">❌「同じロッカーの別引き出し」も共同保管とみなされる</p>
+  </div>
+
+  <div class="card c-ora">
+    <h2>🚗 携帯・運搬のルール</h2>
+    <ul>
+      <li>✅ 装填の有無にかかわらず<span class="ok">常に覆い・容器に入れる</span></li>
+      <li>✅ 所持許可証を<span class="ok">常時携帯</span>（警察官の提示要求に応じる義務）</li>
+      <li>✅ 許可を持たない家族に持たせることは禁止</li>
+    </ul>
+    <p class="warn">❌「装填している場合のみ覆いが必要」←誤り</p>
+  </div>
+</div>
+
+<!-- ⑤ 安全取扱い -->
+<div id="s4" class="sec">
+  <div class="card c-red" style="border-width:2px;">
+    <h2>🛡️ 安全4原則（絶対に覚える！）</h2>
+    <ul>
+      <li>① <span style="color:#fbbf24;font-weight:700;">すべての銃は常に装填されているものとして扱う</span></li>
+      <li>② <span style="color:#fbbf24;font-weight:700;">銃口は常に安全な方向（人のいない方向）に向ける</span></li>
+      <li>③ <span style="color:#fbbf24;font-weight:700;">引き金には発射直前まで指をかけない</span></li>
+      <li>④ <span style="color:#fbbf24;font-weight:700;">目標と背景の安全を確認してから発射</span></li>
+    </ul>
+    <p class="warn">❌「分解して銃身のみなら銃口を人に向けてよい」←絶対NG</p>
+    <p class="warn">❌「安全装置をかければ振動しても暴発しない」←補助のみ</p>
+    <p class="warn">❌「おそらく獲物だろう」で発射→絶対禁止</p>
+  </div>
+
+  <div class="card c-ora">
+    <h2>⚡ 不発 vs 遅発</h2>
+    <ul>
+      <li><strong>不発</strong>：全く発射されない</li>
+      <li><strong>遅発</strong>：時間を置いて発射される</li>
+    </ul>
+    <p style="color:#4ade80;margin-top:8px;">✅ 両方とも：銃口を安全方向に向けたまま<span style="color:#fbbf24;font-weight:700;">10秒（30秒）待機</span>後に慎重に開放</p>
+    <p class="warn">❌「直ちに薬室を開放する」←遅発の危険！最も危険な行為</p>
+  </div>
+
+  <div class="card c-grn">
+    <h2>✅ その他重要ポイント</h2>
+    <ul>
+      <li>• 休憩・移動時は必ず薬室を開放して実包を抜く</li>
+      <li>• 銃身内異物（雪・泥・葉）のまま発射→銃身破裂の危険</li>
+      <li>• 転倒時：銃口方向と引き金から指を離すことを優先</li>
+      <li>• 人に銃を渡す時：自分が確認→相手も確認→渡す</li>
+      <li>• 跳弾：コンクリート・岩だけでなく竹・水面・地面でも発生</li>
+      <li>• 肩付け＝銃床を肩と密着（反動吸収・次弾装填の確実化）</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ⑥ 火薬・実包 -->
+<div id="s5" class="sec">
+  <div class="card c-ora">
+    <h2>💥 実包の構造と注意事項</h2>
+    <ul>
+      <li>• ワッズの3機能：①推進薬と散弾の分離②ガス漏れ防止③散弾を束ねる</li>
+      <li>• グラム表示（例:24g）→ 装填されている散弾全体の重量</li>
+    </ul>
+    <p class="warn">❌ 薬室長より長い実包は使用禁止→閉鎖不完全→銃身破裂</p>
+  </div>
+
+  <div class="card c-red">
+    <h2>⚠️ 実包の廃棄ルール</h2>
+    <p>✅ 廃棄方法：<span class="ok">銃砲火薬店または警察署に持込</span></p>
+    <p class="warn">❌ 燃えるゴミとして廃棄→違法！</p>
+    <p class="warn">❌ 水で濡れた実包を乾燥させて使用→禁止</p>
+    <p class="warn">❌ 変形した実包を使用→禁止</p>
+  </div>
+
+  <div class="card c-blu">
+    <h2>🌿 鉛弾の環境問題</h2>
+    <ul>
+      <li>• 水鳥：水底の鉛散弾を砂と間違えて飲み込む→砂嚢内で溶けて鉛中毒</li>
+      <li>• 猛禽類：残滓の鉛弾を食べる→鉛中毒</li>
+    </ul>
+    <p style="color:#4ade80;font-size:12px;margin-top:6px;">→ 非鉛弾への切り替えが推奨・義務化</p>
+  </div>
+
+  <div class="card c-pur">
+    <h2>📊 無許可譲受の上限</h2>
+    <ul>
+      <li>• 実包（ライフル用除く） → <span class="ok">300個以下</span></li>
+      <li>• 実包（ライフル用） → <span class="ok">うち50個以下</span></li>
+      <li>• 銃用雷管 → <span class="ok">300個以下（ライフル用50個以下）</span></li>
+      <li>• 無煙火薬等 → <span class="ok">600g以下</span></li>
+    </ul>
+  </div>
+</div>
+
+<a href="index.html" class="back-btn">← クイズアプリに戻る</a>
+
+<script>
+function show(id, btn){
+  document.querySelectorAll('.sec').forEach(function(s){ s.classList.remove('on'); });
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
