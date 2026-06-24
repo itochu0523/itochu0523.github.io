@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root { --bg:#080d08; --text:#ddeedd; --green:#4ade80; }
+body { background:var(--bg); color:var(--text); }
+.screen { display:none; position:fixed; inset:0; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+.scroll { flex:1; overflow-y:auto; padding:12px; }
+.sum-section { display:none; }
+.sum-section.active { display:block; }
+</style>
+</head>
+<body>
+<div class="screen active" id="screen-summary">
+  <div style="background:#0f160f;padding:12px;color:#4ade80;font-weight:700;">📖 まとめ</div>
+  <div class="scroll">
+    <div class="sum-section active" id="sum-numbers" style="display:block">
+      <div style="background:rgba(248,113,113,.2);border:1px solid red;border-radius:8px;padding:12px;margin:8px 0;color:white;">
+        <div style="font-weight:700;margin-bottom:8px;">⏰ テスト表示</div>
+        <div>これが表示されていれば正常です</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
