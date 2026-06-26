@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>合格戦略｜狩猟試験HQ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#080d08;color:#ddeedd;font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
+.hdr{background:#0f160f;border-bottom:1px solid rgba(74,222,128,.2);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;}
+.hdr h1{font-size:17px;font-weight:700;color:#4ade80;}
+.hdr a{color:#6b8a6b;font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
+.body{padding:12px;}
+.card{border-radius:10px;padding:14px;margin-bottom:12px;}
+.card h2{font-size:14px;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);}
+.c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}.c-red h2{color:#f87171;}
+.c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}.c-ora h2{color:#fb923c;}
+.c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}.c-blu h2{color:#60a5fa;}
+.c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.45);}.c-grn h2{color:#4ade80;}
+.c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}.c-pur h2{color:#a78bfa;}
+.c-yel{background:#1a1500;border:1px solid rgba(251,191,36,.4);}.c-yel h2{color:#fbbf24;}
+li{font-size:13px;line-height:2.0;list-style:none;}
+p{font-size:13px;line-height:1.8;margin-top:4px;}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+th{background:rgba(255,255,255,.07);padding:7px 8px;text-align:left;color:#8aaa8a;font-size:11px;border-bottom:1px solid rgba(255,255,255,.1);}
+td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;font-size:12px;}
+.ok{color:#4ade80;font-weight:700;}
+.ng{color:#f87171;}
+.yl{color:#fbbf24;font-weight:700;}
+.warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;margin-top:8px;font-size:12px;color:#f87171;line-height:1.6;}
+.why{background:rgba(251,191,36,.06);border-left:3px solid #fbbf24;padding:8px 10px;margin-top:6px;font-size:12px;color:#c8a84a;line-height:1.6;border-radius:0 6px 6px 0;}
+.rank{display:inline-block;background:rgba(248,113,113,.2);color:#f87171;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;margin-right:4px;}
+.rank2{background:rgba(251,146,60,.2);color:#fb923c;}
+.rank3{background:rgba(251,191,36,.2);color:#fbbf24;}
+.pct{font-size:18px;font-weight:700;color:#4ade80;font-family:monospace;}
+.back-btn{display:block;text-align:center;padding:14px;background:#0f160f;border-top:1px solid rgba(74,222,128,.15);color:#4ade80;font-size:14px;font-weight:700;text-decoration:none;position:sticky;bottom:0;}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🎯 合格戦略・頻出パターン分析</h1>
+  <a href="index.html">← アプリに戻る</a>
+</div>
+<div class="body">
+
+<div class="card c-grn">
+  <h2>📊 現在の実力と合格への距離</h2>
+  <table>
+    <tr><th>模試</th><th>点数</th><th>合格ライン（45/50）との差</th></tr>
+    <tr><td>模試1</td><td>49/50（98%）</td><td class="ok">+4問 余裕</td></tr>
+    <tr><td>模試2</td><td>47/50（94%）</td><td class="ok">+2問</td></tr>
+    <tr><td>模試3</td><td>47/50（94%）</td><td class="ok">+2問</td></tr>
+    <tr><td>模試4</td><td>40/50（80%）</td><td class="ng">-5問 不合格</td></tr>
+    <tr><td>模試5</td><td>40/50（80%）</td><td class="ng">-5問 不合格</td></tr>
+    <tr><td>本番模試</td><td>45/50（90%）</td><td class="ok" style="color:#fbbf24;">±0 ギリギリ</td></tr>
+  </table>
+  <div class="why">💡 傾向：知識が定着した分野は高得点、新しい問題パターンに弱い。残り期間で「ひっかけパターンの暗記」が最も効果的！</div>
+</div>
+
+<div class="card c-red">
+  <h2>🔥 頻出パターン TOP10（必ず出る）</h2>
+  <table>
+    <tr><th>#</th><th>パターン</th><th>毎回の出題数</th></tr>
+    <tr>
+      <td><span class="rank">最重要</span></td>
+      <td><strong>数値・期間のひっかけ</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">「14日 vs 30日」「1年 vs 3年」「50日 vs 30日」「800個は合計」等</span>
+      </td>
+      <td class="ng">10〜15問</td>
+    </tr>
+    <tr>
+      <td><span class="rank">最重要</span></td>
+      <td><strong>安全4原則の応用問題</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">「安全装置をかければ安全」「分解すれば銃口を向けてよい」等の誤り</span>
+      </td>
+      <td class="ng">5〜8問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank2">重要</span></td>
+      <td><strong>失効・取消しの区別</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">失効（自動）vs 取消し（行政処分）、50日以内の措置</span>
+      </td>
+      <td>3〜5問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank2">重要</span></td>
+      <td><strong>やむを得ない事情の特例</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">海外のみ・3年以内・1か月以内。「2か月」「5年」「国内旅行」ひっかけ</span>
+      </td>
+      <td>2〜4問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank2">重要</span></td>
+      <td><strong>保管設備・ガンロッカーの基準</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">1mm・固定・鍵違い120種・銃と実包の分離保管</span>
+      </td>
+      <td>3〜5問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank2">重要</span></td>
+      <td><strong>不発 vs 遅発</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">「直ちに開放」は誤り。10秒待機が正解</span>
+      </td>
+      <td>2〜3問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank3">頻出</span></td>
+      <td><strong>欠格事由（許可を受けられない人）</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">「程度が軽い」「医師の診断書」等の例外はない</span>
+      </td>
+      <td>2〜3問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank3">頻出</span></td>
+      <td><strong>ゲージ（番）と号数の区別</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">番が小さいほど口径大・号が大きいほど粒小</span>
+      </td>
+      <td>2〜3問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank3">頻出</span></td>
+      <td><strong>申請窓口の混同</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">消費許可→消費する場所の警察署（住所地ではない）</span>
+      </td>
+      <td>2〜3問</td>
+    </tr>
+    <tr>
+      <td><span class="rank rank3">頻出</span></td>
+      <td><strong>射程距離・発射角の数値</strong><br>
+        <span style="color:#6b8a6b;font-size:11px;">スラッグ約700m・ライフル約4000m・「45度」は誤り</span>
+      </td>
+      <td>2〜3問</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card c-yel">
+  <h2>⚠️ ひっかけの「3大パターン」を見破る</h2>
+
+  <div style="margin-bottom:12px;">
+    <div style="color:#fbbf24;font-weight:700;font-size:13px;margin-bottom:6px;">パターン①：数値を微妙にずらす</div>
+    <table>
+      <tr><th>正しい数値</th><th>ひっかけ数値</th><th>対象</th></tr>
+      <tr><td class="ok">14日</td><td class="ng">30日</td><td>譲受後の確認期限</td></tr>
+      <tr><td class="ok">30日</td><td class="ng">14日</td><td>住所変更の届出</td></tr>
+      <tr><td class="ok">50日</td><td class="ng">30日・60日</td><td>失効後の処分期限</td></tr>
+      <tr><td class="ok">1年</td><td class="ng">3年</td><td>講習修了証明書</td></tr>
+      <tr><td class="ok">3年</td><td class="ng">5年</td><td>技能講習修了証明書</td></tr>
+      <tr><td class="ok">合計800個</td><td class="ng">各々800個（計1600個）</td><td>実包の自宅保管</td></tr>
+      <tr><td class="ok">1か月以内</td><td class="ng">2か月以内</td><td>やむを得ない事情の帰国後申請</td></tr>
+      <tr><td class="ok">3年以内</td><td class="ng">5年以内</td><td>やむを得ない事情の証明書</td></tr>
+    </table>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <div style="color:#fbbf24;font-weight:700;font-size:13px;margin-bottom:6px;">パターン②：対象・範囲を広げる</div>
+    <table>
+      <tr><th>正しい限定</th><th>ひっかけ表現</th></tr>
+      <tr><td class="ok">海外旅行・災害・病気のみ</td><td class="ng">「国内旅行のため更新できなかった場合も〜」</td></tr>
+      <tr><td class="ok">合計800個まで</td><td class="ng">「種類ごとに800個ずつ」</td></tr>
+      <tr><td class="ok">消費する場所の警察署</td><td class="ng">「住所地の警察署でも申請できる」</td></tr>
+      <tr><td class="ok">別々のロッカーで保管</td><td class="ng">「同じロッカーの別引き出しなら可」</td></tr>
+    </table>
+  </div>
+
+  <div>
+    <div style="color:#fbbf24;font-weight:700;font-size:13px;margin-bottom:6px;">パターン③：例外があるかのように見せる</div>
+    <table>
+      <tr><th>正しいルール</th><th>ひっかけ「例外」</th></tr>
+      <tr><td class="ok">欠格事由は例外なし</td><td class="ng">「程度が軽ければ許可される場合がある」</td></tr>
+      <tr><td class="ok">銃口は常に安全方向に</td><td class="ng">「分解中は向けてもよい」</td></tr>
+      <tr><td class="ok">安全装置は補助のみ</td><td class="ng">「安全装置があれば振動しても安全」</td></tr>
+      <tr><td class="ok">常に覆いが必要</td><td class="ng">「装填していなければ覆いは不要」</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card c-blu">
+  <h2>📅 残り期間の最優先学習リスト</h2>
+  <table>
+    <tr><th>優先度</th><th>項目</th><th>理由</th></tr>
+    <tr>
+      <td><span class="ok">最優先</span></td>
+      <td>数値・期間の完全暗記</td>
+      <td>毎回10〜15問出題。1問2点として20〜30点分！</td>
+    </tr>
+    <tr>
+      <td><span class="ok">最優先</span></td>
+      <td>ひっかけ3大パターンの習熟</td>
+      <td>問題文の「言い回し」を見て即座に誤りと判断できるように</td>
+    </tr>
+    <tr>
+      <td style="color:#fbbf24;">重要</td>
+      <td>やむを得ない事情の特例（3セット）</td>
+      <td>「海外・3年・1か月」毎回2〜4問出題</td>
+    </tr>
+    <tr>
+      <td style="color:#fbbf24;">重要</td>
+      <td>失効と取消しの違い</td>
+      <td>毎回3〜5問。「自動か行政処分か」の違いを体で覚える</td>
+    </tr>
+    <tr>
+      <td style="color:#fb923c;">できれば</td>
+      <td>保管設備の技術基準（数値）</td>
+      <td>1mm・固定・120種類の数値を正確に</td>
+    </tr>
+    <tr>
+      <td style="color:#fb923c;">できれば</td>
+      <td>射程距離の数値</td>
+      <td>スラッグ700m・ライフル4000m・発射角20〜35度</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card c-pur">
+  <h2>🧠 体系的に理解するための「3つの柱」</h2>
+
+  <div style="margin-bottom:14px;">
+    <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:6px;">柱①：「なぜその数値か」を覚える</div>
+    <p style="font-size:12px;line-height:1.7;color:#8aaa8a;">
+      単純暗記ではなく理由と一緒に覚える。<br>
+      例：「14日以内に譲受確認」→ なぜ？銃が誰の手にあるか早期に把握するため<br>
+      例：「30日以内に住所変更届」→ なぜ？管轄警察署が変わる可能性があるため<br>
+      例：「10秒待機してから薬室開放」→ なぜ？遅発の危険があるため
+    </p>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:6px;">柱②：「対比」で覚える</div>
+    <p style="font-size:12px;line-height:1.7;color:#8aaa8a;">
+      混同しやすいものをセットで覚える。<br>
+      • 失効（自動）vs 取消し（行政処分）<br>
+      • 番が小さい＝口径大 vs 号が大きい＝粒小<br>
+      • 14日（譲受確認）vs 30日（住所変更）<br>
+      • 1年（講習修了証明書）vs 3年（技能講習修了証明書）<br>
+      • 海外旅行OK vs 国内旅行NG（やむを得ない事情）
+    </p>
+  </div>
+
+  <div>
+    <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:6px;">柱③：「絶対例外なし」のルールを覚える</div>
+    <p style="font-size:12px;line-height:1.7;color:#8aaa8a;">
+      試験では「〜の場合は例外的に許可される」という選択肢が多く出る。<br>
+      以下は<strong style="color:#f87171;">絶対例外なし</strong>のルール：<br>
+      • 欠格事由がある人は許可不可（程度・診断書・同意関係なし）<br>
+      • 銃口は常に安全方向（分解中・空銃でも例外なし）<br>
+      • 技能講習証明書3年超は無効（どんな事情でも）<br>
+      • 許可を持たない人への貸与は禁止（家族でも）<br>
+      • 保護区内での発射は禁止（命中しなくても）
+    </p>
+  </div>
+</div>
+
+<div class="card c-grn">
+  <h2>✅ 試験当日の心得</h2>
+  <table>
+    <tr><td style="width:30px;">①</td><td>問題文をゆっくり最後まで読む（「〜ではない」「〜できる」の語尾に注意）</td></tr>
+    <tr><td>②</td><td>数値が出たら「これは正しい数値か？」と一度疑う</td></tr>
+    <tr><td>③</td><td>「〜場合もある」「〜例外として認められる」は要注意（多くが誤り）</td></tr>
+    <tr><td>④</td><td>直感で○と思っても「ひっかけでは？」と確認する癖をつける</td></tr>
+    <tr><td>⑤</td><td>わからない問題は後回しにして、確実な問題から解く</td></tr>
+    <tr><td>⑥</td><td>50問・60分。1問1分以内で解ける速度が理想</td></tr>
+  </table>
+  <div class="why">💡 間違えられるのは5問だけ（50問中45問正解で合格）。完璧を目指すより「確実に取れる問題を確実に取る」ことが重要！</div>
+</div>
+
+</div>
+<a href="index.html" class="back-btn">← クイズアプリに戻る</a>
+</body>
+</html>
