@@ -476,7 +476,7 @@ const MEALS=[
 const STAPLES=[
   {id:'s01',n:'無料1',c:'水関連'},{id:'s02',n:'無料2',c:'水関連'},{id:'s03',n:'飲料1',c:'水関連'},
   {id:'s04',n:'湧水タンク',c:'水関連'},{id:'s05',n:'豆乳',c:'水関連'},{id:'s06',n:'氷結',c:'水関連'},
-  {id:'s07',n:'赤ワイン',c:'水関連'},{id:'s08',n:'バナナ',c:'水関連'},
+  {id:'s07',n:'赤ワイン',c:'水関連'},{id:'s08',n:'バナナ',c:'水関連'},{id:'s09',n:'タバコ',c:'水関連'},
   {id:'s11',n:'ビニール2L',c:'ビニール関連'},{id:'s12',n:'ビニールSS',c:'ビニール関連'},
   {id:'s13',n:'燃えるゴミ袋20L',c:'ビニール関連'},{id:'s14',n:'燃えないゴミ袋20L',c:'ビニール関連'},
   {id:'s15',n:'透明ゴミ袋30L',c:'ビニール関連'},{id:'s16',n:'半透明袋15L',c:'ビニール関連'},
@@ -612,13 +612,25 @@ async function pullCloud(){
     const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId+'/latest',{headers:{'X-Master-Key':cfg.apiKey}});
     if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
     const j=await r.json();
-    if(j.record){state=j.record;
-      if(!state.staplesNeeded)state.staplesNeeded={};
-      if(!state.shopMemo)state.shopMemo=[];
-      if(!state.boughtToday)state.boughtToday={};
-      saveLocal();renderAll();}
+    if(j.record){
+      const rec=j.record;
+      // 旧フォーマットからマイグレーション
+      if(rec.shopping&&!rec.shopMemo)rec.shopMemo=(rec.shopping||[]).map(i=>({id:i.id,text:i.text,active:i.needed||false}));
+      if(rec.bought&&!rec.boughtToday)rec.boughtToday=rec.bought;
+      // 不要な旧フィールドを削除
+      delete rec.shopping; delete rec.bought; delete rec.staplesQty;
+      // 新フィールドの初期化
+      if(!rec.staplesNeeded)rec.staplesNeeded={};
+      if(!rec.shopMemo)rec.shopMemo=[];
+      if(!rec.boughtToday)rec.boughtToday={};
+      if(!rec.days)rec.days={};if(!rec.weeks)rec.weeks={};
+      if(!rec.fridge)rec.fridge=[];if(!rec.customMeals)rec.customMeals=[];
+      if(!rec.meals)rec.meals={};if(!rec.drinks)rec.drinks={};if(!rec.mealFeedback)rec.mealFeedback={};
+      state=rec;
+      saveLocal();renderAll();
+    }
     return true;
-  }catch(e){return e.name==='AbortError'?'timeout':e.message;}
+  }catch(e){console.error('pull',e);return e.name==='AbortError'?'timeout':e.message;}
 }
 function sched(){clearTimeout(syncTimer);syncTimer=setTimeout(pushCloud,1500);}
 
@@ -635,10 +647,17 @@ function showSync(msg,ok){const el=document.getElementById('sync-status');el.cla
 async function saveSettings(){
   const k=document.getElementById('cfg-key').value.trim();const b=document.getElementById('cfg-bin').value.trim();const a=document.getElementById('cfg-ant').value.trim();
   if(!k){showSync('❌ APIキーを入力してください',false);return;}
-  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('🔄 接続中...',true);
-  const res=cfg.binId?await pullCloud():await pushCloud();
-  if(res===true)showSync('✅ '+(cfg.binId?'同期完了！':'新規Bin作成完了！ Bin ID: '+cfg.binId),true);
-  else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト。APIキーを確認してください':res),false);
+  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('🔄 接続中...（最大10秒）',true);
+  let res;
+  if(cfg.binId){
+    res=await pullCloud();
+    if(res===true)showSync('✅ 同期完了！データを取得しました',true);
+    else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト。ネットワーク確認してください':res)+'\n💡 Bin IDが正しいか確認してください',false);
+  }else{
+    res=await pushCloud();
+    if(res===true)showSync('✅ 新規Bin作成完了！Bin ID: '+cfg.binId+'\n（他のデバイスでこのIDを入力してください）',true);
+    else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト':res)+'\n💡 Secret Keyが正しいか確認してください',false);
+  }
   renderAll();
 }
 
@@ -846,20 +865,22 @@ function renderHome(){
   const cl=CLEANING[dow];const ce=document.getElementById('clean-task');ce.innerHTML='';
   const cb=mkBtn(cl.i,cl.l,cl.note||'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning'));
   if(cl.note){cb.style.borderColor='rgba(122,184,212,0.25)';}ce.appendChild(cb);
-  // 食事
+  // 食事 - meal=nullでもクラッシュしないように安全に処理
   const me=document.getElementById('meal-task');me.innerHTML='';const tm=getTodayMeal();const meal=tm.menuId?mealById(tm.menuId):null;
   if(tm.type==='eatout'){
     if(!tm.eaten)me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食べたらタップ',false,'#c4963a',toggleEaten));
     else me.appendChild(mkBtn(tm.emoji||'🍽️','外食: '+tm.eatOutName,'食事完了',true,'#6fcf97',()=>{}));
-  }else if(!tm.menuId){
+  }else if(!tm.menuId||!meal){
+    // メニュー未選択 or メニューが見つからない場合（旧データ対応）
+    if(tm.menuId&&!meal){const k=todayStr();if(state.meals)state.meals[k]={menuId:null,cooked:false,eaten:false};}
     const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px';
     const b1=mkBtn('🍳','メニューを選ぶ','',false,'#6fcf97',()=>setPage('meal'));b1.style.flex='1';
     const b2=mkBtn('🍽️','外食する','',false,'#c4963a',()=>{setPage('meal');mTab('eatout');});b2.style.flex='1';
     wrap.appendChild(b1);wrap.appendChild(b2);me.appendChild(wrap);
   }else{
-    if(!tm.cooked)me.appendChild(mkBtn(meal.emoji,meal.name+'を調理する','',false,'#e07b54',toggleCooked));
-    else if(!tm.eaten)me.appendChild(mkBtn(meal.emoji,meal.name+'を食べる','調理完了！',false,'#c4963a',toggleEaten));
-    else me.appendChild(mkBtn(meal.emoji,meal.name,'調理・食事完了',true,'#6fcf97',()=>{}));
+    if(!tm.cooked)me.appendChild(mkBtn(meal.emoji||'🍳',meal.name+'を調理する','',false,'#e07b54',toggleCooked));
+    else if(!tm.eaten)me.appendChild(mkBtn(meal.emoji||'🍳',meal.name+'を食べる','調理完了！',false,'#c4963a',toggleEaten));
+    else me.appendChild(mkBtn(meal.emoji||'🍳',meal.name,'調理・食事完了',true,'#6fcf97',()=>{}));
   }
   // 毎日タスク
   const de=document.getElementById('daily-tasks');de.innerHTML='';
