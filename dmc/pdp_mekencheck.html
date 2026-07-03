@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDP目検チェック — アサヒ飲料 日次フロー STEP3-5</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root{
+    --ink:#182742;        /* 瑠璃紺 */
+    --lapis:#2A4DA8;      /* 瑠璃 */
+    --lapis-soft:#E8EDF9;
+    --paper:#F6F7F9;
+    --card:#FFFFFF;
+    --line:#D9DEE8;
+    --gold:#A67C1B;       /* 黄鉄鉱（フラグ） */
+    --gold-soft:#FBF3DE;
+    --fixed:#1E6B4F;      /* 修正済み */
+    --fixed-soft:#E3F1EA;
+    --alert:#A63A2A;
+    --muted:#5C6678;
+    font-size:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.55;
+  }
+  .num{font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,monospace;font-feature-settings:"tnum";letter-spacing:.02em}
+
+  header{
+    background:var(--ink);color:#fff;padding:14px 22px;
+    display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  }
+  header h1{font-size:16px;font-weight:700;letter-spacing:.04em}
+  header .flow{font-size:12px;color:#AEBBD6}
+  header .flow b{color:#fff;font-weight:600}
+
+  .bar{
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+    padding:12px 22px;background:var(--card);border-bottom:1px solid var(--line);
+  }
+  button{
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:7px 14px;border-radius:6px;
+  }
+  button:hover{border-color:var(--lapis);color:var(--lapis)}
+  button:focus-visible{outline:2px solid var(--lapis);outline-offset:2px}
+  button.primary{background:var(--lapis);border-color:var(--lapis);color:#fff}
+  button.primary:hover{background:#1E3A85;color:#fff}
+  button:disabled{opacity:.45;cursor:default;pointer-events:none}
+  .spacer{flex:1}
+  #fileLabel{font-size:12px;color:var(--muted)}
+
+  .stats{display:flex;gap:0;padding:0 22px;background:var(--card);border-bottom:1px solid var(--line)}
+  .stat{padding:10px 18px 12px 0;margin-right:18px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat .v{font-size:20px;font-weight:700}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.05em}
+  .stat.flag .v{color:var(--gold)}
+  .stat.fix .v{color:var(--fixed)}
+
+  main{padding:16px 22px 60px}
+  .drop{
+    border:2px dashed var(--line);border-radius:10px;background:var(--card);
+    padding:56px 20px;text-align:center;color:var(--muted);cursor:pointer;
+  }
+  .drop.on{border-color:var(--lapis);background:var(--lapis-soft)}
+  .drop b{color:var(--ink)}
+
+  .tablewrap{overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:8px;max-height:calc(100vh - 240px)}
+  table{border-collapse:collapse;width:max-content;min-width:100%;font-size:12.5px}
+  thead th{
+    position:sticky;top:0;background:var(--ink);color:#fff;font-weight:600;
+    padding:8px 10px;text-align:left;white-space:nowrap;z-index:2;font-size:11.5px;letter-spacing:.03em;
+  }
+  thead th.review{box-shadow:inset 0 -3px 0 var(--gold)}
+  tbody td{border-bottom:1px solid var(--line);padding:6px 10px;white-space:nowrap;max-width:340px;overflow:hidden;text-overflow:ellipsis;vertical-align:top}
+  tbody tr:hover td{background:#FBFCFE}
+  td.review{cursor:pointer}
+  td.review:hover{outline:2px solid var(--lapis);outline-offset:-2px;border-radius:3px}
+  td.flagged{background:var(--gold-soft);box-shadow:inset 3px 0 0 var(--gold)}
+  td.changed{background:var(--fixed-soft);box-shadow:inset 3px 0 0 var(--fixed)}
+  td.changed .orig{display:block;font-size:10.5px;color:var(--muted);text-decoration:line-through;font-weight:400}
+  .reason{display:block;font-size:10.5px;color:var(--gold);font-weight:600;white-space:normal;max-width:320px}
+  .stamp{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;border:1px solid}
+  .stamp.auto{color:var(--fixed);border-color:var(--fixed);background:var(--fixed-soft)}
+  .stamp.check{color:var(--gold);border-color:var(--gold);background:var(--gold-soft)}
+  .stamp.ok{color:var(--muted);border-color:var(--line)}
+
+  .note{font-size:12px;color:var(--muted);padding:10px 2px}
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;
+    opacity:0;pointer-events:none;transition:opacity .25s;z-index:10;
+  }
+  .toast.show{opacity:1}
+  #aiStatus{font-size:12px;color:var(--lapis);font-weight:600}
+  @media (prefers-reduced-motion: reduce){ .toast{transition:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PDP目検チェック</h1>
+  <span class="flow">アサヒ飲料 日次処理フロー <b>STEP 3</b> 目検 → <b>STEP 4</b> 商品名不明の補完 → <b>STEP 5</b> 不整合の修正 → 書き出し</span>
+</header>
+
+<div class="bar">
+  <button id="btnLoad" class="primary">CSVを読み込む</button>
+  <input type="file" id="file" accept=".csv" hidden>
+  <span id="fileLabel">未読み込み</span>
+  <span class="spacer"></span>
+  <button id="btnStep4" disabled>STEP4を自動適用</button>
+  <button id="btnAI" disabled>AIで整合性チェック（STEP5補助）</button>
+  <input type="password" id="apiKey" placeholder="APIキー（ローカル実行時のみ）" autocomplete="off"
+         style="font:inherit;font-size:12px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;width:210px">
+  <button id="btnTest">接続テスト</button>
+  <span id="aiStatus"></span>
+  <button id="btnNull" disabled>null → 不明 一括置換</button>
+  <span class="spacer"></span>
+  <button id="btnTSV" disabled>TSVをコピー（Sheets貼り付け用）</button>
+  <button id="btnCSV" class="primary" disabled>CSVをダウンロード</button>
+</div>
+
+<div class="stats" id="stats" hidden>
+  <div class="stat"><div class="v num" id="stRows">0</div><div class="k">行数</div></div>
+  <div class="stat fix"><div class="v num" id="stFixed">0</div><div class="k">修正済みセル</div></div>
+  <div class="stat flag"><div class="v num" id="stFlag">0</div><div class="k">要確認フラグ</div></div>
+  <div class="stat"><div class="v num" id="stEmpty">0</div><div class="k">商品名不明 行</div></div>
+</div>
+
+<main>
+  <div class="drop" id="drop">
+    <b>PDP結果CSVをここにドラッグ＆ドロップ</b><br>
+    またはクリックしてファイルを選択（UTF-8 / ヘッダー行つき）
+  </div>
+  <div class="tablewrap" id="tw" hidden>
+    <table id="tbl"><thead></thead><tbody></tbody></table>
+  </div>
+  <p class="note" id="legend" hidden>
+    黄 = 要確認（クリックで「不明」に修正 / もう一度クリックで元に戻す）　緑 = 修正済み（打ち消し線が元の値）。
+    目検対象列（商品名・大分類・サブカテゴリ・ブランド１・ブランド２）はヘッダー下に金色ラインを表示。
+    STEP4では JANコード・購入本数 を除く全列を「不明」にします。
+  </p>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const REVIEW = ["商品名","大分類","サブカテゴリ","ブランド１","ブランド２"];
+const KEEP_ON_STEP4 = new Set(["JANコード","購入本数"]);
+const NAME_COL = "商品名";
+
+let headers = [], rows = [], orig = [], flags = new Map(); // key "r|c" -> reason
+let fname = "output";
+
+const $ = id => document.getElementById(id);
+const toast = msg => { const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"), 2200); };
+const key = (r,c) => r+"|"+c;
+
+/* ---------- 読み込み ---------- */
+$("btnLoad").onclick = () => $("file").click();
+$("file").onchange = e => { if(e.target.files[0]) loadFile(e.target.files[0]); };
+const drop = $("drop");
+drop.onclick = () => $("file").click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("on"); };
+drop.ondragleave = () => drop.classList.remove("on");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("on"); if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); };
+
+function loadFile(f){
+  fname = f.name.replace(/\.csv$/i,"");
+  Papa.parse(f, {
+    skipEmptyLines: "greedy",
+    complete: res => {
+      const data = res.data;
+      if(!data.length){ toast("空のファイルです"); return; }
+      headers = data[0].map(h => (h||"").replace(/^\uFEFF/,"").trim());
+      rows = data.slice(1).map(r => headers.map((_,i)=> (r[i]??"").trim()));
+      orig = rows.map(r => r.slice());
+      flags.clear();
+      $("fileLabel").textContent = f.name + "（" + rows.length + "行）";
+      ["btnStep4","btnAI","btnNull","btnTSV","btnCSV"].forEach(id => $(id).disabled = false);
+      drop.hidden = true; $("tw").hidden = false; $("stats").hidden = false; $("legend").hidden = false;
+      render();
+      toast("読み込み完了。STEP4を実行してください");
+    },
+    error: () => toast("読み込みに失敗しました")
+  });
+}
+
+/* ---------- STEP4: 商品名空欄 → 商品名不明＋全属性 不明 ---------- */
+$("btnStep4").onclick = () => {
+  const ni = headers.indexOf(NAME_COL);
+  if(ni < 0){ toast("「商品名」列が見つかりません"); return; }
+  let nrow = 0;
+  rows.forEach((r) => {
+    if(r[ni] !== "" ) return;
+    nrow++;
+    headers.forEach((h,c) => {
+      if(KEEP_ON_STEP4.has(h)) return;
+      r[c] = (h === NAME_COL) ? "商品名不明" : "不明";
+    });
+  });
+  render();
+  toast(nrow ? "STEP4適用：" + nrow + "行を補完しました" : "商品名が空欄の行はありません");
+};
+
+/* ---------- null一括置換 ---------- */
+$("btnNull").onclick = () => {
+  let n = 0;
+  rows.forEach(r => r.forEach((v,c) => { if(/^null$/i.test(v)){ r[c] = "不明"; n++; } }));
+  render();
+  toast(n ? "null表記 " + n + " 件を「不明」に置換しました" : "null表記はありません");
+};
+
+/* ---------- STEP5: セル操作（クリックで 不明 ⇄ 元値） ---------- */
+function cellClick(r, c){
+  const cur = rows[r][c];
+  rows[r][c] = (cur === "不明" && orig[r][c] !== "不明") ? orig[r][c] : "不明";
+  flags.delete(key(r,c));
+  render();
+}
+
+/* ---------- AI整合性チェック（10行ずつ分割・失敗時はルール判定へ） ---------- */
+function extractIssues(text){
+  const clean = text.replace(/```json|```/g,"").trim();
+  const m = clean.match(/\[[\s\S]*\]/);
+  let s = m ? m[0] : clean;
+  try{ return JSON.parse(s); }
+  catch(e){
+    // 応答が途中で切れた場合: 最後の完結したオブジェクトまでで閉じて再試行
+    const cut = s.lastIndexOf("}");
+    if(cut > 0){ try{ return JSON.parse(s.slice(0, cut+1) + "]"); }catch(_){} }
+    throw e;
+  }
+}
+/* 接続先の優先順位:
+   1) APIキー欄に入力あり → Anthropic API直接（ローカル検証用）
+   2) 同一サーバーの /api/ai-proxy/messages（本番: サーバー側にキー保持）
+   3) キーなし直接（Claudeのアーティファクト内表示のみ有効）        */
+let aiRoute = null; // 成功した経路を記憶
+async function postAnthropic(bodyObj){
+  const apiKey = $("apiKey").value.trim();
+  const routes = [];
+  if(apiKey) routes.push({name:"direct-key", url:"https://api.anthropic.com/v1/messages",
+    headers:{"Content-Type":"application/json","x-api-key":apiKey,
+             "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}});
+  routes.push({name:"proxy", url:"/api/ai-proxy/messages", headers:{"Content-Type":"application/json"}});
+  routes.push({name:"claude", url:"https://api.anthropic.com/v1/messages", headers:{"Content-Type":"application/json"}});
+  const order = aiRoute ? [routes.find(r=>r.name===aiRoute), ...routes.filter(r=>r.name!==aiRoute)] : routes;
+  let lastErr = null;
+  for(const rt of order.filter(Boolean)){
+    try{
+      const res = await fetch(rt.url, {method:"POST", headers:rt.headers, body:JSON.stringify(bodyObj)});
+      if(!res.ok){
+        let detail = "";
+        try{ detail = (await res.clone().json()).error?.message || ""; }catch(_){}
+        lastErr = new Error("API " + res.status + (detail ? "：" + detail : ""));
+        continue;
+      }
+      aiRoute = rt.name;
+      return await res.json();
+    }catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error("接続経路がありません");
+}
+
+async function aiCheckChunk(payload){
+  const data = await postAnthropic({ model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user", content:
+`あなたは飲料マスタデータの検品担当です。以下は飲料商品マスタの行データ（JSON）です。
+各行について「商品名」に対して「大分類」「サブカテゴリ」「ブランド1」「ブランド2」に明らかに関連のない・矛盾する値が付与されていないかを判定してください。
+
+判定基準:
+- 商品名が飲料でない（ゼリー・グミ・惣菜・ギフトセット等）のに飲料カテゴリが付与されている → 該当カテゴリ列を指摘
+- ブランド名が商品名と明らかに別ブランド（例: 商品名がザバスなのにブランドがヴァーム） → 該当ブランド列を指摘
+- 「不明」「その他」「空欄」は指摘不要。確信が持てない場合も指摘しない（過検出しない）
+
+以下のJSON配列のみを出力してください。前置き・コードブロック記号は不要です:
+[{"row": 行番号, "column": "列名", "reason": "30字以内の理由"}]
+指摘が無ければ [] を出力。rowは入力データのrow値をそのまま使うこと。
+
+データ:
+${JSON.stringify(payload)}`}] });
+  const text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  return extractIssues(text);
+}
+
+/* ルールベース代替チェック（API不達時・ローカル実行時用） */
+const NONDRINK = /(ゼリー|ぜりぃ|ゼリ[ィイ]|グミ|サプリ|手羽|煮込|惣菜|ギフト|カレー|グラタン|パウダー|ラーメン|スナック)/;
+const norm = s => (s||"").normalize("NFKC"); // 半角カナ→全角・全角英数→半角
+function ruleCheck(idx){
+  let n = 0;
+  rows.forEach((r,ri) => {
+    const name = norm(r[idx[0]]);
+    if(!name || name === "商品名不明") return;
+    // 1) 飲料以外の可能性
+    if(NONDRINK.test(name)){
+      [1,2].forEach(k => {
+        const c = headers.indexOf(REVIEW[k]);
+        const v = r[c];
+        if(v && v !== "不明" && v !== "その他"){ flags.set(key(ri,c), "商品名が飲料以外の可能性（ルール判定）"); n++; }
+      });
+    }
+    // 2) ブランド語が商品名に含まれない
+    [3,4].forEach(k => {
+      const c = headers.indexOf(REVIEW[k]);
+      const v = r[c];
+      if(!v || v === "不明" || v === "その他") return;
+      const tokens = norm(v).split(/\s+/).filter(t => t.length >= 3);
+      if(tokens.length && !tokens.some(t => name.includes(t))){
+        flags.set(key(ri,c), "ブランド語が商品名と不一致（ルール判定）"); n++;
+      }
+    });
+  });
+  return n;
+}
+
+$("btnAI").onclick = async () => {
+  const idx = REVIEW.map(h => headers.indexOf(h));
+  if(idx.some(i => i < 0)){ toast("目検対象列が揃っていません"); return; }
+  const janI = headers.indexOf("JANコード");
+  const items = rows.map((r,i) => ({ row:i, jan:r[janI],
+    商品名:r[idx[0]], 大分類:r[idx[1]], サブカテゴリ:r[idx[2]], ブランド1:r[idx[3]], ブランド2:r[idx[4]] }))
+    .filter(it => it.商品名 && it.商品名 !== "商品名不明");
+  $("btnAI").disabled = true;
+  const CHUNK = 10;
+  let n = 0;
+  try{
+    for(let i = 0; i < items.length; i += CHUNK){
+      $("aiStatus").textContent = `AIチェック中… ${Math.min(i+CHUNK, items.length)}/${items.length}行`;
+      const issues = await aiCheckChunk(items.slice(i, i+CHUNK));
+      issues.forEach(it => {
+        const c = headers.indexOf(it.column);
+        if(c >= 0 && rows[it.row] && rows[it.row][c] !== "不明"){ flags.set(key(it.row,c), it.reason); n++; }
+      });
+      render();
+    }
+    $("aiStatus").textContent = "";
+    toast(n ? "AIチェック完了：" + n + " 箇所に要確認フラグ" : "AIチェック完了：指摘なし");
+  }catch(e){
+    // 代替: ルールベース
+    const rn = ruleCheck(idx);
+    render();
+    $("aiStatus").textContent = "AI接続不可 → ルール判定で代替（" + rn + "件）";
+    toast("AIに接続できません（" + (e.message || "不明なエラー") + "）。ローカル実行時はAPIキー欄にご自身のキーを入力してください。今回はルール判定で代替しました");
+  }finally{
+    $("btnAI").disabled = false;
+  }
+};
+
+/* ---------- 接続テスト ---------- */
+$("btnTest").onclick = async () => {
+  $("btnTest").disabled = true; $("aiStatus").textContent = "接続テスト中…";
+  try{
+    await postAnthropic({ model:"claude-sonnet-4-6", max_tokens:16,
+      messages:[{role:"user", content:"接続テスト。OKとだけ返答。"}] });
+    $("aiStatus").textContent = "✓ AI接続OK（経路: " + (aiRoute==="direct-key"?"APIキー直接":aiRoute==="proxy"?"サーバープロキシ":"Claude内") + "）";
+    toast("AI接続に成功しました");
+  }catch(e){
+    const msg = e.message || "不明なエラー";
+    $("aiStatus").textContent = "✗ 接続不可：" + msg;
+    if(/credit/i.test(msg)) toast("キーは有効ですが、クレジット残高が不足しています。ConsoleのPlans & Billingで購入してください");
+    else if(/401/.test(msg)) toast("APIキーが無効です。キーを確認してください");
+    else toast("接続できません：" + msg);
+  }finally{
+    $("btnTest").disabled = false;
+  }
+};
+
+/* ---------- 書き出し ---------- */
+function toCSV(){
+  const esc = v => /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v;
+  return [headers.map(esc).join(",")].concat(rows.map(r => r.map(esc).join(","))).join("\r\n");
+}
+$("btnCSV").onclick = () => {
+  const blob = new Blob(["\uFEFF" + toCSV()], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = fname + "_checked.csv";
+  a.click(); URL.revokeObjectURL(a.href);
+  toast("CSVをダウンロードしました");
+};
+$("btnTSV").onclick = async () => {
+  const tsv = [headers.join("\t")].concat(rows.map(r => r.join("\t"))).join("\n");
+  try{ await navigator.clipboard.writeText(tsv); toast("コピーしました。Google SheetsのA1に貼り付けてください"); }
+  catch(e){ toast("コピーに失敗しました"); }
+};
+
+/* ---------- 描画 ---------- */
+function render(){
+  const thead = $("tbl").tHead, tbody = $("tbl").tBodies[0];
+  thead.innerHTML = "<tr><th>状態</th>" + headers.map(h =>
+    `<th class="${REVIEW.includes(h)?"review":""}">${h}</th>`).join("") + "</tr>";
+  const nameI = headers.indexOf(NAME_COL);
+  tbody.innerHTML = rows.map((r,ri) => {
+    let rowFlag = false, rowFix = false;
+    const tds = r.map((v,ci) => {
+      const h = headers[ci];
+      const isRev = REVIEW.includes(h);
+      const fl = flags.get(key(ri,ci));
+      const ch = v !== orig[ri][ci];
+      if(fl) rowFlag = true;
+      if(ch) rowFix = true;
+      let cls = [];
+      if(isRev) cls.push("review");
+      if(fl) cls.push("flagged");
+      if(ch) cls.push("changed");
+      let inner = (v === "" ? "&nbsp;" : escapeHtml(v));
+      if(ch && orig[ri][ci] !== "") inner += `<span class="orig">${escapeHtml(orig[ri][ci])}</span>`;
+      if(fl) inner += `<span class="reason">⚑ ${escapeHtml(fl)}</span>`;
+      const attr = isRev ? ` data-r="${ri}" data-c="${ci}" title="クリックで不明⇄元値"` : "";
+      return `<td class="${cls.join(" ")}"${attr}>${inner}</td>`;
+    }).join("");
+    const stamp = rowFlag ? '<span class="stamp check">要確認</span>'
+                : rowFix  ? '<span class="stamp auto">修正済</span>'
+                : '<span class="stamp ok">—</span>';
+    return `<tr>${"<td>"+stamp+"</td>"}${tds}</tr>`;
+  }).join("");
+  tbody.querySelectorAll("td.review").forEach(td => {
+    td.onclick = () => cellClick(+td.dataset.r, +td.dataset.c);
+  });
+  // stats
+  $("stRows").textContent = rows.length;
+  $("stFlag").textContent = flags.size;
+  let fixed = 0, emptyN = 0;
+  rows.forEach((r,ri) => r.forEach((v,ci) => { if(v !== orig[ri][ci]) fixed++; }));
+  if(nameI >= 0) rows.forEach(r => { if(r[nameI] === "商品名不明") emptyN++; });
+  $("stFixed").textContent = fixed;
+  $("stEmpty").textContent = emptyN;
+}
+function escapeHtml(s){ return s.replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+</script>
+</body>
+</html>
