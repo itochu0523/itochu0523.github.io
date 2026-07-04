@@ -393,6 +393,11 @@ textarea{resize:vertical;min-height:80px;}
           <div class="mt"><div class="mn">間違えた問題</div><div class="ms">苦手を集中攻略</div></div>
           <span class="mbadge" id="wrongBadge">0</span>
         </button>
+        <button class="mbtn" onclick="startMode('repeat')" style="border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.04);">
+          <span class="mi">🔁</span>
+          <div class="mt"><div class="mn">繰り返し間違えた問題</div><div class="ms">3回以上ミスした問題を集中特訓</div></div>
+          <span class="mbadge" id="repeatBadge" style="background:var(--red);">0</span>
+        </button>
         <button class="mbtn" onclick="startMode('marked')">
           <span class="mi">⭐</span>
           <div class="mt"><div class="mn">マーク済み</div><div class="ms">重要問題を復習</div></div>
@@ -503,6 +508,10 @@ textarea{resize:vertical;min-height:80px;}
         <div class="card-t">カテゴリ別習熟度</div>
         <div id="dh-weak"></div>
       </div>
+      <div class="card" id="dh-progress-card">
+        <div class="card-t">📈 全問制覇の進捗</div>
+        <div id="dh-progress"></div>
+      </div>
       <div class="card" id="dh-analysis-card" style="display:none;">
         <div class="card-t">📋 弱点分析・対策アドバイス</div>
         <div id="dh-analysis"></div>
@@ -530,6 +539,14 @@ textarea{resize:vertical;min-height:80px;}
       <div class="card" id="dg-weak-card">
         <div class="card-t">カテゴリ別習熟度</div>
         <div id="dg-weak"></div>
+      </div>
+      <div class="card" id="dg-progress-card">
+        <div class="card-t">📈 全問制覇の進捗</div>
+        <div id="dg-progress"></div>
+      </div>
+      <div class="card" id="dg-repeat-card" style="display:none;">
+        <div class="card-t">🔁 繰り返しミス問題（3回以上）</div>
+        <div id="dg-repeat"></div>
       </div>
       <div class="card" id="dg-analysis-card" style="display:none;">
         <div class="card-t">📋 弱点分析・対策アドバイス</div>
@@ -3685,6 +3702,13 @@ function getPool(mode,cat){
     if(!p.length){toast('間違えた問題がありません 🎉');return null;}
     return shuffle(p);
   }
+  if(mode==='repeat'){
+    // 3回以上間違えた問題（missCount >= 3）
+    const missCount=st.missCount||{};
+    const p=db.filter(q=>(missCount[q.id]||0)>=3);
+    if(!p.length){toast('3回以上間違えた問題がありません 👍');return null;}
+    return shuffle(p);
+  }
   if(mode==='marked'){
     const p=db.filter(q=>st.markedIds.includes(q.id));
     if(!p.length){toast('マーク済みがありません');return null;}
@@ -3762,8 +3786,15 @@ function ansQ(idx){
   st.totalAnswered++; if(ok) st.totalCorrect++;
   if(!st.catStats[q.cat]) st.catStats[q.cat]={a:0,c:0};
   st.catStats[q.cat].a++; if(ok) st.catStats[q.cat].c++;
-  if(!ok){if(!st.wrongIds.includes(q.id)) st.wrongIds.push(q.id);}
-  else st.wrongIds=st.wrongIds.filter(id=>id!==q.id);
+  if(!st.missCount) st.missCount={};
+  if(!st.ansCount) st.ansCount={};
+  st.ansCount[q.id]=(st.ansCount[q.id]||0)+1;
+  if(!ok){
+    if(!st.wrongIds.includes(q.id)) st.wrongIds.push(q.id);
+    st.missCount[q.id]=(st.missCount[q.id]||0)+1;
+  } else {
+    st.wrongIds=st.wrongIds.filter(id=>id!==q.id);
+  }
   save();
 
   const isOX = !(q.choices&&Array.isArray(q.choices));
@@ -3869,6 +3900,16 @@ function updHome(){
   const st=getSt();
   document.getElementById('wrongBadge').textContent=st.wrongIds.length;
   document.getElementById('markBadge').textContent=st.markedIds.length;
+  const mc=st.missCount||{}, qdb=getQDB();
+  const rc=qdb.filter(q=>(mc[q.id]||0)>=3).length;
+  const rb=document.getElementById('repeatBadge');
+  if(rb) rb.textContent=rc;
+  // 繰り返しミスバッジ（3回以上）
+  const missCount=st.missCount||{};
+  const db=getQDB();
+  const repeatCount=db.filter(q=>(missCount[q.id]||0)>=3).length;
+  const rb=document.getElementById('repeatBadge');
+  if(rb) rb.textContent=repeatCount;
   renderCountdown();
 }
 
@@ -3891,7 +3932,70 @@ function updDash(){
   document.getElementById('dg-pct').textContent=gp+'%';
   document.getElementById('dg-bar').style.width=gp+'%';
   renderWeakCats('dg-weak', g.catStats, GUN_CATS);
+  renderProgress('hunter');
+  renderProgress('gun');
+  renderRepeatMiss('gun');
   updateAnalysis();
+}
+
+function renderProgress(examType){
+  const elId = examType==='hunter'?'dh-progress':'dg-progress';
+  const el = document.getElementById(elId);
+  if(!el) return;
+  const st = S[examType];
+  const db = examType==='hunter'
+    ? [...HUNTER_QDB,...(S.customQ?.hunter||[])]
+    : [...GUN_QDB,...(S.customQ?.gun||[])];
+  const total = db.length;
+  const answered = Object.keys(st.ansCount||{}).length;
+  const unanswered = total - answered;
+  const pct = total>0?Math.round(answered/total*100):0;
+  const col = pct>=90?'var(--green)':pct>=70?'var(--yellow)':'var(--orange)';
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+      <span>回答済み <strong style="color:${col}">${answered}</strong>問 / 全${total}問</span>
+      <span style="color:${col};font-family:var(--mono);font-weight:700;">${pct}%</span>
+    </div>
+    <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:8px;">
+      <div style="height:100%;width:${pct}%;background:${col};border-radius:4px;transition:width .5s;"></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);">
+      未回答: <strong style="color:var(--orange)">${unanswered}問</strong>　
+      正答率: <strong>${st.totalAnswered>0?Math.round(st.totalCorrect/st.totalAnswered*100):0}%</strong>
+    </div>
+    ${unanswered>0?`<div style="font-size:11px;color:var(--muted);margin-top:6px;">💡 「ランダム20問」や「分野別」で未回答問題をこなしていきましょう</div>`:'<div style="font-size:11px;color:var(--green);margin-top:6px;">🎉 全問回答済み！</div>'}
+  `;
+}
+
+function renderRepeatMiss(examType){
+  const elId = examType==='hunter'?'dh-repeat':'dg-repeat';
+  const cardId = examType==='hunter'?'dh-repeat-card':'dg-repeat-card';
+  const card = document.getElementById(cardId);
+  const el = document.getElementById(elId);
+  if(!card||!el) return;
+  const st = S[examType];
+  const db = examType==='hunter'
+    ? [...HUNTER_QDB,...(S.customQ?.hunter||[])]
+    : [...GUN_QDB,...(S.customQ?.gun||[])];
+  const mc = st.missCount||{};
+  const repeatQs = db.filter(q=>(mc[q.id]||0)>=3)
+    .sort((a,b)=>(mc[b.id]||0)-(mc[a.id]||0));
+  if(!repeatQs.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  const cats = examType==='hunter'?HUNTER_CATS:GUN_CATS;
+  el.innerHTML = `
+    <div style="font-size:12px;color:var(--red);margin-bottom:8px;">
+      計${repeatQs.length}問が3回以上ミスしています。優先的に復習してください。
+    </div>
+    ${repeatQs.slice(0,5).map(q=>{
+      const ci=cats[q.cat]||{icon:'',name:q.cat};
+      return `<div style="background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:9px;margin-bottom:6px;">
+        <div style="font-size:10px;color:var(--red);margin-bottom:3px;">${ci.icon} ${ci.name}　ミス回数：<strong>${mc[q.id]}回</strong></div>
+        <div style="font-size:12px;line-height:1.5;">${q.q.length>60?q.q.slice(0,60)+'…':q.q}</div>
+      </div>`;
+    }).join('')}
+    ${repeatQs.length>5?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:4px;">他${repeatQs.length-5}問… 「🔁繰り返し間違えた問題」モードで全て練習できます</div>`:''}
+  `;
 }
 
 function renderWeakCats(elId, catStats, cats){
@@ -4078,10 +4182,12 @@ function selExam(exam){
 // ════════════════════════════════════
 function renderCountdown(){
   const today=new Date(); today.setHours(0,0,0,0);
-  const exams=[{l:'初心者講習',d:new Date('2025-07-15')},{l:'狩猟試験',d:new Date('2025-09-12')}];
+  const exams=[{l:'初心者講習',d:new Date('2025-07-15')},{l:'狩猟免許試験',d:new Date('2025-09-12')}];
   document.getElementById('countdownRow').innerHTML=exams.map(e=>{
     const diff=Math.ceil((e.d-today)/86400000);
-    return `<div class="cd-chip"><div class="cd-days">${diff>0?diff:0}</div><div class="cd-lbl">${e.l}</div></div>`;
+    const label=diff>0?`あと${diff}日`:'試験当日・終了';
+    const col=diff<=7?'var(--red)':diff<=14?'var(--yellow)':'var(--green)';
+    return `<div class="cd-chip"><div class="cd-days" style="color:${col}">${diff>0?diff:0}</div><div class="cd-lbl">${e.l}</div></div>`;
   }).join('');
 }
 
