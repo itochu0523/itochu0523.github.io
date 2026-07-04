@@ -3450,6 +3450,11 @@ function load(){
     if(!S.customQ) S.customQ={hunter:[],gun:[]};
     if(!S.hunter.catStats) S.hunter.catStats={};
     if(!S.gun.catStats)    S.gun.catStats={};
+    if(!S.hunter.missCount) S.hunter.missCount={};
+    if(!S.gun.missCount)    S.gun.missCount={};
+    if(!S.hunter.ansCount)  S.hunter.ansCount={};
+    if(!S.gun.ansCount)     S.gun.ansCount={};
+    if(!S.examHistory) S.examHistory={hunter:[],gun:[]};
   }catch(e){}
 }
 
@@ -3571,6 +3576,12 @@ async function doFullSync(){
       const mergedCustomG=[...new Map([...(cloud.customQ?.gun||[]),...(S.customQ.gun||[])].map(q=>[q.id,q])).values()];
       S={...S,...cloud};
       S.customQ={hunter:mergedCustomH,gun:mergedCustomG};
+      // 新フィールドがない場合は初期化（データ保護）
+      if(!S.hunter.missCount) S.hunter.missCount={};
+      if(!S.gun.missCount)    S.gun.missCount={};
+      if(!S.hunter.ansCount)  S.hunter.ansCount={};
+      if(!S.gun.ansCount)     S.gun.ansCount={};
+      if(!S.examHistory)      S.examHistory={hunter:[],gun:[]};
       save(); updateAll();
       toast('☁️ データを取得しました');
     } else {
@@ -4182,12 +4193,21 @@ function selExam(exam){
 // ════════════════════════════════════
 function renderCountdown(){
   const today=new Date(); today.setHours(0,0,0,0);
-  const exams=[{l:'初心者講習',d:new Date('2025-07-15')},{l:'狩猟免許試験',d:new Date('2025-09-12')}];
+  const exams=[
+    {l:'初心者講習（銃）',d:new Date('2025-07-15')},
+    {l:'狩猟免許試験',d:new Date('2025-09-12')}
+  ];
   document.getElementById('countdownRow').innerHTML=exams.map(e=>{
     const diff=Math.ceil((e.d-today)/86400000);
-    const label=diff>0?`あと${diff}日`:'試験当日・終了';
-    const col=diff<=7?'var(--red)':diff<=14?'var(--yellow)':'var(--green)';
-    return `<div class="cd-chip"><div class="cd-days" style="color:${col}">${diff>0?diff:0}</div><div class="cd-lbl">${e.l}</div></div>`;
+    const done=diff<=0;
+    const col=done?'var(--muted)':diff<=7?'var(--red)':diff<=14?'var(--yellow)':'var(--green)';
+    const days=done?'終了':''+diff;
+    const sub=done?'試験終了':diff===0?'本日！':`あと${diff}日`;
+    return `<div class="cd-chip">
+      <div class="cd-days" style="color:${col};font-size:${done?'16px':'26px'}">${days}</div>
+      <div class="cd-lbl">${e.l}</div>
+      <div style="font-size:10px;color:${col};margin-top:2px;">${sub}</div>
+    </div>`;
   }).join('');
 }
 
@@ -4503,10 +4523,6 @@ function smTab(idx){
 }
 
 // showSumを呼ぶ場合も smTab(0) にリダイレクト
-function showSum(id){
-  var map={'numbers':0,'license':1,'gun':2,'storage':3,'safety':4,'ammo':5};
-  smTab(map[id]||0);
-}
 
 function gotoTab(tab){
   showScreen(tab);
