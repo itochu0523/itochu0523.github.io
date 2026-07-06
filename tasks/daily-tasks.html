@@ -474,7 +474,7 @@ const MEALS=[
 
 // ─── 定数 ──────────────────────────────────────────────────────
 const STAPLES=[
-  {id:'s01',n:'無料1',c:'水関連'},{id:'s02',n:'無料2',c:'水関連'},{id:'s03',n:'飲料1',c:'水関連'},
+  {id:'s01',n:'飲料1',c:'水関連'},{id:'s02',n:'飲料2',c:'水関連'},{id:'s03',n:'飲料3',c:'水関連'},
   {id:'s04',n:'湧水タンク',c:'水関連'},{id:'s05',n:'豆乳',c:'水関連'},{id:'s06',n:'氷結',c:'水関連'},
   {id:'s07',n:'赤ワイン',c:'水関連'},{id:'s08',n:'バナナ',c:'水関連'},{id:'s09',n:'タバコ',c:'水関連'},
   {id:'s11',n:'ビニール2L',c:'ビニール関連'},{id:'s12',n:'ビニールSS',c:'ビニール関連'},
@@ -967,7 +967,8 @@ function renderMealTab(t){
     if(tm.type==='eatout'){el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:16px"><div style="font-size:12px;color:var(--gold);margin-bottom:6px">📍 今日の外食</div><div style="font-size:16px;font-weight:600;color:white">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';}
     else if(!tm.menuId){el.innerHTML='<div class="empty"><div class="ei">🍳</div><div class="et">おすすめからメニューを選んでください</div></div>';}
     else{
-      const m=mealById(tm.menuId);if(!m)return;
+      const m=mealById(tm.menuId);
+      if(!m){el.innerHTML='<div class="empty"><div class="ei">🔄</div><div class="et">再度メニューを選んでください</div></div>';return;}
       el.innerHTML='<div class="r-header"><div class="r-emoji">'+m.emoji+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・'+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+m.nutr.cal+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+m.nutr.protein+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+m.nutr.fat+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+m.nutr.carb+'g</div><div class="l">糖質</div></div></div>';
       const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px;margin-bottom:16px';
       [['toggleCooked','🍳','調理した',tm.cooked],['toggleEaten','😋','食べた',tm.eaten]].forEach(([fn,ic,lb,done])=>{const b=mkBtn(ic,lb,'',done,'#6fcf97',window[fn]);b.style.flex='1';wrap.appendChild(b);});
@@ -988,7 +989,7 @@ function renderEatOut(){
 }
 function renderNutr(){
   const el=document.getElementById('nutr-detail');if(!el)return;el.innerHTML='';
-  const wm=Array.from({length:7},(_,i)=>{const k=daysAgo(i);const m=(state.meals||{})[k];return m?.menuId?mealById(m.menuId):null;}).filter(Boolean);
+  const wm=Array.from({length:7},(_,i)=>{const k=daysAgo(i);const m=(state.meals||{})[k];if(!rec||!rec.menuId)return null;const mx=mealById(rec.menuId);return(mx&&mx.nutr)?mx:null;}).filter(Boolean);
   if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">食事の記録がまだありません</div></div>';return;}
   const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});const n=wm.length;
   el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1;const p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+m.emoji+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
