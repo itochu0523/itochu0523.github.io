@@ -398,6 +398,11 @@ textarea{resize:vertical;min-height:80px;}
           <div class="mt"><div class="mn">繰り返し間違えた問題</div><div class="ms">3回以上ミスした問題を集中特訓</div></div>
           <span class="mbadge" id="repeatBadge" style="background:var(--red);">0</span>
         </button>
+        <button class="mbtn" onclick="startMode('unanswered')" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.04);">
+          <span class="mi">🆕</span>
+          <div class="mt"><div class="mn">未回答問題</div><div class="ms">まだ解いていない問題を一気に周回</div></div>
+          <span class="mbadge" id="unansweredBadge" style="background:var(--blue,#60a5fa);">0</span>
+        </button>
         <button class="mbtn" onclick="startMode('marked')">
           <span class="mi">⭐</span>
           <div class="mt"><div class="mn">マーク済み</div><div class="ms">重要問題を復習</div></div>
@@ -449,7 +454,10 @@ textarea{resize:vertical;min-height:80px;}
       <div class="r-verdict" id="rVerdict"></div>
       <div class="r-explain" id="rExplain"></div>
       <div class="r-ref" id="rRef"></div>
-      <button class="mark-btn" id="markBtn" onclick="toggleMark()">☆ 重要マーク</button>
+      <div style="display:flex;gap:8px;">
+        <button class="mark-btn" id="markBtn" onclick="toggleMark()" style="flex:1;">☆ 重要マーク</button>
+        <button class="mark-btn" id="excludeBtn" onclick="toggleExclude()" style="flex:1;">🚫 不要問題にする</button>
+      </div>
     </div>
     <button class="next-btn" id="nextBtn" onclick="nextQ()">次の問題 →</button>
   </div>
@@ -707,6 +715,13 @@ textarea{resize:vertical;min-height:80px;}
       <div class="set-row">
         <div style="flex:1"><div style="font-size:13px;">追加問題数</div><div style="font-size:11px;color:var(--muted)">手入力・AI生成</div></div>
         <div style="font-family:var(--mono);font-size:13px;color:var(--green)" id="customQCount">0問</div>
+      </div>
+      <div class="set-row">
+        <div style="flex:1"><div style="font-size:13px;">🚫 不要問題数</div><div style="font-size:11px;color:var(--muted)">簡単すぎる問題を除外中</div></div>
+        <div style="font-family:var(--mono);font-size:13px;color:var(--red)" id="excludedQCount">0問</div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:8px;">
+        <button class="btn btn-m btn-s" style="flex:1" onclick="startMode('excluded')">🚫 不要問題を確認・解除</button>
       </div>
       <div style="display:flex;gap:7px;margin-top:8px;">
         <button class="btn btn-r btn-s" onclick="resetProgress()">進捗リセット</button>
@@ -3375,8 +3390,8 @@ const CL_KEY  = 'huntingHQ_claude';
 let S = {
   exam:'hunter',
   dashTab:'hunter',
-  hunter:{totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}},
-  gun:   {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],catStats:{}},
+  hunter:{totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],excludedIds:[],catStats:{}},
+  gun:   {totalAnswered:0,totalCorrect:0,wrongIds:[],markedIds:[],excludedIds:[],catStats:{}},
   notes:[],
   customQ:{hunter:[],gun:[]},
   examHistory:{hunter:[],gun:[]}, // 模試結果の履歴
@@ -3401,6 +3416,8 @@ function load(){
     if(!S.gun.missCount)    S.gun.missCount={};
     if(!S.hunter.ansCount)  S.hunter.ansCount={};
     if(!S.gun.ansCount)     S.gun.ansCount={};
+    if(!S.hunter.excludedIds) S.hunter.excludedIds=[];
+    if(!S.gun.excludedIds)    S.gun.excludedIds=[];
     if(!S.examHistory) S.examHistory={hunter:[],gun:[]};
   }catch(e){}
 }
@@ -3528,6 +3545,8 @@ async function doFullSync(){
       if(!S.gun.missCount)    S.gun.missCount={};
       if(!S.hunter.ansCount)  S.hunter.ansCount={};
       if(!S.gun.ansCount)     S.gun.ansCount={};
+      if(!S.hunter.excludedIds) S.hunter.excludedIds=[];
+      if(!S.gun.excludedIds)    S.gun.excludedIds=[];
       if(!S.examHistory)      S.examHistory={hunter:[],gun:[]};
       save(); updateAll();
       toast('☁️ データを取得しました');
@@ -3652,7 +3671,10 @@ let sess={qs:[],idx:0,ans:[],mode:'',t0:0};
 let cQ=null, cAnswered=false, cShuffled=0;
 
 function getPool(mode,cat){
-  const db=getQDB(), st=getSt();
+  const db0=getQDB(), st=getSt();
+  if(!st.excludedIds) st.excludedIds=[];
+  // 不要問題モード以外は、除外リストに入っている問題を出題プールから外す
+  const db = mode==='excluded' ? db0 : db0.filter(q=>!st.excludedIds.includes(q.id));
   if(mode==='random') return shuffle([...db]);
   if(mode==='exam') return makeExam(db);
   if(mode==='wrong'){
@@ -3665,6 +3687,17 @@ function getPool(mode,cat){
     const missCount=st.missCount||{};
     const p=db.filter(q=>(missCount[q.id]||0)>=3);
     if(!p.length){toast('3回以上間違えた問題がありません 👍');return null;}
+    return shuffle(p);
+  }
+  if(mode==='unanswered'){
+    const ansCount=st.ansCount||{};
+    const p=db.filter(q=>!(ansCount[q.id]>0));
+    if(!p.length){toast('全問回答済みです！🎉 素晴らしい！');return null;}
+    return shuffle(p);
+  }
+  if(mode==='excluded'){
+    const p=db.filter(q=>st.excludedIds.includes(q.id));
+    if(!p.length){toast('不要問題としてマークした問題はありません');return null;}
     return shuffle(p);
   }
   if(mode==='marked'){
@@ -3732,7 +3765,7 @@ function renderQ(){
 
   document.getElementById('rbox').style.display='none';
   document.getElementById('nextBtn').style.display='none';
-  updMarkBtn();
+  updMarkBtn(); updExcludeBtn();
 }
 
 function ansQ(idx){
@@ -3777,7 +3810,7 @@ function ansQ(idx){
   document.getElementById('rExplain').textContent=q.explain||'';
   document.getElementById('rRef').textContent=q.ref?'📖 '+q.ref:'';
   document.getElementById('nextBtn').style.display='block';
-  updMarkBtn();
+  updMarkBtn(); updExcludeBtn();
 }
 
 function nextQ(){ sess.idx++; if(sess.idx>=sess.qs.length){showResult();return;} renderQ(); }
@@ -3796,6 +3829,25 @@ function updMarkBtn(){
   const btn=document.getElementById('markBtn');
   btn.textContent=marked?'★ マーク済み':'☆ 重要マーク';
   btn.style.color=marked?'var(--yellow)':'var(--muted)';
+}
+function toggleExclude(){
+  if(!cQ) return;
+  const st=getSt(), id=cQ.id;
+  if(!st.excludedIds) st.excludedIds=[];
+  if(st.excludedIds.includes(id)) st.excludedIds=st.excludedIds.filter(x=>x!==id);
+  else st.excludedIds.push(id);
+  save(); autoSave(); updExcludeBtn();
+}
+function updExcludeBtn(){
+  if(!cQ) return;
+  const st=getSt();
+  if(!st.excludedIds) st.excludedIds=[];
+  const excluded=st.excludedIds.includes(cQ.id);
+  const btn=document.getElementById('excludeBtn');
+  if(!btn) return;
+  btn.textContent=excluded?'✅ 不要問題から戻す':'🚫 不要問題にする';
+  btn.style.color=excluded?'var(--red)':'var(--muted)';
+  btn.style.borderColor=excluded?'var(--red)':'var(--border)';
 }
 
 function showResult(){
@@ -3862,6 +3914,13 @@ function updHome(){
   const rc=qdb.filter(q=>(mc[q.id]||0)>=3).length;
   const rbEl=document.getElementById('repeatBadge');
   if(rbEl) rbEl.textContent=rc;
+  // 未回答問題バッジ（除外問題を除く）
+  const ac=st.ansCount||{};
+  const excluded=st.excludedIds||[];
+  const activeDb=qdb.filter(q=>!excluded.includes(q.id));
+  const uc=activeDb.filter(q=>!(ac[q.id]>0)).length;
+  const ubEl=document.getElementById('unansweredBadge');
+  if(ubEl) ubEl.textContent=uc;
   renderCountdown();
 }
 
@@ -4354,6 +4413,9 @@ function updCustomCount(){
   const hc=(S.customQ?.hunter||[]).length, gc=(S.customQ?.gun||[]).length;
   const el=document.getElementById('customQCount');
   if(el) el.textContent=`狩猟${hc}・銃${gc}問`;
+  const he=(S.hunter.excludedIds||[]).length, ge=(S.gun.excludedIds||[]).length;
+  const eel=document.getElementById('excludedQCount');
+  if(eel) eel.textContent=`狩猟${he}・銃${ge}問`;
 }
 
 // ════════════════════════════════════
