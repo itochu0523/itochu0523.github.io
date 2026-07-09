@@ -736,8 +736,8 @@ textarea{resize:vertical;min-height:80px;}
     <div class="card">
       <div class="card-t">🎨 表示テーマ</div>
       <div style="display:flex;gap:8px;">
-        <button id="theme-dark-btn" onclick="setTheme('dark')" style="flex:1;padding:12px;border-radius:12px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">🌙 ダークモード</button>
-        <button id="theme-light-btn" onclick="setTheme('light')" style="flex:1;padding:12px;border-radius:12px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">☀️ ライトモード</button>
+        <button id="theme-dark-btn" onclick="setTheme('dark')" style="flex:1;flex-direction:row;padding:12px;border-radius:12px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;gap:6px;">🌙 <span>ダークモード</span></button>
+        <button id="theme-light-btn" onclick="setTheme('light')" style="flex:1;flex-direction:row;padding:12px;border-radius:12px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;background:var(--bg3);color:var(--text);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;gap:6px;">☀️ <span>ライトモード</span></button>
       </div>
     </div>
     <div class="card">
@@ -6740,12 +6740,14 @@ function updThemeButtons(mode){
   const darkBtn = document.getElementById('theme-dark-btn');
   const lightBtn = document.getElementById('theme-light-btn');
   if(!darkBtn || !lightBtn) return;
+  darkBtn.style.display='flex'; darkBtn.style.flexDirection='row'; darkBtn.style.alignItems='center'; darkBtn.style.justifyContent='center';
+  lightBtn.style.display='flex'; lightBtn.style.flexDirection='row'; lightBtn.style.alignItems='center'; lightBtn.style.justifyContent='center';
   if(mode==='light'){
     lightBtn.style.background='var(--green)'; lightBtn.style.color='#fff'; lightBtn.style.border='2px solid var(--green)';
-    darkBtn.style.background='var(--bg3)'; darkBtn.style.color='var(--muted)'; darkBtn.style.border='1px solid var(--border)';
+    darkBtn.style.background='var(--bg3)'; darkBtn.style.color='var(--text)'; darkBtn.style.border='1px solid var(--border2)';
   } else {
     darkBtn.style.background='var(--green)'; darkBtn.style.color='#fff'; darkBtn.style.border='2px solid var(--green)';
-    lightBtn.style.background='var(--bg3)'; lightBtn.style.color='var(--muted)'; lightBtn.style.border='1px solid var(--border)';
+    lightBtn.style.background='var(--bg3)'; lightBtn.style.color='var(--text)'; lightBtn.style.border='1px solid var(--border2)';
   }
 }
 function initTheme(){
