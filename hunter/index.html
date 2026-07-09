@@ -23,6 +23,14 @@
   --sat:env(safe-area-inset-top, 0px);
   --sab:env(safe-area-inset-bottom, 0px);
 }
+html.light{
+  --bg:#f4f8f4; --bg2:#ffffff; --bg3:#eef4ee; --card:#ffffff;
+  --border:rgba(22,101,52,.15); --border2:rgba(22,101,52,.3);
+  --text:#0f2a14; --muted:#6b8a6b; --muted2:#3d5a3d;
+  --green:#16a34a; --green2:#15803d; --green3:#dcfce7;
+  --yellow:#b45309; --red:#dc2626; --blue:#2563eb; --orange:#ea580c;
+  --hunter:#ea580c; --gun:#2563eb;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;}
 
@@ -725,6 +733,13 @@ textarea{resize:vertical;min-height:80px;}
 <div class="screen" id="screen-settings">
   <div class="hdr"><div class="hdr-title">⚙️ 設定</div></div>
   <div class="scroll">
+    <div class="card">
+      <div class="card-t">🎨 表示テーマ</div>
+      <div style="display:flex;gap:8px;">
+        <button id="theme-dark-btn" onclick="setTheme('dark')" style="flex:1;padding:12px;border-radius:12px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">🌙 ダークモード</button>
+        <button id="theme-light-btn" onclick="setTheme('light')" style="flex:1;padding:12px;border-radius:12px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">☀️ ライトモード</button>
+      </div>
+    </div>
     <div class="card">
       <div class="card-t">☁️ クラウド同期（JSONBin.io）</div>
       <div style="font-size:12px;color:var(--orange);background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:8px;padding:10px;margin-bottom:11px;line-height:1.7;">
@@ -6505,8 +6520,167 @@ ref:'銃刀法第5条第5項'},
 q:'所持許可を受けた者が失踪し、生死が長期間不明になった場合、その所持許可は自動的に失効する。',
 answer:false,
 explain:'誤り。単なる失踪や生死不明は、法定の失効事由（譲渡・亡失・盗取・同一性を失う改造・３か月以内の不所持等）に直接該当しない。実務上は公安委員会による所在確認や指示等の対応が行われるが、「失踪＝自動失効」という単純な規定ではない。',
-ref:'銃刀法第8条'}
+ref:'銃刀法第8条'},
+
+// ── ユーザー提供15問の検証済み再構成（主語すり替え・最大最小反転パターン）──
+{id:90500,cat:'law',
+q:'鉄砲刀剣類所持等取締法（銃刀法）では、原則として鉄砲の所持することを禁止している。',
+answer:true,
+explain:'正しい（内容として）。銃刀法は原則として銃砲の所持を禁止し、公安委員会の許可を受けた場合に限り例外的に所持が認められる、という基本構造を示している。なお法律の正式名称は「銃砲刀剣類所持等取締法」であり、正確には「銃砲」の字を用いる。',
+ref:'銃刀法第3条'},
+
+{id:90501,cat:'law',
+q:'狩猟のため、猟銃の所持許可を受けた人は、狩猟時期ごとに、その銃を用いた射撃練習を行い、技能の維持・向上に努めなければならない。',
+answer:true,
+explain:'正しい。狩猟のため所持許可を受けた人は、狩猟期間ごとに（初めてその猟銃で狩猟を行う前に）射撃練習を行うよう努める義務がある。技能の維持向上は事故予防のための重要な努力義務。',
+ref:'銃刀法第10条の9'},
+
+{id:90502,cat:'law',
+q:'都道府県知事が必要と認めた場合、公安委員会は、所持許可を受けた人に対し、指定する医師の診断を受けるよう命ずることができる。',
+answer:false,
+explain:'誤り。「必要と認める」主体は都道府県知事ではなく、都道府県公安委員会自身である。都道府県公安委員会が必要と認めたときに、指定する医師の診断を命じることができる。知事にはこの権限がない。',
+ref:'銃刀法第10条の10'},
+
+{id:90503,cat:'law',
+q:'猟銃や空気銃は、たとえ点検の場合で空撃ちをする場合であっても、用心金の中に指を入れてはならない。',
+answer:false,
+explain:'誤り。銃の点検で空撃ちを行うときなどの特別の場合には、例外的に用心金の中に指を入れても構わないとされている。原則（射撃時以外は指を入れない）には、この点検・空撃ちという明確な例外がある。',
+ref:'猟銃等取扱読本'},
+
+{id:90504,cat:'mech',
+q:'銃を組み立てたときは、接合部の緩みを確認するため、銃を垂直にして銃床部の下を支えて軽く揺するなどの確認を行う。',
+answer:true,
+explain:'正しい。組立後は銃を垂直にし、銃床部の下を支えて軽く揺するなどして、接合部分に緩みがないかを確認する必要がある。',
+ref:'警察庁基準問題'},
+
+{id:90505,cat:'law',
+q:'猟銃や空気銃の所持許可を受けるには、住所地を管轄する公安委員会に申請する必要がある。',
+answer:false,
+explain:'誤り。申請先は「住所地を管轄する警察署」であり、「公安委員会」ではない。公安委員会は許可を出す（決定する）主体だが、申請の窓口・提出先は警察署である点を混同しないこと。',
+ref:'銃刀法第4条'},
+
+{id:90506,cat:'law',
+q:'所持許可証の再交付を受けた後に、なくした許可証を見つけたときには、再交付された許可証を住所地の管轄する警察署に返納しなければならない。',
+answer:false,
+explain:'誤り。返納すべきは「再交付された（新しい・有効な）許可証」ではなく、後から見つかった「旧許可証（無効になったもの）」である。新しい許可証は引き続き手元に保持し、旧許可証のみを警察署に返納する。',
+ref:'警察庁基準問題'},
+
+{id:90507,cat:'law',
+q:'猟銃や空気銃の所持者が銃砲刀剣類所持等取締法に違反した場合には、都道府県公安委員から所持許可を抹消される。',
+answer:false,
+explain:'誤り。「抹消される」ではなく「取り消される」が正しい用語。取消しと抹消は法律上異なる概念で、取消しは違反行為等を理由とする行政処分、抹消は既に失効した許可事項を許可証から削除する事務手続きを指す。',
+ref:'銃刀法第11条'},
+
+{id:90508,cat:'safe',
+q:'散弾銃の最大到達距離は、銃の番径であり、使用される散弾の号数ではない。',
+answer:false,
+explain:'誤り。内容が完全に逆。散弾銃の最大到達距離は、銃の番径ではなく、使用される散弾の号数によって決まる。番径（銃の口径）と号数（散弾の粒径）の役割を取り違えないこと。',
+ref:'警察庁基準問題'},
+
+{id:90509,cat:'safe',
+q:'散弾銃の散弾の最大到達距離は、約300メートルとされている。',
+answer:false,
+explain:'誤り。正しい数値は約515メートル。「約300メートル」という数値は誤り。ライフルドスラッグ（一粒弾）の最大到達距離（約700m）や、ライフル弾（約4,000m）と混同しないよう、散弾（複数の粒）は約515mと正確に覚える。',
+ref:'警察庁基準問題'},
+
+{id:90510,cat:'law',
+q:'火薬類に関する許可は原則都道府県知事が行うが、猟銃用火薬類等の譲受け、譲渡し等についての許可は都道府県公安委員会が行う。',
+answer:true,
+explain:'正しい。一般の火薬類許可は都道府県知事が所管するが、猟銃用火薬類等の譲受け・譲渡し等については特別に都道府県公安委員会が許可権限を持つ。',
+ref:'火薬類取締法・銃刀法'},
+
+{id:90511,cat:'safe',
+q:'ライフル銃は、数千メートルの射程があり、国内ではこのような遠距離まで人や動物がいる地形は少ない',
+answer:false,
+explain:'誤り。意味が反転している。正しくは「このような遠距離まで人や動物が全くいない地形は少ない」＝完全に無人・無獣の広大な土地はまれである、という危険性を強調する趣旨。Q12のように言い換えると、逆に安全であるかのような誤った印象を与えてしまう。',
+ref:'警察庁基準問題'},
+
+{id:90512,cat:'safe',
+q:'狩猟に自働銃を使用する場合は、猟場の状況を勘案して必要最大限の装填をおこなうべきである。',
+answer:false,
+explain:'誤り。「必要最大限」ではなく「必要最低限」の装填にとどめるべきである。自動銃（セミオート）であっても、猟場の状況を考慮し、装填数を必要最小限に抑える配慮が求められる。',
+ref:'警察庁基準問題'},
+
+{id:90513,cat:'law',
+q:'弾倉に装填できる弾の数を変更するなど同一性が失われない範囲で銃の改造をした場合には、所持許可証の書き換えを受けなければならない。',
+answer:true,
+explain:'正しい。同一性を失わない範囲の改造（装填数の変更等）をした場合は、許可の取り直しではなく、所持許可証の書換え手続きで対応する。',
+ref:'銃刀法'},
+
+{id:90514,cat:'mech',
+q:'ボルト・アクション銃は、ボルト式の銃であり、散弾銃に多い。',
+answer:false,
+explain:'誤り。ボルトアクション銃が多いのは散弾銃ではなく「ライフル銃」である。散弾銃に多いのは自動装填式・スライドアクション式・元折式等。銃種と機構方式の組み合わせを正確に覚えること。',
+ref:'警察庁基準問題'},
+
+// ── 同パターン追加強化 ──
+{id:90515,cat:'law',
+q:'猟銃や空気銃の所持許可の更新申請は、住所地を管轄する公安委員会に対して行う。',
+answer:false,
+explain:'誤り。申請先は「住所地を管轄する警察署」であり「公安委員会」ではない。新規申請・更新申請いずれも窓口は警察署であり、公安委員会は許可・不許可を決定する側である。',
+ref:'銃刀法第9条の5'},
+
+{id:90516,cat:'law',
+q:'都道府県知事は、所持許可を受けた者が欠格事由に該当する疑いがあると認めた場合、必要な調査を行う間、当該所持許可を受けた者に対し銃を提出させ、保管することができる。',
+answer:false,
+explain:'誤り。「必要な調査を行う間の銃の提出・保管」を命じる主体は都道府県知事ではなく「都道府県公安委員会」である。この分野の問題は「知事」と「公安委員会」を意図的に入れ替えて出題されることが多いので要注意。',
+ref:'銃刀法第10条の10'},
+
+{id:90517,cat:'safe',
+q:'狩猟や有害鳥獣駆除のときは、装填する実包等について、射撃の状況を考え、できるだけ多くの数を装填しておくべきである。',
+answer:false,
+explain:'誤り。「できるだけ多くの数」ではなく「必要最小限の個数」にとどめるべきである。装填数を増やすことは暴発や誤射等のリスクを高めるため、常に必要最小限が原則。',
+ref:'警察庁基準問題'},
+
+{id:90518,cat:'safe',
+q:'引き金の重さは、暴発を防ぐため、できるだけ重くするほど安全性が高まる。',
+answer:false,
+explain:'誤り。引き金の重さは「軽すぎると」暴発しやすく危険だが、逆に重すぎると発射のタイミングを逃す原因にもなる。「重くするほど安全」という一方向の断定は誤りで、狩猟用2kg・射撃用1.5kg程度という適切な目安がある。',
+ref:'猟銃等取扱読本'},
+
+{id:90519,cat:'law',
+q:'猟銃や空気銃の所持許可が失効した場合、その所持許可は都道府県公安委員会から取り消される。',
+answer:false,
+explain:'誤り。「失効」と「取消し」は別の概念。失効は有効期間満了や不所持等により自動的に効力が失われることであり、公安委員会が能動的に取り消す「取消し」とは異なる。失効は本人の手続き不備等で自動的に生じ、取消しは公安委員会の行政処分である。',
+ref:'銃刀法'},
+
+{id:90520,cat:'law',
+q:'所持許可証の記載事項に誤りがあった場合は、警察署にその記載事項を取り消してもらう必要がある。',
+answer:false,
+explain:'誤り。記載事項の訂正は「取消し」ではなく「書換え」の手続きによる。取消しは許可そのものの効力を失わせる重い処分であり、単なる記載内容の誤り訂正とは全く異なる手続き。',
+ref:'銃刀法'},
+
+{id:90521,cat:'safe',
+q:'ライフル銃により発射された弾丸には、最大到達距離が約2,000メートルに及ぶものもある。',
+answer:false,
+explain:'誤り。ライフル銃の弾丸の最大到達距離は約4,000メートルに及ぶものもある。「約2,000メートル」という数値は誤り。',
+ref:'警察庁基準問題'},
+
+{id:90522,cat:'safe',
+q:'散弾銃でライフルドスラッグと呼ばれるものを使用した場合の最大到達距離は、約300メートルとされている。',
+answer:false,
+explain:'誤り。ライフルドスラッグ（一粒弾）の最大到達距離は約700メートル。「約300メートル」ではない。散弾（約515m）・スラッグ（約700m）・ライフル弾（約4,000m）の3つの数値を混同しないこと。',
+ref:'警察庁基準問題'},
+
+{id:90523,cat:'keep',
+q:'実包又は空包について、自宅で保管できる数量は、合計1,000個以内である。',
+answer:false,
+explain:'誤り。自宅で保管できる実包・空包の上限は合計800個であり、1,000個ではない。',
+ref:'火薬類取締法'},
+
+{id:90524,cat:'mech',
+q:'スライド・アクション銃は、ボルト（槓桿）式の銃であり、ライフル銃に多い。',
+answer:false,
+explain:'誤り。この記述はボルトアクション銃の説明であり、スライドアクション銃の説明ではない。スライドアクション銃は先台を握る手で排莢・装填操作を行う方式で、散弾銃に多い。ボルトアクション銃とスライドアクション銃を取り違えないこと。',
+ref:'警察庁基準問題'},
+
+{id:90525,cat:'mech',
+q:'元折単身銃は、発射の際に生じる火薬のガス圧や反動を利用して、排きょうと次弾の装塡が自動的に行われる連発銃である。',
+answer:false,
+explain:'誤り。この記述は自動装填式銃の説明である。元折単身銃は銃身後端と機関部との結合部付近で折れる構造の単発（または二連）銃であり、ガス圧を利用した自動排莢・装填の機構は持たない。',
+ref:'警察庁基準問題'}
 ];
+
 
 
 
@@ -6551,6 +6725,35 @@ let S = {
 };
 
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
+// ── テーマ切替（ダーク/ライトモード）──
+function setTheme(mode){
+  const html = document.documentElement;
+  if(mode==='light'){
+    html.classList.add('light');
+  } else {
+    html.classList.remove('light');
+  }
+  try{ localStorage.setItem('hunting_theme', mode); }catch(e){}
+  updThemeButtons(mode);
+}
+function updThemeButtons(mode){
+  const darkBtn = document.getElementById('theme-dark-btn');
+  const lightBtn = document.getElementById('theme-light-btn');
+  if(!darkBtn || !lightBtn) return;
+  if(mode==='light'){
+    lightBtn.style.background='var(--green)'; lightBtn.style.color='#fff'; lightBtn.style.border='2px solid var(--green)';
+    darkBtn.style.background='var(--bg3)'; darkBtn.style.color='var(--muted)'; darkBtn.style.border='1px solid var(--border)';
+  } else {
+    darkBtn.style.background='var(--green)'; darkBtn.style.color='#fff'; darkBtn.style.border='2px solid var(--green)';
+    lightBtn.style.background='var(--bg3)'; lightBtn.style.color='var(--muted)'; lightBtn.style.border='1px solid var(--border)';
+  }
+}
+function initTheme(){
+  let mode='dark';
+  try{ mode = localStorage.getItem('hunting_theme') || 'dark'; }catch(e){}
+  setTheme(mode);
+}
+
 function load(){
   try{
     const d=localStorage.getItem(LS_KEY);
@@ -7767,6 +7970,7 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 // 初期化
 // ════════════════════════════════════
 load();
+initTheme();
 updateAll();
 if(hasCfg()){
   const cfg=getCfg();
