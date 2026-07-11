@@ -357,9 +357,20 @@ textarea{resize:vertical;min-height:80px;}
   background:var(--bg2);border:1px solid var(--border);border-radius:14px;
   padding:14px;margin-bottom:10px;
 }
-.cb-num{
-  font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:6px;font-weight:700;
+.cb-toprow{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;
 }
+.cb-num{
+  font-size:11px;color:var(--muted);font-family:var(--mono);font-weight:700;
+}
+.cb-actions{display:flex;gap:6px;}
+.cb-act-btn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  width:30px;height:30px;font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.cb-act-btn.on{background:rgba(251,191,36,.15);border-color:var(--yellow);}
+.cb-act-btn.on-red{background:rgba(248,113,113,.15);border-color:var(--red);}
 .cb-q{
   font-size:15px;line-height:1.6;color:var(--text);cursor:pointer;
   padding:2px 0;
@@ -427,31 +438,47 @@ textarea{resize:vertical;min-height:80px;}
           <span class="mi">📝</span>
           <div class="mt"><div class="mn">本番模擬試験</div><div class="ms">本番比率・合格判定つき</div></div>
         </button>
-        <button class="mbtn" onclick="startMode('wrong')">
-          <span class="mi">❌</span>
-          <div class="mt"><div class="mn">間違えた問題</div><div class="ms">苦手を集中攻略</div></div>
-          <span class="mbadge" id="wrongBadge">0</span>
-        </button>
-        <button class="mbtn" onclick="startMode('repeat')" style="border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.04);">
-          <span class="mi">🔁</span>
-          <div class="mt"><div class="mn">繰り返し間違えた問題</div><div class="ms">3回以上ミスした問題を集中特訓</div></div>
-          <span class="mbadge" id="repeatBadge" style="background:var(--red);">0</span>
-        </button>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="mbtn" style="flex:1;margin-bottom:0;" onclick="startMode('wrong')">
+            <span class="mi">❌</span>
+            <div class="mt"><div class="mn">間違えた問題</div><div class="ms">苦手を集中攻略</div></div>
+            <span class="mbadge" id="wrongBadge">0</span>
+          </button>
+          <button onclick="showListBrowse('wrong')" style="width:56px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;color:var(--muted);cursor:pointer;">
+            <span style="font-size:18px;">📋</span><span style="font-size:9px;">一覧</span>
+          </button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="mbtn" style="flex:1;margin-bottom:0;border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.04);" onclick="startMode('repeat')">
+            <span class="mi">🔁</span>
+            <div class="mt"><div class="mn">繰り返し間違えた問題</div><div class="ms">3回以上ミスした問題を集中特訓</div></div>
+            <span class="mbadge" id="repeatBadge" style="background:var(--red);">0</span>
+          </button>
+          <button onclick="showListBrowse('repeat')" style="width:56px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;color:var(--muted);cursor:pointer;">
+            <span style="font-size:18px;">📋</span><span style="font-size:9px;">一覧</span>
+          </button>
+        </div>
         <button class="mbtn" onclick="startMode('unanswered')" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.04);">
           <span class="mi">🆕</span>
           <div class="mt"><div class="mn">未回答問題</div><div class="ms">まだ解いていない問題を一気に周回</div></div>
           <span class="mbadge" id="unansweredBadge" style="background:var(--blue,#60a5fa);">0</span>
         </button>
-        <button class="mbtn" onclick="startMode('marked')">
-          <span class="mi">⭐</span>
-          <div class="mt"><div class="mn">マーク済み</div><div class="ms">重要問題を復習</div></div>
-          <span class="mbadge y" id="markBadge">0</span>
-        </button>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="mbtn" style="flex:1;margin-bottom:0;" onclick="startMode('marked')">
+            <span class="mi">⭐</span>
+            <div class="mt"><div class="mn">マーク済み</div><div class="ms">重要問題を復習</div></div>
+            <span class="mbadge y" id="markBadge">0</span>
+          </button>
+          <button onclick="showListBrowse('marked')" style="width:56px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;color:var(--muted);cursor:pointer;">
+            <span style="font-size:18px;">📋</span><span style="font-size:9px;">一覧</span>
+          </button>
+        </div>
         <button class="mbtn" onclick="showCatScreen()">
           <span class="mi">📚</span>
           <div class="mt"><div class="mn">分野別に攻める</div><div class="ms">カテゴリを選んで出題</div></div>
         </button>
       </div>
+
     </div>
   </div>
   <div class="bnav" id="bnav-home">
@@ -477,7 +504,7 @@ textarea{resize:vertical;min-height:80px;}
 <!-- CATEGORY BROWSE SCREEN (mobile-first list view) -->
 <div class="screen" id="screen-catbrowse">
   <div class="hdr">
-    <button class="icon-btn" onclick="showScreen('cat')">←</button>
+    <button class="icon-btn" onclick="catBrowseBack()">←</button>
     <div class="hdr-title" id="catBrowseTitle" style="font-size:14px;">分野一覧</div>
   </div>
   <div style="display:flex;gap:8px;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);">
@@ -7779,13 +7806,47 @@ function showCatScreen(){
   showScreen('cat');
 }
 
-// ── 分野別・全問一覧ブラウズ画面 ──
+// ── 分野別・条件別 全問一覧ブラウズ画面（汎用化） ──
 let browseCache = [];
+let browseMode = 'cat'; // 'cat' | 'wrong' | 'repeat' | 'marked'
+let browseCatKey = null;
+
 function showCatBrowse(catKey){
   const cats=getCats(), db=getQDB();
   const ci=cats[catKey]||{icon:'',name:catKey};
+  browseMode = 'cat';
+  browseCatKey = catKey;
   browseCache = db.filter(q=>q.cat===catKey);
   document.getElementById('catBrowseTitle').textContent = `${ci.icon} ${ci.name}（${browseCache.length}問）`;
+  renderCatBrowseList();
+  showScreen('catbrowse');
+}
+
+// 間違えた問題／繰り返し間違えた問題／マーク済み問題の一覧を開く
+function showListBrowse(mode){
+  const db=getQDB(), st=getSt();
+  browseMode = mode;
+  browseCatKey = null;
+  let title = '';
+  if(mode==='wrong'){
+    browseCache = db.filter(q=>st.wrongIds.includes(q.id));
+    title = `❌ 間違えた問題（${browseCache.length}問）`;
+  } else if(mode==='repeat'){
+    const mc = st.missCount||{};
+    browseCache = db.filter(q=>(mc[q.id]||0)>=3)
+      .sort((a,b)=>(mc[b.id]||0)-(mc[a.id]||0));
+    title = `🔁 繰り返し間違えた問題（${browseCache.length}問）`;
+  } else if(mode==='marked'){
+    browseCache = db.filter(q=>st.markedIds.includes(q.id));
+    title = `⭐ マーク済みの問題（${browseCache.length}問）`;
+  } else {
+    browseCache = [];
+    title = '一覧';
+  }
+  document.getElementById('catBrowseTitle').textContent = title;
+  if(!browseCache.length){
+    toast('該当する問題がありません 🎉');
+  }
   renderCatBrowseList();
   showScreen('catbrowse');
 }
@@ -7793,6 +7854,7 @@ function showCatBrowse(catKey){
 function renderCatBrowseList(){
   const st = getSt();
   const wrap = document.getElementById('catBrowseList');
+  const mc = st.missCount||{};
   wrap.innerHTML = browseCache.map((q,i)=>{
     const isOX = !(q.choices && Array.isArray(q.choices));
     const answerText = isOX
@@ -7800,8 +7862,15 @@ function renderCatBrowseList(){
       : (q.choices[q.answer] || '');
     const marked = st.markedIds.includes(q.id);
     const excluded = (st.excludedIds||[]).includes(q.id);
+    const missCnt = mc[q.id]||0;
     return `<div class="cb-card" id="cb-${q.id}">
-      <div class="cb-num">Q${i+1}${marked?' ⭐':''}${excluded?' 🚫':''}</div>
+      <div class="cb-toprow">
+        <div class="cb-num">Q${i+1}${browseMode==='repeat'&&missCnt?` ・ミス${missCnt}回`:''}</div>
+        <div class="cb-actions">
+          <button class="cb-act-btn ${marked?'on':''}" onclick="event.stopPropagation();cbToggleMark(${q.id})" title="重要マーク">${marked?'⭐':'☆'}</button>
+          <button class="cb-act-btn ${excluded?'on-red':''}" onclick="event.stopPropagation();cbToggleExclude(${q.id})" title="不要問題">${excluded?'🚫':'🗑️'}</button>
+        </div>
+      </div>
       <div class="cb-q" onclick="toggleCbAnswer(${q.id})">${q.q}</div>
       <div class="cb-answer" id="cb-ans-${q.id}" style="display:none;">
         <div class="cb-answer-text">✅ ${answerText}</div>
@@ -7816,6 +7885,38 @@ function toggleCbAnswer(qid){
   const el = document.getElementById('cb-ans-'+qid);
   if(!el) return;
   el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+function catBrowseBack(){
+  if(browseMode==='cat'){
+    showScreen('cat');
+  } else {
+    gotoTab('home');
+  }
+}
+
+// 一覧画面から直接マークON/OFF
+function cbToggleMark(qid){
+  const st = getSt();
+  if(st.markedIds.includes(qid)) st.markedIds = st.markedIds.filter(x=>x!==qid);
+  else st.markedIds.push(qid);
+  save(); autoSave();
+  // マーク一覧表示中に外したら、リストからも消す
+  if(browseMode==='marked' && !st.markedIds.includes(qid)){
+    browseCache = browseCache.filter(q=>q.id!==qid);
+    document.getElementById('catBrowseTitle').textContent = `⭐ マーク済みの問題（${browseCache.length}問）`;
+  }
+  renderCatBrowseList();
+}
+
+// 一覧画面から直接、不要問題ON/OFF
+function cbToggleExclude(qid){
+  const st = getSt();
+  if(!st.excludedIds) st.excludedIds=[];
+  if(st.excludedIds.includes(qid)) st.excludedIds = st.excludedIds.filter(x=>x!==qid);
+  else st.excludedIds.push(qid);
+  save(); autoSave();
+  renderCatBrowseList();
 }
 
 function cbExpandAll(){
