@@ -6,40 +6,71 @@
 <title>合格戦略｜狩猟試験HQ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#080d08;color:#ddeedd;font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
-.hdr{background:#0f160f;border-bottom:1px solid rgba(74,222,128,.2);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;}
-.hdr h1{font-size:17px;font-weight:700;color:#4ade80;}
-.hdr a{color:#6b8a6b;font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
+:root{
+  --page-bg:#080d08; --text-main:#ddeedd; --text-sub:#8aaa8a; --text-sub2:#6b8a6b;
+  --hdr-bg:#0f160f; --hdr-border:rgba(74,222,128,.2);
+  --card-border-soft:rgba(255,255,255,.1); --card-border-soft2:rgba(255,255,255,.05);
+  --th-bg:rgba(255,255,255,.07);
+  --green:#4ade80; --yellow:#fbbf24; --red:#f87171;
+}
+html.light{
+  --page-bg:#f4f8f4; --text-main:#0f2a14; --text-sub:#3d5a3d; --text-sub2:#3d5a3d;
+  --hdr-bg:#ffffff; --hdr-border:rgba(22,101,52,.2);
+  --card-border-soft:rgba(0,0,0,.1); --card-border-soft2:rgba(0,0,0,.06);
+  --th-bg:rgba(0,0,0,.05);
+  --green:#15803d; --yellow:#b45309; --red:#dc2626;
+}
+body{background:var(--page-bg);color:var(--text-main);font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
+.hdr{background:var(--hdr-bg);border-bottom:1px solid var(--hdr-border);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;position:relative;}
+.hdr h1{font-size:17px;font-weight:700;color:var(--green);}
+.hdr a{color:var(--text-sub2);font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
+.theme-toggle{position:absolute;top:max(14px,calc(env(safe-area-inset-top,0px)+10px));right:14px;background:rgba(120,120,120,.1);border:1px solid var(--card-border-soft);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text-main);cursor:pointer;}
 .body{padding:12px;}
 .card{border-radius:10px;padding:14px;margin-bottom:12px;}
 .card h2{font-size:14px;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);}
-.c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}.c-red h2{color:#f87171;}
-.c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}.c-ora h2{color:#fb923c;}
-.c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}.c-blu h2{color:#60a5fa;}
-.c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.45);}.c-grn h2{color:#4ade80;}
-.c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}.c-pur h2{color:#a78bfa;}
-.c-yel{background:#1a1500;border:1px solid rgba(251,191,36,.4);}.c-yel h2{color:#fbbf24;}
-li{font-size:13px;line-height:2.0;list-style:none;}
-p{font-size:13px;line-height:1.8;margin-top:4px;}
+html:not(.light) .c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}
+html.light .c-red{background:#fef2f2;border:1px solid rgba(220,38,38,.35);}
+.c-red h2{color:var(--red);}
+html:not(.light) .c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}
+html.light .c-ora{background:#fff7ed;border:1px solid rgba(234,88,12,.35);}
+.c-ora h2{color:#fb923c;}
+html.light .c-ora h2{color:#ea580c;}
+html:not(.light) .c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}
+html.light .c-blu{background:#eff6ff;border:1px solid rgba(37,99,235,.35);}
+.c-blu h2{color:#60a5fa;}
+html.light .c-blu h2{color:#2563eb;}
+html:not(.light) .c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.45);}
+html.light .c-grn{background:#f0fdf4;border:2px solid rgba(21,128,61,.35);}
+.c-grn h2{color:var(--green);}
+html:not(.light) .c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}
+html.light .c-pur{background:#f5f3ff;border:1px solid rgba(124,58,237,.3);}
+.c-pur h2{color:#a78bfa;}
+html.light .c-pur h2{color:#7c3aed;}
+html:not(.light) .c-yel{background:#1a1500;border:1px solid rgba(251,191,36,.4);}
+html.light .c-yel{background:#fffbeb;border:1px solid rgba(180,83,9,.3);}
+.c-yel h2{color:var(--yellow);}
+li{font-size:13px;line-height:2.0;list-style:none;color:var(--text-main);}
+p{font-size:13px;line-height:1.8;margin-top:4px;color:var(--text-main);}
 table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
-th{background:rgba(255,255,255,.07);padding:7px 8px;text-align:left;color:#8aaa8a;font-size:11px;border-bottom:1px solid rgba(255,255,255,.1);}
-td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;font-size:12px;}
-.ok{color:#4ade80;font-weight:700;}
-.ng{color:#f87171;}
-.yl{color:#fbbf24;font-weight:700;}
-.warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;margin-top:8px;font-size:12px;color:#f87171;line-height:1.6;}
-.why{background:rgba(251,191,36,.06);border-left:3px solid #fbbf24;padding:8px 10px;margin-top:6px;font-size:12px;color:#c8a84a;line-height:1.6;border-radius:0 6px 6px 0;}
-.rank{display:inline-block;background:rgba(248,113,113,.2);color:#f87171;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;margin-right:4px;}
+th{background:var(--th-bg);padding:7px 8px;text-align:left;color:var(--text-sub);font-size:11px;border-bottom:1px solid var(--card-border-soft);}
+td{padding:7px 8px;border-bottom:1px solid var(--card-border-soft2);vertical-align:top;font-size:12px;color:var(--text-main);}
+.ok{color:var(--green);font-weight:700;}
+.ng{color:var(--red);}
+.yl{color:var(--yellow);font-weight:700;}
+.warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;margin-top:8px;font-size:12px;color:var(--red);line-height:1.6;}
+.why{background:rgba(251,191,36,.06);border-left:3px solid var(--yellow);padding:8px 10px;margin-top:6px;font-size:12px;color:var(--text-sub);line-height:1.6;border-radius:0 6px 6px 0;}
+.rank{display:inline-block;background:rgba(248,113,113,.2);color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;margin-right:4px;}
 .rank2{background:rgba(251,146,60,.2);color:#fb923c;}
-.rank3{background:rgba(251,191,36,.2);color:#fbbf24;}
-.pct{font-size:18px;font-weight:700;color:#4ade80;font-family:monospace;}
-.back-btn{display:block;text-align:center;padding:14px;background:#0f160f;border-top:1px solid rgba(74,222,128,.15);color:#4ade80;font-size:14px;font-weight:700;text-decoration:none;position:sticky;bottom:0;}
+.rank3{background:rgba(251,191,36,.2);color:var(--yellow);}
+.pct{font-size:18px;font-weight:700;color:var(--green);font-family:monospace;}
+.back-btn{display:block;text-align:center;padding:14px;background:var(--hdr-bg);border-top:1px solid var(--hdr-border);color:var(--green);font-size:14px;font-weight:700;text-decoration:none;position:sticky;bottom:0;}
 </style>
 </head>
 <body>
 <div class="hdr">
   <h1>🎯 合格戦略・頻出パターン分析</h1>
   <a href="index.html">← アプリに戻る</a>
+  <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
 </div>
 <div class="body">
 
@@ -266,5 +297,25 @@ td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:
 
 </div>
 <a href="index.html" class="back-btn">← クイズアプリに戻る</a>
+<script>
+function applyTheme(mode){
+  const html = document.documentElement;
+  if(mode==='light'){ html.classList.add('light'); } else { html.classList.remove('light'); }
+  const btn = document.getElementById('themeToggleBtn');
+  if(btn) btn.textContent = mode==='light' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  let mode='dark';
+  try{ mode = localStorage.getItem('hunting_theme') || 'dark'; }catch(e){}
+  mode = mode==='light' ? 'dark' : 'light';
+  try{ localStorage.setItem('hunting_theme', mode); }catch(e){}
+  applyTheme(mode);
+}
+(function initTheme(){
+  let mode='dark';
+  try{ mode = localStorage.getItem('hunting_theme') || 'dark'; }catch(e){}
+  applyTheme(mode);
+})();
+</script>
 </body>
 </html>

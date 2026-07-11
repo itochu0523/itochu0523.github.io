@@ -479,6 +479,9 @@ textarea{resize:vertical;min-height:80px;}
         </button>
       </div>
 
+      <div style="margin-top:16px;margin-bottom:8px;font-size:12px;color:var(--muted);font-weight:700;padding:0 2px;">🎯 苦手テーマ集中特訓</div>
+      <div id="topicBtnList" style="display:flex;flex-direction:column;gap:8px;"></div>
+
     </div>
   </div>
   <div class="bnav" id="bnav-home">
@@ -6885,8 +6888,88 @@ ref:'銃刀法・警察庁基準問題'},
 q:'散弾銃の弾倉を3発以上装填できるものに変更した場合と、猟銃の口径を大きくする改造をした場合は、どちらも法的な結果（自動失効するか、取り消されることがあるか）が同じである。',
 answer:false,
 explain:'誤り。弾倉容量の変更は「構造・機能の基準維持義務違反」として取り消されることがある（裁量規定）にとどまるが、口径変更は「別の銃」とみなされ自動的に失効する。両者は法的結果が明確に異なる。',
-ref:'銃刀法・警察庁基準問題'}
+ref:'銃刀法・警察庁基準問題'},
+
+// ── 失効・取消し／ガンロッカー 重点強化 ──
+{id:90555,cat:'law',
+q:'猟銃の口径を小さくする改造をした場合も、口径を大きくする場合と同様に、許可を受けた銃と同じ銃とは認められず自動的に失効する。',
+answer:true,
+explain:'正しい。口径の変更は「大きくする」場合に限らず、「小さくする」場合であっても、銃の本質的なスペックが変わることに変わりはなく、許可を受けた銃と同じ銃とは認められない。この場合も自動的に許可が失効する。',
+ref:'銃刀法・警察庁基準問題'},
+
+{id:90556,cat:'law',
+q:'散弾銃の弾倉を改造して装填数を1発減らした場合、構造・機能の基準維持義務違反として所持許可を取り消されることがある。',
+answer:false,
+explain:'誤り。装填数を減らす方向の変更は、法定上限（散弾銃計3発）を超えない限り、同一性を失わない範囲の軽微な変更であり、義務違反にはならない。所持許可証の書換え手続きで足りる。義務違反となるのは、法定上限を「超える」方向への変更（散弾銃を3発以上等）である。',
+ref:'銃刀法'},
+
+{id:90557,cat:'law',
+q:'猟銃を杖や傘に偽装する「変装銃砲」への改造をした場合、これは構造・機能の基準維持義務違反として取り消されることがある扱いとなる。',
+answer:false,
+explain:'誤り。変装銃砲への改造は「義務違反として取り消されることがある」という穏やかな扱いではなく、そもそも所持許可の対象になり得ないものへの変化であり、その時点で許可が失効する。変装銃砲は「別の物への偽装」という点で、口径変更等と同じ「自動失効」グループに分類される。',
+ref:'銃刀法第4条'},
+
+{id:90558,cat:'law',
+q:'猟銃の所持者が3年以上（改正前基準）その用途に使用していない場合、都道府県公安委員会は必ずその許可を取り消さなければならない。',
+answer:false,
+explain:'誤り。「必ず取り消さなければならない」が誤り。3年以上の不使用（眠り銃）は取消しの対象となり得るが、これは公安委員会の裁量による「取り消されることがある」規定であり、自動的・必然的に取り消されるものではない。',
+ref:'銃刀法第11条'},
+
+{id:90559,cat:'law',
+q:'銃刀法違反により罰金以上の刑に処せられた場合、その時点で所持許可は自動的に失効する。',
+answer:false,
+explain:'誤り。法令違反は「取り消されることがある」（裁量規定）に該当し、自動的に失効するわけではない。自動失効するのは、銃自体の同一性が失われる改造（口径変更等）、譲渡、亡失・盗取、3か月以内の不所持等、特定の限られた事由に限られる。',
+ref:'銃刀法第11条'},
+
+{id:90560,cat:'law',
+q:'欠格事由に新たに該当するに至った場合（例：精神障害の発症）、所持許可は自動的に失効するのではなく、公安委員会が取り消すかどうかを判断する。',
+answer:true,
+explain:'正しい。所持後に新たに欠格事由に該当するに至った場合も、自動失効ではなく、公安委員会が個別に取消しの要否を判断する裁量規定である。この際、公安委員会は必要な調査や医師の診断命令等の手段を用いることができる。',
+ref:'銃刀法第5条・第11条'},
+
+{id:90561,cat:'keep',
+q:'ガンロッカーの鍵を、家族が確実に管理できるよう、家族の一人にも予備の合鍵を渡しておくことは、盗難防止の観点から望ましい。',
+answer:false,
+explain:'誤り。ガンロッカーの鍵は所持者本人のみが管理しなければならず、家族であっても合鍵を渡すことは「自ら保管」の原則に反する。盗難防止の観点からではなく、無許可者による銃へのアクセスを防ぐという法令上の要請から、鍵の管理は本人に限定される。',
+ref:'銃刀法第10条の6'},
+
+{id:90562,cat:'keep',
+q:'ガンロッカーは、扉が二重構造になっていれば、スチール製でなくても木製やプラスチック製でよい。',
+answer:false,
+explain:'誤り。ガンロッカーの材質はスチール（鉄板）1.0mm以上であることが法定基準。二重構造等の工夫があっても、木製・プ�スチック製である限り基準を満たさない。',
+ref:'銃刀法・技術基準'},
+
+{id:90563,cat:'keep',
+q:'ガンロッカーの鍵違い（施錠の種類）は、120種類以上であることが基準として定められている。',
+answer:true,
+explain:'正しい。ガンロッカーの鍵違いは120種類以上という具体的な基準が定められている。この数値は他人が容易に開錠できないようにするための重要な要件。',
+ref:'銃刀法・技術基準'},
+
+{id:90564,cat:'keep',
+q:'ガンロッカーは施錠さえできれば、床や壁に固定する必要は法律上一切求められていない。',
+answer:false,
+explain:'誤り。法律上の要件は「容易に持ち運びができないこと」であり、施錠できることとは別の要件として、固定（またはそれに準ずる重量等の対策）が求められる。施錠のみでは容易に持ち運びできてしまうため、この要件を満たさない。',
+ref:'銃刀法施行規則第84条'},
+
+{id:90565,cat:'keep',
+q:'銃と実包を、同じガンロッカーの中で、それぞれ施錠可能な別々の引き出しに分けて保管すれば、法令上問題ない。',
+answer:false,
+explain:'誤り。同じロッカーの別の引き出しに分けて保管しても「共に保管」しているとみなされ、違反となる。銃（ガンロッカー）と実包（装弾ロッカー）は、物理的に完全に別のロッカーに保管する必要がある。',
+ref:'銃刀法第10条の6'},
+
+{id:90566,cat:'keep',
+q:'猟銃等保管業者に保管を委託すれば、自宅にガンロッカーを設置する義務は生じない。',
+answer:true,
+explain:'正しい。猟銃等保管業者への委託保管は、自ら保管する義務の正当な例外であり、この場合は自宅にガンロッカーを設置する必要はない。長期出張・長期入院・賃貸住宅で設置できない等の事情がある場合に利用される。',
+ref:'銃刀法第10条の6・第10条の8'},
+
+{id:90567,cat:'keep',
+q:'ガンロッカーの設置場所は、盗難防止のため、家族にも場所を知らせない完全に秘密の場所にしなければならない。',
+answer:false,
+explain:'誤り。「家族にも秘密にする」という要件は法令上存在しない。求められているのは「管理上支障のない場所」への設置であり、秘匿性そのものが要件ではない。鍵の管理（本人のみ）と設置場所の適切さは別の論点。',
+ref:'銃刀法施行規則第84条'}
 ];
+
 
 
 
@@ -7492,6 +7575,22 @@ function updHome(){
   const ubEl=document.getElementById('unansweredBadge');
   if(ubEl) ubEl.textContent=uc;
   renderCountdown();
+  renderTopicButtons();
+}
+
+function renderTopicButtons(){
+  const wrap = document.getElementById('topicBtnList');
+  if(!wrap) return;
+  const db = [...HUNTER_QDB, ...(S.customQ?.hunter||[]), ...GUN_QDB, ...(S.customQ?.gun||[])];
+  wrap.innerHTML = Object.entries(TOPICS).map(([key,topic])=>{
+    let cnt=0;
+    try{ cnt = db.filter(q=>topic.match(q)).length; }catch(e){}
+    return `<button class="mbtn" style="margin-bottom:0;" onclick="startTopicQuiz('${key}')">
+      <span class="mi">🎯</span>
+      <div class="mt"><div class="mn">${topic.name}</div><div class="ms">この分野だけ集中して解く</div></div>
+      <span class="mbadge" style="background:var(--blue,#60a5fa);">${cnt}</span>
+    </button>`;
+  }).join('');
 }
 
 function updDash(){
@@ -7820,6 +7919,78 @@ function showCatBrowse(catKey){
   document.getElementById('catBrowseTitle').textContent = `${ci.icon} ${ci.name}（${browseCache.length}問）`;
   renderCatBrowseList();
   showScreen('catbrowse');
+}
+
+// ── テーマ別集中学習システム（summary.htmlから問題へジャンプ） ──
+const TOPICS = {
+  shikko_torikeshi: {
+    name:'⚖️ 失効・取消し',
+    match:(q)=>/失効|取り消|取消し/.test(q.q+q.explain)
+  },
+  ganlocker: {
+    name:'🔒 ガンロッカー・保管',
+    match:(q)=>/ガンロッカー|保管設備|保管の方法|装弾ロッカー/.test(q.q+q.explain)
+  },
+  chobo: {
+    name:'📔 帳簿の記載事項',
+    match:(q)=>/帳簿/.test(q.q+q.explain)
+  },
+  gun_types: {
+    name:'🔫 銃の種類と特徴',
+    match:(q)=>q.cat==='mech'
+  },
+  ammo_caliber: {
+    name:'💥 弾と口径・号数',
+    match:(q)=>/口径|番径|号数|グラム|散弾/.test(q.q+q.explain)
+  },
+  kakikae_masshou: {
+    name:'✏️ 書換え・抹消',
+    match:(q)=>/書換え|抹消/.test(q.q+q.explain)
+  },
+  trap: {
+    name:'⚠️ ひっかけ問題集',
+    match:(q)=>/必ず|いかなる場合も|一切|絶対に|全て(の)?場合|例外(は|が)?無い|しか(でき|認められ)/.test(q.q)
+  },
+};
+
+function getTopicQuestions(topicKey){
+  const topic = TOPICS[topicKey];
+  if(!topic) return [];
+  const db = [...HUNTER_QDB, ...(S.customQ?.hunter||[]), ...GUN_QDB, ...(S.customQ?.gun||[])];
+  return db.filter(q => {
+    try{ return topic.match(q); }catch(e){ return false; }
+  });
+}
+
+// 問題からexam種別を判定（HUNTER_QDBのidレンジで区別：hunter問題は元々choicesを持つ）
+function tagExamType(q){
+  const isHunter = HUNTER_QDB.some(h=>h.id===q.id) || (S.customQ?.hunter||[]).some(h=>h.id===q.id);
+  return isHunter ? 'hunter' : 'gun';
+}
+
+function startTopicQuiz(topicKey){
+  const qs = getTopicQuestions(topicKey);
+  const topic = TOPICS[topicKey];
+  if(!qs.length){ toast('該当する問題が見つかりませんでした'); return; }
+  // gun/hunter混在の可能性があるため、多い方のexamに揃える（大半はgun）
+  const gunCount = qs.filter(q=>tagExamType(q)==='gun').length;
+  const hunterCount = qs.length - gunCount;
+  S.exam = gunCount>=hunterCount ? 'gun' : 'hunter';
+  const filtered = shuffle(qs.filter(q=>tagExamType(q)===S.exam));
+  sess = {qs:filtered, idx:0, ans:[], mode:'topic', t0:Date.now()};
+  showScreen('quiz');
+  renderQ();
+}
+
+// summary.html等の別ページから ?topic=XXX で開かれた場合、自動でそのテーマのクイズを開始
+function handleTopicParam(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const topic = params.get('topic');
+    if(topic && TOPICS[topic]){
+      setTimeout(()=>startTopicQuiz(topic), 100);
+    }
+  }catch(e){}
 }
 
 // 間違えた問題／繰り返し間違えた問題／マーク済み問題の一覧を開く
@@ -8259,6 +8430,7 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 // ════════════════════════════════════
 load();
 initTheme();
+handleTopicParam();
 updateAll();
 if(hasCfg()){
   const cfg=getCfg();

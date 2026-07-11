@@ -6,57 +6,93 @@
 <title>重要まとめ｜狩猟試験HQ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#080d08;color:#ddeedd;font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
-.hdr{background:#0f160f;border-bottom:1px solid rgba(74,222,128,.2);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;position:sticky;top:0;z-index:10;}
-.hdr h1{font-size:17px;font-weight:700;color:#4ade80;}
-.hdr a{color:#6b8a6b;font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#0f160f;border-bottom:1px solid rgba(74,222,128,.1);position:sticky;top:56px;z-index:9;}
-.tab{padding:6px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#6b8a6b;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.tab.on{border:2px solid #4ade80;background:rgba(74,222,128,.12);color:#4ade80;}
+:root{
+  --page-bg:#080d08; --text-main:#ddeedd; --text-sub:#8aaa8a; --text-sub2:#6b8a6b;
+  --hdr-bg:#0f160f; --hdr-border:rgba(74,222,128,.2);
+  --tab-bg:rgba(255,255,255,.05); --tab-border:rgba(255,255,255,.2); --tab-text:#6b8a6b;
+  --card-border-soft:rgba(255,255,255,.1); --card-border-soft2:rgba(255,255,255,.05);
+  --th-bg:rgba(255,255,255,.07);
+  --green:#4ade80; --yellow:#fbbf24; --red:#f87171;
+}
+html.light{
+  --page-bg:#f4f8f4; --text-main:#0f2a14; --text-sub:#3d5a3d; --text-sub2:#3d5a3d;
+  --hdr-bg:#ffffff; --hdr-border:rgba(22,101,52,.2);
+  --tab-bg:rgba(22,101,52,.06); --tab-border:rgba(22,101,52,.25); --tab-text:#3d5a3d;
+  --card-border-soft:rgba(0,0,0,.1); --card-border-soft2:rgba(0,0,0,.06);
+  --th-bg:rgba(0,0,0,.05);
+  --green:#15803d; --yellow:#b45309; --red:#dc2626;
+}
+body{background:var(--page-bg);color:var(--text-main);font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
+.hdr{background:var(--hdr-bg);border-bottom:1px solid var(--hdr-border);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;position:sticky;top:0;z-index:10;}
+.hdr h1{font-size:17px;font-weight:700;color:var(--green);}
+.hdr a{color:var(--text-sub2);font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
+.theme-toggle{position:absolute;top:max(14px,calc(env(safe-area-inset-top,0px)+10px));right:14px;background:var(--tab-bg);border:1px solid var(--tab-border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text-main);cursor:pointer;}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--hdr-bg);border-bottom:1px solid var(--card-border-soft2);position:sticky;top:56px;z-index:9;}
+.tab{padding:6px 11px;border-radius:20px;border:1px solid var(--tab-border);background:var(--tab-bg);color:var(--tab-text);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.tab.on{border:2px solid var(--green);background:rgba(74,222,128,.12);color:var(--green);}
 .sec{display:none;padding:12px;}
 .sec.on{display:block;}
 /* カード */
 .card{border-radius:10px;padding:14px;margin-bottom:12px;}
-.card h2{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);}
-.c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}.c-red h2{color:#f87171;}
-.c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}.c-ora h2{color:#fb923c;}
-.c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}.c-blu h2{color:#60a5fa;}
-.c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.45);}.c-grn h2{color:#4ade80;}
-.c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}.c-pur h2{color:#a78bfa;}
-.c-yel{background:#1a1500;border:1px solid rgba(251,191,36,.4);}.c-yel h2{color:#fbbf24;}
+.card h2{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--card-border-soft);}
+html:not(.light) .c-red{background:#1e0a0a;border:1px solid rgba(248,113,113,.4);}
+html.light .c-red{background:#fef2f2;border:1px solid rgba(220,38,38,.35);}
+.c-red h2{color:var(--red);}
+html:not(.light) .c-ora{background:#1a120a;border:1px solid rgba(251,146,60,.4);}
+html.light .c-ora{background:#fff7ed;border:1px solid rgba(234,88,12,.35);}
+.c-ora h2{color:#fb923c;}
+html.light .c-ora h2{color:#ea580c;}
+html:not(.light) .c-blu{background:#0a0f1a;border:1px solid rgba(96,165,250,.4);}
+html.light .c-blu{background:#eff6ff;border:1px solid rgba(37,99,235,.35);}
+.c-blu h2{color:#60a5fa;}
+html.light .c-blu h2{color:#2563eb;}
+html:not(.light) .c-grn{background:#0a1a10;border:2px solid rgba(74,222,128,.45);}
+html.light .c-grn{background:#f0fdf4;border:2px solid rgba(21,128,61,.35);}
+.c-grn h2{color:var(--green);}
+html:not(.light) .c-pur{background:#0d0a1a;border:1px solid rgba(167,139,250,.4);}
+html.light .c-pur{background:#f5f3ff;border:1px solid rgba(124,58,237,.3);}
+.c-pur h2{color:#a78bfa;}
+html.light .c-pur h2{color:#7c3aed;}
+html:not(.light) .c-yel{background:#1a1500;border:1px solid rgba(251,191,36,.4);}
+html.light .c-yel{background:#fffbeb;border:1px solid rgba(180,83,9,.3);}
+.c-yel h2{color:var(--yellow);}
 /* テキスト */
-li{font-size:13px;line-height:2.0;list-style:none;}
-p{font-size:13px;line-height:1.8;margin-top:4px;}
-.ok{color:#4ade80;font-weight:700;}
-.ng{color:#f87171;}
-.yl{color:#fbbf24;font-weight:700;}
+li{font-size:13px;line-height:2.0;list-style:none;color:var(--text-main);}
+p{font-size:13px;line-height:1.8;margin-top:4px;color:var(--text-main);}
+.ok{color:var(--green);font-weight:700;}
+.ng{color:var(--red);}
+.yl{color:var(--yellow);font-weight:700;}
 /* 表 */
 table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
-th{background:rgba(255,255,255,.07);padding:7px 8px;text-align:left;color:#8aaa8a;font-size:11px;border-bottom:1px solid rgba(255,255,255,.1);}
-td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;}
+th{background:var(--th-bg);padding:7px 8px;text-align:left;color:var(--text-sub);font-size:11px;border-bottom:1px solid var(--card-border-soft);}
+td{padding:7px 8px;border-bottom:1px solid var(--card-border-soft2);vertical-align:top;color:var(--text-main);}
 tr:last-child td{border-bottom:none;}
 /* フロー図 */
 .flow{display:flex;flex-direction:column;gap:3px;margin-top:8px;}
-.fstep{background:#161e2a;border-radius:8px;padding:9px 12px;font-size:13px;}
-.farr{text-align:center;color:#4ade80;font-size:16px;line-height:1;}
+.fstep{background:#161e2a;border-radius:8px;padding:9px 12px;font-size:13px;color:#ddeedd;}
+html.light .fstep{background:#e0e7ff;color:#1e293b;}
+.farr{text-align:center;color:var(--green);font-size:16px;line-height:1;}
 .fstep.goal{background:#0d2a0d;border:1px solid rgba(74,222,128,.4);color:#4ade80;font-weight:700;}
+html.light .fstep.goal{background:#dcfce7;color:#15803d;}
 /* 比較ボックス */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .cbox{border-radius:8px;padding:10px;font-size:12px;line-height:1.7;}
 .cbox h3{font-size:12px;font-weight:700;margin-bottom:6px;}
 .cbox-ok{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);}
-.cbox-ok h3{color:#4ade80;}
+.cbox-ok h3{color:var(--green);}
+.cbox-ok, .cbox-ok div{color:var(--text-main);}
 .cbox-ng{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);}
-.cbox-ng h3{color:#f87171;}
+.cbox-ng h3{color:var(--red);}
+.cbox-ng, .cbox-ng div{color:var(--text-main);}
 /* 数値バッジ */
 .num-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
-.num-item{background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;}
-.num-val{font-size:22px;font-weight:700;color:#4ade80;font-variant-numeric:tabular-nums;}
-.num-lbl{font-size:11px;color:#8aaa8a;margin-top:3px;line-height:1.4;}
-.num-ng{font-size:10px;color:#f87171;margin-top:2px;}
+.num-item{background:rgba(120,120,120,.08);border-radius:8px;padding:10px;text-align:center;}
+.num-val{font-size:22px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;}
+.num-lbl{font-size:11px;color:var(--text-sub);margin-top:3px;line-height:1.4;}
+.num-ng{font-size:10px;color:var(--red);margin-top:2px;}
 /* 警告ボックス */
 .warn-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;margin-top:8px;}
-.warn-box p{color:#f87171;font-size:12px;}
+.warn-box p{color:var(--red);font-size:12px;}
 /* 理由ボックス */
 .why{background:rgba(251,191,36,.06);border-left:3px solid #fbbf24;border-radius:0 6px 6px 0;padding:8px 10px;margin-top:6px;font-size:12px;color:#c8a84a;line-height:1.6;}
 /* チェーン（撃発機構等） */
@@ -71,9 +107,10 @@ tr:last-child td{border-bottom:none;}
 </style>
 </head>
 <body>
-<div class="hdr">
+<div class="hdr" style="position:relative;">
   <h1>📖 重要まとめ（体系版）</h1>
   <a href="index.html">← アプリに戻る</a>
+  <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
 </div>
 <div class="tabs">
   <button class="tab on" onclick="show('s0',this)">🔢 数字一覧</button>
@@ -87,6 +124,20 @@ tr:last-child td{border-bottom:none;}
 
 <!-- ① 数字一覧 -->
 <div id="s0" class="sec on">
+
+  <div class="card c-red" style="border-width:2px;">
+    <h2>🎯 テーマ別・集中特訓ハブ</h2>
+    <p style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">苦手なテーマだけを抽出して集中的に問題演習できます。ここから直接ジャンプ！</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="index.html?topic=trap" style="display:block;text-align:center;padding:13px;background:rgba(248,113,113,.15);border:2px solid var(--red);border-radius:10px;color:var(--red);font-weight:700;text-decoration:none;font-size:14px;">⚠️ ひっかけ問題集を解く →</a>
+      <a href="index.html?topic=shikko_torikeshi" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">⚖️ 失効・取消し →</a>
+      <a href="index.html?topic=ganlocker" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">🔒 ガンロッカー・保管 →</a>
+      <a href="index.html?topic=chobo" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📔 帳簿の記載事項 →</a>
+      <a href="index.html?topic=gun_types" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">🔫 銃の種類と特徴 →</a>
+      <a href="index.html?topic=ammo_caliber" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">💥 弾と口径・号数 →</a>
+      <a href="index.html?topic=kakikae_masshou" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">✏️ 書換え・抹消 →</a>
+    </div>
+  </div>
 
   <div class="card c-red">
     <h2>⏰ 期間・日数 完全一覧（ひっかけ多発！）</h2>
@@ -340,6 +391,7 @@ tr:last-child td{border-bottom:none;}
       </div>
       <div class="why">💡 ゲージ（銃の口径）と号数（散弾の粒）は全く別の単位！混同厳禁</div>
     </div>
+    <a href="index.html?topic=ammo_caliber" style="display:block;text-align:center;margin-top:12px;padding:12px;background:rgba(74,222,128,.12);border:2px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📝 この分野の問題を解く（弾と口径）→</a>
   </div>
 
   <div class="card c-blu">
@@ -352,6 +404,7 @@ tr:last-child td{border-bottom:none;}
     </table>
     <div class="why">💡 上記を超える装填数の銃は所持許可不可！散弾銃3発・ライフル/空気銃6発を正確に覚える</div>
     <p style="margin-top:8px;font-size:13px;">✅ <strong>ライフル銃の所持要件</strong>：継続<span class="yl">10年以上</span>の猟銃所持歴が必要（例外：職業的捕獲者等）</p>
+    <a href="index.html?topic=gun_types" style="display:block;text-align:center;margin-top:12px;padding:12px;background:rgba(74,222,128,.12);border:2px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📝 この分野の問題を解く（銃の種類）→</a>
   </div>
 
   <div class="card c-red">
@@ -409,6 +462,7 @@ tr:last-child td{border-bottom:none;}
       <p>❌「木製・プラスチック製の収納ケース」← スチール1mm以上が必須</p>
     </div>
     <div class="why">💡 なぜ固定が必要か？固定されていないと丸ごと持ち去られる盗難リスクがあるため！</div>
+    <a href="index.html?topic=ganlocker" style="display:block;text-align:center;margin-top:12px;padding:12px;background:rgba(74,222,128,.12);border:2px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📝 この分野の問題を解く（ガンロッカー・保管）→</a>
   </div>
 
   <div class="card c-ora">
@@ -580,6 +634,20 @@ tr:last-child td{border-bottom:none;}
 
 <div id="s6" class="sec">
 
+  <div class="card c-red" style="border-width:2px;">
+    <h2>🎯 テーマ別・集中特訓ハブ</h2>
+    <p style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">苦手なテーマだけを抽出して集中的に問題演習できます。ここから直接ジャンプ！</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="index.html?topic=trap" style="display:block;text-align:center;padding:13px;background:rgba(248,113,113,.15);border:2px solid var(--red);border-radius:10px;color:var(--red);font-weight:700;text-decoration:none;font-size:14px;">⚠️ ひっかけ問題集を解く →</a>
+      <a href="index.html?topic=shikko_torikeshi" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">⚖️ 失効・取消し →</a>
+      <a href="index.html?topic=ganlocker" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">🔒 ガンロッカー・保管 →</a>
+      <a href="index.html?topic=chobo" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📔 帳簿の記載事項 →</a>
+      <a href="index.html?topic=gun_types" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">🔫 銃の種類と特徴 →</a>
+      <a href="index.html?topic=ammo_caliber" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">💥 弾と口径・号数 →</a>
+      <a href="index.html?topic=kakikae_masshou" style="display:block;text-align:center;padding:12px;background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">✏️ 書換え・抹消 →</a>
+    </div>
+  </div>
+
   <div class="card c-blu">
     <h2>⚖️ 関係法令の体系</h2>
     <table>
@@ -685,6 +753,7 @@ tr:last-child td{border-bottom:none;}
       <p>❌「口径を変えても書換えで済む」← 誤り。口径変更は自動失効の対象</p>
     </div>
     <div class="why">💡 判断軸：<strong>「口径・全長・銃身長」という設計上の本質スペック</strong>に関わる変化は失効側、<strong>それ以外（装填数・使用実績・所持者の状態・保管方法）</strong>は取消し（裁量）側にきれいに分類できる</div>
+    <a href="index.html?topic=shikko_torikeshi" style="display:block;text-align:center;margin-top:12px;padding:12px;background:rgba(74,222,128,.12);border:2px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📝 この分野の問題を解く（失効・取消し）→</a>
   </div>
 
   <div class="card c-pur">
@@ -702,7 +771,8 @@ tr:last-child td{border-bottom:none;}
       <p>❌「消費数量だけ記載すればよい」← 誤り。場所・年月日・相手方等も必須</p>
       <p>❌「都道府県名だけでよい」← 誤り。標的射撃は射撃場の所在地と名称まで必要</p>
     </div>
-    <p style="margin-top:8px;font-size:12px;color:#8aaa8a;">帳簿は最終記載日から<strong style="color:#fbbf24;">3年間</strong>保存。実包を所持していない場合は帳簿の備え付け自体が不要。</p>
+    <p style="margin-top:8px;font-size:12px;color:var(--text-sub);">帳簿は最終記載日から<strong style="color:var(--yellow);">3年間</strong>保存。実包を所持していない場合は帳簿の備え付け自体が不要。</p>
+    <a href="index.html?topic=chobo" style="display:block;text-align:center;margin-top:12px;padding:12px;background:rgba(74,222,128,.12);border:2px solid var(--green);border-radius:10px;color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">📝 この分野の問題を解く（帳簿）→</a>
   </div>
 
   <div class="card c-yel">
@@ -790,6 +860,26 @@ function show(id, btn){
   btn.classList.add('on');
   window.scrollTo(0,0);
 }
+
+// ── ダーク/ライトモード（index.htmlと同じlocalStorageキーで同期）──
+function applyTheme(mode){
+  const html = document.documentElement;
+  if(mode==='light'){ html.classList.add('light'); } else { html.classList.remove('light'); }
+  const btn = document.getElementById('themeToggleBtn');
+  if(btn) btn.textContent = mode==='light' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  let mode='dark';
+  try{ mode = localStorage.getItem('hunting_theme') || 'dark'; }catch(e){}
+  mode = mode==='light' ? 'dark' : 'light';
+  try{ localStorage.setItem('hunting_theme', mode); }catch(e){}
+  applyTheme(mode);
+}
+(function initTheme(){
+  let mode='dark';
+  try{ mode = localStorage.getItem('hunting_theme') || 'dark'; }catch(e){}
+  applyTheme(mode);
+})();
 </script>
 </body>
 </html>
