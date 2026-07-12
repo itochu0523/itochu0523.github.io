@@ -300,9 +300,10 @@ textarea{resize:vertical;min-height:80px;}
   transform:translateX(-50%) translateY(40px);
   background:var(--bg2);color:var(--text);padding:9px 16px;
   border-radius:20px;font-size:13px;border:1px solid var(--border);
-  transition:transform .22s;z-index:9999;white-space:nowrap;pointer-events:none;
+  transition:transform .22s, opacity .22s;z-index:9999;white-space:nowrap;pointer-events:none;
+  opacity:0;visibility:hidden;
 }
-#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible;}
 
 /* CAT SCREEN */
 #screen-cat .scroll{padding-bottom:30px;}
@@ -6530,9 +6531,9 @@ ref:'銃刀法第5条・第11条'},
 
 {id:90497,cat:'law',
 q:'猟銃の所持許可の更新を受けようとする者が経験者講習会を受講しなかった場合、更新を受けることは一切認められない。',
-answer:false,
-explain:'誤り。「一切認められない」という断定は誤り。経験者講習会の受講・修了は更新の要件だが、やむを得ない事情による特例（技能講習修了証明書が3年以内である等の条件を満たす場合）で更新の途が残されている場合がある。細部は個別の制度趣旨を確認する必要がある。',
-ref:'銃刀法第5条の3'},
+answer:true,
+explain:'正しい。経験者講習会の受講・修了（講習修了証明書の取得）は更新の必須要件であり、これ自体に免除規定は存在しない。混同しやすいのは「技能講習」（猟銃のみ対象の別の講習）で、こちらには国民スポーツ大会推薦選手や特定鳥獣被害対策実施隊員・特定従事者（申請日前1年以内に対象鳥獣の捕獲等に1回以上参加、かつ3年以内に指示処分を受けていない等の条件を満たす場合）に限った免除規定がある。「経験者講習会」と「技能講習」は別の講習であり、免除規定の有無も異なる点に注意。',
+ref:'銃刀法第5条の3・鳥獣被害防止特別措置法'},
 
 {id:90498,cat:'law',
 q:'同居している母親が薬物中毒者である場合、申請者本人にどれだけ問題がなくても、所持許可は絶対に受けられない。',
