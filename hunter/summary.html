@@ -536,6 +536,25 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
 <!-- ⑤ 安全取扱い -->
 <div id="s4" class="sec">
 
+  <div class="card c-yel" style="border-width:2px;">
+    <h2>🎯 装填時の銃口方向は「場所」で正反対になる（超重要）</h2>
+    <p style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">「野外で装填」という言葉だけでは判断できない。地面の性質で安全な方向が変わる。</p>
+    <div class="compare">
+      <div class="cbox" style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);">
+        <h3 style="color:#60a5fa;">🎯 クレー射撃場（硬い地面）</h3>
+        <div style="font-size:12px;line-height:1.7;">銃口は<strong style="color:#60a5fa;">上方（空）</strong>に向けて装填<br>理由：コンクリート等の硬い地面に暴発すると跳弾するため、上空の方が安全</div>
+      </div>
+      <div class="cbox cbox-ok">
+        <h3>🦌 狩猟の野外（柔らかい地面）</h3>
+        <div style="font-size:12px;line-height:1.7;">銃口は<strong style="color:var(--green);">下（柔らかい地面）</strong>に向けて装填<br>理由：上空に向けると、落下した弾が離れた場所の人に当たる危険</div>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:10px;">
+      <p>❌ 単に「野外で装填する際は銃口を空に向ける」と覚えるのは危険。射撃場（硬い地面）限定のルールであり、狩猟の野外（柔らかい地面）には当てはまらない</p>
+    </div>
+    <div class="why">💡 判断軸：地面が硬い（コンクリート等）→上向き／地面が柔らかい（土等）→下向き。「矛盾するルール」ではなく「場所に応じた安全な方向」の使い分け</div>
+  </div>
+
   <div class="card c-red" style="border-width:2px;">
     <h2>🛡️ 安全4原則（これが全て）</h2>
     <table>
@@ -820,7 +839,7 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
       <tr><td>② 更新失念</td><td>失効後、速やかに返納</td><td class="yl">失効から50日以内に新規取得か譲渡・廃棄</td></tr>
       <tr><td>③ 銃の改造</td><td>その銃の許可が失効</td><td>改造から50日以内に新しい銃として許可申請し直す</td></tr>
       <tr><td>④ 記載事項変更漏れ</td><td class="ng">10日以内に届出。猶予期間なし！</td><td>10日を過ぎると直ちに失効・不法所持</td></tr>
-      <tr><td>⑤ 許可の取消し</td><td>取消しと同時に失効</td><td>公安委員会からの提出命令で仮領置</td></tr>
+      <tr><td>⑤ 許可の取消し</td><td>取消しと同時に失効</td><td class="ng">公安委員会からの提出命令で仮領置</td></tr>
       <tr><td>⑥ 全部を生前に手放す</td><td>銃と一緒に銃砲店へ引渡し、代理で返納手続き</td><td>譲渡と同時に手続き完了（猶予期間の概念なし）</td></tr>
       <tr><td>⑦ 一部だけ生前に手放す</td><td>許可証は残したまま、該当銃のみ抹消</td><td>該当の1丁のみ処分、他の銃は有効のまま</td></tr>
     </table>
@@ -828,6 +847,21 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
       <p>❌「全部50日ルールで統一されている」← 誤り！④は猶予期間なし、⑤は仮領置という別の仕組み</p>
     </div>
     <div class="why">💡 判断軸：「本人が自主的に手続きできる場面」（①②③⑥⑦）か「公安委員会が能動的に動く場面」（⑤）か、まず見分ける</div>
+
+    <div style="background:#1a0a0a;border:2px solid rgba(248,113,113,.4);border-radius:8px;padding:12px;margin-top:12px;">
+      <p style="color:#f87171;font-weight:700;font-size:13px;margin-bottom:8px;">⑤取消しを深掘り：失効とは全く別の手続き</p>
+      <div class="compare">
+        <div class="cbox" style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);">
+          <h3 style="color:#fbbf24;">失効の場合</h3>
+          <div style="font-size:11px;line-height:1.7;">本人が<strong>自主的に</strong>50日以内に譲渡・廃棄等の措置をとる（受け身の猶予期間）</div>
+        </div>
+        <div class="cbox cbox-ng">
+          <h3>取消しの場合</h3>
+          <div style="font-size:11px;line-height:1.7;">公安委員会が<strong>能動的に</strong>提出を命令→仮領置（一時的に警察が預かる）。違法行為による取消しは欠格期間（5年・10年等）も発生しうる</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-sub);margin-top:8px;">❌「取消しの場合もすぐに鉄砲店に引き取ってもらう」← 誤り。まず公安委員会への提出・仮領置が基本の流れ</p>
+    </div>
   </div>
 
   <div class="card c-grn">
