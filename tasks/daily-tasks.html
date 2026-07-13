@@ -963,7 +963,7 @@ function renderHome(){
   if(cl.note){cb.style.borderColor='rgba(122,184,212,0.25)';}ce.appendChild(cb);
   // 食事（昼食・夕食）
   var me=document.getElementById('meal-task');me.innerHTML='';
-  function renderMealSlot(slotLabel,slotIcon,slotTm,onSelectFn,onCookedFn,onEatenFn,onEatoutFn){
+  function renderMealSlot(slotLabel,slotIcon,slotTm,onSelectFn,onCookedFn,onEatenFn,onEatoutFn,onResetFn){
     var wrap2=document.createElement('div');wrap2.style.cssText='margin-bottom:8px';
     var hdr=document.createElement('div');hdr.style.cssText='font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:6px;padding-left:2px;opacity:0.7';
     hdr.textContent=slotIcon+' '+slotLabel;wrap2.appendChild(hdr);
@@ -974,7 +974,7 @@ function renderHome(){
     }else if(!slotTm.menuId||!slotMeal){
       var b1=mkBtn('🍳','メニューを選ぶ','タップして選択',false,'#6fcf97',onSelectFn);var eoBtn=document.createElement('button');eoBtn.style.cssText='width:100%;margin-top:8px;padding:13px;background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.25);border-radius:14px;color:rgba(196,150,58,0.9);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px';eoBtn.textContent='🍽️ 外食する';eoBtn.onclick=onEatoutFn;wrap2.appendChild(b1);wrap2.appendChild(eoBtn);
     }else{
-      if(!slotTm.cooked)wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name+'を調理','',false,'#e07b54',onCookedFn));
+      if(!slotTm.cooked){wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name+'を調理','',false,'#e07b54',onCookedFn));if(onResetFn){var chBtn2=document.createElement('button');chBtn2.style.cssText='width:100%;margin-top:4px;padding:8px;background:transparent;border:1px dashed rgba(255,255,255,0.12);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit';chBtn2.textContent='変更する';chBtn2.onclick=onResetFn;wrap2.appendChild(chBtn2);}}
       else if(!slotTm.eaten)wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name+'を食べる','調理完了！',false,'#c4963a',onEatenFn));
       else wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name,'完了',true,'#6fcf97',function(){}));
     }
@@ -984,7 +984,8 @@ function renderHome(){
   renderMealSlot('昼食','🌞',lunch,
     function(){mealSlotTarget='lunch';setPage('meal');},
     toggleLunchCooked,toggleLunchEaten,
-    function(){mealSlotTarget='lunch';setPage('meal');mTab('eatout');});
+    function(){mealSlotTarget='lunch';setPage('meal');mTab('eatout');},
+    resetLunch);
   var tm=getTodayMeal();
   if(tm.menuId&&!mealById(tm.menuId)){var k2=todayStr();if(state.meals)state.meals[k2]={menuId:null,cooked:false,eaten:false};}
   renderMealSlot('夜ご飯','🌙',tm,
@@ -1190,6 +1191,9 @@ function renderHist(){
 }
 
 // ─── 全体 ──────────────────────────────────────────────────────
+
+function resetMeal(){var k=todayStr();if(state.meals)state.meals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
+function resetLunch(){var k=todayStr();if(state.lunchMeals)state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
 function renderAll(){renderHome();renderDrink();renderQuickTasks();renderShopTab(curShopTab);renderMealTab(curMealTab);renderStockPage();}
 loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
 </script>
