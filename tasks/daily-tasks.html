@@ -581,6 +581,7 @@ function loadLocal(){
   if(!state.drinks)state.drinks={};
   if(!state.mealFeedback)state.mealFeedback={};
   if(!state.quickTasks)state.quickTasks=[];
+  if(!state.quickTasks)state.quickTasks=[];
   if(!state.lunchMeals)state.lunchMeals={};
   if(!state.weeklyCustom)state.weeklyCustom=[];
 }
@@ -785,6 +786,7 @@ async function saveFb(){
   if(!pendingFbId||!selectedRating)return;
   if(!state.mealFeedback)state.mealFeedback={};
   if(!state.quickTasks)state.quickTasks=[];
+  if(!state.quickTasks)state.quickTasks=[];
   if(!state.lunchMeals)state.lunchMeals={};
   if(!state.weeklyCustom)state.weeklyCustom=[];const id=pendingFbId;const note=document.getElementById('fb-note').value.trim();
   if(!state.mealFeedback[id])state.mealFeedback[id]={ratings:[],notes:[],avgRating:0};
@@ -969,7 +971,7 @@ function renderHome(){
     hdr.textContent=slotIcon+' '+slotLabel;wrap2.appendChild(hdr);
     var slotMeal=slotTm.menuId?mealById(slotTm.menuId):null;
     if(slotTm.type==='eatout'){
-      if(!slotTm.eaten)wrap2.appendChild(mkBtn(slotTm.emoji||'🍽️','外食: '+slotTm.eatOutName,'食べたらタップ',false,'#c4963a',onEatenFn));
+      if(!slotTm.eaten){wrap2.appendChild(mkBtn(slotTm.emoji||'🍽️','外食: '+slotTm.eatOutName,'食べたらタップ',false,'#c4963a',onEatenFn));var cancelBtn=document.createElement('button');cancelBtn.style.cssText='width:100%;margin-top:6px;padding:10px;background:transparent;border:1px dashed rgba(248,113,113,0.3);border-radius:12px;color:rgba(248,113,113,0.7);font-size:13px;cursor:pointer;font-family:inherit';cancelBtn.textContent='🗑 外食記録を削除';cancelBtn.onclick=onResetFn||function(){};wrap2.appendChild(cancelBtn);}
       else wrap2.appendChild(mkBtn(slotTm.emoji||'🍽️','外食: '+slotTm.eatOutName,'完了',true,'#6fcf97',function(){}));
     }else if(!slotTm.menuId||!slotMeal){
       var b1=mkBtn('🍳','メニューを選ぶ','タップして選択',false,'#6fcf97',onSelectFn);var eoBtn=document.createElement('button');eoBtn.style.cssText='width:100%;margin-top:8px;padding:13px;background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.25);border-radius:14px;color:rgba(196,150,58,0.9);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px';eoBtn.textContent='🍽️ 外食する';eoBtn.onclick=onEatoutFn;wrap2.appendChild(b1);wrap2.appendChild(eoBtn);
@@ -1196,6 +1198,77 @@ function resetMeal(){var k=todayStr();if(state.meals)state.meals[k]={menuId:null
 function resetLunch(){var k=todayStr();if(state.lunchMeals)state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
 function renderAll(){renderHome();renderDrink();renderQuickTasks();renderShopTab(curShopTab);renderMealTab(curMealTab);renderStockPage();}
 loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
+
+// ===== QUICK TASKS (fixed) =====
+window.addQuickTask=function(){
+  var inp=document.getElementById('qt-input');
+  if(!inp)return;
+  var txt=inp.value.trim();
+  if(!txt)return;
+  if(!state.quickTasks)state.quickTasks=[];
+  state.quickTasks.push({id:''+Date.now(),text:txt,done:false});
+  inp.value='';
+  saveLocal();sched();renderQuickTasks();
+};
+window.doneQuickTask=function(id){
+  if(!state.quickTasks)return;
+  state.quickTasks=state.quickTasks.map(function(t){
+    return t.id===id?{id:t.id,text:t.text,done:true}:t;
+  });
+  saveLocal();sched();renderQuickTasks();
+};
+window.deleteQuickTask=function(id){
+  if(!state.quickTasks)return;
+  state.quickTasks=state.quickTasks.filter(function(t){return t.id!==id;});
+  saveLocal();sched();renderQuickTasks();
+};
+window.renderQuickTasks=function(){
+  var el=document.getElementById('qt-list');
+  if(!el)return;
+  el.innerHTML='';
+  var tasks=(state.quickTasks||[]).filter(function(t){return !t.done;});
+  if(!tasks.length){
+    el.innerHTML='<p style="font-size:13px;color:rgba(232,245,233,0.4);padding:4px 0">'
+      +'タスクを追加してください</p>';
+    return;
+  }
+  tasks.forEach(function(t){
+    var d=document.createElement('div');
+    d.style.cssText='display:flex;align-items:center;gap:10px;'
+      +'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);'
+      +'border-radius:14px;padding:14px;margin-bottom:8px;';
+    var done=document.createElement('button');
+    done.style.cssText='flex-shrink:0;min-width:70px;height:42px;border-radius:12px;'
+      +'border:2px solid #6fcf97;background:rgba(111,207,151,0.1);'
+      +'color:#6fcf97;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;';
+    done.textContent='✓ 完了';
+    done.onclick=(function(id){return function(){window.doneQuickTask(id);};})(t.id);
+    var span=document.createElement('span');
+    span.style.cssText='flex:1;font-size:16px;color:white;';
+    span.textContent=t.text;
+    var del=document.createElement('button');
+    del.style.cssText='flex-shrink:0;background:none;border:none;'
+      +'color:rgba(255,80,80,0.5);font-size:22px;cursor:pointer;padding:2px 6px;';
+    del.textContent='✕';
+    del.onclick=(function(id){return function(){window.deleteQuickTask(id);};})(t.id);
+    d.appendChild(done);d.appendChild(span);d.appendChild(del);
+    el.appendChild(d);
+  });
+};
+// ===== END QUICK TASKS =====
+
+window.resetEatOut=function(){
+  var k=todayStr();
+  if(state.meals&&state.meals[k])
+    state.meals[k]={menuId:null,cooked:false,eaten:false,type:null};
+  saveLocal();sched();renderHome();
+};
+window.resetLunchEatOut=function(){
+  var k=todayStr();
+  if(state.lunchMeals&&state.lunchMeals[k])
+    state.lunchMeals[k]={menuId:null,cooked:false,eaten:false,type:null};
+  saveLocal();sched();renderHome();
+};
 </script>
 </body>
 </html>
