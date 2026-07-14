@@ -4,112 +4,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>🌿 デイリータスク</title>
+<title>デイリータスク</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
-:root{--bg:#111a14;--green:#6fcf97;--gold:#c4963a;--red:#f87171;--blue:#7ab8d4;--purple:#b08ac0;--orange:#e07b54;
-  --text:#e8f5e9;--muted:rgba(232,245,233,0.42);--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);
-  --nav-h:70px;--radius:18px;}
+:root{--green:#6fcf97;--gold:#c4963a;--red:#f87171;--blue:#7ab8d4;--purple:#b08ac0;--orange:#e07b54;
+  --text:#e8f5e9;--muted:rgba(232,245,233,0.42);--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.07);--radius:18px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-height:100vh;
-  font-family:'Noto Sans JP',sans-serif;color:var(--text);overflow-x:hidden;padding-bottom:var(--nav-h);}
+body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:100vh;
+  font-family:'Noto Sans JP',sans-serif;color:var(--text);overflow-x:hidden;padding-bottom:76px;}
 .page{display:none;max-width:480px;margin:0 auto;padding:0 14px;}
 .page.active{display:block;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:24px 0 16px;}
-.h-date{color:rgba(111,207,151,0.65);font-size:12px;letter-spacing:1px;margin-bottom:4px;}
-.h-title{color:white;font-size:24px;font-weight:700;}
-.h-right{display:flex;align-items:center;gap:12px;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 14px;}
+.h-date{color:rgba(111,207,151,0.65);font-size:12px;letter-spacing:1px;margin-bottom:3px;}
+.h-title{color:white;font-size:23px;font-weight:700;}
 .gear{background:none;border:none;font-size:22px;cursor:pointer;opacity:0.6;padding:4px;}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;}
 .sec{margin-bottom:18px;}
-.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:2px;}
-/* Task buttons */
-.task-btn{width:100%;display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:14px 14px;min-height:68px;margin-bottom:8px;cursor:pointer;
-  transition:transform 0.15s,background 0.2s;text-align:left;-webkit-appearance:none;font-family:inherit;}
-.task-btn:active{transform:scale(0.97);}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;padding-left:2px;}
+.slot-label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:6px;padding-left:2px;opacity:0.75;}
+.task-btn{width:100%;display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;min-height:66px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;transition:transform 0.12s;}
+.task-btn:active{transform:scale(0.98);}
 .task-btn.done{background:rgba(111,207,151,0.07);}
-.t-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;}
-.t-info{flex:1;}
-.t-lbl{color:white;font-size:16px;font-weight:600;margin-bottom:2px;line-height:1.35;}
+.t-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px;background:rgba(255,255,255,0.05);}
+.t-info{flex:1;min-width:0;}
+.t-lbl{color:white;font-size:16px;font-weight:600;line-height:1.35;}
 .task-btn.done .t-lbl{color:var(--muted);text-decoration:line-through;}
-.t-sub{color:var(--muted);font-size:12px;line-height:1.3;}
+.t-sub{color:var(--muted);font-size:12px;line-height:1.3;margin-top:2px;}
 .chk{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:800;transition:all 0.25s;border:2px solid rgba(255,255,255,0.18);background:transparent;}
-.task-btn.done .chk{color:#111a14;}
-/* Tabs */
+  font-size:16px;font-weight:800;border:2px solid rgba(255,255,255,0.18);background:transparent;}
+.sub-btn{width:100%;margin-top:6px;padding:11px;border-radius:12px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;}
+.sub-eatout{background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.25);color:rgba(196,150,58,0.9);}
+.sub-change{background:transparent;border:1px dashed rgba(255,255,255,0.18);color:var(--muted);}
+.sub-del{background:transparent;border:1px dashed rgba(248,113,113,0.35);color:rgba(248,113,113,0.8);}
+.inrow{display:flex;gap:8px;margin-bottom:10px;}
+.inp{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;
+  padding:13px 15px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:50px;}
+.inp::placeholder{color:var(--muted);}
+.add-btn{background:var(--green);border:none;border-radius:14px;padding:0 18px;color:#111a14;font-weight:700;
+  font-size:15px;cursor:pointer;font-family:inherit;min-height:50px;white-space:nowrap;}
+.qt-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:13px 14px;margin-bottom:8px;}
+.qt-done{flex-shrink:0;min-width:70px;height:42px;border-radius:12px;border:2px solid var(--green);
+  background:rgba(111,207,151,0.1);color:var(--green);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.qt-txt{flex:1;font-size:16px;color:white;}
+.qt-del{flex-shrink:0;background:none;border:none;color:rgba(255,80,80,0.5);font-size:22px;cursor:pointer;padding:2px 8px;}
+.empty-txt{font-size:13px;color:var(--muted);padding:6px 2px;}
 .tab-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
 .tab-btn{flex-shrink:0;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;
-  padding:10px 14px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
-  transition:all 0.2s;min-height:46px;white-space:nowrap;}
+  padding:9px 13px;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;min-height:44px;white-space:nowrap;}
 .tab-btn.on{background:rgba(111,207,151,0.12);border-color:rgba(111,207,151,0.25);color:var(--green);}
-/* Shopping chips on home - larger, easier to tap */
-.shop-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{display:flex;align-items:center;gap:8px;border-radius:30px;padding:11px 18px;min-height:48px;
-  cursor:pointer;font-size:15px;font-family:inherit;transition:all 0.2s;border:1px solid;}
-.chip:active{transform:scale(0.95);}
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:flex;align-items:center;gap:6px;border-radius:30px;padding:11px 16px;min-height:46px;cursor:pointer;font-size:15px;font-family:inherit;border:1px solid;}
 .chip-need{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);color:white;}
-.chip-manual{background:rgba(255,255,255,0.06);border-color:var(--border);color:white;}
-/* Staples checklist */
-.staple-cat{font-size:12px;font-weight:700;color:var(--muted);padding:10px 0 6px;letter-spacing:1px;}
-.staple-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:60px;cursor:pointer;transition:all 0.2s;}
-.staple-row.needed{background:rgba(111,207,151,0.07);border-color:rgba(111,207,151,0.25);}
-.staple-row:active{transform:scale(0.98);}
-.staple-chk{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
-  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#111a14;flex-shrink:0;transition:all 0.2s;}
-.staple-row.needed .staple-chk{background:var(--green);border-color:var(--green);}
-.staple-name{flex:1;font-size:15px;color:white;}
-.staple-row.needed .staple-name{font-weight:600;}
-.need-badge{font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(111,207,151,0.15);
-  border:1px solid rgba(111,207,151,0.3);color:var(--green);white-space:nowrap;}
-/* Fridge */
-.fi-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:13px 15px;margin-bottom:8px;min-height:56px;}
-.fi-name{flex:1;font-size:15px;color:white;}
-.fi-amt{font-size:13px;color:var(--muted);}
-.fi-del{background:none;border:none;color:rgba(255,80,80,0.5);font-size:20px;cursor:pointer;padding:4px 8px;}
-/* Shopping page */
-.shop-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:15px 16px;margin-bottom:8px;min-height:62px;}
-.shop-item.active{background:rgba(111,207,151,0.06);border-color:rgba(111,207,151,0.2);}
-.shop-item-name{flex:1;font-size:16px;color:white;}
-.shop-cat-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);margin:12px 0 7px;padding-left:2px;text-transform:uppercase;}
-.big-chk{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
-  display:flex;align-items:center;justify-content:center;color:#111a14;font-weight:800;font-size:15px;
-  cursor:pointer;transition:all 0.2s;flex-shrink:0;font-family:inherit;}
-.big-chk.on{background:var(--green);border-color:var(--green);}
-.del-btn{background:none;border:none;color:rgba(255,80,80,0.45);font-size:20px;cursor:pointer;padding:4px 8px;}
-/* Drink tracking */
-.drink-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.chip-memo{background:rgba(255,255,255,0.06);border-color:var(--border);color:white;}
+.meal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;cursor:pointer;text-align:left;width:100%;font-family:inherit;}
+.meal-card.sel{background:rgba(111,207,151,0.08);border-color:rgba(111,207,151,0.3);}
+.mc-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;}
+.mc-emoji{font-size:30px;flex-shrink:0;}
+.mc-name{font-size:15px;font-weight:700;color:white;}
+.mc-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+.mc-right{text-align:right;flex-shrink:0;}
+.mc-meta{font-size:11px;color:var(--muted);}
+.mc-nutr{display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--border);}
+.mc-n{font-size:11px;color:var(--muted);}
+.mc-n b{color:white;font-weight:600;}
+.mc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.mc-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(255,255,255,0.06);color:var(--muted);}
+.drink-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:8px;}
 .drink-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
 .drink-info{flex:1;min-width:0;}
 .drink-name{font-size:13px;font-weight:600;color:white;margin-bottom:4px;}
-.drink-pg-bg{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
-.drink-pg{height:100%;border-radius:3px;transition:width 0.4s ease;}
-.drink-amt{font-size:11px;color:var(--muted);white-space:nowrap;text-align:right;min-width:48px;}
-.drink-btns{display:flex;gap:4px;flex-shrink:0;}
-.d-add{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:10px;
-  padding:6px 8px;color:var(--green);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;}
-/* Meal cards */
-.meal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;font-family:inherit;}
-.meal-card:active{transform:scale(0.98);}
-.meal-card.sel{background:rgba(111,207,151,0.08);border-color:rgba(111,207,151,0.3);}
-.mc-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;}
-.mc-emoji{font-size:30px;line-height:1;flex-shrink:0;}
-.mc-info{flex:1;min-width:0;}
-.mc-name{font-size:15px;font-weight:700;color:white;}
-.mc-desc{font-size:12px;color:var(--muted);margin-top:2px;}
-.mc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
-.mc-tags{display:flex;gap:4px;flex-wrap:wrap;}
-.mc-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(255,255,255,0.06);color:var(--muted);}
-.mc-nutr{display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--border);}
-.mc-n{font-size:11px;color:var(--muted);}
-.mc-n span{color:white;font-weight:600;}
-/* Recipe */
+.dp-bg{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+.dp-bar{height:100%;border-radius:3px;transition:width 0.4s;}
+.drink-amt{font-size:11px;color:var(--muted);text-align:right;min-width:46px;}
+.d-add{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:10px;padding:6px 8px;color:var(--green);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;}
+.staple-cat{font-size:12px;font-weight:700;color:var(--muted);padding:10px 0 6px;}
+.staple-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;min-height:58px;cursor:pointer;}
+.staple-row.on{background:rgba(111,207,151,0.07);border-color:rgba(111,207,151,0.25);}
+.staple-chk{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#111a14;flex-shrink:0;}
+.staple-row.on .staple-chk{background:var(--green);border-color:var(--green);}
+.staple-name{flex:1;font-size:15px;color:white;}
+.need-badge{font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.3);color:var(--green);}
+.fi-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px 15px;margin-bottom:8px;min-height:54px;}
+.fi-name{flex:1;font-size:15px;color:white;}
+.fi-amt{font-size:13px;color:var(--muted);}
+.fi-del{background:none;border:none;color:rgba(255,80,80,0.5);font-size:20px;cursor:pointer;padding:4px 8px;}
+.shop-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 15px;margin-bottom:8px;min-height:58px;}
+.shop-item.on{background:rgba(111,207,151,0.06);border-color:rgba(111,207,151,0.2);}
+.shop-name{flex:1;font-size:16px;color:white;}
+.shop-cat-lbl{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);margin:12px 0 7px;padding-left:2px;}
+.big-chk{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;display:flex;align-items:center;justify-content:center;color:#111a14;font-weight:800;font-size:15px;cursor:pointer;flex-shrink:0;font-family:inherit;}
+.big-chk.on{background:var(--green);border-color:var(--green);}
+.buy-btn{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:12px;padding:8px 14px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap;}
+.del-btn{background:none;border:none;color:rgba(255,80,80,0.45);font-size:20px;cursor:pointer;padding:4px 8px;}
+.stat-row{display:flex;gap:10px;margin-bottom:20px;}
+.stat-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.stat-num{font-size:24px;font-weight:700;}
+.stat-lbl{font-size:10px;color:var(--muted);text-align:center;}
+.chart-wrap{background:rgba(0,0,0,0.2);border-radius:16px;padding:14px 6px 8px;}
+.chart-wrap canvas{max-height:170px;}
+.ts-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ts-lbl{font-size:12px;color:rgba(232,245,233,0.6);width:100px;flex-shrink:0;}
+.ts-bg{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
+.ts-bar{height:100%;border-radius:4px;}
+.ts-pct{font-size:13px;font-weight:700;width:36px;text-align:right;}
+.empty{display:flex;flex-direction:column;align-items:center;padding:40px 20px;gap:10px;}
+.empty .ei{font-size:40px;}
+.empty .et{font-size:14px;color:var(--muted);text-align:center;line-height:1.6;}
+.cuisine-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.cu-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;padding:7px 12px;color:white;font-size:13px;cursor:pointer;font-family:inherit;min-height:38px;}
+.cu-btn.on{border-color:var(--green);color:var(--green);}
+.eo-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 .r-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .r-emoji{font-size:44px;}
 .r-info h2{font-size:20px;font-weight:700;}
@@ -119,80 +126,38 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 .r-nv .v{font-size:20px;font-weight:700;color:var(--green);}
 .r-nv .l{font-size:11px;color:var(--muted);}
 .r-sec{margin-bottom:14px;}
-.r-sec h3{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.r-sec h3{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:8px;}
 .ing-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;}
 .ing-miss{color:var(--orange);}
 .step-row{display:flex;gap:10px;margin-bottom:10px;}
-.step-num{width:26px;height:26px;border-radius:50%;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.2);
-  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--green);flex-shrink:0;margin-top:1px;}
+.step-num{width:26px;height:26px;border-radius:50%;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--green);flex-shrink:0;}
 .step-txt{font-size:14px;line-height:1.6;flex:1;}
-/* Stars */
 .stars{display:flex;gap:8px;margin:10px 0;justify-content:center;}
-.star{font-size:36px;cursor:pointer;transition:transform 0.15s;line-height:1;}
-.star:hover{transform:scale(1.15);}
-/* Nutrition */
+.star{font-size:36px;cursor:pointer;}
 .nb-row{margin-bottom:10px;}
 .nb-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
 .nb-bg{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
 .nb-bar{height:100%;border-radius:4px;}
-/* Stats */
-.stat-row{display:flex;gap:10px;margin-bottom:20px;}
-.stat-card{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;
-  display:flex;flex-direction:column;align-items:center;gap:4px;}
-.stat-num{font-size:26px;font-weight:700;}
-.stat-lbl{font-size:10px;color:var(--muted);text-align:center;}
-.chart-wrap{background:rgba(0,0,0,0.2);border-radius:16px;padding:14px 6px 8px;}
-.chart-wrap canvas{max-height:170px;}
-.ts-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.ts-lbl{font-size:12px;color:rgba(232,245,233,0.6);width:100px;flex-shrink:0;}
-.ts-bg{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
-.ts-bar{height:100%;border-radius:4px;transition:width 0.6s;}
-.ts-pct{font-size:13px;font-weight:700;width:36px;text-align:right;}
-/* Eatout */
-.cuisine-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.cu-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;
-  padding:7px 12px;color:white;font-size:13px;cursor:pointer;font-family:inherit;min-height:38px;}
-.cu-btn.on{border-color:var(--green);color:var(--green);}
-.eo-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
-/* Forms */
-.add-form{display:flex;gap:8px;margin-bottom:14px;}
-.add-form input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  border-radius:14px;padding:14px 15px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;}
-.add-form input::placeholder{color:var(--muted);}
-.green-btn{background:var(--green);border:none;border-radius:14px;padding:14px 18px;color:#111a14;
-  font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;min-height:52px;white-space:nowrap;}
-.pill-btn{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:20px;
-  padding:8px 16px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.pill{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:20px;padding:8px 16px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
 .hint{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
-.empty{display:flex;flex-direction:column;align-items:center;padding:40px 20px;gap:10px;}
-.empty .ei{font-size:40px;}
-.empty .et{font-size:14px;color:var(--muted);}
-/* Modals */
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:200;align-items:flex-end;}
 .ov.open{display:flex;}
 .mbox{background:#1a2b1e;border-radius:24px 24px 0 0;padding:24px 18px 36px;width:100%;max-width:480px;margin:0 auto;max-height:88vh;overflow-y:auto;}
 .m-title{font-size:18px;font-weight:700;margin-bottom:14px;}
 .m-row{margin-bottom:12px;}
-.m-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:1px;}
-.m-row input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px;padding:12px 14px;color:white;font-size:14px;outline:none;font-family:monospace;}
+.m-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;}
+.m-row input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 14px;color:white;font-size:14px;outline:none;font-family:monospace;}
 .m-btns{display:flex;gap:10px;margin-top:16px;}
 .m-btn{flex:1;padding:15px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;min-height:54px;}
 .m-btn.p{background:var(--green);color:#111a14;}
 .m-btn.s{background:rgba(255,255,255,0.08);color:white;}
-.sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
-.sync-err{background:rgba(255,80,80,0.1);color:var(--red);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;}
-/* Nav */
-#nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:rgba(10,18,12,0.96);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);
-  display:flex;z-index:100;}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  background:none;border:none;color:var(--muted);cursor:pointer;font-family:inherit;
-  padding-bottom:env(safe-area-inset-bottom,0);position:relative;}
+.sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;white-space:pre-line;}
+.sync-err{background:rgba(255,80,80,0.1);color:var(--red);font-size:12px;padding:8px 12px;border-radius:10px;margin-top:8px;white-space:pre-line;}
+#nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:rgba(10,18,12,0.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);display:flex;z-index:100;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--muted);cursor:pointer;font-family:inherit;}
 .nb .ni{font-size:22px;}
 .nb .nl{font-size:10px;}
 .nb.on{color:var(--green);}
-.nb-dot{position:absolute;bottom:calc(env(safe-area-inset-bottom,0)+6px);width:4px;height:4px;border-radius:50%;background:var(--green);}
 </style>
 </head>
 <body>
@@ -201,94 +166,91 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 <div id="pg-home" class="page active">
   <div class="header">
     <div><div class="h-date" id="hdr-date"></div><div class="h-title" id="hdr-day"></div></div>
-    <div class="h-right">
-      <button class="gear" onclick="openSettings()">⚙️</button>
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <svg width="58" height="58" viewBox="0 0 58 58">
-          <circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
-          <circle id="ring-arc" cx="29" cy="29" r="23" fill="none" stroke="#6fcf97" stroke-width="4"
-            stroke-linecap="round" transform="rotate(-90 29 29)"
-            stroke-dasharray="144.5" stroke-dashoffset="144.5" style="transition:stroke-dashoffset 0.6s ease"/>
-          <text x="29" y="34" text-anchor="middle" fill="white" font-size="12" font-weight="700" id="ring-pct">0%</text>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="gear" onclick="openSettings()">&#9881;</button>
+      <div class="ring-wrap">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+          <circle id="ring-arc" cx="28" cy="28" r="22" fill="none" stroke="#6fcf97" stroke-width="4"
+            stroke-linecap="round" transform="rotate(-90 28 28)" stroke-dasharray="138.2" stroke-dashoffset="138.2" style="transition:stroke-dashoffset 0.6s"/>
+          <text x="28" y="33" text-anchor="middle" fill="white" font-size="12" font-weight="700" id="ring-pct">0%</text>
         </svg>
         <div style="font-size:11px;color:var(--muted);margin-top:-2px" id="ring-sub">0/0</div>
       </div>
     </div>
   </div>
-  <div class="sec"><div class="sec-label">💧 今日の水分</div><div id="drink-widget"></div></div>
-  <div class="sec" id="sec-trash" style="display:none"><div class="sec-label">🗑️ ゴミ捨て</div><div id="trash-task"></div></div>
-  <div class="sec"><div class="sec-label">🧹 今日の掃除</div><div id="clean-task"></div></div>
-  <div class="sec"><div class="sec-label">🍳 今日の食事</div><div id="meal-task"></div></div>
-  <div class="sec"><div class="sec-label">📋 毎日タスク</div><div id="daily-tasks"></div></div>
-  <div class="sec" id="sec-shop" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span class="sec-label" style="margin-bottom:0">🛒 買い物リスト</span>
+
+  <div class="sec">
+    <div class="sec-label">&#9889; \u3059\u3050\u3084\u308b\u30bf\u30b9\u30af</div>
+    <div class="inrow">
+      <input type="text" id="qt-input" class="inp" placeholder="\u30bf\u30b9\u30af\u3092\u5165\u529b..." onkeydown="if(event.key==='Enter')addQuickTask()">
+      <button class="add-btn" onclick="addQuickTask()">\u8ffd\u52a0</button>
     </div>
-    <div id="shop-chips"></div>
+    <div id="qt-list"></div>
   </div>
-  <div class="sec"><div class="sec-label">📅 今週のタスク</div><div id="weekly-tasks"></div></div>
+
+  <div class="sec"><div class="sec-label">&#128167; \u4eca\u65e5\u306e\u6c34\u5206</div><div id="drink-widget"></div></div>
+  <div class="sec" id="sec-trash" style="display:none"><div class="sec-label">&#128465; \u30b4\u30df\u6368\u3066</div><div id="trash-task"></div></div>
+  <div class="sec"><div class="sec-label">&#129529; \u4eca\u65e5\u306e\u63b2\u9664</div><div id="clean-task"></div></div>
+  <div class="sec"><div class="sec-label">&#127859; \u4eca\u65e5\u306e\u98df\u4e8b</div><div id="meal-task"></div></div>
+  <div class="sec"><div class="sec-label">&#128203; \u6bce\u65e5\u30bf\u30b9\u30af</div><div id="daily-tasks"></div></div>
+  <div class="sec" id="sec-shop" style="display:none"><div class="sec-label">&#128722; \u8cb7\u3044\u7269\u30ea\u30b9\u30c8</div><div id="shop-chips"></div></div>
+  <div class="sec"><div class="sec-label">&#128197; \u4eca\u9031\u306e\u30bf\u30b9\u30af</div><div id="weekly-tasks"></div></div>
   <div style="height:20px"></div>
 </div>
 
 <!-- MEAL -->
 <div id="pg-meal" class="page">
-  <div class="header"><div><div class="h-title">🍳 食事管理</div></div></div>
+  <div class="header"><div class="h-title">&#127859; \u98df\u4e8b\u7ba1\u7406</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="mt-rec" onclick="mTab('rec')">おすすめ</button>
-    <button class="tab-btn" id="mt-custom" onclick="mTab('custom')">➕ 追加</button>
-    <button class="tab-btn" id="mt-eatout" onclick="mTab('eatout')">🍽️ 外食</button>
-    <button class="tab-btn" id="mt-today" onclick="mTab('today')">今日の献立</button>
-    <button class="tab-btn" id="mt-nutr" onclick="mTab('nutr')">栄養</button>
+    <button class="tab-btn on" id="mt-rec" onclick="mTab('rec')">\u304a\u3059\u3059\u3081</button>
+    <button class="tab-btn" id="mt-custom" onclick="mTab('custom')">\u2795 \u8ffd\u52a0</button>
+    <button class="tab-btn" id="mt-eatout" onclick="mTab('eatout')">&#127853; \u5916\u98df</button>
+    <button class="tab-btn" id="mt-nutr" onclick="mTab('nutr')">\u6804\u990a</button>
   </div>
   <div id="mv-rec">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <span style="font-size:13px;color:var(--muted)">全<span id="meal-cnt">0</span>品</span>
-      <button class="pill-btn" onclick="shuffleRec()">🔀 シャッフル</button>
+      <span style="font-size:13px;color:var(--muted)" id="which-slot"></span>
+      <button class="pill" onclick="shuffleRec()">\U0001f500 \u30b7\u30e3\u30c3\u30d5\u30eb</button>
     </div>
     <div id="meal-cards"></div>
   </div>
   <div id="mv-custom" style="display:none">
-    <p class="hint">料理名を入力してAIでレシピ自動生成（⚙️でClaude APIキー設定）</p>
-    <div class="add-form">
-      <input type="text" id="custom-name" placeholder="料理名を入力...">
-      <button class="green-btn" id="ai-btn" onclick="genRecipe()">🤖 AI生成</button>
-    </div>
+    <p class="hint">\u6599\u7406\u540d\u3092\u5165\u529b\u3057\u3066AI\u3067\u30ec\u30b7\u30d4\u751f\u6210\uff08\u2699\uFE0F\u3067API\u30ad\u30fc\u8a2d\u5b9a\uff09</p>
+    <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="\u6599\u7406\u540d..."><button class="add-btn" id="ai-btn" onclick="genRecipe()">\U0001f916 \u751f\u6210</button></div>
     <div id="custom-list"></div>
   </div>
   <div id="mv-eatout" style="display:none">
     <div id="eo-today"></div>
-    <div class="sec-label">ジャンルを選ぶ</div>
-    <div class="cuisine-btns" id="cuisine-btns"></div>
-    <div class="add-form"><input type="text" id="eo-rest" placeholder="店名（任意）"></div>
-    <div class="add-form">
-      <input type="text" id="eo-dish" placeholder="料理・注文内容">
-      <button class="green-btn" onclick="logEatOut()">記録</button>
+    <div class="sec-label">\u3069\u3061\u3089\u306e\u98df\u4e8b\uff1f</div>
+    <div class="inrow" style="gap:6px">
+      <button class="tab-btn" id="eoslot-lunch" onclick="eoSlot('lunch')">\U0001f31e \u663c\u98df</button>
+      <button class="tab-btn on" id="eoslot-dinner" onclick="eoSlot('dinner')">\U0001f319 \u591c\u3054\u98df</button>
     </div>
-    <div class="sec-label" style="margin-top:4px">外食履歴</div>
+    <div class="sec-label">\u30b8\u30e3\u30f3\u30eb</div>
+    <div class="cuisine-btns" id="cuisine-btns"></div>
+    <div class="inrow"><input type="text" id="eo-rest" class="inp" placeholder="\u5e97\u540d\uff08\u4efb\u610f\uff09"></div>
+    <div class="inrow"><input type="text" id="eo-dish" class="inp" placeholder="\u6599\u7406\u30fb\u6ce8\u6587\u5185\u5bb9"><button class="add-btn" onclick="logEatOut()">\u8a18\u9332</button></div>
+    <div class="sec-label" style="margin-top:4px">\u5916\u98df\u5c65\u6b74</div>
     <div id="eo-hist"></div>
   </div>
-  <div id="mv-today" style="display:none"><div id="today-detail"></div></div>
   <div id="mv-nutr" style="display:none"><div id="nutr-detail"></div></div>
   <div style="height:20px"></div>
 </div>
 
 <!-- STOCK -->
 <div id="pg-stock" class="page">
-  <div class="header"><div><div class="h-title">📦 在庫管理</div></div></div>
+  <div class="header"><div class="h-title">&#128230; \u5728\u5eab\u7ba1\u7406</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="st-fridge" onclick="sTab('fridge')">🧊 冷蔵庫</button>
-    <button class="tab-btn" id="st-staples" onclick="sTab('staples')">📦 常備品</button>
+    <button class="tab-btn on" id="st-fridge" onclick="sTab('fridge')">&#129482; \u51b7\u8535\u5eab</button>
+    <button class="tab-btn" id="st-staples" onclick="sTab('staples')">&#128230; \u5e38\u5099\u54c1</button>
   </div>
   <div id="sv-fridge">
-    <div class="add-form">
-      <input type="text" id="fi-name" placeholder="食材名" style="flex:2">
-      <input type="text" id="fi-amt" placeholder="量" style="flex:1;min-width:60px">
-      <button class="green-btn" onclick="addFridge()">追加</button>
-    </div>
+    <div class="inrow"><input type="text" id="fi-name" class="inp" placeholder="\u98df\u6750\u540d" style="flex:2"><input type="text" id="fi-amt" class="inp" placeholder="\u91cf" style="flex:1;min-width:60px"><button class="add-btn" onclick="addFridge()">\u8ffd\u52a0</button></div>
     <div id="fridge-list"></div>
   </div>
   <div id="sv-staples" style="display:none">
-    <p class="hint">✅ チェックすると買い物リストに追加、もう一度チェックで削除（完了）</p>
+    <p class="hint">\u2705 \u30c1\u30a7\u30c3\u30af\u3067\u8cb7\u3044\u7269\u30ea\u30b9\u30c8\u306b\u8ffd\u52a0\u3001\u3082\u3046\u4e00\u5ea6\u30c1\u30a7\u30c3\u30af\u3067\u524a\u9664\uff08\u5b8c\u4e86\uff09</p>
     <div id="staples-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -296,23 +258,15 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 
 <!-- SHOP -->
 <div id="pg-shop" class="page">
-  <div class="header"><div><div class="h-title">🛒 買い物リスト</div></div></div>
+  <div class="header"><div class="h-title">&#128722; \u8cb7\u3044\u7269\u30ea\u30b9\u30c8</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="sh-today" onclick="shTab('today')">✅ 今日買うもの</button>
-    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">📝 メモリスト</button>
+    <button class="tab-btn on" id="sh-today" onclick="shTab('today')">\u2705 \u4eca\u65e5\u8cb7\u3046\u3082\u306e</button>
+    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">\U0001f4dd \u30e1\u30e2\u30ea\u30b9\u30c8</button>
   </div>
-  <!-- 今日買うもの -->
-  <div id="shv-today">
-    <p class="hint">タップで購入完了（ホームからも消えます）。常備品は在庫ページでチェック管理。</p>
-    <div id="sh-today-content"></div>
-  </div>
-  <!-- メモリスト管理 -->
+  <div id="shv-today"><div id="sh-today-content"></div></div>
   <div id="shv-manage" style="display:none">
-    <p class="hint">いつでも使えるメモリスト。チェックで今日の買い物リストに出す・外す。</p>
-    <div class="add-form">
-      <input type="text" id="new-item" placeholder="アイテムを追加..." onkeydown="if(event.key==='Enter')addItem()">
-      <button class="green-btn" onclick="addItem()">追加</button>
-    </div>
+    <p class="hint">\u3044\u3064\u3067\u3082\u4f7f\u3048\u308b\u30e1\u30e2\u3002\u30c1\u30a7\u30c3\u30af\u3067\u4eca\u65e5\u306e\u30ea\u30b9\u30c8\u306b\u51fa\u3059\u30fb\u5916\u3059\u3002</p>
+    <div class="inrow"><input type="text" id="new-item" class="inp" placeholder="\u30a2\u30a4\u30c6\u30e0\u3092\u8ffd\u52a0..." onkeydown="if(event.key==='Enter')addMemo()"><button class="add-btn" onclick="addMemo()">\u8ffd\u52a0</button></div>
     <div id="manage-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -320,77 +274,58 @@ body{background:linear-gradient(155deg,#0e1710 0%,#111a14 50%,#131520 100%);min-
 
 <!-- HIST -->
 <div id="pg-hist" class="page">
-  <div class="header"><div><div class="h-title">📊 記録・分析</div></div></div>
+  <div class="header"><div class="h-title">&#128202; \u8a18\u9332\u30fb\u5206\u6790</div></div>
   <div class="stat-row">
-    <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">🔥 0</div><div class="stat-lbl">連続達成日</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-today-cnt" style="color:#6fcf97">✅ 0</div><div class="stat-lbl">今日の完了</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">📅 0</div><div class="stat-lbl">記録日数</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">0</div><div class="stat-lbl">\u9023\u7d9a\u9054\u6210\u65e5</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-tcnt" style="color:#6fcf97">0</div><div class="stat-lbl">\u4eca\u65e5\u306e\u5b8c\u4e86</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">0</div><div class="stat-lbl">\u8a18\u9332\u65e5\u6570</div></div>
   </div>
-  <div class="sec"><div class="sec-label">📈 直近14日間</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
-  <div class="sec"><div class="sec-label">🏅 タスク別達成率（30日間）</div><div id="task-stats"></div></div>
+  <div class="sec"><div class="sec-label">&#128200; \u76f4\u8fd114\u65e5\u9593</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
+  <div class="sec"><div class="sec-label">&#127941; \u30bf\u30b9\u30af\u5225\u9054\u6210\u7387\uff0830\u65e5\uff09</div><div id="task-stats"></div></div>
   <div style="height:20px"></div>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav id="nav">
-  <button class="nb on" id="nav-home" onclick="setPage('home')"><span class="ni">🏠</span><span class="nl">ホーム</span><div class="nb-dot"></div></button>
-  <button class="nb" id="nav-meal" onclick="setPage('meal')"><span class="ni">🍳</span><span class="nl">食事</span></button>
-  <button class="nb" id="nav-stock" onclick="setPage('stock')"><span class="ni">📦</span><span class="nl">在庫</span></button>
-  <button class="nb" id="nav-shop" onclick="setPage('shop')"><span class="ni">🛒</span><span class="nl">買い物</span></button>
-  <button class="nb" id="nav-hist" onclick="setPage('hist')"><span class="ni">📊</span><span class="nl">記録</span></button>
+  <button class="nb on" id="nav-home" onclick="setPage('home')"><span class="ni">&#127968;</span><span class="nl">\u30db\u30fc\u30e0</span></button>
+  <button class="nb" id="nav-meal" onclick="setPage('meal')"><span class="ni">&#127859;</span><span class="nl">\u98df\u4e8b</span></button>
+  <button class="nb" id="nav-stock" onclick="setPage('stock')"><span class="ni">&#128230;</span><span class="nl">\u5728\u5eab</span></button>
+  <button class="nb" id="nav-shop" onclick="setPage('shop')"><span class="ni">&#128722;</span><span class="nl">\u8cb7\u3044\u7269</span></button>
+  <button class="nb" id="nav-hist" onclick="setPage('hist')"><span class="ni">&#128202;</span><span class="nl">\u8a18\u9332</span></button>
 </nav>
 
-<!-- 設定モーダル -->
 <div class="ov" id="settings-ov" onclick="if(event.target===this)closeSettings()">
   <div class="mbox">
-    <div class="m-title">⚙️ 設定・クラウド同期</div>
+    <div class="m-title">\u2699\uFE0F \u8a2d\u5b9a\u30fb\u30af\u30e9\u30a6\u30c9\u540c\u671f</div>
     <div class="m-row"><label>JSONBin Secret Key</label><input type="password" id="cfg-key" placeholder="$2b$10$..." autocomplete="off"></div>
-    <div class="m-row"><label>Bin ID（初回は空欄でOK）</label><input type="text" id="cfg-bin" placeholder="自動生成されます"></div>
+    <div class="m-row"><label>Bin ID\uff08\u521d\u56de\u306f\u7a7a\u6b04OK\uff09</label><input type="text" id="cfg-bin" placeholder="\u81ea\u52d5\u751f\u6210"></div>
     <div id="sync-status"></div>
     <hr style="border:none;border-top:1px solid var(--border);margin:14px 0">
-    <div class="m-row"><label>Anthropic API Key（AIレシピ生成・任意）</label><input type="password" id="cfg-ant" placeholder="sk-ant-..." autocomplete="off"></div>
-    <div class="m-btns">
-      <button class="m-btn p" onclick="saveSettings()">🚀 同期を開始</button>
-      <button class="m-btn s" onclick="closeSettings()">閉じる</button>
-    </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6">
-      <a href="https://jsonbin.io" target="_blank" style="color:var(--green)">jsonbin.io</a> → Secret Key をコピー<br>
-      <a href="https://console.anthropic.com" target="_blank" style="color:var(--green)">console.anthropic.com</a> → API Keys
-    </p>
+    <div class="m-row"><label>Anthropic API Key\uff08AI\u30ec\u30b7\u30d4\u30fb\u4efb\u610f\uff09</label><input type="password" id="cfg-ant" placeholder="sk-ant-..." autocomplete="off"></div>
+    <div class="m-btns"><button class="m-btn p" onclick="saveSettings()">\U0001f680 \u540c\u671f\u3092\u958b\u59cb</button><button class="m-btn s" onclick="closeSettings()">\u9589\u3058\u308b</button></div>
   </div>
 </div>
 
-<!-- レシピモーダル -->
 <div class="ov" id="recipe-ov" onclick="if(event.target===this)closeRecipe()">
   <div class="mbox"><div id="recipe-content"></div><div class="m-btns" id="recipe-btns"></div></div>
 </div>
 
-<!-- AIプレビューモーダル -->
 <div class="ov" id="preview-ov" onclick="if(event.target===this)closePreview()">
-  <div class="mbox">
-    <div class="m-title">✨ 生成されたレシピを確認</div>
-    <div id="preview-content"></div>
-    <div class="m-btns">
-      <button class="m-btn s" onclick="closePreview()">キャンセル</button>
-      <button class="m-btn p" onclick="saveCustom()">✅ 保存する</button>
-    </div>
-  </div>
+  <div class="mbox"><div class="m-title">\u2728 \u751f\u6210\u30ec\u30b7\u30d4\u3092\u78ba\u8a8d</div><div id="preview-content"></div>
+    <div class="m-btns"><button class="m-btn s" onclick="closePreview()">\u30ad\u30e3\u30f3\u30bb\u30eb</button><button class="m-btn p" onclick="saveCustom()">\u2705 \u4fdd\u5b58</button></div></div>
 </div>
 
-<!-- フィードバックモーダル -->
 <div class="ov" id="fb-ov" onclick="if(event.target===this)closeFb()">
-  <div class="mbox">
-    <div class="m-title">⭐ 食事の評価</div>
+  <div class="mbox"><div class="m-title">\u2b50 \u98df\u4e8b\u306e\u8a55\u4fa1</div>
     <p style="font-size:14px;color:var(--muted);margin-bottom:8px" id="fb-name"></p>
     <div class="stars" id="fb-stars"></div>
-    <textarea id="fb-note" placeholder="感想・改善メモ（例：醤油を減らすと美味しい）"
-      style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;
-      padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
-    <div class="m-btns">
-      <button class="m-btn s" onclick="closeFb()">スキップ</button>
-      <button class="m-btn p" onclick="saveFb()">✅ 保存</button>
-    </div>
-  </div>
+    <textarea id="fb-note" placeholder="\u611f\u60f3\u30fb\u6539\u5584\u30e1\u30e2" style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
+    <div class="m-btns"><button class="m-btn s" onclick="closeFb()">\u30b9\u30ad\u30c3\u30d7</button><button class="m-btn p" onclick="saveFb()">\u2705 \u4fdd\u5b58</button></div></div>
+</div>
+
+<div class="ov" id="weekly-ov" onclick="if(event.target===this)closeWeeklyModal()">
+  <div class="mbox"><div class="m-title">\U0001f4c5 \u9031\u6b21\u30bf\u30b9\u30af\u3092\u8ffd\u52a0</div>
+    <div class="inrow"><input type="text" id="wc-emoji" class="inp" placeholder="\U0001f4cc" style="max-width:70px;text-align:center;font-size:20px"><input type="text" id="wc-input" class="inp" placeholder="\u30bf\u30b9\u30af\u540d"></div>
+    <div class="m-btns"><button class="m-btn s" onclick="closeWeeklyModal()">\u30ad\u30e3\u30f3\u30bb\u30eb</button><button class="m-btn p" onclick="addWeeklyCustom()">\u2705 \u8ffd\u52a0</button></div></div>
 </div>
 
 <script>
@@ -410,202 +345,152 @@ const MEALS=[
 {id:"m13",emoji:"🍳",name:"オムライス",desc:"ふわとろ卵のケチャップライス",tags:["洋食","卵"],time:20,nutr:{cal:520,protein:20,fat:20,carb:60},ings:[{n:"ご飯",a:"1人分"},{n:"卵",a:"3個"},{n:"鶏むね肉",a:"80g"},{n:"玉ねぎ",a:"1/4個"},{n:"ケチャップ",a:"大さじ3"},{n:"バター",a:"10g"}],steps:["鶏肉と玉ねぎを炒めご飯とケチャップで炒める","楕円に成形する","薄焼き卵を作る","卵で包む","ケチャップをかけて完成"]},
 {id:"m14",emoji:"🐄",name:"牛丼",desc:"甘辛牛肉どんぶり",tags:["和食","牛肉","丼"],time:20,nutr:{cal:580,protein:28,fat:20,carb:66},ings:[{n:"牛バラ薄切り",a:"200g"},{n:"玉ねぎ",a:"1個"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"だし汁",a:"200ml"},{n:"ご飯",a:"1人分"}],steps:["玉ねぎを薄切り","煮汁を作る","玉ねぎを2分煮る","牛肉を加えさっと煮る","ご飯に乗せて完成"]},
 {id:"m15",emoji:"🥦",name:"野菜炒め定食",desc:"シャキシャキ炒め",tags:["和食","野菜","ヘルシー"],time:15,nutr:{cal:280,protein:12,fat:12,carb:30},ings:[{n:"もやし",a:"1袋"},{n:"キャベツ",a:"1/4個"},{n:"にんじん",a:"1/2本"},{n:"豚バラ",a:"80g"},{n:"醤油",a:"大さじ1"},{n:"オイスターソース",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["野菜を切る","強火で豚肉を炒める","野菜を加えて炒める","醤油とオイスターソースで味付け","ごま油で仕上げ"]},
-{id:"m16",emoji:"🍜",name:"ざるそば",desc:"夏の定番冷たいそば",tags:["和食","そば","ヘルシー"],time:10,nutr:{cal:320,protein:14,fat:2,carb:62},ings:[{n:"そば",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"100ml"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"},{n:"海苔",a:"適量"}],steps:["そばを表示通り茹でる","冷水でしっかり洗う","氷水で締める","器に盛り海苔をのせる","つゆにわさびとねぎを入れて付けて食べる"]},
-{id:"m17",emoji:"🍜",name:"かけそば",desc:"温かいシンプルなそば",tags:["和食","そば"],time:10,nutr:{cal:330,protein:14,fat:2,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"長ねぎ",a:"適量"},{n:"七味",a:"適量"}],steps:["だし汁と醤油とみりんでつゆを作る","そばを茹でてお湯で洗う","器にそばを盛る","熱いつゆを注ぐ","ねぎと七味をのせて完成"]},
-{id:"m18",emoji:"🍜",name:"月見そば",desc:"卵のせ温かいそば",tags:["和食","そば"],time:12,nutr:{cal:380,protein:18,fat:6,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"卵",a:"1個"},{n:"長ねぎ",a:"適量"}],steps:["つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","そっと生卵を落とす","ねぎをのせて完成"]},
-{id:"m19",emoji:"🍜",name:"天ぷらそば",desc:"えびの天ぷら乗せそば",tags:["和食","そば"],time:20,nutr:{cal:480,protein:20,fat:14,carb:66},ings:[{n:"そば",a:"1玉"},{n:"えび",a:"2尾"},{n:"天ぷら粉",a:"大さじ3"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"}],steps:["えびを天ぷら粉で揚げる","つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","天ぷらをのせて完成"]},
-{id:"m20",emoji:"🍜",name:"鴨南蛮そば",desc:"鴨肉と長ねぎの贅沢そば",tags:["和食","そば"],time:25,nutr:{cal:440,protein:26,fat:14,carb:52},ings:[{n:"そば",a:"1玉"},{n:"鶏もも肉",a:"100g"},{n:"長ねぎ",a:"1本"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["肉を食べやすく切る","ねぎを斜め切りして焼く","肉を炒めつゆと合わせる","そばを茹でて盛る","肉とねぎを乗せて完成"]},
-{id:"m21",emoji:"🍜",name:"冷やしそうめん",desc:"夏の定番細麺",tags:["和食","そうめん","ヘルシー"],time:8,nutr:{cal:290,protein:10,fat:1,carb:60},ings:[{n:"そうめん",a:"2束"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"150ml"},{n:"氷",a:"適量"},{n:"トマト",a:"1個"},{n:"きゅうり",a:"1本"}],steps:["そうめんを茹でる2分","冷水でよく洗う","氷水で締める","器に盛る","野菜と氷入りつゆで食べる"]},
-{id:"m22",emoji:"🍜",name:"にゅうめん",desc:"温かいそうめんスープ",tags:["和食","そうめん"],time:10,nutr:{cal:300,protein:12,fat:2,carb:58},ings:[{n:"そうめん",a:"2束"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"小さじ2"},{n:"塩",a:"少量"},{n:"三つ葉",a:"少量"},{n:"かまぼこ",a:"2切れ"}],steps:["だし汁を沸かし調味する","そうめんを茹でてお湯で洗う","器に盛る","熱いつゆを注ぐ","かまぼこと三つ葉をのせて完成"]},
+{id:"m16",emoji:"🍜",name:"ざるそば",desc:"冷たいそば",tags:["和食","そば","ヘルシー"],time:10,nutr:{cal:320,protein:14,fat:2,carb:62},ings:[{n:"そば",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"},{n:"海苔",a:"適量"}],steps:["そばを茹でる","冷水でしっかり洗う","氷水で締める","器に盛り海苔をのせる","つゆにわさびとねぎを入れて食べる"]},
+{id:"m17",emoji:"🍜",name:"かけそば",desc:"温かいそば",tags:["和食","そば"],time:10,nutr:{cal:330,protein:14,fat:2,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"長ねぎ",a:"適量"},{n:"七味",a:"適量"}],steps:["つゆを作る","そばを茹でてお湯で洗う","器にそばを盛る","熱いつゆを注ぐ","ねぎと七味をのせて完成"]},
+{id:"m18",emoji:"🍜",name:"月見そば",desc:"卵のせそば",tags:["和食","そば"],time:12,nutr:{cal:380,protein:18,fat:6,carb:64},ings:[{n:"そば",a:"1玉"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"卵",a:"1個"},{n:"長ねぎ",a:"適量"}],steps:["つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","そっと生卵を落とす","ねぎをのせて完成"]},
+{id:"m19",emoji:"🍜",name:"天ぷらそば",desc:"えび天のせそば",tags:["和食","そば"],time:20,nutr:{cal:480,protein:20,fat:14,carb:66},ings:[{n:"そば",a:"1玉"},{n:"えび",a:"2尾"},{n:"天ぷら粉",a:"大さじ3"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"}],steps:["えびを天ぷら粉で揚げる","つゆを作る","そばを茹でて盛る","熱いつゆを注ぐ","天ぷらをのせて完成"]},
+{id:"m20",emoji:"🍜",name:"鴨南蛮そば",desc:"鴨肉とねぎのそば",tags:["和食","そば"],time:25,nutr:{cal:440,protein:26,fat:14,carb:52},ings:[{n:"そば",a:"1玉"},{n:"鶏もも肉",a:"100g"},{n:"長ねぎ",a:"1本"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["肉を食べやすく切る","ねぎを斜め切りして焼く","肉を炒めつゆと合わせる","そばを茹でて盛る","肉とねぎを乗せて完成"]},
+{id:"m21",emoji:"🍜",name:"冷やしそうめん",desc:"夏の定番細麺",tags:["和食","そうめん","ヘルシー"],time:8,nutr:{cal:290,protein:10,fat:1,carb:60},ings:[{n:"そうめん",a:"2束"},{n:"めんつゆ",a:"大さじ3"},{n:"氷",a:"適量"},{n:"トマト",a:"1個"},{n:"きゅうり",a:"1本"}],steps:["そうめんを茹でる2分","冷水でよく洗う","氷水で締める","器に盛る","野菜と氷入りつゆで食べる"]},
+{id:"m22",emoji:"🍜",name:"にゅうめん",desc:"温かいそうめん",tags:["和食","そうめん"],time:10,nutr:{cal:300,protein:12,fat:2,carb:58},ings:[{n:"そうめん",a:"2束"},{n:"だし汁",a:"500ml"},{n:"醤油",a:"小さじ2"},{n:"塩",a:"少量"},{n:"三つ葉",a:"少量"},{n:"かまぼこ",a:"2切れ"}],steps:["だし汁を沸かし調味する","そうめんを茹でてお湯で洗う","器に盛る","熱いつゆを注ぐ","かまぼことみつばをのせて完成"]},
 {id:"m23",emoji:"🍜",name:"そうめんチャンプルー",desc:"沖縄風炒めそうめん",tags:["和食","そうめん"],time:15,nutr:{cal:360,protein:16,fat:10,carb:50},ings:[{n:"そうめん",a:"2束"},{n:"豚バラ薄切り",a:"80g"},{n:"もやし",a:"100g"},{n:"卵",a:"2個"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"小さじ1"}],steps:["そうめんを茹でて水洗い","豚肉を炒めもやしを加える","そうめんを加えて炒める","溶き卵を加える","醤油とごま油で仕上げ"]},
-{id:"m24",emoji:"🍝",name:"カルボナーラ",desc:"濃厚クリームのローマパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:580,protein:24,fat:28,carb:56},ings:[{n:"スパゲッティ",a:"100g"},{n:"ベーコン",a:"50g"},{n:"卵黄",a:"2個"},{n:"パルメザン",a:"30g"},{n:"黒こしょう",a:"たっぷり"},{n:"にんにく",a:"1かけ"}],steps:["パスタを茹でる(茹で汁を取っておく)","ベーコンをにんにくで炒める","卵黄とパルメザンを混ぜる","火を止めてパスタを和える","卵液を加えて余熱で絡め黒こしょうをかける"]},
-{id:"m25",emoji:"🍝",name:"ミートソーススパゲッティ",desc:"ボロネーゼ風の定番パスタ",tags:["パスタ","洋食","牛肉"],time:40,nutr:{cal:540,protein:26,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"合いびき肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"50ml"},{n:"ケチャップ",a:"大さじ2"}],steps:["玉ねぎをみじん切りして炒める","ひき肉を加えて炒める","赤ワインを加えて煮立てる","トマト缶とケチャップを加えて20分煮込む","茹でたパスタに乗せて完成"]},
-{id:"m26",emoji:"🍝",name:"アラビアータ",desc:"ピリ辛トマトパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:12,fat:12,carb:62},ings:[{n:"スパゲッティ",a:"100g"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"2かけ"},{n:"鷹の爪",a:"2本"},{n:"オリーブオイル",a:"大さじ3"},{n:"バジル",a:"少量"}],steps:["にんにくと鷹の爪をオリーブオイルで炒める","トマト缶を加えてつぶしながら煮る","10分煮詰める","茹でたパスタを加えて絡める","バジルを乗せて完成"]},
-{id:"m27",emoji:"🍝",name:"ナポリタン",desc:"懐かしい日本のパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:480,protein:16,fat:14,carb:68},ings:[{n:"スパゲッティ",a:"100g"},{n:"玉ねぎ",a:"1/2個"},{n:"ピーマン",a:"1個"},{n:"ウインナー",a:"3本"},{n:"ケチャップ",a:"大さじ4"},{n:"バター",a:"10g"}],steps:["野菜とウインナーを切る","バターで炒める","ケチャップを加えて炒める","茹でたパスタを加える","よく混ぜて完成"]},
+{id:"m24",emoji:"🍝",name:"カルボナーラ",desc:"濃厚クリームパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:580,protein:24,fat:28,carb:56},ings:[{n:"スパゲッティ",a:"100g"},{n:"ベーコン",a:"50g"},{n:"卵黄",a:"2個"},{n:"パルメザン",a:"30g"},{n:"黒こしょう",a:"たっぷり"},{n:"にんにく",a:"1かけ"}],steps:["パスタを茹でる","ベーコンをにんにくで炒める","卵黄とパルメザンを混ぜる","火を止めてパスタを和える","卵液を加えて余熱で絡め黒こしょうをかける"]},
+{id:"m25",emoji:"🍝",name:"ミートソース",desc:"ボロネーゼ風パスタ",tags:["パスタ","洋食","牛肉"],time:40,nutr:{cal:540,protein:26,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"合いびき肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"50ml"},{n:"ケチャップ",a:"大さじ2"}],steps:["玉ねぎをみじん切りして炒める","ひき肉を加えて炒める","赤ワインを加えて煮立てる","トマト缶とケチャップを加えて20分煮込む","茹でたパスタに乗せて完成"]},
+{id:"m26",emoji:"🍝",name:"アラビアータ",desc:"ピリ辛トマトパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:12,fat:12,carb:62},ings:[{n:"スパゲッティ",a:"100g"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"2かけ"},{n:"鷹の爪",a:"2本"},{n:"オリーブオイル",a:"大さじ3"},{n:"バジル",a:"少量"}],steps:["にんにくと鷹の爪を炒める","トマト缶を加えて煮る","10分煮詰める","茹でたパスタを加えて絡める","バジルを乗せて完成"]},
+{id:"m27",emoji:"🍝",name:"ナポリタン",desc:"懐かしい喫茶店の味",tags:["パスタ","洋食"],time:20,nutr:{cal:480,protein:16,fat:14,carb:68},ings:[{n:"スパゲッティ",a:"100g"},{n:"玉ねぎ",a:"1/2個"},{n:"ピーマン",a:"1個"},{n:"ウインナー",a:"3本"},{n:"ケチャップ",a:"大さじ4"},{n:"バター",a:"10g"}],steps:["野菜とウインナーを切る","バターで炒める","ケチャップを加えて炒める","茹でたパスタを加える","よく混ぜて完成"]},
 {id:"m28",emoji:"🍝",name:"たらこパスタ",desc:"マヨたらこの和風パスタ",tags:["パスタ","和食"],time:15,nutr:{cal:500,protein:18,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"たらこ",a:"1腹"},{n:"バター",a:"10g"},{n:"醤油",a:"小さじ1"},{n:"海苔",a:"適量"},{n:"大葉",a:"適量"}],steps:["パスタを茹でる","バターを溶かしたらこを和える","醤油を加える","茹でたパスタを加えて和える","海苔と大葉をのせて完成"]},
-{id:"m29",emoji:"🍝",name:"明太子パスタ",desc:"辛子明太子の和風パスタ",tags:["パスタ","和食"],time:15,nutr:{cal:500,protein:18,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"明太子",a:"1腹"},{n:"バター",a:"10g"},{n:"醤油",a:"小さじ1"},{n:"海苔",a:"適量"},{n:"大葉",a:"適量"},{n:"レモン",a:"少量"}],steps:["パスタを茹でる","バターを溶かし明太子をほぐす","醤油を加える","茹でたパスタを加えて和える","海苔と大葉とレモンを乗せて完成"]},
-{id:"m30",emoji:"🍝",name:"ボンゴレビアンコ",desc:"あさりの旨みパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"スパゲッティ",a:"100g"},{n:"あさり",a:"200g"},{n:"にんにく",a:"2かけ"},{n:"白ワイン",a:"50ml"},{n:"オリーブオイル",a:"大さじ3"},{n:"パセリ",a:"少量"}],steps:["あさりを砂抜きする","にんにくをオリーブオイルで炒める","あさりと白ワインを加えて蓋をして蒸す","口が開いたらパスタを加える","パセリを散らして完成"]},
-{id:"m31",emoji:"🍝",name:"きのこクリームパスタ",desc:"濃厚クリームソース",tags:["パスタ","洋食"],time:25,nutr:{cal:520,protein:16,fat:24,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"しめじ",a:"1/2パック"},{n:"エリンギ",a:"1本"},{n:"生クリーム",a:"100ml"},{n:"バター",a:"10g"},{n:"にんにく",a:"1かけ"},{n:"塩こしょう",a:"適量"}],steps:["パスタを茹でる","バターでにんにくを炒める","きのこを加えて炒める","生クリームを加えて煮詰める","パスタを加えて絡め塩こしょうで調整"]},
-{id:"m32",emoji:"🍜",name:"釜玉うどん",desc:"温かい生卵絡めうどん",tags:["和食","うどん"],time:10,nutr:{cal:400,protein:16,fat:8,carb:64},ings:[{n:"うどん",a:"1玉"},{n:"卵",a:"1個"},{n:"醤油",a:"大さじ1"},{n:"バター",a:"5g"},{n:"長ねぎ",a:"適量"},{n:"かつおぶし",a:"少量"}],steps:["うどんを茹でる","熱いうちに生卵を割り入れる","醤油とバターを加える","よく混ぜる","ねぎとかつおぶしをのせて完成"]},
-{id:"m33",emoji:"🍛",name:"カレーうどん",desc:"スパイシーなとろみうどん",tags:["和食","うどん"],time:15,nutr:{cal:480,protein:18,fat:12,carb:72},ings:[{n:"うどん",a:"1玉"},{n:"カレールー",a:"1かけ"},{n:"だし汁",a:"400ml"},{n:"玉ねぎ",a:"1/2個"},{n:"鶏もも肉",a:"80g"},{n:"長ねぎ",a:"適量"}],steps:["鶏肉と玉ねぎを炒める","だし汁を加えてルーを溶かす","うどんを茹でて器に盛る","カレーつゆを注ぐ","ねぎをのせて完成"]},
-{id:"m34",emoji:"🍜",name:"ざるうどん",desc:"冷たい締めうどん",tags:["和食","うどん","ヘルシー"],time:10,nutr:{cal:340,protein:12,fat:2,carb:68},ings:[{n:"うどん",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"水",a:"100ml"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"}],steps:["うどんを茹でる","冷水でしっかり洗う","氷水で締める","器に盛る","つゆにつけて食べる"]},
-{id:"m35",emoji:"🍱",name:"とんかつ定食",desc:"サクサクの揚げたてとんかつ",tags:["和食","豚肉"],time:30,nutr:{cal:620,protein:32,fat:28,carb:54},ings:[{n:"豚ロース肉",a:"200g"},{n:"塩こしょう",a:"適量"},{n:"薄力粉",a:"大さじ2"},{n:"卵",a:"1個"},{n:"パン粉",a:"適量"},{n:"揚げ油",a:"適量"},{n:"ご飯",a:"1人分"}],steps:["豚肉を叩いて塩こしょうする","粉と卵とパン粉で衣をつける","170℃の油で4分揚げる","一度取り出し190℃で1分二度揚げ","キャベツとご飯と盛り付け"]},
-{id:"m36",emoji:"🍚",name:"かつ丼",desc:"甘辛卵でとじたとんかつ丼",tags:["和食","豚肉","丼"],time:25,nutr:{cal:660,protein:30,fat:22,carb:76},ings:[{n:"とんかつ",a:"1枚"},{n:"卵",a:"2個"},{n:"玉ねぎ",a:"1/2個"},{n:"だし汁",a:"100ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"ご飯",a:"1人分"}],steps:["とんかつを切る","玉ねぎを煮汁で煮る","とんかつを加える","溶き卵を流し半熟で止める","ご飯に乗せて完成"]},
-{id:"m37",emoji:"🍚",name:"天丼",desc:"サクサク天ぷらのどんぶり",tags:["和食","丼"],time:25,nutr:{cal:580,protein:22,fat:16,carb:80},ings:[{n:"えび",a:"4尾"},{n:"なす",a:"1本"},{n:"天ぷら粉",a:"大さじ4"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"}],steps:["天ぷら粉を水で溶く","えびとなすを揚げる","タレを作る","ご飯に天ぷらを乗せる","タレをかけて完成"]},
-{id:"m38",emoji:"🐠",name:"海鮮丼",desc:"新鮮な刺身のどんぶり",tags:["和食","魚","丼"],time:10,nutr:{cal:420,protein:28,fat:8,carb:58},ings:[{n:"刺身の盛り合わせ",a:"200g"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"わさび",a:"少量"},{n:"海苔",a:"適量"}],steps:["酢飯か普通のご飯を用意する","刺身を切る","ご飯に海苔を敷く","刺身を並べる","わさび醤油で食べる"]},
-{id:"m39",emoji:"🍚",name:"炊き込みご飯",desc:"だし染みた和風混ぜご飯",tags:["和食","作り置き"],time:40,nutr:{cal:380,protein:14,fat:6,carb:68},ings:[{n:"米",a:"2合"},{n:"鶏もも肉",a:"100g"},{n:"ごぼう",a:"1/3本"},{n:"にんじん",a:"1/2本"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"だし汁",a:"適量"}],steps:["具材を切る","米を研ぐ","調味料とだし汁を加えて混ぜる","具材を乗せて炊く","炊けたら混ぜて完成"]},
-{id:"m40",emoji:"🍵",name:"お茶漬け",desc:"さらさら食べるご飯",tags:["和食","ヘルシー"],time:5,nutr:{cal:250,protein:10,fat:2,carb:46},ings:[{n:"ご飯",a:"1人分"},{n:"お茶または出汁",a:"200ml"},{n:"鮭フレーク",a:"大さじ2"},{n:"梅干し",a:"1個"},{n:"海苔",a:"適量"},{n:"わさび",a:"少量"}],steps:["ご飯を器に盛る","具材を乗せる","熱いお茶またはだし汁を注ぐ","わさびを添える","よくかき混ぜて食べる"]},
-{id:"m41",emoji:"🍚",name:"卵かけご飯",desc:"シンプル究極の朝食",tags:["和食","卵","ヘルシー"],time:3,nutr:{cal:320,protein:18,fat:10,carb:42},ings:[{n:"ご飯",a:"1人分"},{n:"卵",a:"1個"},{n:"醤油",a:"小さじ2"},{n:"海苔",a:"適量"}],steps:["ご飯を温かく用意する","生卵を割り入れる","醤油を回しかける","よく混ぜる","海苔を添えて完成"]},
-{id:"m42",emoji:"🐠",name:"サバの味噌煮",desc:"ご飯が進む濃厚な煮魚",tags:["和食","魚","作り置き"],time:25,nutr:{cal:380,protein:28,fat:18,carb:18},ings:[{n:"サバの切り身",a:"2切れ"},{n:"味噌",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"生姜",a:"1かけ"},{n:"水",a:"200ml"}],steps:["サバに熱湯をかけて臭みを取る","水とみりんと砂糖と生姜を煮立てる","サバを入れ落し蓋して10分煮る","味噌を溶き入れる","とろみがついたら完成"]},
-{id:"m43",emoji:"🥘",name:"豚キムチ炒め",desc:"辛くてご飯が止まらない",tags:["和食","豚肉","韓国"],time:15,nutr:{cal:380,protein:26,fat:20,carb:18},ings:[{n:"豚バラ薄切り",a:"150g"},{n:"キムチ",a:"150g"},{n:"豆腐",a:"1/2丁"},{n:"醤油",a:"小さじ1"},{n:"ごま油",a:"小さじ1"},{n:"長ねぎ",a:"適量"}],steps:["豚肉を炒める","キムチを加えて炒める","豆腐を加えて炒める","醤油で味を調える","ごま油をかけてねぎを散らす"]},
-{id:"m44",emoji:"🥘",name:"回鍋肉",desc:"四川風キャベツと豚の炒め",tags:["中華","豚肉"],time:20,nutr:{cal:380,protein:22,fat:20,carb:22},ings:[{n:"豚バラブロック",a:"200g"},{n:"キャベツ",a:"1/4個"},{n:"ピーマン",a:"1個"},{n:"豆板醤",a:"小さじ1"},{n:"甜麺醤",a:"大さじ1"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["豚バラを茹でて薄切りにする","キャベツとピーマンを切る","豚肉を炒め豆板醤を加える","野菜を加えて炒める","甜麺醤と醤油で味付けごま油で仕上げ"]},
-{id:"m45",emoji:"🥘",name:"唐揚げ",desc:"サクサクジューシー揚げ物",tags:["和食","鶏肉"],time:30,nutr:{cal:520,protein:35,fat:28,carb:24},ings:[{n:"鶏もも肉",a:"300g"},{n:"醤油",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"生姜",a:"1かけ"},{n:"片栗粉",a:"大さじ4"},{n:"揚げ油",a:"適量"}],steps:["鶏肉を一口大に切る","醤油と酒とにんにくと生姜で15分漬ける","片栗粉をまぶす","170℃で4分揚げる","190℃で1分二度揚げして完成"]},
-{id:"m46",emoji:"🍖",name:"ハンバーグ",desc:"ジューシーな洋食の王道",tags:["洋食","牛肉"],time:30,nutr:{cal:500,protein:28,fat:30,carb:22},ings:[{n:"合いびき肉",a:"200g"},{n:"玉ねぎ",a:"1/2個"},{n:"卵",a:"1個"},{n:"パン粉",a:"大さじ2"},{n:"牛乳",a:"大さじ2"},{n:"塩こしょう",a:"適量"},{n:"デミグラスソース",a:"適量"}],steps:["玉ねぎをみじん切りして炒めて冷ます","ひき肉と卵とパン粉と牛乳と玉ねぎを混ぜる","空気を抜いて成形する","フライパンで両面焼く","ソースをかけて完成"]},
-{id:"m47",emoji:"🥘",name:"ビーフシチュー",desc:"とろとろ本格煮込み",tags:["洋食","牛肉","作り置き"],time:90,nutr:{cal:480,protein:28,fat:22,carb:38},ings:[{n:"牛バラ肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんじん",a:"1本"},{n:"じゃがいも",a:"2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"100ml"},{n:"シチューのルー",a:"2かけ"}],steps:["牛肉を切り塩こしょうする","焼き色をつける","野菜を加えて炒め赤ワインを加える","トマト缶と水で60分煮込む","ルーを加えて10分煮て完成"]},
-{id:"m48",emoji:"🍚",name:"ビビンバ",desc:"コチュジャン混ぜ韓国丼",tags:["韓国","丼"],time:25,nutr:{cal:450,protein:22,fat:12,carb:60},ings:[{n:"ご飯",a:"1人分"},{n:"牛ひき肉",a:"100g"},{n:"ほうれん草",a:"1/2束"},{n:"もやし",a:"100g"},{n:"にんじん",a:"1/2本"},{n:"卵",a:"1個"},{n:"コチュジャン",a:"大さじ1"},{n:"ごま油",a:"適量"}],steps:["野菜を炒め下味をつける","ひき肉を炒め醤油とごま油で味付け","ご飯の上に盛り付ける","コチュジャンをのせる","よく混ぜて食べる"]},
-{id:"m49",emoji:"🍜",name:"焼きそば",desc:"ソース香る定番炒め麺",tags:["中華","豚肉"],time:15,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"焼きそば麺",a:"1玉"},{n:"豚バラ",a:"80g"},{n:"キャベツ",a:"1/4個"},{n:"もやし",a:"100g"},{n:"ソース",a:"大さじ2"},{n:"塩こしょう",a:"適量"}],steps:["野菜と豚肉を切る","豚肉を炒め野菜を加える","麺を加えほぐしながら炒める","ソースと塩こしょうで味付け","青のりと紅しょうがを添えて完成"]},
-{id:"m50",emoji:"🥞",name:"お好み焼き",desc:"大阪のソウルフード",tags:["和食","豚肉"],time:25,nutr:{cal:480,protein:20,fat:18,carb:54},ings:[{n:"薄力粉",a:"100g"},{n:"卵",a:"2個"},{n:"だし汁",a:"150ml"},{n:"キャベツ",a:"1/4個"},{n:"豚バラ",a:"100g"},{n:"ソース",a:"適量"},{n:"マヨネーズ",a:"適量"}],steps:["キャベツをみじん切り","粉と卵とだし汁とキャベツを混ぜる","生地を流し豚肉を乗せて3分焼く","裏返して3分焼く","ソースとマヨと青のりをかけて完成"]},
-{id:"m51",emoji:"🍱",name:"鶏そぼろ丼",desc:"ご飯に乗せるだけ簡単丼",tags:["和食","鶏肉","丼"],time:20,nutr:{cal:440,protein:28,fat:10,carb:58},ings:[{n:"鶏ひき肉",a:"200g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"生姜",a:"少量"},{n:"卵",a:"2個"},{n:"ご飯",a:"1人分"}],steps:["ひき肉を炒める","醤油とみりんと砂糖と生姜で炒り煮","別の鍋で卵を甘く炒る","ご飯の上にそぼろと卵を盛る","絹さやを添えて完成"]},
-{id:"m52",emoji:"🐠",name:"ぶりの照り焼き",desc:"脂のりよい魚の甘辛焼き",tags:["和食","魚"],time:20,nutr:{cal:390,protein:30,fat:16,carb:22},ings:[{n:"ぶりの切り身",a:"2切れ"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"砂糖",a:"小さじ1"}],steps:["ぶりに塩を振り水気を取る","フライパンで両面焼く","タレを加えて絡める","大根おろしを添えて完成","タレが煮詰まったら仕上げ"]},
-{id:"m53",emoji:"🥗",name:"ツナアボカドサラダ",desc:"ヘルシーなサラダ",tags:["洋食","ヘルシー"],time:10,nutr:{cal:320,protein:18,fat:22,carb:12},ings:[{n:"ツナ缶",a:"1缶"},{n:"アボカド",a:"1個"},{n:"トマト",a:"1個"},{n:"レモン汁",a:"大さじ1"},{n:"塩こしょう",a:"適量"},{n:"オリーブオイル",a:"大さじ1"}],steps:["アボカドとトマトを切る","ツナ缶の油を切る","全材料をボウルに入れる","レモン汁とオリーブオイルと塩こしょうで和える","器に盛り付けて完成"]},
-{id:"m54",emoji:"🥘",name:"豚バラ大根",desc:"染み染み大根の煮物",tags:["和食","豚肉","作り置き"],time:40,nutr:{cal:380,protein:22,fat:20,carb:24},ings:[{n:"豚バラ肉",a:"200g"},{n:"大根",a:"1/2本"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"だし汁",a:"400ml"}],steps:["豚肉を切る","大根を2cm輪切りにして下茹で","鍋で豚肉を炒め大根を加える","だし汁と調味料を加えて煮立てる","落し蓋して30分煮込む"]},
-{id:"m55",emoji:"🍲",name:"鶏肉のトマト煮",desc:"イタリアン風煮込み",tags:["洋食","鶏肉","作り置き"],time:40,nutr:{cal:380,protein:32,fat:16,carb:22},ings:[{n:"鶏もも肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんにく",a:"2かけ"},{n:"トマト缶",a:"1缶"},{n:"オリーブオイル",a:"大さじ2"},{n:"塩こしょう",a:"適量"},{n:"バジル",a:"少量"}],steps:["鶏肉に塩こしょうして焼き色をつける","玉ねぎとにんにくを炒める","トマト缶を加えてつぶす","鶏肉を戻し入れ20分煮込む","バジルをちぎって乗せて完成"]},
-{id:"m56",emoji:"🥘",name:"グラタン",desc:"とろけるチーズが食欲をそそる",tags:["洋食","作り置き"],time:40,nutr:{cal:480,protein:22,fat:24,carb:42},ings:[{n:"マカロニ",a:"80g"},{n:"鶏むね肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"バター",a:"20g"},{n:"薄力粉",a:"大さじ2"},{n:"牛乳",a:"300ml"},{n:"ピザ用チーズ",a:"50g"}],steps:["マカロニを茹でる","バターで玉ねぎと鶏肉を炒める","薄力粉を加えて炒め牛乳を少しずつ加える","マカロニを混ぜて耐熱皿に入れる","チーズを乗せて200℃で15分焼く"]},
-{id:"m57",emoji:"🍣",name:"アボカドサーモン丼",desc:"ヘルシーオシャレ丼",tags:["丼","ヘルシー"],time:10,nutr:{cal:480,protein:26,fat:20,carb:50},ings:[{n:"スモークサーモン",a:"80g"},{n:"アボカド",a:"1個"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ1"},{n:"わさび",a:"少量"},{n:"レモン汁",a:"小さじ1"}],steps:["アボカドを薄切りにしてレモン汁","ご飯を器に盛る","サーモンとアボカドを乗せる","わさび醤油をかける","ごまを振って完成"]},
-{id:"m58",emoji:"🍱",name:"冷しゃぶ",desc:"夏のさっぱり豚しゃぶ",tags:["和食","豚肉","ヘルシー"],time:20,nutr:{cal:320,protein:26,fat:12,carb:22},ings:[{n:"豚ロース薄切り",a:"200g"},{n:"レタス",a:"1/4玉"},{n:"きゅうり",a:"1本"},{n:"トマト",a:"1個"},{n:"ポン酢",a:"大さじ3"}],steps:["野菜を切り皿に盛る","お湯に酒を加え豚肉をしゃぶしゃぶ","引き上げ冷水に取る","水気を切って野菜の上に乗せる","ポン酢で食べる"]},
-{id:"m59",emoji:"🥣",name:"茶碗蒸し",desc:"ぷるぷる和風蒸し料理",tags:["和食"],time:30,nutr:{cal:180,protein:14,fat:6,carb:14},ings:[{n:"卵",a:"2個"},{n:"だし汁",a:"300ml"},{n:"鶏肉",a:"50g"},{n:"えび",a:"4尾"},{n:"醤油",a:"小さじ1"},{n:"みりん",a:"小さじ1"},{n:"塩",a:"少量"}],steps:["だし汁に調味料を合わせる","卵を溶き調味しただし汁と混ぜる","具材を器に入れる","卵液を注ぎ蒸し器で弱火15分蒸す","竹串で確認して完成"]},
-{id:"m60",emoji:"🍱",name:"筑前煮",desc:"根菜たっぷり郷土料理",tags:["和食","作り置き"],time:45,nutr:{cal:280,protein:16,fat:8,carb:36},ings:[{n:"鶏もも肉",a:"150g"},{n:"ごぼう",a:"1/2本"},{n:"れんこん",a:"100g"},{n:"にんじん",a:"1本"},{n:"こんにゃく",a:"1/2枚"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"}],steps:["具材を切りごぼうとれんこんをアク抜き","鍋で鶏肉を炒め野菜を加える","だし汁を加えて10分煮る","調味料を加えて煮る","汁気が少なくなったら完成"]},
-{id:"m61",emoji:"🥗",name:"豆腐チャンプルー",desc:"沖縄の家庭料理",tags:["和食","豆腐","ヘルシー"],time:20,nutr:{cal:300,protein:20,fat:16,carb:16},ings:[{n:"木綿豆腐",a:"1丁"},{n:"もやし",a:"1袋"},{n:"ランチョンミート",a:"80g"},{n:"卵",a:"2個"},{n:"醤油",a:"大さじ1"},{n:"塩こしょう",a:"適量"},{n:"ごま油",a:"少量"}],steps:["豆腐を水切りし一口大に切る","ランチョンミートを炒める","豆腐を加えて焼き色をつける","もやしと卵を加える","醤油と塩こしょうとごま油で仕上げ"]},
-{id:"m62",emoji:"🍜",name:"フォー",desc:"ベトナムの牛骨スープ麺",tags:["アジア","ヘルシー"],time:20,nutr:{cal:360,protein:20,fat:6,carb:58},ings:[{n:"フォー(米麺)",a:"100g"},{n:"牛薄切り肉",a:"80g"},{n:"チキンスープ",a:"500ml"},{n:"ナンプラー",a:"大さじ1"},{n:"レモン",a:"1/4個"},{n:"もやし",a:"100g"},{n:"パクチー",a:"適量"}],steps:["スープにナンプラーで味付けする","フォーを茹でる","器にフォーを盛る","熱いスープを注ぐ","牛肉ともやしとパクチーを乗せてレモンを絞る"]},
-{id:"m63",emoji:"🍚",name:"ガパオライス",desc:"タイの鶏ひき肉バジル炒め",tags:["アジア","鶏肉"],time:20,nutr:{cal:480,protein:28,fat:18,carb:48},ings:[{n:"鶏ひき肉",a:"150g"},{n:"バジル",a:"一握り"},{n:"にんにく",a:"2かけ"},{n:"唐辛子",a:"1本"},{n:"ナンプラー",a:"大さじ1"},{n:"オイスターソース",a:"大さじ1"},{n:"卵",a:"1個"},{n:"ご飯",a:"1人分"}],steps:["にんにくと唐辛子を炒める","ひき肉を加えて炒める","ナンプラーとオイスターソースで味付け","バジルを加えてさっと炒める","ご飯に乗せ目玉焼きを添えて完成"]},
-{id:"m64",emoji:"🌮",name:"タコス",desc:"メキシカンな手巻きタコス",tags:["洋食","牛肉"],time:25,nutr:{cal:480,protein:26,fat:22,carb:42},ings:[{n:"牛ひき肉",a:"150g"},{n:"タコスシェル",a:"4枚"},{n:"レタス",a:"2枚"},{n:"トマト",a:"1個"},{n:"チーズ",a:"30g"},{n:"タコスシーズニング",a:"適量"},{n:"サルサソース",a:"適量"}],steps:["ひき肉にシーズニングをまぶして炒める","野菜を切る","タコスシェルを温める","具材を盛り付ける","サルサソースをかけて完成"]},
-{id:"m65",emoji:"🍜",name:"パッタイ",desc:"タイ風焼き米麺",tags:["アジア"],time:25,nutr:{cal:460,protein:18,fat:14,carb:60},ings:[{n:"ライスヌードル",a:"80g"},{n:"えび",a:"6尾"},{n:"卵",a:"2個"},{n:"もやし",a:"100g"},{n:"ナンプラー",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"ピーナッツ",a:"大さじ2"},{n:"レモン",a:"1/4個"}],steps:["ライスヌードルを水に浸して柔らかくする","えびを炒める","卵を加えてスクランブル","麺ともやしを加えて炒める","ナンプラーと砂糖で味付けしピーナッツとレモンを添える"]},
-{id:"m66",emoji:"🍜",name:"台湾まぜそば",desc:"旨みたっぷりの汁なし麺",tags:["中華"],time:20,nutr:{cal:540,protein:28,fat:20,carb:58},ings:[{n:"中華麺",a:"1玉"},{n:"豚ひき肉",a:"100g"},{n:"醤油",a:"大さじ2"},{n:"豆板醤",a:"小さじ1"},{n:"卵黄",a:"1個"},{n:"にんにく",a:"1かけ"},{n:"長ねぎ",a:"適量"},{n:"海苔",a:"適量"}],steps:["豚ひき肉を調味料で炒める","麺を茹でて器に盛る","ひき肉と卵黄とねぎと海苔を乗せる","にんにくを添える","よく混ぜて食べる"]},
-{id:"m67",emoji:"🍜",name:"ラーメン",desc:"自家製醤油ラーメン",tags:["中華"],time:30,nutr:{cal:520,protein:22,fat:16,carb:68},ings:[{n:"中華麺",a:"1玉"},{n:"鶏がらスープ",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"チャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"長ねぎ",a:"適量"},{n:"煮卵",a:"1個"}],steps:["スープに醤油とみりんで味付けする","麺を茹でる","器にスープを注ぐ","麺を盛り付ける","チャーシューとメンマとねぎと煮卵を乗せて完成"]},
-{id:"m68",emoji:"🍜",name:"冷麺",desc:"韓国風さっぱり冷たい麺",tags:["韓国","ヘルシー"],time:15,nutr:{cal:360,protein:14,fat:4,carb:66},ings:[{n:"冷麺麺",a:"1玉"},{n:"牛スープ",a:"400ml"},{n:"コチュジャン",a:"大さじ1"},{n:"酢",a:"大さじ1"},{n:"砂糖",a:"小さじ1"},{n:"きゅうり",a:"1本"},{n:"ゆで卵",a:"1個"}],steps:["スープに調味料を混ぜる","麺を茹でて冷水で締める","器に麺を盛る","冷たいスープを注ぐ","きゅうりとゆで卵を乗せて完成"]},
-{id:"m69",emoji:"🍣",name:"マグロの漬け丼",desc:"醤油漬けまぐろのどんぶり",tags:["和食","魚","丼"],time:15,nutr:{cal:420,protein:30,fat:6,carb:56},ings:[{n:"まぐろ刺身",a:"150g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"ごま油",a:"小さじ1"},{n:"ご飯",a:"1人分"},{n:"海苔",a:"適量"},{n:"わさび",a:"少量"}],steps:["醤油とみりんとごま油でタレを作る","まぐろを30分漬ける","ご飯を器に盛る","海苔を敷く","まぐろを乗せわさびを添える"]},
-{id:"m70",emoji:"🥣",name:"リゾット",desc:"クリーミーなイタリア米料理",tags:["洋食"],time:30,nutr:{cal:460,protein:14,fat:18,carb:58},ings:[{n:"米",a:"1/2合"},{n:"玉ねぎ",a:"1/4個"},{n:"チキンスープ",a:"400ml"},{n:"白ワイン",a:"50ml"},{n:"バター",a:"15g"},{n:"パルメザン",a:"20g"},{n:"塩こしょう",a:"適量"}],steps:["玉ねぎをバターで炒める","米を加えて炒める","白ワインを加えて蒸発させる","スープを少しずつ加えながら炊く","パルメザンとバターを加えて仕上げ"]},
-{id:"m71",emoji:"🥣",name:"豆腐ステーキ",desc:"ヘルシーな和風豆腐料理",tags:["和食","豆腐","ヘルシー"],time:15,nutr:{cal:240,protein:16,fat:12,carb:12},ings:[{n:"木綿豆腐",a:"1丁"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"バター",a:"10g"},{n:"長ねぎ",a:"適量"}],steps:["豆腐を水切りして厚めに切る","フライパンでバターを熱する","豆腐を両面焼く","醤油とみりんとにんにくのソースを作る","ソースをかけてねぎを散らす"]},
-{id:"m72",emoji:"🍜",name:"つけ麺",desc:"濃厚つけ汁で食べる麺",tags:["中華"],time:30,nutr:{cal:560,protein:28,fat:16,carb:72},ings:[{n:"中華麺",a:"1玉"},{n:"豚骨スープ",a:"200ml"},{n:"醤油",a:"大さじ3"},{n:"チャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"長ねぎ",a:"適量"},{n:"煮卵",a:"1個"}],steps:["スープに醤油でタレを作る","麺を固めに茹でる","冷水で締める","つけ汁を温める","麺と具材を盛り付けつけ汁につけて食べる"]},
-{id:"m73",emoji:"🍲",name:"おでん",desc:"冬の具だくさん煮物",tags:["和食","作り置き"],time:60,nutr:{cal:300,protein:18,fat:8,carb:38},ings:[{n:"大根",a:"1/2本"},{n:"こんにゃく",a:"1枚"},{n:"卵",a:"3個"},{n:"ちくわ",a:"3本"},{n:"はんぺん",a:"1枚"},{n:"だし汁",a:"1L"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["大根を下茹でする","卵を固ゆでにして殻をむく","だし汁に醤油とみりんを合わせる","大根とこんにゃくを入れて30分煮る","残りの具材を加えて20分煮込む"]},
-{id:"m74",emoji:"🍱",name:"親子丼(だし多め)",desc:"だしが染みたふわふわ親子丼",tags:["和食","鶏肉","丼"],time:20,nutr:{cal:460,protein:28,fat:12,carb:52},ings:[{n:"鶏もも肉",a:"150g"},{n:"卵",a:"3個"},{n:"玉ねぎ",a:"1/2個"},{n:"だし汁",a:"200ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"小さじ1"},{n:"ご飯",a:"1人分"}],steps:["鶏肉と玉ねぎを切る","だし汁多めの煮汁を作る","弱火でじっくり鶏肉を煮る","溶き卵を3回に分けて加える","ふわふわの半熟でご飯に乗せて完成"]},
-{id:"m75",emoji:"🥗",name:"ニョッキのトマトソース",desc:"もちもちのイタリア団子",tags:["洋食"],time:35,nutr:{cal:420,protein:12,fat:10,carb:70},ings:[{n:"じゃがいも",a:"2個"},{n:"薄力粉",a:"80g"},{n:"卵",a:"1個"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"1かけ"},{n:"バジル",a:"少量"},{n:"オリーブオイル",a:"大さじ2"}],steps:["じゃがいもを茹でてつぶす","薄力粉と卵を加えてこねる","棒状にして2cmに切る","フォークで模様をつける","沸騰したお湯で茹でトマトソースで和える"]}
+{id:"m29",emoji:"🍝",name:"明太子パスタ",desc:"辛子明太子の和風パスタ",tags:["パスタ","和食"],time:15,nutr:{cal:500,protein:18,fat:20,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"明太子",a:"1腹"},{n:"バター",a:"10g"},{n:"醤油",a:"小さじ1"},{n:"海苔",a:"適量"},{n:"大葉",a:"適量"}],steps:["パスタを茹でる","バターを溶かし明太子をほぐす","醤油を加える","茹でたパスタを加えて和える","海苔と大葉をのせて完成"]},
+{id:"m30",emoji:"🍝",name:"ボンゴレ",desc:"あさりの旨みパスタ",tags:["パスタ","洋食"],time:20,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"スパゲッティ",a:"100g"},{n:"あさり",a:"200g"},{n:"にんにく",a:"2かけ"},{n:"白ワイン",a:"50ml"},{n:"オリーブオイル",a:"大さじ3"},{n:"パセリ",a:"少量"}],steps:["あさりを砂抜きする","にんにくを炒める","あさりと白ワインを加えて蒸す","口が開いたらパスタを加える","パセリを散らして完成"]},
+{id:"m31",emoji:"🍝",name:"きのこクリームパスタ",desc:"濃厚クリームソース",tags:["パスタ","洋食"],time:25,nutr:{cal:520,protein:16,fat:24,carb:60},ings:[{n:"スパゲッティ",a:"100g"},{n:"しめじ",a:"1/2パック"},{n:"エリンギ",a:"1本"},{n:"生クリーム",a:"100ml"},{n:"バター",a:"10g"},{n:"にんにく",a:"1かけ"}],steps:["パスタを茹でる","バターでにんにくを炒める","きのこを加えて炒める","生クリームを加えて煮詰める","パスタを加えて絡め塩こしょうで調整"]},
+{id:"m32",emoji:"🍜",name:"釜玉うどん",desc:"生卵絡めうどん",tags:["和食","うどん"],time:10,nutr:{cal:400,protein:16,fat:8,carb:64},ings:[{n:"うどん",a:"1玉"},{n:"卵",a:"1個"},{n:"醤油",a:"大さじ1"},{n:"バター",a:"5g"},{n:"長ねぎ",a:"適量"},{n:"かつおぶし",a:"少量"}],steps:["うどんを茹でる","熱いうちに生卵を割り入れる","醤油とバターを加える","よく混ぜる","ねぎとかつおぶしをのせて完成"]},
+{id:"m33",emoji:"🍛",name:"カレーうどん",desc:"とろみカレーうどん",tags:["和食","うどん"],time:15,nutr:{cal:480,protein:18,fat:12,carb:72},ings:[{n:"うどん",a:"1玉"},{n:"カレールー",a:"1かけ"},{n:"だし汁",a:"400ml"},{n:"玉ねぎ",a:"1/2個"},{n:"鶏もも肉",a:"80g"},{n:"長ねぎ",a:"適量"}],steps:["鶏肉と玉ねぎを炒める","だし汁を加えてルーを溶かす","うどんを茹でて器に盛る","カレーつゆを注ぐ","ねぎをのせて完成"]},
+{id:"m34",emoji:"🍜",name:"ざるうどん",desc:"冷たいうどん",tags:["和食","うどん","ヘルシー"],time:10,nutr:{cal:340,protein:12,fat:2,carb:68},ings:[{n:"うどん",a:"1玉"},{n:"めんつゆ",a:"大さじ3"},{n:"わさび",a:"少量"},{n:"長ねぎ",a:"少量"}],steps:["うどんを茹でる","冷水でしっかり洗う","氷水で締める","器に盛る","つゆにつけて食べる"]},
+{id:"m35",emoji:"🍱",name:"とんかつ定食",desc:"サクサクとんかつ",tags:["和食","豚肉"],time:30,nutr:{cal:620,protein:32,fat:28,carb:54},ings:[{n:"豚ロース肉",a:"200g"},{n:"塩こしょう",a:"適量"},{n:"薄力粉",a:"大さじ2"},{n:"卵",a:"1個"},{n:"パン粉",a:"適量"},{n:"揚げ油",a:"適量"},{n:"ご飯",a:"1人分"}],steps:["豚肉を叩いて塩こしょうする","粉と卵とパン粉で衣をつける","170℃の油で4分揚げる","190℃で1分二度揚げ","キャベツとご飯と盛り付け"]},
+{id:"m36",emoji:"🍚",name:"かつ丼",desc:"卵とじとんかつ丼",tags:["和食","豚肉","丼"],time:25,nutr:{cal:660,protein:30,fat:22,carb:76},ings:[{n:"とんかつ",a:"1枚"},{n:"卵",a:"2個"},{n:"玉ねぎ",a:"1/2個"},{n:"だし汁",a:"100ml"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"ご飯",a:"1人分"}],steps:["とんかつを切る","玉ねぎを煮汁で煮る","とんかつを加える","溶き卵を流し半熟で止める","ご飯に乗せて完成"]},
+{id:"m37",emoji:"🍚",name:"天丼",desc:"天ぷらどんぶり",tags:["和食","丼"],time:25,nutr:{cal:580,protein:22,fat:16,carb:80},ings:[{n:"えび",a:"4尾"},{n:"なす",a:"1本"},{n:"天ぷら粉",a:"大さじ4"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"}],steps:["天ぷら粉を水で溶く","えびとなすを揚げる","タレを作る","ご飯に天ぷらを乗せる","タレをかけて完成"]},
+{id:"m38",emoji:"🐠",name:"海鮮丼",desc:"刺身どんぶり",tags:["和食","魚","丼"],time:10,nutr:{cal:420,protein:28,fat:8,carb:58},ings:[{n:"刺身の盛り合わせ",a:"200g"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ2"},{n:"わさび",a:"少量"},{n:"海苔",a:"適量"}],steps:["ご飯を用意する","刺身を切る","ご飯に海苔を敷く","刺身を並べる","わさび醤油で食べる"]},
+{id:"m39",emoji:"🍚",name:"炊き込みご飯",desc:"だし染みご飯",tags:["和食","作り置き"],time:40,nutr:{cal:380,protein:14,fat:6,carb:68},ings:[{n:"米",a:"2合"},{n:"鶏もも肉",a:"100g"},{n:"ごぼう",a:"1/3本"},{n:"にんじん",a:"1/2本"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"}],steps:["具材を切る","米を研ぐ","調味料とだし汁を加えて混ぜる","具材を乗せて炊く","炊けたら混ぜて完成"]},
+{id:"m40",emoji:"🍵",name:"お茶漬け",desc:"さらさらご飯",tags:["和食","ヘルシー"],time:5,nutr:{cal:250,protein:10,fat:2,carb:46},ings:[{n:"ご飯",a:"1人分"},{n:"お茶または出汁",a:"200ml"},{n:"鮭フレーク",a:"大さじ2"},{n:"梅干し",a:"1個"},{n:"海苔",a:"適量"}],steps:["ご飯を器に盛る","具材を乗せる","熱いお茶を注ぐ","わさびを添える","よくかき混ぜて食べる"]},
+{id:"m41",emoji:"🍚",name:"卵かけご飯",desc:"究極の朝食",tags:["和食","卵","ヘルシー"],time:3,nutr:{cal:320,protein:18,fat:10,carb:42},ings:[{n:"ご飯",a:"1人分"},{n:"卵",a:"1個"},{n:"醤油",a:"小さじ2"},{n:"海苔",a:"適量"}],steps:["ご飯を温かく用意する","生卵を割り入れる","醤油を回しかける","よく混ぜる","海苔を添えて完成"]},
+{id:"m42",emoji:"🐠",name:"サバの味噌煮",desc:"濃厚な煮魚",tags:["和食","魚","作り置き"],time:25,nutr:{cal:380,protein:28,fat:18,carb:18},ings:[{n:"サバの切り身",a:"2切れ"},{n:"味噌",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"生姜",a:"1かけ"},{n:"水",a:"200ml"}],steps:["サバに熱湯をかける","水とみりんと砂糖と生姜を煮立てる","サバを入れ落し蓋して10分煮る","味噌を溶き入れる","とろみがついたら完成"]},
+{id:"m43",emoji:"🥘",name:"豚キムチ炒め",desc:"ご飯が進む辛旨炒め",tags:["和食","豚肉","韓国"],time:15,nutr:{cal:380,protein:26,fat:20,carb:18},ings:[{n:"豚バラ薄切り",a:"150g"},{n:"キムチ",a:"150g"},{n:"豆腐",a:"1/2丁"},{n:"醤油",a:"小さじ1"},{n:"ごま油",a:"小さじ1"},{n:"長ねぎ",a:"適量"}],steps:["豚肉を炒める","キムチを加えて炒める","豆腐を加えて炒める","醤油で味を調える","ごま油をかけてねぎを散らす"]},
+{id:"m44",emoji:"🥘",name:"回鍋肉",desc:"四川風豚キャベツ炒め",tags:["中華","豚肉"],time:20,nutr:{cal:380,protein:22,fat:20,carb:22},ings:[{n:"豚バラブロック",a:"200g"},{n:"キャベツ",a:"1/4個"},{n:"ピーマン",a:"1個"},{n:"豆板醤",a:"小さじ1"},{n:"甜麺醤",a:"大さじ1"},{n:"醤油",a:"大さじ1"}],steps:["豚バラを茹でて薄切りにする","野菜を切る","豚肉を炒め豆板醤を加える","野菜を加えて炒める","甜麺醤と醤油で味付け"]},
+{id:"m45",emoji:"🥘",name:"唐揚げ",desc:"サクサク揚げ物",tags:["和食","鶏肉"],time:30,nutr:{cal:520,protein:35,fat:28,carb:24},ings:[{n:"鶏もも肉",a:"300g"},{n:"醤油",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"生姜",a:"1かけ"},{n:"片栗粉",a:"大さじ4"},{n:"揚げ油",a:"適量"}],steps:["鶏肉を一口大に切る","調味料で15分漬ける","片栗粉をまぶす","170℃で4分揚げる","190℃で1分二度揚げして完成"]},
+{id:"m46",emoji:"🍖",name:"ハンバーグ",desc:"洋食の王道",tags:["洋食","牛肉"],time:30,nutr:{cal:500,protein:28,fat:30,carb:22},ings:[{n:"合いびき肉",a:"200g"},{n:"玉ねぎ",a:"1/2個"},{n:"卵",a:"1個"},{n:"パン粉",a:"大さじ2"},{n:"牛乳",a:"大さじ2"},{n:"デミグラスソース",a:"適量"}],steps:["玉ねぎを炒めて冷ます","ひき肉と材料を混ぜる","成形する","フライパンで両面焼く","ソースをかけて完成"]},
+{id:"m47",emoji:"🥘",name:"ビーフシチュー",desc:"とろとろ煮込み",tags:["洋食","牛肉","作り置き"],time:90,nutr:{cal:480,protein:28,fat:22,carb:38},ings:[{n:"牛バラ肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんじん",a:"1本"},{n:"じゃがいも",a:"2個"},{n:"トマト缶",a:"1缶"},{n:"赤ワイン",a:"100ml"},{n:"シチューのルー",a:"2かけ"}],steps:["牛肉を焼き色をつける","野菜を炒め赤ワインを加える","トマト缶と水で60分煮込む","ルーを加えて10分煮て完成","味を調える"]},
+{id:"m48",emoji:"🍚",name:"ビビンバ",desc:"韓国風混ぜ丼",tags:["韓国","丼"],time:25,nutr:{cal:450,protein:22,fat:12,carb:60},ings:[{n:"ご飯",a:"1人分"},{n:"牛ひき肉",a:"100g"},{n:"ほうれん草",a:"1/2束"},{n:"もやし",a:"100g"},{n:"にんじん",a:"1/2本"},{n:"卵",a:"1個"},{n:"コチュジャン",a:"大さじ1"}],steps:["野菜を炒め下味をつける","ひき肉を炒める","ご飯の上に盛り付ける","コチュジャンをのせる","よく混ぜて食べる"]},
+{id:"m49",emoji:"🍜",name:"焼きそば",desc:"ソース香る炒め麺",tags:["中華","豚肉"],time:15,nutr:{cal:420,protein:18,fat:14,carb:54},ings:[{n:"焼きそば麺",a:"1玉"},{n:"豚バラ",a:"80g"},{n:"キャベツ",a:"1/4個"},{n:"もやし",a:"100g"},{n:"ソース",a:"大さじ2"}],steps:["野菜と豚肉を切る","豚肉を炒め野菜を加える","麺を加えほぐしながら炒める","ソースで味付け","青のりを添えて完成"]},
+{id:"m50",emoji:"🥞",name:"お好み焼き",desc:"大阪のソウルフード",tags:["和食","豚肉"],time:25,nutr:{cal:480,protein:20,fat:18,carb:54},ings:[{n:"薄力粉",a:"100g"},{n:"卵",a:"2個"},{n:"だし汁",a:"150ml"},{n:"キャベツ",a:"1/4個"},{n:"豚バラ",a:"100g"},{n:"ソース",a:"適量"},{n:"マヨネーズ",a:"適量"}],steps:["キャベツをみじん切り","生地を混ぜる","豚肉を乗せて3分焼く","裏返して3分焼く","ソースとマヨをかけて完成"]},
+{id:"m51",emoji:"🍱",name:"鶏そぼろ丼",desc:"簡単2色丼",tags:["和食","鶏肉","丼"],time:20,nutr:{cal:440,protein:28,fat:10,carb:58},ings:[{n:"鶏ひき肉",a:"200g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"砂糖",a:"大さじ1"},{n:"卵",a:"2個"},{n:"ご飯",a:"1人分"}],steps:["ひき肉を炒める","調味料で炒り煮","別の鍋で卵を炒る","ご飯にそぼろと卵を盛る","完成"]},
+{id:"m52",emoji:"🐠",name:"ぶりの照り焼き",desc:"甘辛魚料理",tags:["和食","魚"],time:20,nutr:{cal:390,protein:30,fat:16,carb:22},ings:[{n:"ぶりの切り身",a:"2切れ"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ1"},{n:"砂糖",a:"小さじ1"}],steps:["ぶりに塩を振り水気を取る","フライパンで両面焼く","タレを加えて絡める","大根おろしを添えて完成","仕上げ"]},
+{id:"m53",emoji:"🥗",name:"ツナアボカドサラダ",desc:"ヘルシーサラダ",tags:["洋食","ヘルシー"],time:10,nutr:{cal:320,protein:18,fat:22,carb:12},ings:[{n:"ツナ缶",a:"1缶"},{n:"アボカド",a:"1個"},{n:"トマト",a:"1個"},{n:"レモン汁",a:"大さじ1"},{n:"オリーブオイル",a:"大さじ1"}],steps:["アボカドとトマトを切る","ツナ缶の油を切る","ボウルに入れる","調味料で和える","器に盛り付けて完成"]},
+{id:"m54",emoji:"🥘",name:"豚バラ大根",desc:"染み染み煮物",tags:["和食","豚肉","作り置き"],time:40,nutr:{cal:380,protein:22,fat:20,carb:24},ings:[{n:"豚バラ肉",a:"200g"},{n:"大根",a:"1/2本"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"},{n:"酒",a:"大さじ2"},{n:"だし汁",a:"400ml"}],steps:["豚肉を切る","大根を輪切りして下茹で","豚肉を炒め大根を加える","調味料を加えて煮立てる","落し蓋して30分煮込む"]},
+{id:"m55",emoji:"🍲",name:"鶏肉のトマト煮",desc:"イタリアン煮込み",tags:["洋食","鶏肉","作り置き"],time:40,nutr:{cal:380,protein:32,fat:16,carb:22},ings:[{n:"鶏もも肉",a:"250g"},{n:"玉ねぎ",a:"1個"},{n:"にんにく",a:"2かけ"},{n:"トマト缶",a:"1缶"},{n:"オリーブオイル",a:"大さじ2"},{n:"バジル",a:"少量"}],steps:["鶏肉に焼き色をつける","玉ねぎとにんにくを炒める","トマト缶を加える","鶏肉を戻し20分煮込む","バジルを乗せて完成"]},
+{id:"m56",emoji:"🥘",name:"グラタン",desc:"とろけるチーズ",tags:["洋食","作り置き"],time:40,nutr:{cal:480,protein:22,fat:24,carb:42},ings:[{n:"マカロニ",a:"80g"},{n:"鶏むね肉",a:"150g"},{n:"玉ねぎ",a:"1/2個"},{n:"バター",a:"20g"},{n:"薄力粉",a:"大さじ2"},{n:"牛乳",a:"300ml"},{n:"ピザ用チーズ",a:"50g"}],steps:["マカロニを茹でる","バターで具材を炒める","薄力粉と牛乳でソースを作る","耐熱皿に入れる","チーズを乗せて200℃で15分焼く"]},
+{id:"m57",emoji:"🍣",name:"アボカドサーモン丼",desc:"オシャレ丼",tags:["丼","ヘルシー"],time:10,nutr:{cal:480,protein:26,fat:20,carb:50},ings:[{n:"スモークサーモン",a:"80g"},{n:"アボカド",a:"1個"},{n:"ご飯",a:"1人分"},{n:"醤油",a:"大さじ1"},{n:"わさび",a:"少量"}],steps:["アボカドを薄切りにする","ご飯を器に盛る","サーモンとアボカドを乗せる","わさび醤油をかける","完成"]},
+{id:"m58",emoji:"🍱",name:"冷しゃぶ",desc:"さっぱり豚しゃぶ",tags:["和食","豚肉","ヘルシー"],time:20,nutr:{cal:320,protein:26,fat:12,carb:22},ings:[{n:"豚ロース薄切り",a:"200g"},{n:"レタス",a:"1/4玉"},{n:"きゅうり",a:"1本"},{n:"トマト",a:"1個"},{n:"ポン酢",a:"大さじ3"}],steps:["野菜を切り皿に盛る","豚肉をしゃぶしゃぶ","冷水に取る","水気を切って乗せる","ポン酢で食べる"]},
+{id:"m59",emoji:"🥣",name:"茶碗蒸し",desc:"ぷるぷる蒸し料理",tags:["和食"],time:30,nutr:{cal:180,protein:14,fat:6,carb:14},ings:[{n:"卵",a:"2個"},{n:"だし汁",a:"300ml"},{n:"鶏肉",a:"50g"},{n:"えび",a:"4尾"},{n:"醤油",a:"小さじ1"},{n:"みりん",a:"小さじ1"}],steps:["だし汁に調味料を合わせる","卵を溶き混ぜる","具材を器に入れる","卵液を注ぎ蒸し器で15分蒸す","完成"]},
+{id:"m60",emoji:"🍱",name:"筑前煮",desc:"根菜の煮物",tags:["和食","作り置き"],time:45,nutr:{cal:280,protein:16,fat:8,carb:36},ings:[{n:"鶏もも肉",a:"150g"},{n:"ごぼう",a:"1/2本"},{n:"れんこん",a:"100g"},{n:"にんじん",a:"1本"},{n:"こんにゃく",a:"1/2枚"},{n:"醤油",a:"大さじ3"},{n:"みりん",a:"大さじ2"}],steps:["具材を切りアク抜き","鶏肉を炒め野菜を加える","だし汁で10分煮る","調味料を加えて煮る","汁気が少なくなったら完成"]},
+{id:"m61",emoji:"🥗",name:"豆腐チャンプルー",desc:"沖縄家庭料理",tags:["和食","豆腐","ヘルシー"],time:20,nutr:{cal:300,protein:20,fat:16,carb:16},ings:[{n:"木綿豆腐",a:"1丁"},{n:"もやし",a:"1袋"},{n:"ランチョンミート",a:"80g"},{n:"卵",a:"2個"},{n:"醤油",a:"大さじ1"},{n:"ごま油",a:"少量"}],steps:["豆腐を水切りする","ランチョンミートを炒める","豆腐を加えて焼く","もやしと卵を加える","調味料で仕上げ"]},
+{id:"m62",emoji:"🍜",name:"フォー",desc:"ベトナムの米麺",tags:["アジア","ヘルシー"],time:20,nutr:{cal:360,protein:20,fat:6,carb:58},ings:[{n:"フォー",a:"100g"},{n:"牛薄切り肉",a:"80g"},{n:"チキンスープ",a:"500ml"},{n:"ナンプラー",a:"大さじ1"},{n:"レモン",a:"1/4個"},{n:"もやし",a:"100g"},{n:"パクチー",a:"適量"}],steps:["スープを味付けする","フォーを茹でる","器に盛る","熱いスープを注ぐ","具材を乗せてレモンを絞る"]},
+{id:"m63",emoji:"🍚",name:"ガパオライス",desc:"タイのバジル炒め",tags:["アジア","鶏肉"],time:20,nutr:{cal:480,protein:28,fat:18,carb:48},ings:[{n:"鶏ひき肉",a:"150g"},{n:"バジル",a:"一握り"},{n:"にんにく",a:"2かけ"},{n:"ナンプラー",a:"大さじ1"},{n:"オイスターソース",a:"大さじ1"},{n:"卵",a:"1個"},{n:"ご飯",a:"1人分"}],steps:["にんにくを炒める","ひき肉を加えて炒める","調味料で味付け","バジルを加えて炒める","ご飯に乗せ目玉焼きを添える"]},
+{id:"m64",emoji:"🌮",name:"タコス",desc:"メキシカン",tags:["洋食","牛肉"],time:25,nutr:{cal:480,protein:26,fat:22,carb:42},ings:[{n:"牛ひき肉",a:"150g"},{n:"タコスシェル",a:"4枚"},{n:"レタス",a:"2枚"},{n:"トマト",a:"1個"},{n:"チーズ",a:"30g"},{n:"サルサソース",a:"適量"}],steps:["ひき肉を炒める","野菜を切る","シェルを温める","具材を盛る","サルサをかけて完成"]},
+{id:"m65",emoji:"🍜",name:"パッタイ",desc:"タイの焼き米麺",tags:["アジア"],time:25,nutr:{cal:460,protein:18,fat:14,carb:60},ings:[{n:"ライスヌードル",a:"80g"},{n:"えび",a:"6尾"},{n:"卵",a:"2個"},{n:"もやし",a:"100g"},{n:"ナンプラー",a:"大さじ2"},{n:"ピーナッツ",a:"大さじ2"}],steps:["麺を水で戻す","えびを炒める","卵を加える","麺ともやしを加えて炒める","調味料とピーナッツで仕上げ"]},
+{id:"m66",emoji:"🍜",name:"台湾まぜそば",desc:"汁なし麺",tags:["中華"],time:20,nutr:{cal:540,protein:28,fat:20,carb:58},ings:[{n:"中華麺",a:"1玉"},{n:"豚ひき肉",a:"100g"},{n:"醤油",a:"大さじ2"},{n:"豆板醤",a:"小さじ1"},{n:"卵黄",a:"1個"},{n:"にんにく",a:"1かけ"},{n:"長ねぎ",a:"適量"}],steps:["ひき肉を炒める","麺を茹でて盛る","具材を乗せる","にんにくを添える","よく混ぜて食べる"]},
+{id:"m67",emoji:"🍜",name:"ラーメン",desc:"醤油ラーメン",tags:["中華"],time:30,nutr:{cal:520,protein:22,fat:16,carb:68},ings:[{n:"中華麺",a:"1玉"},{n:"鶏がらスープ",a:"500ml"},{n:"醤油",a:"大さじ2"},{n:"チャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"長ねぎ",a:"適量"},{n:"煮卵",a:"1個"}],steps:["スープを味付けする","麺を茹でる","スープを注ぐ","麺を盛る","具材を乗せて完成"]},
+{id:"m68",emoji:"🍜",name:"冷麺",desc:"韓国冷麺",tags:["韓国","ヘルシー"],time:15,nutr:{cal:360,protein:14,fat:4,carb:66},ings:[{n:"冷麺麺",a:"1玉"},{n:"牛スープ",a:"400ml"},{n:"コチュジャン",a:"大さじ1"},{n:"酢",a:"大さじ1"},{n:"きゅうり",a:"1本"},{n:"ゆで卵",a:"1個"}],steps:["スープに調味料を混ぜる","麺を茹でて締める","器に盛る","冷スープを注ぐ","具材を乗せて完成"]},
+{id:"m69",emoji:"🍣",name:"マグロ漬け丼",desc:"漬けまぐろ丼",tags:["和食","魚","丼"],time:15,nutr:{cal:420,protein:30,fat:6,carb:56},ings:[{n:"まぐろ刺身",a:"150g"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"ごま油",a:"小さじ1"},{n:"ご飯",a:"1人分"},{n:"海苔",a:"適量"}],steps:["タレを作る","まぐろを30分漬ける","ご飯を盛る","海苔を敷く","まぐろを乗せる"]},
+{id:"m70",emoji:"🥣",name:"リゾット",desc:"イタリア米料理",tags:["洋食"],time:30,nutr:{cal:460,protein:14,fat:18,carb:58},ings:[{n:"米",a:"1/2合"},{n:"玉ねぎ",a:"1/4個"},{n:"チキンスープ",a:"400ml"},{n:"白ワイン",a:"50ml"},{n:"バター",a:"15g"},{n:"パルメザン",a:"20g"}],steps:["玉ねぎを炒める","米を加えて炒める","白ワインを加える","スープを少しずつ加え炊く","パルメザンで仕上げ"]},
+{id:"m71",emoji:"🥣",name:"豆腐ステーキ",desc:"和風豆腐",tags:["和食","豆腐","ヘルシー"],time:15,nutr:{cal:240,protein:16,fat:12,carb:12},ings:[{n:"木綿豆腐",a:"1丁"},{n:"醤油",a:"大さじ2"},{n:"みりん",a:"大さじ1"},{n:"にんにく",a:"1かけ"},{n:"バター",a:"10g"},{n:"長ねぎ",a:"適量"}],steps:["豆腐を水切りし厚めに切る","バターを熱する","豆腐を両面焼く","ソースを作る","かけてねぎを散らす"]},
+{id:"m72",emoji:"🍜",name:"つけ麺",desc:"濃厚つけ汁",tags:["中華"],time:30,nutr:{cal:560,protein:28,fat:16,carb:72},ings:[{n:"中華麺",a:"1玉"},{n:"豚骨スープ",a:"200ml"},{n:"醤油",a:"大さじ3"},{n:"チャーシュー",a:"2枚"},{n:"メンマ",a:"適量"},{n:"煮卵",a:"1個"}],steps:["つけ汁を作る","麺を固めに茹でる","冷水で締める","つけ汁を温める","つけて食べる"]},
+{id:"m73",emoji:"🍲",name:"おでん",desc:"冬の煮物",tags:["和食","作り置き"],time:60,nutr:{cal:300,protein:18,fat:8,carb:38},ings:[{n:"大根",a:"1/2本"},{n:"こんにゃく",a:"1枚"},{n:"卵",a:"3個"},{n:"ちくわ",a:"3本"},{n:"はんぺん",a:"1枚"},{n:"だし汁",a:"1L"},{n:"醤油",a:"大さじ3"}],steps:["大根を下茹でする","卵を固ゆでにする","だしを作る","大根とこんにゃくを30分煮る","残りを加えて20分煮込む"]},
+{id:"m74",emoji:"🍳",name:"チーズオムレツ",desc:"ふわふわ卵",tags:["洋食","卵","ヘルシー"],time:10,nutr:{cal:320,protein:20,fat:24,carb:4},ings:[{n:"卵",a:"3個"},{n:"ピザ用チーズ",a:"40g"},{n:"牛乳",a:"大さじ2"},{n:"バター",a:"10g"},{n:"塩こしょう",a:"適量"}],steps:["卵を溶き牛乳と塩こしょうを加える","バターを熱する","卵液を流し入れる","チーズを乗せて包む","形を整えて完成"]},
+{id:"m75",emoji:"🥗",name:"ニョッキトマトソース",desc:"もちもち団子",tags:["洋食"],time:35,nutr:{cal:420,protein:12,fat:10,carb:70},ings:[{n:"じゃがいも",a:"2個"},{n:"薄力粉",a:"80g"},{n:"卵",a:"1個"},{n:"トマト缶",a:"1/2缶"},{n:"にんにく",a:"1かけ"},{n:"バジル",a:"少量"}],steps:["じゃがいもを茹でてつぶす","粉と卵でこねる","棒状にして切る","茹でる","トマトソースで和える"]}
 ];
 
-// ─── 定数 ──────────────────────────────────────────────────────
 const STAPLES=[
-  {id:'s01',n:'飲料1',c:'水関連'},{id:'s02',n:'飲料2',c:'水関連'},{id:'s03',n:'飲料3',c:'水関連'},
-  {id:'s04',n:'湧水タンク',c:'水関連'},{id:'s05',n:'豆乳',c:'水関連'},{id:'s06',n:'氷結',c:'水関連'},
-  {id:'s07',n:'赤ワイン',c:'水関連'},{id:'s08',n:'バナナ',c:'水関連'},{id:'s09',n:'タバコ',c:'水関連'},
-  {id:'s11',n:'ビニール2L',c:'ビニール関連'},{id:'s12',n:'ビニールSS',c:'ビニール関連'},
-  {id:'s13',n:'燃えるゴミ袋20L',c:'ビニール関連'},{id:'s14',n:'燃えないゴミ袋20L',c:'ビニール関連'},
-  {id:'s15',n:'透明ゴミ袋30L',c:'ビニール関連'},{id:'s16',n:'半透明袋15L',c:'ビニール関連'},
-  {id:'s21',n:'シャンプー',c:'風呂系'},{id:'s22',n:'トリートメント',c:'風呂系'},
-  {id:'s23',n:'洗顔',c:'風呂系'},{id:'s24',n:'ボディーソープ',c:'風呂系'},
-  {id:'s25',n:'化粧水',c:'風呂系'},{id:'s26',n:'オールインワンジェル',c:'風呂系'},
-  {id:'s27',n:'日焼け止め',c:'風呂系'},{id:'s28',n:'歯磨き粉',c:'風呂系'},
-  {id:'s29',n:'マウスウォッシュ',c:'風呂系'},{id:'s2a',n:'GUMフロス',c:'風呂系'},
-  {id:'s2b',n:'マツキヨ極細フロス',c:'風呂系'},
-  {id:'s31',n:'トイレ拭き',c:'掃除系'},{id:'s32',n:'バスジェット',c:'掃除系'},
-  {id:'s33',n:'トイレマジックリン',c:'掃除系'},{id:'s34',n:'コロコロ',c:'掃除系'},
-  {id:'s35',n:'洗濯洗剤',c:'掃除系'},{id:'s36',n:'柔軟剤',c:'掃除系'},
-  {id:'s37',n:'ハンドソープ',c:'掃除系'},{id:'s38',n:'食器洗剤Joy',c:'掃除系'},
-  {id:'s39',n:'洗濯槽クリーナー',c:'掃除系'},{id:'s3a',n:'超浅型水切り',c:'掃除系'},
-  {id:'s41',n:'ティッシュ',c:'ペーパー類'},{id:'s42',n:'トイレットペーパー',c:'ペーパー類'},
-  {id:'s43',n:'キッチンペーパー',c:'ペーパー類'},{id:'s44',n:'なんでもペーパー',c:'ペーパー類'},
-  {id:'s45',n:'ラップ',c:'ペーパー類'},{id:'s46',n:'クッキングペーパー',c:'ペーパー類'},
-  {id:'s47',n:'ウェットティッシュ',c:'ペーパー類'},{id:'s48',n:'雑巾',c:'ペーパー類'},
+  {id:'s01',n:'\u98f2\u65991',c:'\u6c34\u95a2\u9023'},{id:'s02',n:'\u98f2\u65992',c:'\u6c34\u95a2\u9023'},{id:'s03',n:'\u98f2\u65993',c:'\u6c34\u95a2\u9023'},
+  {id:'s04',n:'\u6e67\u6c34\u30bf\u30f3\u30af',c:'\u6c34\u95a2\u9023'},{id:'s05',n:'\u8c46\u4e73',c:'\u6c34\u95a2\u9023'},{id:'s06',n:'\u6c37\u7d50',c:'\u6c34\u95a2\u9023'},
+  {id:'s07',n:'\u8d64\u30ef\u30a4\u30f3',c:'\u6c34\u95a2\u9023'},{id:'s08',n:'\u30d0\u30ca\u30ca',c:'\u6c34\u95a2\u9023'},{id:'s09',n:'\u30bf\u30d0\u30b3',c:'\u6c34\u95a2\u9023'},
+  {id:'s11',n:'\u30d3\u30cb\u30fc\u30eb2L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s12',n:'\u30d3\u30cb\u30fc\u30ebSS',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
+  {id:'s13',n:'\u71c3\u3048\u308b\u30b4\u30df\u888b20L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s14',n:'\u71c3\u3048\u306a\u3044\u30b4\u30df\u888b20L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
+  {id:'s15',n:'\u900f\u660e\u30b4\u30df\u888b30L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s16',n:'\u534a\u900f\u660e\u888b15L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
+  {id:'s21',n:'\u30b7\u30e3\u30f3\u30d7\u30fc',c:'\u98a8\u5442\u7cfb'},{id:'s22',n:'\u30c8\u30ea\u30fc\u30c8\u30e1\u30f3\u30c8',c:'\u98a8\u5442\u7cfb'},
+  {id:'s23',n:'\u6d17\u9854',c:'\u98a8\u5442\u7cfb'},{id:'s24',n:'\u30dc\u30c7\u30a3\u30fc\u30bd\u30fc\u30d7',c:'\u98a8\u5442\u7cfb'},
+  {id:'s25',n:'\u5316\u7ca7\u6c34',c:'\u98a8\u5442\u7cfb'},{id:'s26',n:'\u30aa\u30fc\u30eb\u30a4\u30f3\u30ef\u30f3\u30b8\u30a7\u30eb',c:'\u98a8\u5442\u7cfb'},
+  {id:'s27',n:'\u65e5\u713c\u3051\u6b62\u3081',c:'\u98a8\u5442\u7cfb'},{id:'s28',n:'\u6b6f\u78e8\u304d\u7c89',c:'\u98a8\u5442\u7cfb'},
+  {id:'s29',n:'\u30de\u30a6\u30b9\u30a6\u30a9\u30c3\u30b7\u30e5',c:'\u98a8\u5442\u7cfb'},{id:'s2a',n:'GUM\u30d5\u30ed\u30b9',c:'\u98a8\u5442\u7cfb'},
+  {id:'s2b',n:'\u30de\u30c4\u30ad\u30e8\u6975\u7d30\u30d5\u30ed\u30b9',c:'\u98a8\u5442\u7cfb'},
+  {id:'s31',n:'\u30c8\u30a4\u30ec\u62ed\u304d',c:'\u63b2\u9664\u7cfb'},{id:'s32',n:'\u30d0\u30b9\u30b8\u30a7\u30c3\u30c8',c:'\u63b2\u9664\u7cfb'},
+  {id:'s33',n:'\u30c8\u30a4\u30ec\u30de\u30b8\u30c3\u30af\u30ea\u30f3',c:'\u63b2\u9664\u7cfb'},{id:'s34',n:'\u30b3\u30ed\u30b3\u30ed',c:'\u63b2\u9664\u7cfb'},
+  {id:'s35',n:'\u6d17\u6fef\u6d17\u5264',c:'\u63b2\u9664\u7cfb'},{id:'s36',n:'\u67d4\u8edf\u5264',c:'\u63b2\u9664\u7cfb'},
+  {id:'s37',n:'\u30cf\u30f3\u30c9\u30bd\u30fc\u30d7',c:'\u63b2\u9664\u7cfb'},{id:'s38',n:'\u98df\u5668\u6d17\u5264Joy',c:'\u63b2\u9664\u7cfb'},
+  {id:'s39',n:'\u6d17\u6fef\u69fd\u30af\u30ea\u30fc\u30ca\u30fc',c:'\u63b2\u9664\u7cfb'},{id:'s3a',n:'\u8d85\u6d45\u578b\u6c34\u5207\u308a',c:'\u63b2\u9664\u7cfb'},
+  {id:'s41',n:'\u30c6\u30a3\u30c3\u30b7\u30e5',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s42',n:'\u30c8\u30a4\u30ec\u30c3\u30c8\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
+  {id:'s43',n:'\u30ad\u30c3\u30c1\u30f3\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s44',n:'\u306a\u3093\u3067\u3082\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
+  {id:'s45',n:'\u30e9\u30c3\u30d7',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s46',n:'\u30af\u30c3\u30ad\u30f3\u30b0\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
+  {id:'s47',n:'\u30a6\u30a7\u30c3\u30c8\u30c6\u30a3\u30c3\u30b7\u30e5',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s48',n:'\u96d1\u5dfe',c:'\u30da\u30fc\u30d1\u30fc\u985e'}
 ];
-const TRASH={1:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},2:{l:'燃えないゴミ',i:'🚯',c:'#7a8fa6'},
-  3:{l:'ペットボトル',i:'♻️',c:'#4a9e7f'},4:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},5:{l:'瓶・缶ゴミ',i:'🍶',c:'#c4963a'}};
-// 掃除スケジュール: 月(1)・木(4)はゴミ捨て日 → 玄関・マンション階段掃除（固定）
-const CLEANING={
-  0:{i:'🛁',l:'バスルーム掃除'},
-  1:{i:'🚪',l:'玄関・マンション階段掃除',note:'ゴミ捨て日の掃除（固定）'},
-  2:{i:'🍳',l:'キッチン掃除'},
-  3:{i:'🪥',l:'洗面所・トイレ掃除'},
-  4:{i:'🚪',l:'玄関・マンション階段掃除',note:'ゴミ捨て日の掃除（固定）'},
-  5:{i:'🏠',l:'リビング・床掃除'},
-  6:{i:'🪟',l:'窓・ベランダ掃除'},
-};
-const DAILY=[
-  {id:'meditation',e:'🧘',l:'瞑想',s:'5分'},{id:'reading',e:'📖',l:'読書',s:'20ページ'},
-  {id:'toilet',e:'🚿',l:'トイレ掃除',s:''},{id:'walk',e:'🚶',l:'散歩',s:''},
-  {id:'hunting',e:'🎯',l:'狩猟免許勉強',s:''},
-];
-const WEEKLY=[{id:'carwash',e:'🚗',l:'洗車',s:'週1回'},{id:'bedding',e:'🛏️',l:'布団関連洗濯',s:'週1回'}];
-const TLABELS={trash:'ゴミ捨て',cleaning:'掃除',meal:'食事',meditation:'瞑想',reading:'読書',
-  toilet:'トイレ掃除',walk:'散歩',hunting:'狩猟免許勉強',carwash:'洗車',bedding:'布団洗濯'};
+const TRASH={1:{l:'\u71c3\u3048\u308b\u30b4\u30df',i:'\U0001f525',c:'#e07b54'},2:{l:'\u71c3\u3048\u306a\u3044\u30b4\u30df',i:'\U0001f6af',c:'#7a8fa6'},3:{l:'\u30da\u30c3\u30c8\u30dc\u30c8\u30eb',i:'\u267b\ufe0f',c:'#4a9e7f'},4:{l:'\u71c3\u3048\u308b\u30b4\u30df',i:'\U0001f525',c:'#e07b54'},5:{l:'\u74f6\u30fb\u7f36\u30b4\u30df',i:'\U0001f376',c:'#c4963a'}};
+const CLEANING={0:{i:'\U0001f6c1',l:'\u30d0\u30b9\u30eb\u30fc\u30e0\u63b2\u9664'},1:{i:'\U0001f6aa',l:'\u73c4\u95a2\u30fb\u30de\u30f3\u30b7\u30e7\u30f3\u968e\u6bb5\u63b2\u9664',note:'\u30b4\u30df\u6368\u3066\u65e5\u306e\u63b2\u9664\uff08\u56fa\u5b9a\uff09'},2:{i:'\U0001f373',l:'\u30ad\u30c3\u30c1\u30f3\u63b2\u9664'},3:{i:'\U0001faa5',l:'\u6d17\u9762\u6240\u30fb\u30c8\u30a4\u30ec\u63b2\u9664'},4:{i:'\U0001f6aa',l:'\u73c4\u95a2\u30fb\u30de\u30f3\u30b7\u30e7\u30f3\u968e\u6bb5\u63b2\u9664',note:'\u30b4\u30df\u6368\u3066\u65e5\u306e\u63b2\u9664\uff08\u56fa\u5b9a\uff09'},5:{i:'\U0001f3e0',l:'\u30ea\u30d3\u30f3\u30b0\u30fb\u5e8a\u63b2\u9664'},6:{i:'\U0001fa9f',l:'\u7a93\u30fb\u30d9\u30e9\u30f3\u30c0\u63b2\u9664'}};
+const DAILY=[{id:'meditation',e:'\U0001f9d8',l:'\u77a5\u60f3',s:'5\u5206'},{id:'reading',e:'\U0001f4d6',l:'\u8aad\u66f8',s:'20\u30da\u30fc\u30b8'},{id:'toilet',e:'\U0001f6bf',l:'\u30c8\u30a4\u30ec\u63b2\u9664',s:''},{id:'walk',e:'\U0001f6b6',l:'\u6563\u6b69',s:''},{id:'hunting',e:'\U0001f3af',l:'\u72e9\u731f\u514d\u8a31\u52c9\u5f37',s:''}];
+const WEEKLY=[{id:'carwash',e:'\U0001f697',l:'\u6d17\u8eca',s:'\u90311\u56de'},{id:'bedding',e:'\U0001f6cf\ufe0f',l:'\u5e03\u56e3\u95a2\u9023\u6d17\u6fef',s:'\u90311\u56de'}];
+const TLABELS={trash:'\u30b4\u30df\u6368\u3066',cleaning:'\u63b2\u9664',meal:'\u98df\u4e8b',meditation:'\u77a5\u60f3',reading:'\u8aad\u66f8',toilet:'\u30c8\u30a4\u30ec\u63b2\u9664',walk:'\u6563\u6b69',hunting:'\u72e9\u731f\u514d\u8a31\u52c9\u5f37',carwash:'\u6d17\u8eca',bedding:'\u5e03\u56e3\u6d17\u6fef'};
 const HIDS=Object.keys(TLABELS);
-const DRINKS=[
-  {id:'water',i:'💧',n:'水',goal:2000,color:'#7ab8d4',steps:[150,350,500]},
-  {id:'soymilk',i:'🥛',n:'豆乳',goal:400,color:'#c4963a',steps:[200,400]},
-  {id:'alcohol',i:'🍺',n:'お酒',goal:350,color:'#b08ac0',steps:[150,350]},
-];
-const CUISINES=[{e:'🍣',l:'寿司'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ'},{e:'🍔',l:'バーガー'},
-  {e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},{e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
+const DRINKS=[{id:'water',i:'\U0001f4a7',n:'\u6c34',goal:2000,color:'#7ab8d4',steps:[150,350,500]},{id:'soymilk',i:'\U0001f95b',n:'\u8c46\u4e73',goal:400,color:'#c4963a',steps:[200,400]},{id:'alcohol',i:'\U0001f37a',n:'\u304a\u9152',goal:350,color:'#b08ac0',steps:[150,350]}];
+const CUISINES=[{e:'\U0001f363',l:'\u5bff\u53f8'},{e:'\U0001f35c',l:'\u30e9\u30fc\u30e1\u30f3'},{e:'\U0001f355',l:'\u30d4\u30b6'},{e:'\U0001f354',l:'\u30d0\u30fc\u30ac\u30fc'},{e:'\U0001f969',l:'\u8089\u6599\u7406'},{e:'\U0001f371',l:'\u5b9a\u98df'},{e:'\U0001f32e',l:'\u30a8\u30b9\u30cb\u30c3\u30af'},{e:'\U0001f362',l:'\u5c45\u9152\u5c4b'},{e:'\u2615',l:'\u30ab\u30d5\u30a7'},{e:'\U0001f370',l:'\u30b9\u30a4\u30fc\u30c4'}];
 
-// ─── 状態 ──────────────────────────────────────────────────────
-let state={
-  days:{},weeks:{},
-  // 買い物 - シンプル設計
-  // staplesNeeded: { stapleId: true/false } チェック = 買い物リストに出す
-  // shopMemo: [{ id, text, active }] - メモリスト（active=今日の買い物リストに出す）
-  // boughtToday: { date: { itemId: true } } - 今日購入済み（ホームから消す）
-  staplesNeeded:{}, shopMemo:[], boughtToday:{},
-  fridge:[], customMeals:[], meals:{}, drinks:{}, mealFeedback:{}
-};
+let state={days:{},weeks:{},staplesNeeded:{},shopMemo:[],boughtToday:{},fridge:[],customMeals:[],meals:{},lunchMeals:{},drinks:{},mealFeedback:{},quickTasks:[],weeklyCustom:[]};
 let cfg={apiKey:'',binId:'',anthropicKey:''};
-let histChart=null, syncTimer=null, recIdxs=[];
-let selectedCuisine='🍽️', pendingCustom=null, pendingFbId=null, selectedRating=0;
-let curMealTab='rec', curStockTab='fridge', curShopTab='today';
+let histChart=null,syncTimer=null,recIdxs=[],selectedCuisine='\U0001f363',pendingCustom=null,pendingFbId=null,selectedRating=0;
+let curMealTab='rec',curStockTab='fridge',curShopTab='today',mealSlotTarget=null,eoSlotTarget='dinner';
 
-// ─── ユーティリティ ────────────────────────────────────────────
 const pad=n=>String(n).padStart(2,'0');
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
-function mondayStr(){const d=new Date(),dw=d.getDay();d.setDate(d.getDate()-(dw===0?6:dw-1));return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function mondayStr(){const d=new Date(),w=d.getDay();d.setDate(d.getDate()-(w===0?6:w-1));return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
-function allMeals(){return [...MEALS,...(state.customMeals||[])];}
+function allMeals(){return MEALS.concat(state.customMeals||[]);}
 function mealById(id){return allMeals().find(m=>m.id===id);}
 function fridgeHas(name){return (state.fridge||[]).some(f=>f.name.includes(name)||name.includes(f.name));}
 function getDayDone(id){return !!((state.days||{})[todayStr()]||{})[id];}
 function getWeekDone(id){return !!((state.weeks||{})[mondayStr()]||{})[id];}
-function getTodayMeal(){return ((state.meals||{})[todayStr()])||{menuId:null,cooked:false,eaten:false};}
+function getDinner(){return (state.meals||{})[todayStr()]||{menuId:null,cooked:false,eaten:false};}
+function getLunch(){return (state.lunchMeals||{})[todayStr()]||{menuId:null,cooked:false,eaten:false};}
 function getTodayDrink(id){return ((state.drinks||{})[todayStr()]||{})[id]||0;}
 function getRating(id){return (state.mealFeedback||{})[id]?.avgRating||0;}
-function starStr(id){const r=getRating(id);if(!r)return '';const cnt=(state.mealFeedback||{})[id]?.ratings?.length||0;return '<span style="font-size:12px;color:#c4963a">★'+r.toFixed(1)+'</span><span style="font-size:10px;color:var(--muted)"> ('+cnt+'件)</span>';}
-// 買い物関連
 function isStapleNeeded(id){return !!(state.staplesNeeded||{})[id];}
 function isBoughtToday(id){return !!((state.boughtToday||{})[todayStr()]||{})[id];}
-function getActiveShopItems(){return (state.shopMemo||[]).filter(i=>i.active&&!isBoughtToday(i.id));}
+function getActiveMemo(){return (state.shopMemo||[]).filter(i=>i.active&&!isBoughtToday(i.id));}
 function getNeededStaples(){return STAPLES.filter(s=>isStapleNeeded(s.id)&&!isBoughtToday('st_'+s.id));}
 
-// ─── ストレージ ────────────────────────────────────────────────
+function ensureFields(o){
+  o=o||{};
+  if(!o.days)o.days={};if(!o.weeks)o.weeks={};if(!o.staplesNeeded)o.staplesNeeded={};
+  if(!o.shopMemo)o.shopMemo=[];if(!o.boughtToday)o.boughtToday={};if(!o.fridge)o.fridge=[];
+  if(!o.customMeals)o.customMeals=[];if(!o.meals)o.meals={};if(!o.lunchMeals)o.lunchMeals={};
+  if(!o.drinks)o.drinks={};if(!o.mealFeedback)o.mealFeedback={};if(!o.quickTasks)o.quickTasks=[];
+  if(!o.weeklyCustom)o.weeklyCustom=[];
+  return o;
+}
 function loadLocal(){
-  try{const s=localStorage.getItem('dts');if(s){const parsed=JSON.parse(s);
-    // 旧データからマイグレーション
-    if(parsed.shopping&&!parsed.shopMemo){
-      parsed.shopMemo=(parsed.shopping||[]).map(i=>({id:i.id,text:i.text,active:i.needed||false}));
-    }
-    state=parsed;
-  }}catch(e){}
-  try{const c=localStorage.getItem('dtc');if(c)cfg=JSON.parse(c);}catch(e){}
-  if(!state.days)state.days={};
-  if(!state.weeks)state.weeks={};
-  if(!state.staplesNeeded)state.staplesNeeded={};
-  if(!state.shopMemo)state.shopMemo=[];
-  if(!state.boughtToday)state.boughtToday={};
-  if(!state.fridge)state.fridge=[];
-  if(!state.customMeals)state.customMeals=[];
-  if(!state.meals)state.meals={};
-  if(!state.drinks)state.drinks={};
-  if(!state.mealFeedback)state.mealFeedback={};
-  if(!state.quickTasks)state.quickTasks=[];
-  if(!state.quickTasks)state.quickTasks=[];
-  if(!state.lunchMeals)state.lunchMeals={};
-  if(!state.weeklyCustom)state.weeklyCustom=[];
+  try{const s=localStorage.getItem('dts2');if(s)state=JSON.parse(s);}catch(e){}
+  try{const c=localStorage.getItem('dtc2');if(c)cfg=JSON.parse(c);}catch(e){}
+  state=ensureFields(state);
 }
-function saveLocal(){localStorage.setItem('dts',JSON.stringify(state));}
-function saveCfg(){localStorage.setItem('dtc',JSON.stringify(cfg));}
+function saveLocal(){localStorage.setItem('dts2',JSON.stringify(state));}
+function saveCfg(){localStorage.setItem('dtc2',JSON.stringify(cfg));}
 
-// ─── JSONBin ──────────────────────────────────────────────────
-async function fetchT(url,opts){
-  const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);
-  try{const r=await fetch(url,{...opts,signal:ctrl.signal});clearTimeout(tid);return r;}catch(e){clearTimeout(tid);throw e;}
-}
+async function fetchT(url,opts){const ct=new AbortController();const t=setTimeout(()=>ct.abort(),10000);try{const r=await fetch(url,Object.assign({},opts,{signal:ct.signal}));clearTimeout(t);return r;}catch(e){clearTimeout(t);throw e;}}
 async function pushCloud(){
   if(!cfg.apiKey)return false;
   try{
     if(!cfg.binId){
-      const r=await fetchT('https://api.jsonbin.io/v3/b',{method:'POST',
-        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},body:JSON.stringify(state)});
-      if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
-      const j=await r.json();if(j.metadata?.id){cfg.binId=j.metadata.id;saveCfg();const el=document.getElementById('cfg-bin');if(el)el.value=cfg.binId;}
+      const r=await fetchT('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey,'X-Bin-Name':'DailyTasks'},body:JSON.stringify(state)});
+      if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,60));}
+      const j=await r.json();if(j.metadata&&j.metadata.id){cfg.binId=j.metadata.id;saveCfg();const el=document.getElementById('cfg-bin');if(el)el.value=cfg.binId;}
       return true;
     }else{
-      const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId,{method:'PUT',
-        headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(state)});
-      if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
+      const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cfg.apiKey},body:JSON.stringify(state)});
+      if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,60));}
       return true;
     }
   }catch(e){return e.name==='AbortError'?'timeout':e.message;}
@@ -614,661 +499,376 @@ async function pullCloud(){
   if(!cfg.apiKey||!cfg.binId)return false;
   try{
     const r=await fetchT('https://api.jsonbin.io/v3/b/'+cfg.binId+'/latest',{headers:{'X-Master-Key':cfg.apiKey}});
-    if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,80));}
+    if(!r.ok){const t=await r.text();throw new Error('HTTP '+r.status+': '+t.slice(0,60));}
     const j=await r.json();
     if(j.record){
-      const rec=j.record;
-      // 旧フォーマットからマイグレーション
+      let rec=j.record;
       if(rec.shopping&&!rec.shopMemo)rec.shopMemo=(rec.shopping||[]).map(i=>({id:i.id,text:i.text,active:i.needed||false}));
       if(rec.bought&&!rec.boughtToday)rec.boughtToday=rec.bought;
-      // 不要な旧フィールドを削除
-      delete rec.shopping; delete rec.bought; delete rec.staplesQty;
-      // 新フィールドの初期化
-      if(!rec.staplesNeeded)rec.staplesNeeded={};
-      if(!rec.shopMemo)rec.shopMemo=[];
-      if(!rec.boughtToday)rec.boughtToday={};
-      if(!rec.days)rec.days={};if(!rec.weeks)rec.weeks={};
-      if(!rec.fridge)rec.fridge=[];if(!rec.customMeals)rec.customMeals=[];
-      if(!rec.meals)rec.meals={};if(!rec.drinks)rec.drinks={};if(!rec.mealFeedback)rec.mealFeedback={};
-      state=rec;
-      saveLocal();renderAll();
+      delete rec.shopping;delete rec.bought;delete rec.staplesQty;
+      state=ensureFields(rec);saveLocal();renderAll();
     }
     return true;
-  }catch(e){console.error('pull',e);return e.name==='AbortError'?'timeout':e.message;}
+  }catch(e){return e.name==='AbortError'?'timeout':e.message;}
 }
 function sched(){clearTimeout(syncTimer);syncTimer=setTimeout(pushCloud,1500);}
 
-// ─── 設定 ─────────────────────────────────────────────────────
-function openSettings(){
-  document.getElementById('cfg-key').value=cfg.apiKey||'';
-  document.getElementById('cfg-bin').value=cfg.binId||'';
-  document.getElementById('cfg-ant').value=cfg.anthropicKey||'';
-  document.getElementById('sync-status').innerHTML='';
-  document.getElementById('settings-ov').classList.add('open');
-}
+function openSettings(){document.getElementById('cfg-key').value=cfg.apiKey||'';document.getElementById('cfg-bin').value=cfg.binId||'';document.getElementById('cfg-ant').value=cfg.anthropicKey||'';document.getElementById('sync-status').innerHTML='';document.getElementById('settings-ov').classList.add('open');}
 function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
-function showSync(msg,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=msg;}
+function showSync(m,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=m;}
 async function saveSettings(){
-  const k=document.getElementById('cfg-key').value.trim();const b=document.getElementById('cfg-bin').value.trim();const a=document.getElementById('cfg-ant').value.trim();
-  if(!k){showSync('❌ APIキーを入力してください',false);return;}
-  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('🔄 接続中...（最大10秒）',true);
-  let res;
-  if(cfg.binId){
-    res=await pullCloud();
-    if(res===true)showSync('✅ 同期完了！データを取得しました',true);
-    else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト。ネットワーク確認してください':res)+'\n💡 Bin IDが正しいか確認してください',false);
-  }else{
-    res=await pushCloud();
-    if(res===true)showSync('✅ 新規Bin作成完了！Bin ID: '+cfg.binId+'\n（他のデバイスでこのIDを入力してください）',true);
-    else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト':res)+'\n💡 Secret Keyが正しいか確認してください',false);
-  }
+  const k=document.getElementById('cfg-key').value.trim(),b=document.getElementById('cfg-bin').value.trim(),a=document.getElementById('cfg-ant').value.trim();
+  if(!k){showSync('\u274c APIキーを入力してください',false);return;}
+  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('\U0001f504 接続中...',true);
+  const res=cfg.binId?await pullCloud():await pushCloud();
+  if(res===true)showSync('\u2705 '+(cfg.binId?'同期完了！':'新規作成完了！ Bin ID: '+cfg.binId),true);
+  else showSync('\u274c エラー: '+(res==='timeout'?'タイムアウト':res),false);
   renderAll();
 }
 
-// ─── ページ切替 ───────────────────────────────────────────────
 function setPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>{b.classList.remove('on');const d=b.querySelector('.nb-dot');if(d)d.remove();});
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('pg-'+id).classList.add('active');
-  const nb=document.getElementById('nav-'+id);nb.classList.add('on');
-  if(!nb.querySelector('.nb-dot')){const d=document.createElement('div');d.className='nb-dot';nb.appendChild(d);}
+  document.getElementById('nav-'+id).classList.add('on');
   if(id==='hist')renderHist();
   if(id==='meal')renderMealTab(curMealTab);
   if(id==='stock')renderStockTab(curStockTab);
   if(id==='shop')renderShopTab(curShopTab);
 }
-function mTab(t){curMealTab=t;['rec','custom','eatout','today','nutr'].forEach(k=>{const b=document.getElementById('mt-'+k);if(b)b.className='tab-btn'+(t===k?' on':'');const v=document.getElementById('mv-'+k);if(v)v.style.display=t===k?'':'none';});renderMealTab(t);}
+function mTab(t){curMealTab=t;['rec','custom','eatout','nutr'].forEach(k=>{const b=document.getElementById('mt-'+k);if(b)b.className='tab-btn'+(t===k?' on':'');const v=document.getElementById('mv-'+k);if(v)v.style.display=t===k?'':'none';});renderMealTab(t);}
 function sTab(t){curStockTab=t;document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');document.getElementById('sv-fridge').style.display=t==='fridge'?'':'none';document.getElementById('sv-staples').style.display=t==='staples'?'':'none';renderStockTab(t);}
 function shTab(t){curShopTab=t;document.getElementById('sh-today').className='tab-btn'+(t==='today'?' on':'');document.getElementById('sh-manage').className='tab-btn'+(t==='manage'?' on':'');document.getElementById('shv-today').style.display=t==='today'?'':'none';document.getElementById('shv-manage').style.display=t==='manage'?'':'none';renderShopTab(t);}
+function eoSlot(s){eoSlotTarget=s;document.getElementById('eoslot-lunch').className='tab-btn'+(s==='lunch'?' on':'');document.getElementById('eoslot-dinner').className='tab-btn'+(s==='dinner'?' on':'');}
 
-// ─── データ操作 ───────────────────────────────────────────────
-function toggleDay(id){
-  const k=todayStr();if(!state.days[k])state.days[k]={};
-  state.days[k][id]=!state.days[k][id];
-  WEEKLY.forEach(t=>{state.days[k][t.id]=getWeekDone(t.id);});
-  const m=getTodayMeal();state.days[k].meal=(m.cooked&&m.eaten);
-  saveLocal();sched();renderHome();
+// ===== QUICK TASKS =====
+function addQuickTask(){
+  const inp=document.getElementById('qt-input');if(!inp)return;
+  const txt=inp.value.trim();if(!txt)return;
+  if(!state.quickTasks)state.quickTasks=[];
+  state.quickTasks.push({id:'qt'+Date.now(),text:txt,done:false});
+  inp.value='';saveLocal();sched();renderQuickTasks();
 }
-function toggleWeek(id){
-  const k=mondayStr(),dk=todayStr();
-  if(!state.weeks[k])state.weeks[k]={};state.weeks[k][id]=!state.weeks[k][id];
-  if(!state.days[dk])state.days[dk]={};state.days[dk][id]=state.weeks[k][id];
-  saveLocal();sched();renderHome();
+function doneQuickTask(id){state.quickTasks=(state.quickTasks||[]).map(t=>t.id===id?{id:t.id,text:t.text,done:true}:t);saveLocal();sched();renderQuickTasks();}
+function deleteQuickTask(id){state.quickTasks=(state.quickTasks||[]).filter(t=>t.id!==id);saveLocal();sched();renderQuickTasks();}
+function renderQuickTasks(){
+  const el=document.getElementById('qt-list');if(!el)return;el.innerHTML='';
+  const tasks=(state.quickTasks||[]).filter(t=>!t.done);
+  if(!tasks.length){el.innerHTML='<p class="empty-txt">\u30bf\u30b9\u30af\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</p>';return;}
+  tasks.forEach(t=>{
+    const d=document.createElement('div');d.className='qt-item';
+    const ok=document.createElement('button');ok.className='qt-done';ok.textContent='\u2713 \u5b8c\u4e86';ok.onclick=()=>doneQuickTask(t.id);
+    const sp=document.createElement('span');sp.className='qt-txt';sp.textContent=t.text;
+    const rm=document.createElement('button');rm.className='qt-del';rm.textContent='\u2715';rm.onclick=()=>deleteQuickTask(t.id);
+    d.appendChild(ok);d.appendChild(sp);d.appendChild(rm);el.appendChild(d);
+  });
 }
-// 常備品チェック: ON=買い物リスト追加、OFF=買い物完了
-function toggleStaple(id){
-  if(!state.staplesNeeded)state.staplesNeeded={};
-  state.staplesNeeded[id]=!state.staplesNeeded[id];
-  // もしOFFにした場合、購入済みにする（ホームからも消える）
-  if(!state.staplesNeeded[id]){
-    const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};
-    state.boughtToday[k]['st_'+id]=true;
-  }
-  saveLocal();sched();renderHome();renderStockTab('staples');renderShopTab(curShopTab);
+
+// ===== DRINKS =====
+function addDrink(id,ml){if(!state.drinks)state.drinks={};const k=todayStr();if(!state.drinks[k])state.drinks[k]={};state.drinks[k][id]=(state.drinks[k][id]||0)+ml;saveLocal();sched();renderDrink();}
+function renderDrink(){
+  const el=document.getElementById('drink-widget');if(!el)return;el.innerHTML='';
+  DRINKS.forEach(d=>{
+    const amt=getTodayDrink(d.id),pct=Math.min(100,Math.round(amt/d.goal*100));
+    const row=document.createElement('div');row.className='drink-row';
+    row.innerHTML='<div class="drink-icon">'+d.i+'</div><div class="drink-info"><div class="drink-name">'+d.n+'</div><div class="dp-bg"><div class="dp-bar" style="width:'+pct+'%;background:'+d.color+'"></div></div></div><div class="drink-amt">'+(amt>=1000?(amt/1000).toFixed(1)+'L':amt+'ml')+'<br><span style="font-size:10px">'+pct+'%</span></div><div style="display:flex;gap:4px">'+d.steps.map(s=>'<button class="d-add" onclick="addDrink(\''+d.id+'\','+s+')">+'+s+'</button>').join('')+'</div>';
+    el.appendChild(row);
+  });
 }
-// メモリスト: active切替（今日の買い物リストに出す・外す）
-function toggleMemoActive(id){
-  state.shopMemo=(state.shopMemo||[]).map(i=>i.id===id?{...i,active:!i.active}:i);
-  saveLocal();sched();renderHome();renderShopTab(curShopTab);
+
+// ===== MEALS =====
+function selectDinner(id){
+  const k=todayStr();if(!state.meals)state.meals={};state.meals[k]={menuId:id,cooked:false,eaten:false};
+  addIngsToMemo(id);saveLocal();sched();renderHome();mealSlotTarget=null;closeRecipe();
 }
-// 手動追加アイテムを購入済みに（ホームから消えるがメモに残る）
-function buyMemoItem(id){
-  const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};
-  state.boughtToday[k][id]=true;
-  saveLocal();sched();renderHome();renderShopTab(curShopTab);
+function selectLunch(id){
+  const k=todayStr();if(!state.lunchMeals)state.lunchMeals={};state.lunchMeals[k]={menuId:id,cooked:false,eaten:false};
+  addIngsToMemo(id);saveLocal();sched();renderHome();mealSlotTarget=null;closeRecipe();
 }
-// メモリストに追加
-function addItem(){
-  const inp=document.getElementById('new-item');const txt=inp.value.trim();if(!txt)return;
-  state.shopMemo=[...(state.shopMemo||[]),{id:Date.now().toString(),text:txt,active:true}];
-  inp.value='';saveLocal();sched();renderHome();renderShopTab(curShopTab);
-}
-// メモリストから削除
-function deleteMemo(id){
-  state.shopMemo=(state.shopMemo||[]).filter(i=>i.id!==id);
-  const k=todayStr();if(state.boughtToday[k])delete state.boughtToday[k][id];
-  saveLocal();sched();renderHome();renderShopTab(curShopTab);
-}
-// 冷蔵庫
-function addFridge(){
-  const name=document.getElementById('fi-name').value.trim();const amt=document.getElementById('fi-amt').value.trim();if(!name)return;
-  state.fridge=[...(state.fridge||[]),{id:Date.now().toString(),name,amt:amt||'適量'}];
-  document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';
-  saveLocal();sched();renderStockTab('fridge');
-}
-function delFridge(id){state.fridge=(state.fridge||[]).filter(f=>f.id!==id);saveLocal();sched();renderStockTab('fridge');}
-// 水分
-function addDrink(id,ml){
-  if(!state.drinks)state.drinks={};const k=todayStr();if(!state.drinks[k])state.drinks[k]={};
-  state.drinks[k][id]=(state.drinks[k][id]||0)+ml;saveLocal();sched();renderDrink();
-}
-// 食事選択
-function selectMeal(mealId){
-  if(mealSlotTarget==='lunch'){selectLunch(mealId);return;}
-  const k=todayStr();if(!state.meals)state.meals={};state.meals[k]={menuId:mealId,cooked:false,eaten:false};
-  const meal=mealById(mealId);
-  if(meal){(meal.ings||[]).forEach(ing=>{if(!fridgeHas(ing.n)&&!(state.shopMemo||[]).find(s=>s.text===ing.n)){state.shopMemo=[...(state.shopMemo||[]),{id:'ing_'+Date.now()+'_'+Math.random().toString(36).slice(2),text:ing.n,active:true}];}});}
-  saveLocal();sched();renderHome();renderMealTab(curMealTab);closeRecipe();
-}
-function toggleCooked(){
-  const k=todayStr();if(!state.meals)state.meals={};if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
-  state.meals[k].cooked=!state.meals[k].cooked;
-  if(!state.days[k])state.days[k]={};state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
-  saveLocal();sched();renderHome();renderMealTab(curMealTab);
-}
-function toggleEaten(){
-  const k=todayStr();if(!state.meals)state.meals={};if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};
-  const was=state.meals[k].eaten;state.meals[k].eaten=!state.meals[k].eaten;
-  if(!state.days[k])state.days[k]={};state.days[k].meal=(state.meals[k].cooked&&state.meals[k].eaten);
-  saveLocal();sched();renderHome();renderMealTab(curMealTab);
-  if(!was&&state.meals[k].eaten&&state.meals[k].menuId)setTimeout(()=>openFb(state.meals[k].menuId),400);
-}
+function addIngsToMemo(id){const m=mealById(id);if(m)(m.ings||[]).forEach(ing=>{if(!fridgeHas(ing.n)&&!(state.shopMemo||[]).find(s=>s.text===ing.n))state.shopMemo.push({id:'ing'+Date.now()+Math.random().toString(36).slice(2,6),text:ing.n,active:true});});}
+function selectMeal(id){if(mealSlotTarget==='lunch')selectLunch(id);else selectDinner(id);}
+function resetDinner(){const k=todayStr();if(state.meals)state.meals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
+function resetLunch(){const k=todayStr();if(state.lunchMeals)state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
+function toggleDinnerCooked(){const k=todayStr();if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};state.meals[k].cooked=!state.meals[k].cooked;syncMealDone();saveLocal();sched();renderHome();}
+function toggleDinnerEaten(){const k=todayStr();if(!state.meals[k])state.meals[k]={menuId:null,cooked:false,eaten:false};const w=state.meals[k].eaten;state.meals[k].eaten=!state.meals[k].eaten;syncMealDone();saveLocal();sched();renderHome();if(!w&&state.meals[k].eaten&&state.meals[k].menuId)setTimeout(()=>openFb(state.meals[k].menuId),400);}
+function toggleLunchCooked(){const k=todayStr();if(!state.lunchMeals[k])state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};state.lunchMeals[k].cooked=!state.lunchMeals[k].cooked;saveLocal();sched();renderHome();}
+function toggleLunchEaten(){const k=todayStr();if(!state.lunchMeals[k])state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};const w=state.lunchMeals[k].eaten;state.lunchMeals[k].eaten=!state.lunchMeals[k].eaten;saveLocal();sched();renderHome();if(!w&&state.lunchMeals[k].eaten&&state.lunchMeals[k].menuId)setTimeout(()=>openFb(state.lunchMeals[k].menuId),400);}
+function syncMealDone(){const k=todayStr();const d=getDinner();if(!state.days[k])state.days[k]={};state.days[k].meal=(d.cooked&&d.eaten)||(d.type==='eatout'&&d.eaten);}
 function logEatOut(){
-  const rest=document.getElementById('eo-rest').value.trim();const dish=document.getElementById('eo-dish').value.trim();
-  if(!dish){alert('料理名を入力してください');return;}
-  const k=todayStr();if(!state.meals)state.meals={};
-  state.meals[k]={type:'eatout',eatOutName:rest?rest+' / '+dish:dish,restaurant:rest,dish,emoji:selectedCuisine,eaten:false,cooked:true};
-  if(!state.days[k])state.days[k]={};state.days[k].meal=false;
+  const rest=document.getElementById('eo-rest').value.trim(),dish=document.getElementById('eo-dish').value.trim();
+  if(!dish){alert('\u6599\u7406\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044');return;}
+  const k=todayStr();const name=rest?rest+' / '+dish:dish;
+  const obj={type:'eatout',eatOutName:name,restaurant:rest,dish:dish,emoji:selectedCuisine,eaten:false,cooked:true};
+  if(eoSlotTarget==='lunch'){if(!state.lunchMeals)state.lunchMeals={};state.lunchMeals[k]=obj;}
+  else{if(!state.meals)state.meals={};state.meals[k]=obj;}
   document.getElementById('eo-rest').value='';document.getElementById('eo-dish').value='';
   saveLocal();sched();renderHome();renderEatOut();
 }
 
-// ─── フィードバック ────────────────────────────────────────────
-function openFb(id){
-  pendingFbId=id;selectedRating=0;const fb=(state.mealFeedback||{})[id]||{};const avg=fb.avgRating||0;
-  document.getElementById('fb-name').textContent=(mealById(id)||{}).name||'';
-  document.getElementById('fb-stars').innerHTML=[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating('+n+')" data-v="'+n+'">'+(n<=Math.round(avg)?'⭐':'☆')+'</span>').join('');
-  document.getElementById('fb-note').value='';document.getElementById('fb-ov').classList.add('open');
+function openRecipe(id){
+  const m=mealById(id);if(!m)return;
+  const sel=(mealSlotTarget==='lunch'?getLunch():getDinner()).menuId===id;
+  document.getElementById('recipe-content').innerHTML=recipeHTML(m,true);
+  const slotName=mealSlotTarget==='lunch'?'\u663c\u98df':'\u591c\u3054\u98df';
+  document.getElementById('recipe-btns').innerHTML='<button class="m-btn s" onclick="closeRecipe()">\u9589\u3058\u308b</button><button class="m-btn p" onclick="selectMeal(\''+id+'\')">'+(sel?'\u2713 \u9078\u629e\u6e08\u307f':slotName+'\u306b\u3059\u308b')+'</button>';
+  document.getElementById('recipe-ov').classList.add('open');
 }
+function closeRecipe(){document.getElementById('recipe-ov').classList.remove('open');}
+function recipeHTML(m,fb){
+  const f=fb?(state.mealFeedback||{})[m.id]||{}:{};const tips=f.recipeTips||[],notes=f.notes||[];
+  const ings=(m.ings||[]).map(i=>{const miss=fb&&!fridgeHas(i.n);return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'\u2713 ')+i.n+'</span><span>'+i.a+'</span></div>';}).join('');
+  const steps=(m.steps||[]).map((s,i)=>'<div class="step-row"><div class="step-num">'+(i+1)+'</div><div class="step-txt">'+s+'</div></div>').join('');
+  const tipsH=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">\U0001f916 AI\u30ec\u30b7\u30d4\u6539\u5584\u30d2\u30f3\u30c8</h3>'+tips.map(t=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">\U0001f4a1 '+t+'</div>').join('')+'</div>':'';
+  const notesH=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">\U0001f4dd \u30e1\u30e2</h3>'+notes.slice(-3).map(n=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">\u2605'+n.rating+'</span> '+n.text+'</div>').join('')+'</div>':'';
+  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'\U0001f373')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+' \u30fb \u23f1 '+m.time+'\u5206</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.cal:'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.protein:'?')+'g</div><div class="l">\u86cb\u767d\u8cea</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.fat:'?')+'g</div><div class="l">\u8102\u8cea</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.carb:'?')+'g</div><div class="l">\u7cd6\u8cea</div></div></div>'+(ings?'<div class="r-sec"><h3>\u6750\u6599</h3>'+ings+'</div>':'')+(steps?'<div class="r-sec"><h3>\u4f5c\u308a\u65b9</h3>'+steps+'</div>':'')+tipsH+notesH;
+}
+function scoreMeal(m){let s=0;(m.ings||[]).forEach(i=>{if(fridgeHas(i.n))s+=2;});const h=Object.values(state.meals||{}).concat(Object.values(state.lunchMeals||{})).filter(v=>v.menuId===m.id);s-=h.length*3;const r=getRating(m.id);if(r>0)s+=r*2;return s;}
+function shuffleRec(){const a=allMeals();const idx=a.map((_,i)=>i);for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}recIdxs=idx.slice(0,6);renderMealTab('rec');}
+
+// ===== FEEDBACK =====
+function openFb(id){pendingFbId=id;selectedRating=0;const f=(state.mealFeedback||{})[id]||{},avg=f.avgRating||0;document.getElementById('fb-name').textContent=(mealById(id)||{}).name||'';document.getElementById('fb-stars').innerHTML=[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating('+n+')" data-v="'+n+'">'+(n<=Math.round(avg)?'\u2b50':'\u2606')+'</span>').join('');document.getElementById('fb-note').value='';document.getElementById('fb-ov').classList.add('open');}
 function closeFb(){document.getElementById('fb-ov').classList.remove('open');pendingFbId=null;}
-function setRating(n){selectedRating=n;document.querySelectorAll('.star').forEach(s=>{s.textContent=parseInt(s.dataset.v)<=n?'⭐':'☆';});}
+function setRating(n){selectedRating=n;document.querySelectorAll('.star').forEach(s=>{s.textContent=parseInt(s.dataset.v)<=n?'\u2b50':'\u2606';});}
 async function saveFb(){
   if(!pendingFbId||!selectedRating)return;
-  if(!state.mealFeedback)state.mealFeedback={};
-  if(!state.quickTasks)state.quickTasks=[];
-  if(!state.quickTasks)state.quickTasks=[];
-  if(!state.lunchMeals)state.lunchMeals={};
-  if(!state.weeklyCustom)state.weeklyCustom=[];const id=pendingFbId;const note=document.getElementById('fb-note').value.trim();
+  if(!state.mealFeedback)state.mealFeedback={};const id=pendingFbId,note=document.getElementById('fb-note').value.trim();
   if(!state.mealFeedback[id])state.mealFeedback[id]={ratings:[],notes:[],avgRating:0};
   state.mealFeedback[id].ratings.push(selectedRating);
   if(note)state.mealFeedback[id].notes.push({date:todayStr(),text:note,rating:selectedRating});
   const rs=state.mealFeedback[id].ratings;state.mealFeedback[id].avgRating=rs.reduce((a,b)=>a+b,0)/rs.length;
   if(note&&cfg.anthropicKey&&selectedRating<=3)await improveRecipe(id,note,selectedRating);
-  saveLocal();sched();closeFb();renderHome();recIdxs=[];
+  saveLocal();sched();closeFb();recIdxs=[];renderHome();
 }
-async function improveRecipe(mealId,feedback,rating){
-  const meal=mealById(mealId);if(!meal)return;
+async function improveRecipe(id,fb,rating){
+  const m=mealById(id);if(!m)return;
   try{
-    const prompt='料理「'+meal.name+'」のフィードバック：「'+feedback+'」（評価：'+rating+'/5）\n改善ポイントを3つ以内でJSONのみで：{"tips":["改善1","改善2","改善3"]}';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();const text=(data.content||[])[0]?.text||'{}';
-    const r=JSON.parse(text.replace(/```json|```/g,'').trim());
-    if(r.tips&&r.tips.length){if(!state.mealFeedback[mealId].recipeTips)state.mealFeedback[mealId].recipeTips=[];state.mealFeedback[mealId].recipeTips=[...r.tips,...(state.mealFeedback[mealId].recipeTips||[])].slice(0,6);}
-  }catch(e){console.error('improve',e);}
+    const p='\u6599\u7406\u300c'+m.name+'\u300d\u306e\u30d5\u30a3\u30fc\u30c9\u30d0\u30c3\u30af\uff1a\u300c'+fb+'\u300d\uff08\u8a55\u4fa1\uff1a'+rating+'/5\uff09\u3002\u6539\u5584\u30dd\u30a4\u30f3\u30c8\u30923\u3064\u4ee5\u5185\u3067JSON\u306e\u307f\uff1a{"tips":["\u6539\u5584"]}';
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:p}]})});
+    const d=await r.json();const txt=(d.content||[])[0]?.text||'{}';const res=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    if(res.tips&&res.tips.length){if(!state.mealFeedback[id].recipeTips)state.mealFeedback[id].recipeTips=[];state.mealFeedback[id].recipeTips=res.tips.concat(state.mealFeedback[id].recipeTips).slice(0,6);}
+  }catch(e){console.error(e);}
 }
 
-// ─── カスタムメニュー ──────────────────────────────────────────
+// ===== CUSTOM MENU =====
 async function genRecipe(){
-  const name=document.getElementById('custom-name').value.trim();if(!name){alert('料理名を入力してください');return;}
-  if(!cfg.anthropicKey){alert('⚙️からClaude APIキーを設定するとAI生成が使えます');return;}
-  const btn=document.getElementById('ai-btn');btn.textContent='🔄 生成中...';btn.disabled=true;
+  const name=document.getElementById('custom-name').value.trim();if(!name){alert('\u6599\u7406\u540d\u3092\u5165\u529b');return;}
+  if(!cfg.anthropicKey){alert('\u2699\uFE0F\u304b\u3089Claude API\u30ad\u30fc\u3092\u8a2d\u5b9a\u3059\u308b\u3068AI\u751f\u6210\u304c\u4f7f\u3048\u307e\u3059');return;}
+  const btn=document.getElementById('ai-btn');btn.textContent='\U0001f504 \u751f\u6210\u4e2d';btn.disabled=true;
   try{
-    const prompt='料理名「'+name+'」のレシピをJSONのみで：\n{"emoji":"絵文字","desc":"説明20文字以内","tags":["タグ"],"time":分数,"nutr":{"cal":数値,"protein":数値,"fat":数値,"carb":数値},"ings":[{"n":"食材","a":"量"}],"steps":["手順1","手順2","手順3","手順4","手順5"]}';
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();const text=(data.content||[])[0]?.text||'{}';
-    pendingCustom={id:'c'+Date.now(),name,...JSON.parse(text.replace(/```json|```/g,'').trim()),isCustom:true};
-    showPreview(pendingCustom);
-  }catch(e){alert('AI生成失敗: '+e.message);}
-  btn.textContent='🤖 AI生成';btn.disabled=false;
+    const p='\u6599\u7406\u540d\u300c'+name+'\u300d\u306e\u30ec\u30b7\u30d4\u3092JSON\u306e\u307f\uff1a{"emoji":"\U0001f373","desc":"\u8aac\u660e","tags":["\u30bf\u30b0"],"time":20,"nutr":{"cal":400,"protein":20,"fat":12,"carb":40},"ings":[{"n":"\u98df\u6750","a":"\u91cf"}],"steps":["\u624b\u9806"]}';
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:p}]})});
+    const d=await r.json();const txt=(d.content||[])[0]?.text||'{}';
+    pendingCustom=Object.assign({id:'c'+Date.now(),name:name,isCustom:true},JSON.parse(txt.replace(/```json|```/g,'').trim()));
+    document.getElementById('preview-content').innerHTML=recipeHTML(pendingCustom,false);
+    document.getElementById('preview-ov').classList.add('open');
+  }catch(e){alert('\u751f\u6210\u5931\u6557: '+e.message);}
+  btn.textContent='\U0001f916 \u751f\u6210';btn.disabled=false;
 }
-function showPreview(meal){document.getElementById('preview-content').innerHTML=recipeHTML(meal,false);document.getElementById('preview-ov').classList.add('open');}
 function closePreview(){document.getElementById('preview-ov').classList.remove('open');}
-function saveCustom(){
-  if(!pendingCustom)return;state.customMeals=[...(state.customMeals||[]),pendingCustom];
-  saveLocal();sched();closePreview();document.getElementById('custom-name').value='';pendingCustom=null;recIdxs=[];renderMealTab('custom');
-}
-function delCustom(id){if(!confirm('削除しますか？'))return;state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);saveLocal();sched();renderMealTab('custom');recIdxs=[];}
+function saveCustom(){if(!pendingCustom)return;state.customMeals.push(pendingCustom);saveLocal();sched();closePreview();document.getElementById('custom-name').value='';pendingCustom=null;recIdxs=[];renderMealTab('custom');}
+function delCustom(id){if(!confirm('\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'))return;state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);saveLocal();sched();recIdxs=[];renderMealTab('custom');}
 
-// ─── レシピ ────────────────────────────────────────────────────
-function openRecipe(mealId){
-  const m=mealById(mealId);if(!m)return;const sel=getTodayMeal().menuId===mealId;
-  document.getElementById('recipe-content').innerHTML=recipeHTML(m,true);
-  document.getElementById('recipe-btns').innerHTML='<button class="m-btn s" onclick="closeRecipe()">閉じる</button><button class="m-btn p" onclick="selectMeal(\''+mealId+'\')">'+(sel?'✓ 選択済み':'今日のメニューにする')+'</button>';
-  document.getElementById('recipe-ov').classList.add('open');
-}
-function closeRecipe(){document.getElementById('recipe-ov').classList.remove('open');}
-function recipeHTML(m,showFb){
-  const fb=showFb?(state.mealFeedback||{})[m.id]||{}:{};const tips=fb.recipeTips||[];const notes=fb.notes||[];
-  const ingsHTML=(m.ings||[]).map(ing=>{const miss=showFb&&!fridgeHas(ing.n);return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'✓ ')+ing.n+'</span><span>'+ing.a+'</span></div>';}).join('');
-  const stepsHTML=(m.steps||[]).map((s,i)=>'<div class="step-row"><div class="step-num">'+(i+1)+'</div><div class="step-txt">'+s+'</div></div>').join('');
-  const tipsHTML=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">🤖 AIレシピ改善ヒント</h3>'+tips.map(t=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">💡 '+t+'</div>').join('')+'</div>':'';
-  const notesHTML=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">📝 あなたのメモ</h3>'+notes.slice(-3).map(n=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">★'+n.rating+'</span> <span style="color:rgba(232,245,233,0.7)">'+n.text+'</span></div>').join('')+'</div>':'';
-  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'🍽️')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・⏱ '+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?.cal||'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?.protein||'?')+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.fat||'?')+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+(m.nutr?.carb||'?')+'g</div><div class="l">糖質</div></div></div>'+(ingsHTML?'<div class="r-sec"><h3>材料</h3>'+ingsHTML+'</div>':'')+(stepsHTML?'<div class="r-sec"><h3>作り方</h3>'+stepsHTML+'</div>':'')+tipsHTML+notesHTML;
-}
-function scoreMeal(m){
-  let s=0;(m.ings||[]).forEach(ing=>{if(fridgeHas(ing.n))s+=2;});
-  const hist=Object.values(state.meals||{}).filter(v=>v.menuId===m.id);s-=hist.length*3;
-  const r=getRating(m.id);if(r>0)s+=r*2;return s;
-}
-
-
-// ─── クイックタスク ─────────────────────────────────────────
-function addQuickTask(){
-  var inp=document.getElementById('qt-input');var txt=inp.value.trim();if(!txt)return;
-  if(!state.quickTasks)state.quickTasks=[];
-  state.quickTasks.push({id:Date.now().toString(),text:txt,done:false});
-  inp.value='';saveLocal();sched();renderQuickTasks();
-}
-function doneQuickTask(id){
-  state.quickTasks=(state.quickTasks||[]).map(function(t){return t.id===id?Object.assign({},t,{done:true}):t;});
-  saveLocal();sched();renderQuickTasks();renderHome();
-}
-function deleteQuickTask(id){
-  state.quickTasks=(state.quickTasks||[]).filter(function(t){return t.id!==id;});
-  saveLocal();sched();renderQuickTasks();
-}
-function renderQuickTasks(){
-  var el=document.getElementById('qt-list');if(!el)return;el.innerHTML='';
-  var tasks=(state.quickTasks||[]).filter(function(t){return !t.done;});
-  if(!tasks.length){el.innerHTML='<div style="font-size:13px;color:var(--muted);padding:6px 2px">タスクを追加してください</div>';return;}
-  tasks.forEach(function(t){
-    var row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 15px;margin-bottom:8px';
-    row.innerHTML='<button onclick="doneQuickTask(\''+t.id+'\')" style="width:32px;height:32px;border-radius:50%;border:2px solid var(--green);background:transparent;cursor:pointer;font-size:16px;color:var(--green);flex-shrink:0">✓</button>'
-      +'<span style="flex:1;font-size:16px;color:white">'+t.text+'</span>'
-      +'<button onclick="deleteQuickTask(\''+t.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:20px;cursor:pointer;padding:4px 8px">✕</button>';
-    el.appendChild(row);
-  });
-}
-
-// ─── 昼食スロット ────────────────────────────────────────────
-var mealSlotTarget=null;
-function getLunch(){return (state.lunchMeals||{})[todayStr()]||{menuId:null,cooked:false,eaten:false};}
-function selectLunch(mealId){
-  var k=todayStr();if(!state.lunchMeals)state.lunchMeals={};
-  state.lunchMeals[k]={menuId:mealId,cooked:false,eaten:false};
-  var meal=mealById(mealId);
-  if(meal){(meal.ings||[]).forEach(function(ing){if(!fridgeHas(ing.n)&&!(state.shopMemo||[]).find(function(s){return s.text===ing.n;})){state.shopMemo=[].concat(state.shopMemo||[],[{id:'ing_'+Date.now(),text:ing.n,active:true}]);}});}
-  saveLocal();sched();renderHome();mealSlotTarget=null;closeRecipe();
-}
-function toggleLunchCooked(){
-  var k=todayStr();if(!state.lunchMeals)state.lunchMeals={};
-  if(!state.lunchMeals[k])state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};
-  state.lunchMeals[k].cooked=!state.lunchMeals[k].cooked;
-  saveLocal();sched();renderHome();
-}
-function toggleLunchEaten(){
-  var k=todayStr();if(!state.lunchMeals)state.lunchMeals={};
-  if(!state.lunchMeals[k])state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};
-  var was=state.lunchMeals[k].eaten;
-  state.lunchMeals[k].eaten=!state.lunchMeals[k].eaten;
-  saveLocal();sched();renderHome();
-  if(!was&&state.lunchMeals[k].eaten&&state.lunchMeals[k].menuId)setTimeout(function(){openFb(state.lunchMeals[k].menuId);},400);
-}
-
-// ─── カスタム週次タスク ──────────────────────────────────────
-function openWeeklyModal(){document.getElementById('weekly-modal').classList.add('open');}
-function closeWeeklyModal(){document.getElementById('weekly-modal').classList.remove('open');}
-function addWeeklyCustom(){
-  var txt=document.getElementById('wc-input').value.trim();
-  var emoji=document.getElementById('wc-emoji').value.trim()||'📌';
-  if(!txt)return;
-  if(!state.weeklyCustom)state.weeklyCustom=[];
-  state.weeklyCustom.push({id:'wc_'+Date.now(),label:txt,emoji:emoji});
-  document.getElementById('wc-input').value='';document.getElementById('wc-emoji').value='';
-  saveLocal();sched();renderWeeklySection();closeWeeklyModal();
-}
-function deleteWeeklyCustom(id){
-  state.weeklyCustom=(state.weeklyCustom||[]).filter(function(t){return t.id!==id;});
-  Object.keys(state.weeks||{}).forEach(function(k){if(state.weeks[k])delete state.weeks[k][id];});
-  saveLocal();sched();renderWeeklySection();
-}
-function renderWeeklySection(){
-  var el=document.getElementById('weekly-tasks');if(!el)return;el.innerHTML='';
-  WEEKLY.forEach(function(t){el.appendChild(mkBtn(t.e,t.l,t.s,getWeekDone(t.id),'#b08ac0',function(){toggleWeek(t.id);}));});
-  (state.weeklyCustom||[]).forEach(function(t){
-    var b=mkBtn(t.emoji,t.label,'週1回',getWeekDone(t.id),'#b08ac0',function(){toggleWeek(t.id);});
-    b.style.position='relative';
-    var del=document.createElement('button');
-    del.style.cssText='position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;color:rgba(255,80,80,0.4);font-size:18px;cursor:pointer;padding:4px';
-    del.textContent='✕';
-    del.onclick=function(e){e.stopPropagation();deleteWeeklyCustom(t.id);};
-    b.appendChild(del);el.appendChild(b);
-  });
-  var addBtn=document.createElement('button');
-  addBtn.style.cssText='width:100%;padding:14px;background:rgba(176,138,192,0.07);border:1px dashed rgba(176,138,192,0.25);border-radius:var(--radius);color:rgba(176,138,192,0.7);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px;margin-top:2px';
-  addBtn.textContent='＋ タスクを追加';addBtn.onclick=openWeeklyModal;
-  el.appendChild(addBtn);
-}
-// ─── HOME ─────────────────────────────────────────────────────
+// ===== HOME =====
 function mkBtn(icon,label,sub,done,accent,onClick){
-  const btn=document.createElement('button');btn.className='task-btn'+(done?' done':'');btn.onclick=onClick;
-  const ic=document.createElement('div');ic.className='t-icon';ic.style.background=done?(accent||'#6fcf97')+'28':'rgba(255,255,255,0.05)';ic.textContent=icon;
-  const info=document.createElement('div');info.className='t-info';
-  const lbl=document.createElement('div');lbl.className='t-lbl';lbl.textContent=label;info.appendChild(lbl);
-  if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;info.appendChild(s);}
-  const chk=document.createElement('div');chk.className='chk';
-  if(done){chk.textContent='✓';chk.style.background=accent||'#6fcf97';chk.style.border='2px solid '+(accent||'#6fcf97');}
-  btn.appendChild(ic);btn.appendChild(info);btn.appendChild(chk);return btn;
+  const b=document.createElement('button');b.className='task-btn'+(done?' done':'');b.onclick=onClick;
+  const ic=document.createElement('div');ic.className='t-icon';ic.style.background=done?accent+'28':'rgba(255,255,255,0.05)';ic.textContent=icon;
+  const inf=document.createElement('div');inf.className='t-info';
+  const l=document.createElement('div');l.className='t-lbl';l.textContent=label;inf.appendChild(l);
+  if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;inf.appendChild(s);}
+  const c=document.createElement('div');c.className='chk';if(done){c.textContent='\u2713';c.style.background=accent;c.style.border='2px solid '+accent;c.style.color='#111a14';}
+  b.appendChild(ic);b.appendChild(inf);b.appendChild(c);return b;
 }
-function renderHome(){
-  const dow=new Date().getDay();const d=new Date();
-  document.getElementById('hdr-date').textContent=d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
-  document.getElementById('hdr-day').textContent=['日','月','火','水','木','金','土'][dow]+'曜日';
-  // ゴミ
-  const tr=TRASH[dow];const sec=document.getElementById('sec-trash');const tel=document.getElementById('trash-task');
-  if(tr){sec.style.display='';tel.innerHTML='';const done=getDayDone('trash');const b=mkBtn('🗑️',tr.i+' '+tr.l,'今日のゴミ',done,tr.c,()=>toggleDay('trash'));if(done)b.style.borderColor=tr.c+'50';tel.appendChild(b);}
-  else sec.style.display='none';
-  // 掃除
-  const cl=CLEANING[dow];const ce=document.getElementById('clean-task');ce.innerHTML='';
-  const cb=mkBtn(cl.i,cl.l,cl.note||'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning'));
-  if(cl.note){cb.style.borderColor='rgba(122,184,212,0.25)';}ce.appendChild(cb);
-  // 食事（昼食・夕食）
-  var me=document.getElementById('meal-task');me.innerHTML='';
-  function renderMealSlot(slotLabel,slotIcon,slotTm,onSelectFn,onCookedFn,onEatenFn,onEatoutFn,onResetFn){
-    var wrap2=document.createElement('div');wrap2.style.cssText='margin-bottom:8px';
-    var hdr=document.createElement('div');hdr.style.cssText='font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:6px;padding-left:2px;opacity:0.7';
-    hdr.textContent=slotIcon+' '+slotLabel;wrap2.appendChild(hdr);
-    var slotMeal=slotTm.menuId?mealById(slotTm.menuId):null;
-    if(slotTm.type==='eatout'){
-      if(!slotTm.eaten){wrap2.appendChild(mkBtn(slotTm.emoji||'🍽️','外食: '+slotTm.eatOutName,'食べたらタップ',false,'#c4963a',onEatenFn));var cancelBtn=document.createElement('button');cancelBtn.style.cssText='width:100%;margin-top:6px;padding:10px;background:transparent;border:1px dashed rgba(248,113,113,0.3);border-radius:12px;color:rgba(248,113,113,0.7);font-size:13px;cursor:pointer;font-family:inherit';cancelBtn.textContent='🗑 外食記録を削除';cancelBtn.onclick=onResetFn||function(){};wrap2.appendChild(cancelBtn);}
-      else wrap2.appendChild(mkBtn(slotTm.emoji||'🍽️','外食: '+slotTm.eatOutName,'完了',true,'#6fcf97',function(){}));
-    }else if(!slotTm.menuId||!slotMeal){
-      var b1=mkBtn('🍳','メニューを選ぶ','タップして選択',false,'#6fcf97',onSelectFn);var eoBtn=document.createElement('button');eoBtn.style.cssText='width:100%;margin-top:8px;padding:13px;background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.25);border-radius:14px;color:rgba(196,150,58,0.9);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px';eoBtn.textContent='🍽️ 外食する';eoBtn.onclick=onEatoutFn;wrap2.appendChild(b1);wrap2.appendChild(eoBtn);
-    }else{
-      if(!slotTm.cooked){wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name+'を調理','',false,'#e07b54',onCookedFn));if(onResetFn){var chBtn2=document.createElement('button');chBtn2.style.cssText='width:100%;margin-top:4px;padding:8px;background:transparent;border:1px dashed rgba(255,255,255,0.12);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit';chBtn2.textContent='変更する';chBtn2.onclick=onResetFn;wrap2.appendChild(chBtn2);}}
-      else if(!slotTm.eaten)wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name+'を食べる','調理完了！',false,'#c4963a',onEatenFn));
-      else wrap2.appendChild(mkBtn(slotMeal.emoji||'🍳',slotMeal.name,'完了',true,'#6fcf97',function(){}));
-    }
-    me.appendChild(wrap2);
+function subBtn(cls,txt,onClick){const b=document.createElement('button');b.className='sub-btn '+cls;b.textContent=txt;b.onclick=onClick;return b;}
+
+function renderMealSlot(container,label,icon,slot,slotKind){
+  const wrap=document.createElement('div');wrap.style.marginBottom='10px';
+  const hd=document.createElement('div');hd.className='slot-label';hd.textContent=icon+' '+label;wrap.appendChild(hd);
+  const isLunch=slotKind==='lunch';
+  const onSelect=()=>{mealSlotTarget=slotKind;setPage('meal');mTab('rec');};
+  const onEatout=()=>{mealSlotTarget=slotKind;eoSlotTarget=slotKind;setPage('meal');mTab('eatout');};
+  const onCooked=isLunch?toggleLunchCooked:toggleDinnerCooked;
+  const onEaten=isLunch?toggleLunchEaten:toggleDinnerEaten;
+  const onReset=isLunch?resetLunch:resetDinner;
+  if(slot.type==='eatout'){
+    if(!slot.eaten)wrap.appendChild(mkBtn(slot.emoji||'\U0001f37d\uFE0F','\u5916\u98df: '+slot.eatOutName,'\u98df\u3079\u305f\u3089\u30bf\u30c3\u30d7',false,'#c4963a',onEaten));
+    else wrap.appendChild(mkBtn(slot.emoji||'\U0001f37d\uFE0F','\u5916\u98df: '+slot.eatOutName,'\u5b8c\u4e86',true,'#6fcf97',()=>{}));
+    wrap.appendChild(subBtn('sub-del','\u2715 \u5916\u98df\u8a18\u9332\u3092\u524a\u9664',onReset));
+  }else if(!slot.menuId||!mealById(slot.menuId)){
+    wrap.appendChild(mkBtn('\U0001f373','\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u3076','\u30bf\u30c3\u30d7\u3057\u3066\u9078\u629e',false,'#6fcf97',onSelect));
+    wrap.appendChild(subBtn('sub-eatout','\U0001f37d\uFE0F \u5916\u98df\u3059\u308b',onEatout));
+  }else{
+    const m=mealById(slot.menuId);
+    if(!slot.cooked){wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name+'\u3092\u8abf\u7406','',false,'#e07b54',onCooked));wrap.appendChild(subBtn('sub-change','\u5909\u66f4\u3059\u308b',onReset));}
+    else if(!slot.eaten){wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name+'\u3092\u98df\u3079\u308b','\u8abf\u7406\u5b8c\u4e86\uff01',false,'#c4963a',onEaten));wrap.appendChild(subBtn('sub-change','\u5909\u66f4\u3059\u308b',onReset));}
+    else{wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name,'\u5b8c\u4e86',true,'#6fcf97',()=>{}));wrap.appendChild(subBtn('sub-change','\U0001f504 \u30e1\u30cb\u30e5\u30fc\u3092\u5909\u66f4',onReset));}
   }
-  var lunch=getLunch();
-  renderMealSlot('昼食','🌞',lunch,
-    function(){mealSlotTarget='lunch';setPage('meal');},
-    toggleLunchCooked,toggleLunchEaten,
-    function(){mealSlotTarget='lunch';setPage('meal');mTab('eatout');},
-    resetLunch);
-  var tm=getTodayMeal();
-  if(tm.menuId&&!mealById(tm.menuId)){var k2=todayStr();if(state.meals)state.meals[k2]={menuId:null,cooked:false,eaten:false};}
-  renderMealSlot('夜ご飯','🌙',tm,
-    function(){mealSlotTarget=null;setPage('meal');},
-    toggleCooked,toggleEaten,
-    function(){mealSlotTarget=null;setPage('meal');mTab('eatout');});
-  // 毎日タスク
+  container.appendChild(wrap);
+}
+
+function renderHome(){
+  const dow=new Date().getDay(),d=new Date();
+  document.getElementById('hdr-date').textContent=d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
+  document.getElementById('hdr-day').textContent=['\u65e5','\u6708','\u706b','\u6c34','\u6728','\u91d1','\u571f'][dow]+'\u66dc\u65e5';
+  renderQuickTasks();
+  renderDrink();
+  const tr=TRASH[dow],ts=document.getElementById('sec-trash'),tt=document.getElementById('trash-task');
+  if(tr){ts.style.display='';tt.innerHTML='';tt.appendChild(mkBtn('\U0001f5d1\uFE0F',tr.i+' '+tr.l,'\u4eca\u65e5\u306e\u30b4\u30df',getDayDone('trash'),tr.c,()=>toggleDay('trash')));}else ts.style.display='none';
+  const cl=CLEANING[dow],ce=document.getElementById('clean-task');ce.innerHTML='';ce.appendChild(mkBtn(cl.i,cl.l,cl.note||'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning')));
+  const me=document.getElementById('meal-task');me.innerHTML='';
+  renderMealSlot(me,'\u663c\u98df','\U0001f31e',getLunch(),'lunch');
+  renderMealSlot(me,'\u591c\u3054\u98df','\U0001f319',getDinner(),'dinner');
   const de=document.getElementById('daily-tasks');de.innerHTML='';
   DAILY.forEach(t=>de.appendChild(mkBtn(t.e,t.l,t.s,getDayDone(t.id),'#6fcf97',()=>toggleDay(t.id))));
-  // 買い物リスト（ホーム）: 未購入の常備品 + アクティブなメモアイテム
-  const needStaples=getNeededStaples();const needMemo=getActiveShopItems();
-  const ss=document.getElementById('sec-shop');
-  if(needStaples.length>0||needMemo.length>0){
-    ss.style.display='';const chips=document.getElementById('shop-chips');chips.innerHTML='';
-    const grid=document.createElement('div');grid.className='shop-grid';
-    // 常備品チップ: タップでその常備品のチェックを外す（完了）
-    needStaples.forEach(s=>{
-      const chip=document.createElement('button');chip.className='chip chip-need';
-      chip.innerHTML='<span style="font-size:14px">📦</span><span>'+s.n+'</span><span style="font-size:11px;color:rgba(111,207,151,0.6)">✓ 完了</span>';
-      chip.onclick=()=>toggleStaple(s.id);grid.appendChild(chip);
-    });
-    // メモアイテムチップ: タップで購入済み（ホームから消えるがメモに残る）
-    needMemo.forEach(item=>{
-      const chip=document.createElement('button');chip.className='chip chip-manual';
-      chip.innerHTML='<span>'+item.text+'</span>';
-      chip.onclick=()=>buyMemoItem(item.id);grid.appendChild(chip);
-    });
-    chips.appendChild(grid);
+  const ns=getNeededStaples(),nm=getActiveMemo(),ss=document.getElementById('sec-shop');
+  if(ns.length||nm.length){
+    ss.style.display='';const ch=document.getElementById('shop-chips');ch.innerHTML='';
+    const g=document.createElement('div');g.className='chip-grid';
+    ns.forEach(s=>{const c=document.createElement('button');c.className='chip chip-need';c.innerHTML='<span style="font-size:13px">\U0001f4e6</span><span>'+s.n+'</span><span style="font-size:11px;color:rgba(111,207,151,0.6)">\u2713</span>';c.onclick=()=>toggleStaple(s.id);g.appendChild(c);});
+    nm.forEach(i=>{const c=document.createElement('button');c.className='chip chip-memo';c.innerHTML='<span>'+i.text+'</span>';c.onclick=()=>buyMemo(i.id);g.appendChild(c);});
+    ch.appendChild(g);
   }else ss.style.display='none';
-  // 週タスク
   renderWeeklySection();
-  // リング
-  const done=
-    (TRASH[dow]&&getDayDone('trash')?1:0)+
-    (getDayDone('cleaning')?1:0)+
-    ((tm.cooked&&tm.eaten)?1:0)+
-    DAILY.filter(t=>getDayDone(t.id)).length+
-    ((needStaples.length===0&&needMemo.length===0&&(getNeededStaples().length+(state.shopMemo||[]).filter(i=>i.active).length>0))?1:0)+
-    WEEKLY.filter(t=>getWeekDone(t.id)).length;
-  const shopTask=(state.shopMemo||[]).filter(i=>i.active).length>0||Object.keys(state.staplesNeeded||{}).some(id=>state.staplesNeeded[id])?1:0;
-  const total=(TRASH[dow]?1:0)+1+2+DAILY.length+shopTask+WEEKLY.length+(state.weeklyCustom||[]).length;
-  const pct=total>0?Math.round(done/total*100):0;
-  const circ=2*Math.PI*23;
+  const lunch=getLunch(),dinner=getDinner();
+  let done=(tr&&getDayDone('trash')?1:0)+(getDayDone('cleaning')?1:0)
+    +(((lunch.cooked&&lunch.eaten)||(lunch.type==='eatout'&&lunch.eaten))?1:0)
+    +(((dinner.cooked&&dinner.eaten)||(dinner.type==='eatout'&&dinner.eaten))?1:0)
+    +DAILY.filter(t=>getDayDone(t.id)).length
+    +WEEKLY.filter(t=>getWeekDone(t.id)).length
+    +(state.weeklyCustom||[]).filter(t=>getWeekDone(t.id)).length;
+  const shopTask=(ns.length||nm.length)?0:0;
+  let total=(tr?1:0)+1+2+DAILY.length+WEEKLY.length+(state.weeklyCustom||[]).length;
+  const pct=total>0?Math.round(done/total*100):0,circ=2*Math.PI*22;
   document.getElementById('ring-arc').style.strokeDashoffset=circ*(1-pct/100);
   document.getElementById('ring-pct').textContent=pct+'%';
   document.getElementById('ring-sub').textContent=done+'/'+total;
 }
+function toggleDay(id){const k=todayStr();if(!state.days[k])state.days[k]={};state.days[k][id]=!state.days[k][id];saveLocal();sched();renderHome();}
+function toggleWeek(id){const k=mondayStr();if(!state.weeks[k])state.weeks[k]={};state.weeks[k][id]=!state.weeks[k][id];saveLocal();sched();renderHome();}
 
-// ─── 水分 ─────────────────────────────────────────────────────
-function renderDrink(){
-  const el=document.getElementById('drink-widget');if(!el)return;el.innerHTML='';
-  DRINKS.forEach(d=>{
-    const amt=getTodayDrink(d.id);const pct=Math.min(100,Math.round(amt/d.goal*100));
-    const row=document.createElement('div');row.className='drink-row';
-    row.innerHTML='<div class="drink-icon">'+d.i+'</div><div class="drink-info"><div class="drink-name">'+d.n+'</div><div class="drink-pg-bg"><div class="drink-pg" style="width:'+pct+'%;background:'+d.color+'"></div></div></div><div class="drink-amt">'+(amt>=1000?(amt/1000).toFixed(1)+'L':amt+'ml')+'<br><span style="font-size:10px;color:var(--muted)">'+pct+'%</span></div><div class="drink-btns">'+d.steps.map(s=>'<button class="d-add" onclick="addDrink(\''+d.id+'\','+s+')">+'+s+'</button>').join('')+'</div>';
-    el.appendChild(row);
+// ===== WEEKLY CUSTOM =====
+function openWeeklyModal(){document.getElementById('weekly-ov').classList.add('open');}
+function closeWeeklyModal(){document.getElementById('weekly-ov').classList.remove('open');}
+function addWeeklyCustom(){const txt=document.getElementById('wc-input').value.trim(),em=document.getElementById('wc-emoji').value.trim()||'\U0001f4cc';if(!txt)return;if(!state.weeklyCustom)state.weeklyCustom=[];state.weeklyCustom.push({id:'wc'+Date.now(),label:txt,emoji:em});document.getElementById('wc-input').value='';document.getElementById('wc-emoji').value='';saveLocal();sched();closeWeeklyModal();renderHome();}
+function deleteWeeklyCustom(id){state.weeklyCustom=(state.weeklyCustom||[]).filter(t=>t.id!==id);saveLocal();sched();renderHome();}
+function renderWeeklySection(){
+  const el=document.getElementById('weekly-tasks');if(!el)return;el.innerHTML='';
+  WEEKLY.forEach(t=>el.appendChild(mkBtn(t.e,t.l,t.s,getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id))));
+  (state.weeklyCustom||[]).forEach(t=>{
+    const b=mkBtn(t.emoji,t.label,'\u90311\u56de',getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id));
+    b.style.position='relative';
+    const del=document.createElement('button');del.style.cssText='position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;color:rgba(255,80,80,0.4);font-size:18px;cursor:pointer;padding:4px';del.textContent='\u2715';del.onclick=(e)=>{e.stopPropagation();deleteWeeklyCustom(t.id);};
+    b.appendChild(del);el.appendChild(b);
   });
+  const add=document.createElement('button');add.style.cssText='width:100%;padding:14px;background:rgba(176,138,192,0.07);border:1px dashed rgba(176,138,192,0.25);border-radius:var(--radius);color:rgba(176,138,192,0.7);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px;margin-top:2px';add.textContent='\uff0b \u30bf\u30b9\u30af\u3092\u8ffd\u52a0';add.onclick=openWeeklyModal;el.appendChild(add);
 }
 
-// ─── 食事タブ ──────────────────────────────────────────────────
+// ===== MEAL TAB =====
 function renderMealTab(t){
   if(t==='rec'){
-    const all=allMeals();const ce=document.getElementById('meal-cnt');if(ce)ce.textContent=all.length;
-    if(recIdxs.length===0){const scored=all.map((m,i)=>({i,score:scoreMeal(m)})).sort((a,b)=>b.score-a.score);recIdxs=scored.slice(0,6).map(x=>x.i);}
-    const el=document.getElementById('meal-cards');if(!el)return;el.innerHTML='';const tm=getTodayMeal();
+    const a=allMeals();
+    document.getElementById('which-slot').textContent=(mealSlotTarget==='lunch'?'\U0001f31e \u663c\u98df':'\U0001f319 \u591c\u3054\u98df')+'\u306e\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u629e';
+    if(!recIdxs.length){const sc=a.map((m,i)=>({i,s:scoreMeal(m)})).sort((x,y)=>y.s-x.s);recIdxs=sc.slice(0,6).map(x=>x.i);}
+    const el=document.getElementById('meal-cards');if(!el)return;el.innerHTML='';
+    const cur=(mealSlotTarget==='lunch'?getLunch():getDinner());
     recIdxs.forEach(idx=>{
-      const m=allMeals()[idx];if(!m)return;const sel=tm.menuId===m.id;
-      const avail=(m.ings||[]).filter(ing=>fridgeHas(ing.n)).length;const stars=starStr(m.id);
-      const card=document.createElement('button');card.className='meal-card'+(sel?' sel':'');card.onclick=()=>openRecipe(m.id);
-      const tagsHTML=(m.tags||[]).map(t=>'<span class="mc-tag">'+t+'</span>').join('');
-      card.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'🍽️')+'</div><div class="mc-info"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div style="text-align:right"><div style="font-size:11px;color:var(--muted)">⏱ '+m.time+'分</div><div style="font-size:11px;color:var(--muted)">食材 '+avail+'/'+(m.ings||[]).length+'</div></div></div><div class="mc-meta"><div class="mc-tags">'+tagsHTML+'</div><div>'+stars+'</div></div><div class="mc-nutr"><div class="mc-n"><span>'+(m.nutr?.cal||'?')+'</span> kcal</div><div class="mc-n"><span>'+(m.nutr?.protein||'?')+'g</span> 蛋白質</div><div class="mc-n"><span>'+(m.nutr?.fat||'?')+'g</span> 脂質</div><div class="mc-n"><span>'+(m.nutr?.carb||'?')+'g</span> 糖質</div></div>';
-      el.appendChild(card);
+      const m=a[idx];if(!m)return;const sel=cur.menuId===m.id,avail=(m.ings||[]).filter(i=>fridgeHas(i.n)).length;
+      const r=getRating(m.id),stars=r?'<span style="font-size:12px;color:#c4963a">\u2605'+r.toFixed(1)+'</span>':'';
+      const c=document.createElement('button');c.className='meal-card'+(sel?' sel':'');c.onclick=()=>openRecipe(m.id);
+      c.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'\U0001f373')+'</div><div style="flex:1;min-width:0"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div class="mc-right"><div class="mc-meta">\u23f1 '+m.time+'\u5206</div><div class="mc-meta">\u98df\u6750 '+avail+'/'+(m.ings||[]).length+'</div>'+stars+'</div></div><div class="mc-tags">'+(m.tags||[]).map(x=>'<span class="mc-tag">'+x+'</span>').join('')+'</div><div class="mc-nutr"><div class="mc-n"><b>'+(m.nutr?m.nutr.cal:'?')+'</b> kcal</div><div class="mc-n"><b>'+(m.nutr?m.nutr.protein:'?')+'g</b> \u86cb\u767d</div><div class="mc-n"><b>'+(m.nutr?m.nutr.fat:'?')+'g</b> \u8102\u8cea</div><div class="mc-n"><b>'+(m.nutr?m.nutr.carb:'?')+'g</b> \u7cd6\u8cea</div></div>';
+      el.appendChild(c);
     });
   }else if(t==='custom'){
     const el=document.getElementById('custom-list');if(!el)return;el.innerHTML='';
-    const customs=state.customMeals||[];
-    if(customs.length===0){el.innerHTML='<div class="empty"><div class="ei">✨</div><div class="et">カスタムメニューはまだありません</div></div>';return;}
-    const lbl=document.createElement('div');lbl.className='sec-label';lbl.style.marginTop='14px';lbl.textContent='保存済みカスタムメニュー';el.appendChild(lbl);
-    customs.forEach(m=>{
-      const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';
-      row.innerHTML='<span style="font-size:26px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' ・ '+(m.time||'?')+'分・'+(m.nutr?.cal||'?')+'kcal</div></div><button class="pill-btn" onclick="openRecipe(\''+m.id+'\')">詳細</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>';
-      el.appendChild(row);
-    });
+    const cs=state.customMeals||[];
+    if(!cs.length){el.innerHTML='<div class="empty"><div class="ei">\u2728</div><div class="et">\u30ab\u30b9\u30bf\u30e0\u30e1\u30cb\u30e5\u30fc\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093</div></div>';return;}
+    cs.forEach(m=>{const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';row.innerHTML='<span style="font-size:26px">'+(m.emoji||'\U0001f373')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' \u30fb '+(m.time||'?')+'\u5206</div></div><button class="pill" onclick="openRecipe(\''+m.id+'\')">\u8a73\u7d30</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">\u2715</button>';el.appendChild(row);});
   }else if(t==='eatout')renderEatOut();
-  else if(t==='today'){
-    const el=document.getElementById('today-detail');if(!el)return;el.innerHTML='';
-    const tm=getTodayMeal();
-    if(tm.type==='eatout'){el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:16px"><div style="font-size:12px;color:var(--gold);margin-bottom:6px">📍 今日の外食</div><div style="font-size:16px;font-weight:600;color:white">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';}
-    else if(!tm.menuId){el.innerHTML='<div class="empty"><div class="ei">🍳</div><div class="et">おすすめからメニューを選んでください</div></div>';}
-    else{
-      const m=mealById(tm.menuId);
-      if(!m){el.innerHTML='<div class="empty"><div class="ei">🔄</div><div class="et">再度メニューを選んでください</div></div>';return;}
-      el.innerHTML='<div class="r-header"><div class="r-emoji">'+m.emoji+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+'・'+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+m.nutr.cal+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+m.nutr.protein+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+m.nutr.fat+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+m.nutr.carb+'g</div><div class="l">糖質</div></div></div>';
-      const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:10px;margin-bottom:16px';
-      [['toggleCooked','🍳','調理した',tm.cooked],['toggleEaten','😋','食べた',tm.eaten]].forEach(([fn,ic,lb,done])=>{const b=mkBtn(ic,lb,'',done,'#6fcf97',window[fn]);b.style.flex='1';wrap.appendChild(b);});
-      el.appendChild(wrap);
-    }
-  }else if(t==='nutr')renderNutr();
+  else if(t==='nutr')renderNutr();
 }
-function shuffleRec(){const all=allMeals();const idxs=all.map((_,i)=>i);for(let i=idxs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idxs[i],idxs[j]]=[idxs[j],idxs[i]];}recIdxs=idxs.slice(0,6);renderMealTab('rec');}
 function renderEatOut(){
-  const tm=getTodayMeal();const el=document.getElementById('eo-today');if(!el)return;el.innerHTML='';
-  if(tm.type==='eatout')el.innerHTML='<div style="background:rgba(196,150,58,0.08);border:1px solid rgba(196,150,58,0.2);border-radius:14px;padding:14px;margin-bottom:14px"><div style="font-size:12px;color:var(--gold);margin-bottom:4px">📍 今日の外食</div><div style="font-size:15px;font-weight:600;color:white">'+(tm.emoji||'🍽️')+' '+tm.eatOutName+'</div></div>';
-  const cb=document.getElementById('cuisine-btns');if(!cb)return;cb.innerHTML='';
-  CUISINES.forEach(c=>{const b=document.createElement('button');b.className='cu-btn'+(selectedCuisine===c.e?' on':'');b.textContent=c.e+' '+c.l;b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('.cu-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};cb.appendChild(b);});
+  eoSlot(eoSlotTarget);
+  const cb=document.getElementById('cuisine-btns');if(cb){cb.innerHTML='';CUISINES.forEach(c=>{const b=document.createElement('button');b.className='cu-btn'+(selectedCuisine===c.e?' on':'');b.textContent=c.e+' '+c.l;b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('.cu-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};cb.appendChild(b);});}
   const hi=document.getElementById('eo-hist');if(!hi)return;hi.innerHTML='';
-  const eos=Object.entries(state.meals||{}).filter(([,v])=>v.type==='eatout').sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10);
-  if(!eos.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">外食の記録がありません</div></div>';return;}
-  eos.forEach(([date,m])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+date+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+( m.eaten?'✅':'⬜')+'</span>';hi.appendChild(row);});
+  const all=[];Object.entries(state.meals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'\u591c']);});Object.entries(state.lunchMeals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'\u663c']);});
+  all.sort((a,b)=>b[0].localeCompare(a[0]));
+  if(!all.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">\u5916\u98df\u306e\u8a18\u9332\u304c\u3042\u308a\u307e\u305b\u3093</div></div>';return;}
+  all.slice(0,10).forEach(([d,m,slot])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'\U0001f37d\uFE0F')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+d+' \u30fb '+slot+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+(m.eaten?'\u2705':'\u2b1c')+'</span>';hi.appendChild(row);});
 }
 function renderNutr(){
   const el=document.getElementById('nutr-detail');if(!el)return;el.innerHTML='';
-  const wm=Array.from({length:7},(_,i)=>{const k=daysAgo(i);const m=(state.meals||{})[k];if(!rec||!rec.menuId)return null;const mx=mealById(rec.menuId);return(mx&&mx.nutr)?mx:null;}).filter(Boolean);
-  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">食事の記録がまだありません</div></div>';return;}
+  const wm=[];for(let i=0;i<7;i++){const k=daysAgo(i);[state.meals,state.lunchMeals].forEach(src=>{const rec=(src||{})[k];if(rec&&rec.menuId){const m=mealById(rec.menuId);if(m&&m.nutr)wm.push(m);}});}
+  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">\U0001f4ca</div><div class="et">\u307e\u3060\u98df\u4e8b\u306e\u8a18\u9332\u304c\u3042\u308a\u307e\u305b\u3093<br>\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u3093\u3067\u300c\u98df\u3079\u305f\u300d\u3092\u62bc\u3059\u3068\u8a18\u9332\u3055\u308c\u307e\u3059</div></div>';return;}
   const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});const n=wm.length;
-  el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1;const p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+m.emoji+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
+  el.innerHTML='<div class="sec-label">\u904e\u53bb7\u65e5\u306e\u5e73\u5747\uff08'+n+'\u98df\u5206\uff09</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">\u86cb\u767d\u8cea</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">\u8102\u8cea</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">\u7cd6\u8cea</div></div></div>'+[['\u86cb\u767d\u8cea','#6fcf97',avg.protein/n*4],['\u8102\u8cea','#c4963a',avg.fat/n*9],['\u7cd6\u8cea','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1,p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">\u4eca\u9031\u306e\u98df\u4e8b</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+(m.emoji||'\U0001f373')+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
 }
 
-// ─── 在庫 ──────────────────────────────────────────────────────
-function renderStockPage(){renderStockTab(curStockTab);}
+// ===== STOCK =====
+function addFridge(){const name=document.getElementById('fi-name').value.trim(),amt=document.getElementById('fi-amt').value.trim();if(!name)return;state.fridge.push({id:Date.now().toString(),name:name,amt:amt||'\u9069\u91cf'});document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';saveLocal();sched();renderStockTab('fridge');}
+function delFridge(id){state.fridge=(state.fridge||[]).filter(f=>f.id!==id);saveLocal();sched();renderStockTab('fridge');}
+function toggleStaple(id){
+  if(!state.staplesNeeded)state.staplesNeeded={};state.staplesNeeded[id]=!state.staplesNeeded[id];
+  if(!state.staplesNeeded[id]){const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};state.boughtToday[k]['st_'+id]=true;}
+  else{const k=todayStr();if(state.boughtToday[k])delete state.boughtToday[k]['st_'+id];}
+  saveLocal();sched();renderHome();renderStockTab('staples');renderShopTab(curShopTab);
+}
 function renderStockTab(t){
   if(t==='fridge'){
     const el=document.getElementById('fridge-list');if(!el)return;el.innerHTML='';
-    const items=state.fridge||[];
-    if(!items.length){el.innerHTML='<div class="empty"><div class="ei">🧊</div><div class="et">食材を追加してください</div></div>';return;}
-    items.forEach(f=>{const row=document.createElement('div');row.className='fi-row';row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">✕</button>';el.appendChild(row);});
+    if(!(state.fridge||[]).length){el.innerHTML='<div class="empty"><div class="ei">\U0001f9ca</div><div class="et">\u98df\u6750\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</div></div>';return;}
+    state.fridge.forEach(f=>{const row=document.createElement('div');row.className='fi-row';row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">\u2715</button>';el.appendChild(row);});
   }else{
     const el=document.getElementById('staples-list');if(!el)return;el.innerHTML='';
-    const cats=[...new Set(STAPLES.map(s=>s.c))];
-    cats.forEach(cat=>{
-      const hdr=document.createElement('div');hdr.className='staple-cat';hdr.textContent=cat;el.appendChild(hdr);
-      STAPLES.filter(s=>s.c===cat).forEach(master=>{
-        const needed=isStapleNeeded(master.id);
-        const row=document.createElement('div');row.className='staple-row'+(needed?' needed':'');row.onclick=()=>toggleStaple(master.id);
-        row.innerHTML='<div class="staple-chk">'+(needed?'✓':'')+'</div><span class="staple-name">'+master.n+'</span>'+(needed?'<span class="need-badge">買い物リストに追加中</span>':'');
+    [...new Set(STAPLES.map(s=>s.c))].forEach(cat=>{
+      const h=document.createElement('div');h.className='staple-cat';h.textContent=cat;el.appendChild(h);
+      STAPLES.filter(s=>s.c===cat).forEach(m=>{
+        const need=isStapleNeeded(m.id);const row=document.createElement('div');row.className='staple-row'+(need?' on':'');row.onclick=()=>toggleStaple(m.id);
+        row.innerHTML='<div class="staple-chk">'+(need?'\u2713':'')+'</div><span class="staple-name">'+m.n+'</span>'+(need?'<span class="need-badge">\u8cb7\u3046</span>':'');
         el.appendChild(row);
       });
     });
   }
 }
 
-// ─── 買い物 ────────────────────────────────────────────────────
-function renderShopPage(){renderShopTab(curShopTab);}
+// ===== SHOP =====
+function buyStaple(id){const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};state.boughtToday[k]['st_'+id]=true;if(state.staplesNeeded)state.staplesNeeded[id]=false;saveLocal();sched();renderHome();renderShopTab(curShopTab);}
+function buyMemo(id){const k=todayStr();if(!state.boughtToday[k])state.boughtToday[k]={};state.boughtToday[k][id]=true;saveLocal();sched();renderHome();renderShopTab(curShopTab);}
+function addMemo(){const inp=document.getElementById('new-item'),txt=inp.value.trim();if(!txt)return;state.shopMemo.push({id:'m'+Date.now(),text:txt,active:true});inp.value='';saveLocal();sched();renderHome();renderShopTab(curShopTab);}
+function toggleMemoActive(id){state.shopMemo=(state.shopMemo||[]).map(i=>i.id===id?Object.assign({},i,{active:!i.active}):i);saveLocal();sched();renderHome();renderShopTab(curShopTab);}
+function deleteMemo(id){state.shopMemo=(state.shopMemo||[]).filter(i=>i.id!==id);saveLocal();sched();renderHome();renderShopTab(curShopTab);}
 function renderShopTab(t){
   if(t==='today'){
     const el=document.getElementById('sh-today-content');if(!el)return;el.innerHTML='';
-    const staples=getNeededStaples();const memo=getActiveShopItems();
-    if(!staples.length&&!memo.length){
-      el.innerHTML='<div class="empty"><div class="ei">✅</div><div class="et">今日の買い物リストは空です</div></div>';return;
-    }
-    if(staples.length){
-      const lbl=document.createElement('div');lbl.className='shop-cat-lbl';lbl.textContent='📦 常備品（在庫ページでチェック管理）';el.appendChild(lbl);
-      staples.forEach(s=>{
-        const row=document.createElement('div');row.className='shop-item active';
-        row.innerHTML='<span class="shop-item-name">'+s.n+'</span><button onclick="toggleStaple(\''+s.id+'\')" style="background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:12px;padding:8px 14px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">✓ 購入完了</button>';
-        el.appendChild(row);
-      });
-    }
-    if(memo.length){
-      const lbl=document.createElement('div');lbl.className='shop-cat-lbl';lbl.textContent='📝 メモリスト';el.appendChild(lbl);
-      memo.forEach(item=>{
-        const row=document.createElement('div');row.className='shop-item active';
-        row.innerHTML='<span class="shop-item-name">'+item.text+'</span><button onclick="buyMemoItem(\''+item.id+'\')" style="background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.2);border-radius:12px;padding:8px 14px;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">✓ 購入完了</button>';
-        el.appendChild(row);
-      });
-    }
+    const st=getNeededStaples(),mm=getActiveMemo();
+    if(!st.length&&!mm.length){el.innerHTML='<div class="empty"><div class="ei">\u2705</div><div class="et">\u4eca\u65e5\u306e\u8cb7\u3044\u7269\u30ea\u30b9\u30c8\u306f\u7a7a\u3067\u3059</div></div>';return;}
+    if(st.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='\U0001f4e6 \u5e38\u5099\u54c1';el.appendChild(l);st.forEach(s=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+s.n+'</span><button class="buy-btn" onclick="buyStaple(\''+s.id+'\')">\u2713 \u8cfc\u5165\u5b8c\u4e86</button>';el.appendChild(row);});}
+    if(mm.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='\U0001f4dd \u30e1\u30e2\u30ea\u30b9\u30c8';el.appendChild(l);mm.forEach(i=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+i.text+'</span><button class="buy-btn" onclick="buyMemo(\''+i.id+'\')">\u2713 \u8cfc\u5165\u5b8c\u4e86</button>';el.appendChild(row);});}
   }else{
-    // メモリスト管理
     const el=document.getElementById('manage-list');if(!el)return;el.innerHTML='';
-    const all=state.shopMemo||[];
-    if(!all.length){el.innerHTML='<div class="empty"><div class="ei">📝</div><div class="et">メモを追加してください</div></div>';return;}
-    all.forEach(item=>{
-      const bought=isBoughtToday(item.id);
-      const row=document.createElement('div');row.className='shop-item'+(item.active?' active':'');
-      row.innerHTML='<button class="big-chk'+(item.active?' on':'')+'" onclick="toggleMemoActive(\''+item.id+'\')">'+(item.active?'✓':'')+'</button><span class="shop-item-name"'+(bought?' style="text-decoration:line-through;color:var(--muted)"':'')+'>'+item.text+'</span>'+(bought?'<span style="font-size:11px;color:var(--green)">購入済</span>':'')+'<button class="del-btn" onclick="deleteMemo(\''+item.id+'\')">✕</button>';
-      el.appendChild(row);
-    });
+    if(!(state.shopMemo||[]).length){el.innerHTML='<div class="empty"><div class="ei">\U0001f4dd</div><div class="et">\u30e1\u30e2\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</div></div>';return;}
+    state.shopMemo.forEach(i=>{const bt=isBoughtToday(i.id);const row=document.createElement('div');row.className='shop-item'+(i.active?' on':'');row.innerHTML='<button class="big-chk'+(i.active?' on':'')+'" onclick="toggleMemoActive(\''+i.id+'\')">'+(i.active?'\u2713':'')+'</button><span class="shop-name"'+(bt?' style="text-decoration:line-through;color:var(--muted)"':'')+'>'+i.text+'</span>'+(bt?'<span style="font-size:11px;color:var(--green)">\u8cfc\u5165\u6e08</span>':'')+'<button class="del-btn" onclick="deleteMemo(\''+i.id+'\')">\u2715</button>';el.appendChild(row);});
   }
 }
 
-// ─── 記録 ──────────────────────────────────────────────────────
+// ===== HIST =====
 function renderHist(){
-  const dow=new Date().getDay();const tr=TRASH[dow];const tm=getTodayMeal();
-  const todayDone=HIDS.filter(id=>{
-    if(id==='carwash'||id==='bedding')return getWeekDone(id);
-    if(id==='trash')return tr&&getDayDone('trash');
-    if(id==='meal')return tm.cooked&&tm.eaten;
-    return getDayDone(id);
-  }).length;
-  let streak=0;for(let i=1;i<=60;i++){const k=daysAgo(i);const d=(state.days||{})[k];if(d&&HIDS.some(id=>d[id]))streak++;else break;}
-  const recDays=Object.keys(state.days||{}).filter(k=>{const d=(state.days||{})[k];return d&&HIDS.some(id=>d[id]);}).length;
-  document.getElementById('st-streak').textContent='🔥 '+streak;
-  document.getElementById('st-today-cnt').textContent='✅ '+todayDone;
-  document.getElementById('st-days').textContent='📅 '+recDays;
+  const dow=new Date().getDay(),tr=TRASH[dow],lunch=getLunch(),dinner=getDinner();
+  const td=HIDS.filter(id=>{if(id==='carwash'||id==='bedding')return getWeekDone(id);if(id==='trash')return tr&&getDayDone('trash');if(id==='meal')return (dinner.cooked&&dinner.eaten)||(dinner.type==='eatout'&&dinner.eaten);return getDayDone(id);}).length;
+  let streak=0;for(let i=1;i<=60;i++){const k=daysAgo(i),dd=(state.days||{})[k];if(dd&&HIDS.some(id=>dd[id]))streak++;else break;}
+  const rd=Object.keys(state.days||{}).filter(k=>{const dd=(state.days||{})[k];return dd&&HIDS.some(id=>dd[id]);}).length;
+  document.getElementById('st-streak').textContent='\U0001f525 '+streak;
+  document.getElementById('st-tcnt').textContent='\u2705 '+td;
+  document.getElementById('st-days').textContent='\U0001f4c5 '+rd;
   const labels=[],data=[],colors=[];
-  for(let i=13;i>=1;i--){const k=daysAgo(i);const d=(state.days||{})[k]||{};const cnt=HIDS.filter(id=>d[id]).length;const dt=new Date();dt.setDate(dt.getDate()-i);labels.push((dt.getMonth()+1)+'/'+(dt.getDate()));data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');}
+  for(let i=13;i>=1;i--){const k=daysAgo(i),dd=(state.days||{})[k]||{},cnt=HIDS.filter(id=>dd[id]).length,dt=new Date();dt.setDate(dt.getDate()-i);labels.push((dt.getMonth()+1)+'/'+dt.getDate());data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');}
   if(histChart)histChart.destroy();
-  const ctx=document.getElementById('hist-chart').getContext('2d');
-  histChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' タスク完了'},backgroundColor:'#1a2b1e',titleColor:'rgba(255,255,255,0.6)',bodyColor:'#6fcf97',borderColor:'rgba(111,207,151,0.2)',borderWidth:1}},scales:{x:{grid:{display:false},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},stepSize:1},beginAtZero:true}}}});
+  histChart=new Chart(document.getElementById('hist-chart').getContext('2d'),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'rgba(255,255,255,0.35)',font:{size:10},stepSize:1},beginAtZero:true}}}});
   const dwd=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]&&HIDS.some(id=>(state.days||{})[k][id])).length;
   const el=document.getElementById('task-stats');if(!el)return;el.innerHTML='';
-  HIDS.map(id=>{const done=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]?.[id]).length;const pct=dwd>0?Math.round(done/dwd*100):0;return{id,label:TLABELS[id],pct};}).sort((a,b)=>b.pct-a.pct).forEach(({label,pct})=>{const color=pct>=70?'#6fcf97':pct>=40?'#3a8f6a':'#1e5a42';const row=document.createElement('div');row.className='ts-item';row.innerHTML='<div class="ts-lbl">'+label+'</div><div class="ts-bg"><div class="ts-bar" style="width:'+pct+'%;background:'+color+'"></div></div><div class="ts-pct" style="color:'+color+'">'+pct+'%</div>';el.appendChild(row);});
+  HIDS.map(id=>{const done=Array.from({length:30},(_,i)=>daysAgo(i+1)).filter(k=>(state.days||{})[k]&&(state.days||{})[k][id]).length;return{id,label:TLABELS[id],pct:dwd>0?Math.round(done/dwd*100):0};}).sort((a,b)=>b.pct-a.pct).forEach(({label,pct})=>{const c=pct>=70?'#6fcf97':pct>=40?'#3a8f6a':'#1e5a42';const row=document.createElement('div');row.className='ts-item';row.innerHTML='<div class="ts-lbl">'+label+'</div><div class="ts-bg"><div class="ts-bar" style="width:'+pct+'%;background:'+c+'"></div></div><div class="ts-pct" style="color:'+c+'">'+pct+'%</div>';el.appendChild(row);});
 }
 
-// ─── 全体 ──────────────────────────────────────────────────────
-
-function resetMeal(){var k=todayStr();if(state.meals)state.meals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
-function resetLunch(){var k=todayStr();if(state.lunchMeals)state.lunchMeals[k]={menuId:null,cooked:false,eaten:false};saveLocal();sched();renderHome();}
-function renderAll(){renderHome();renderDrink();renderQuickTasks();renderShopTab(curShopTab);renderMealTab(curMealTab);renderStockPage();}
+function renderAll(){renderHome();renderMealTab(curMealTab);renderStockTab(curStockTab);renderShopTab(curShopTab);}
 loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
-
-// ===== QUICK TASKS (fixed) =====
-window.addQuickTask=function(){
-  var inp=document.getElementById('qt-input');
-  if(!inp)return;
-  var txt=inp.value.trim();
-  if(!txt)return;
-  if(!state.quickTasks)state.quickTasks=[];
-  state.quickTasks.push({id:''+Date.now(),text:txt,done:false});
-  inp.value='';
-  saveLocal();sched();renderQuickTasks();
-};
-window.doneQuickTask=function(id){
-  if(!state.quickTasks)return;
-  state.quickTasks=state.quickTasks.map(function(t){
-    return t.id===id?{id:t.id,text:t.text,done:true}:t;
-  });
-  saveLocal();sched();renderQuickTasks();
-};
-window.deleteQuickTask=function(id){
-  if(!state.quickTasks)return;
-  state.quickTasks=state.quickTasks.filter(function(t){return t.id!==id;});
-  saveLocal();sched();renderQuickTasks();
-};
-window.renderQuickTasks=function(){
-  var el=document.getElementById('qt-list');
-  if(!el)return;
-  el.innerHTML='';
-  var tasks=(state.quickTasks||[]).filter(function(t){return !t.done;});
-  if(!tasks.length){
-    el.innerHTML='<p style="font-size:13px;color:rgba(232,245,233,0.4);padding:4px 0">'
-      +'タスクを追加してください</p>';
-    return;
-  }
-  tasks.forEach(function(t){
-    var d=document.createElement('div');
-    d.style.cssText='display:flex;align-items:center;gap:10px;'
-      +'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);'
-      +'border-radius:14px;padding:14px;margin-bottom:8px;';
-    var done=document.createElement('button');
-    done.style.cssText='flex-shrink:0;min-width:70px;height:42px;border-radius:12px;'
-      +'border:2px solid #6fcf97;background:rgba(111,207,151,0.1);'
-      +'color:#6fcf97;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;';
-    done.textContent='✓ 完了';
-    done.onclick=(function(id){return function(){window.doneQuickTask(id);};})(t.id);
-    var span=document.createElement('span');
-    span.style.cssText='flex:1;font-size:16px;color:white;';
-    span.textContent=t.text;
-    var del=document.createElement('button');
-    del.style.cssText='flex-shrink:0;background:none;border:none;'
-      +'color:rgba(255,80,80,0.5);font-size:22px;cursor:pointer;padding:2px 6px;';
-    del.textContent='✕';
-    del.onclick=(function(id){return function(){window.deleteQuickTask(id);};})(t.id);
-    d.appendChild(done);d.appendChild(span);d.appendChild(del);
-    el.appendChild(d);
-  });
-};
-// ===== END QUICK TASKS =====
-
-window.resetEatOut=function(){
-  var k=todayStr();
-  if(state.meals&&state.meals[k])
-    state.meals[k]={menuId:null,cooked:false,eaten:false,type:null};
-  saveLocal();sched();renderHome();
-};
-window.resetLunchEatOut=function(){
-  var k=todayStr();
-  if(state.lunchMeals&&state.lunchMeals[k])
-    state.lunchMeals[k]={menuId:null,cooked:false,eaten:false,type:null};
-  saveLocal();sched();renderHome();
-};
 </script>
 </body>
 </html>
