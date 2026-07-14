@@ -181,57 +181,57 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
   </div>
 
   <div class="sec">
-    <div class="sec-label">&#9889; \u3059\u3050\u3084\u308b\u30bf\u30b9\u30af</div>
+    <div class="sec-label">&#9889; すぐやるタスク</div>
     <div class="inrow">
-      <input type="text" id="qt-input" class="inp" placeholder="\u30bf\u30b9\u30af\u3092\u5165\u529b..." onkeydown="if(event.key==='Enter')addQuickTask()">
-      <button class="add-btn" onclick="addQuickTask()">\u8ffd\u52a0</button>
+      <input type="text" id="qt-input" class="inp" placeholder="タスクを入力..." onkeydown="if(event.key==='Enter')addQuickTask()">
+      <button class="add-btn" onclick="addQuickTask()">追加</button>
     </div>
     <div id="qt-list"></div>
   </div>
 
-  <div class="sec"><div class="sec-label">&#128167; \u4eca\u65e5\u306e\u6c34\u5206</div><div id="drink-widget"></div></div>
-  <div class="sec" id="sec-trash" style="display:none"><div class="sec-label">&#128465; \u30b4\u30df\u6368\u3066</div><div id="trash-task"></div></div>
-  <div class="sec"><div class="sec-label">&#129529; \u4eca\u65e5\u306e\u63b2\u9664</div><div id="clean-task"></div></div>
-  <div class="sec"><div class="sec-label">&#127859; \u4eca\u65e5\u306e\u98df\u4e8b</div><div id="meal-task"></div></div>
-  <div class="sec"><div class="sec-label">&#128203; \u6bce\u65e5\u30bf\u30b9\u30af</div><div id="daily-tasks"></div></div>
-  <div class="sec" id="sec-shop" style="display:none"><div class="sec-label">&#128722; \u8cb7\u3044\u7269\u30ea\u30b9\u30c8</div><div id="shop-chips"></div></div>
-  <div class="sec"><div class="sec-label">&#128197; \u4eca\u9031\u306e\u30bf\u30b9\u30af</div><div id="weekly-tasks"></div></div>
+  <div class="sec"><div class="sec-label">&#128167; 今日の水分</div><div id="drink-widget"></div></div>
+  <div class="sec" id="sec-trash" style="display:none"><div class="sec-label">&#128465; ゴミ捨て</div><div id="trash-task"></div></div>
+  <div class="sec"><div class="sec-label">&#129529; 今日の掲除</div><div id="clean-task"></div></div>
+  <div class="sec"><div class="sec-label">&#127859; 今日の食事</div><div id="meal-task"></div></div>
+  <div class="sec"><div class="sec-label">&#128203; 毎日タスク</div><div id="daily-tasks"></div></div>
+  <div class="sec" id="sec-shop" style="display:none"><div class="sec-label">&#128722; 買い物リスト</div><div id="shop-chips"></div></div>
+  <div class="sec"><div class="sec-label">&#128197; 今週のタスク</div><div id="weekly-tasks"></div></div>
   <div style="height:20px"></div>
 </div>
 
 <!-- MEAL -->
 <div id="pg-meal" class="page">
-  <div class="header"><div class="h-title">&#127859; \u98df\u4e8b\u7ba1\u7406</div></div>
+  <div class="header"><div class="h-title">&#127859; 食事管理</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="mt-rec" onclick="mTab('rec')">\u304a\u3059\u3059\u3081</button>
-    <button class="tab-btn" id="mt-custom" onclick="mTab('custom')">\u2795 \u8ffd\u52a0</button>
-    <button class="tab-btn" id="mt-eatout" onclick="mTab('eatout')">&#127853; \u5916\u98df</button>
-    <button class="tab-btn" id="mt-nutr" onclick="mTab('nutr')">\u6804\u990a</button>
+    <button class="tab-btn on" id="mt-rec" onclick="mTab('rec')">おすすめ</button>
+    <button class="tab-btn" id="mt-custom" onclick="mTab('custom')">➕ 追加</button>
+    <button class="tab-btn" id="mt-eatout" onclick="mTab('eatout')">&#127853; 外食</button>
+    <button class="tab-btn" id="mt-nutr" onclick="mTab('nutr')">栄養</button>
   </div>
   <div id="mv-rec">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <span style="font-size:13px;color:var(--muted)" id="which-slot"></span>
-      <button class="pill" onclick="shuffleRec()">\U0001f500 \u30b7\u30e3\u30c3\u30d5\u30eb</button>
+      <button class="pill" onclick="shuffleRec()">🔀 シャッフル</button>
     </div>
     <div id="meal-cards"></div>
   </div>
   <div id="mv-custom" style="display:none">
-    <p class="hint">\u6599\u7406\u540d\u3092\u5165\u529b\u3057\u3066AI\u3067\u30ec\u30b7\u30d4\u751f\u6210\uff08\u2699\uFE0F\u3067API\u30ad\u30fc\u8a2d\u5b9a\uff09</p>
-    <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="\u6599\u7406\u540d..."><button class="add-btn" id="ai-btn" onclick="genRecipe()">\U0001f916 \u751f\u6210</button></div>
+    <p class="hint">料理名を入力してAIでレシピ生成（⚙️でAPIキー設定）</p>
+    <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="料理名..."><button class="add-btn" id="ai-btn" onclick="genRecipe()">🤖 生成</button></div>
     <div id="custom-list"></div>
   </div>
   <div id="mv-eatout" style="display:none">
     <div id="eo-today"></div>
-    <div class="sec-label">\u3069\u3061\u3089\u306e\u98df\u4e8b\uff1f</div>
+    <div class="sec-label">どちらの食事？</div>
     <div class="inrow" style="gap:6px">
-      <button class="tab-btn" id="eoslot-lunch" onclick="eoSlot('lunch')">\U0001f31e \u663c\u98df</button>
-      <button class="tab-btn on" id="eoslot-dinner" onclick="eoSlot('dinner')">\U0001f319 \u591c\u3054\u98df</button>
+      <button class="tab-btn" id="eoslot-lunch" onclick="eoSlot('lunch')">🌞 昼食</button>
+      <button class="tab-btn on" id="eoslot-dinner" onclick="eoSlot('dinner')">🌙 夜ご食</button>
     </div>
-    <div class="sec-label">\u30b8\u30e3\u30f3\u30eb</div>
+    <div class="sec-label">ジャンル</div>
     <div class="cuisine-btns" id="cuisine-btns"></div>
-    <div class="inrow"><input type="text" id="eo-rest" class="inp" placeholder="\u5e97\u540d\uff08\u4efb\u610f\uff09"></div>
-    <div class="inrow"><input type="text" id="eo-dish" class="inp" placeholder="\u6599\u7406\u30fb\u6ce8\u6587\u5185\u5bb9"><button class="add-btn" onclick="logEatOut()">\u8a18\u9332</button></div>
-    <div class="sec-label" style="margin-top:4px">\u5916\u98df\u5c65\u6b74</div>
+    <div class="inrow"><input type="text" id="eo-rest" class="inp" placeholder="店名（任意）"></div>
+    <div class="inrow"><input type="text" id="eo-dish" class="inp" placeholder="料理・注文内容"><button class="add-btn" onclick="logEatOut()">記録</button></div>
+    <div class="sec-label" style="margin-top:4px">外食履歴</div>
     <div id="eo-hist"></div>
   </div>
   <div id="mv-nutr" style="display:none"><div id="nutr-detail"></div></div>
@@ -240,17 +240,17 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
 
 <!-- STOCK -->
 <div id="pg-stock" class="page">
-  <div class="header"><div class="h-title">&#128230; \u5728\u5eab\u7ba1\u7406</div></div>
+  <div class="header"><div class="h-title">&#128230; 在庫管理</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="st-fridge" onclick="sTab('fridge')">&#129482; \u51b7\u8535\u5eab</button>
-    <button class="tab-btn" id="st-staples" onclick="sTab('staples')">&#128230; \u5e38\u5099\u54c1</button>
+    <button class="tab-btn on" id="st-fridge" onclick="sTab('fridge')">&#129482; 冷蔵庫</button>
+    <button class="tab-btn" id="st-staples" onclick="sTab('staples')">&#128230; 常備品</button>
   </div>
   <div id="sv-fridge">
-    <div class="inrow"><input type="text" id="fi-name" class="inp" placeholder="\u98df\u6750\u540d" style="flex:2"><input type="text" id="fi-amt" class="inp" placeholder="\u91cf" style="flex:1;min-width:60px"><button class="add-btn" onclick="addFridge()">\u8ffd\u52a0</button></div>
+    <div class="inrow"><input type="text" id="fi-name" class="inp" placeholder="食材名" style="flex:2"><input type="text" id="fi-amt" class="inp" placeholder="量" style="flex:1;min-width:60px"><button class="add-btn" onclick="addFridge()">追加</button></div>
     <div id="fridge-list"></div>
   </div>
   <div id="sv-staples" style="display:none">
-    <p class="hint">\u2705 \u30c1\u30a7\u30c3\u30af\u3067\u8cb7\u3044\u7269\u30ea\u30b9\u30c8\u306b\u8ffd\u52a0\u3001\u3082\u3046\u4e00\u5ea6\u30c1\u30a7\u30c3\u30af\u3067\u524a\u9664\uff08\u5b8c\u4e86\uff09</p>
+    <p class="hint">✅ チェックで買い物リストに追加、もう一度チェックで削除（完了）</p>
     <div id="staples-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -258,15 +258,15 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
 
 <!-- SHOP -->
 <div id="pg-shop" class="page">
-  <div class="header"><div class="h-title">&#128722; \u8cb7\u3044\u7269\u30ea\u30b9\u30c8</div></div>
+  <div class="header"><div class="h-title">&#128722; 買い物リスト</div></div>
   <div class="tab-row">
-    <button class="tab-btn on" id="sh-today" onclick="shTab('today')">\u2705 \u4eca\u65e5\u8cb7\u3046\u3082\u306e</button>
-    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">\U0001f4dd \u30e1\u30e2\u30ea\u30b9\u30c8</button>
+    <button class="tab-btn on" id="sh-today" onclick="shTab('today')">✅ 今日買うもの</button>
+    <button class="tab-btn" id="sh-manage" onclick="shTab('manage')">📝 メモリスト</button>
   </div>
   <div id="shv-today"><div id="sh-today-content"></div></div>
   <div id="shv-manage" style="display:none">
-    <p class="hint">\u3044\u3064\u3067\u3082\u4f7f\u3048\u308b\u30e1\u30e2\u3002\u30c1\u30a7\u30c3\u30af\u3067\u4eca\u65e5\u306e\u30ea\u30b9\u30c8\u306b\u51fa\u3059\u30fb\u5916\u3059\u3002</p>
-    <div class="inrow"><input type="text" id="new-item" class="inp" placeholder="\u30a2\u30a4\u30c6\u30e0\u3092\u8ffd\u52a0..." onkeydown="if(event.key==='Enter')addMemo()"><button class="add-btn" onclick="addMemo()">\u8ffd\u52a0</button></div>
+    <p class="hint">いつでも使えるメモ。チェックで今日のリストに出す・外す。</p>
+    <div class="inrow"><input type="text" id="new-item" class="inp" placeholder="アイテムを追加..." onkeydown="if(event.key==='Enter')addMemo()"><button class="add-btn" onclick="addMemo()">追加</button></div>
     <div id="manage-list"></div>
   </div>
   <div style="height:20px"></div>
@@ -274,34 +274,34 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
 
 <!-- HIST -->
 <div id="pg-hist" class="page">
-  <div class="header"><div class="h-title">&#128202; \u8a18\u9332\u30fb\u5206\u6790</div></div>
+  <div class="header"><div class="h-title">&#128202; 記録・分析</div></div>
   <div class="stat-row">
-    <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">0</div><div class="stat-lbl">\u9023\u7d9a\u9054\u6210\u65e5</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-tcnt" style="color:#6fcf97">0</div><div class="stat-lbl">\u4eca\u65e5\u306e\u5b8c\u4e86</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">0</div><div class="stat-lbl">\u8a18\u9332\u65e5\u6570</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-streak" style="color:#e07b54">0</div><div class="stat-lbl">連続達成日</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-tcnt" style="color:#6fcf97">0</div><div class="stat-lbl">今日の完了</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-days" style="color:#b08ac0">0</div><div class="stat-lbl">記録日数</div></div>
   </div>
-  <div class="sec"><div class="sec-label">&#128200; \u76f4\u8fd114\u65e5\u9593</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
-  <div class="sec"><div class="sec-label">&#127941; \u30bf\u30b9\u30af\u5225\u9054\u6210\u7387\uff0830\u65e5\uff09</div><div id="task-stats"></div></div>
+  <div class="sec"><div class="sec-label">&#128200; 直近14日間</div><div class="chart-wrap"><canvas id="hist-chart"></canvas></div></div>
+  <div class="sec"><div class="sec-label">&#127941; タスク別達成率（30日）</div><div id="task-stats"></div></div>
   <div style="height:20px"></div>
 </div>
 
 <nav id="nav">
-  <button class="nb on" id="nav-home" onclick="setPage('home')"><span class="ni">&#127968;</span><span class="nl">\u30db\u30fc\u30e0</span></button>
-  <button class="nb" id="nav-meal" onclick="setPage('meal')"><span class="ni">&#127859;</span><span class="nl">\u98df\u4e8b</span></button>
-  <button class="nb" id="nav-stock" onclick="setPage('stock')"><span class="ni">&#128230;</span><span class="nl">\u5728\u5eab</span></button>
-  <button class="nb" id="nav-shop" onclick="setPage('shop')"><span class="ni">&#128722;</span><span class="nl">\u8cb7\u3044\u7269</span></button>
-  <button class="nb" id="nav-hist" onclick="setPage('hist')"><span class="ni">&#128202;</span><span class="nl">\u8a18\u9332</span></button>
+  <button class="nb on" id="nav-home" onclick="setPage('home')"><span class="ni">&#127968;</span><span class="nl">ホーム</span></button>
+  <button class="nb" id="nav-meal" onclick="setPage('meal')"><span class="ni">&#127859;</span><span class="nl">食事</span></button>
+  <button class="nb" id="nav-stock" onclick="setPage('stock')"><span class="ni">&#128230;</span><span class="nl">在庫</span></button>
+  <button class="nb" id="nav-shop" onclick="setPage('shop')"><span class="ni">&#128722;</span><span class="nl">買い物</span></button>
+  <button class="nb" id="nav-hist" onclick="setPage('hist')"><span class="ni">&#128202;</span><span class="nl">記録</span></button>
 </nav>
 
 <div class="ov" id="settings-ov" onclick="if(event.target===this)closeSettings()">
   <div class="mbox">
-    <div class="m-title">\u2699\uFE0F \u8a2d\u5b9a\u30fb\u30af\u30e9\u30a6\u30c9\u540c\u671f</div>
+    <div class="m-title">⚙️ 設定・クラウド同期</div>
     <div class="m-row"><label>JSONBin Secret Key</label><input type="password" id="cfg-key" placeholder="$2b$10$..." autocomplete="off"></div>
-    <div class="m-row"><label>Bin ID\uff08\u521d\u56de\u306f\u7a7a\u6b04OK\uff09</label><input type="text" id="cfg-bin" placeholder="\u81ea\u52d5\u751f\u6210"></div>
+    <div class="m-row"><label>Bin ID（初回は空欄OK）</label><input type="text" id="cfg-bin" placeholder="自動生成"></div>
     <div id="sync-status"></div>
     <hr style="border:none;border-top:1px solid var(--border);margin:14px 0">
-    <div class="m-row"><label>Anthropic API Key\uff08AI\u30ec\u30b7\u30d4\u30fb\u4efb\u610f\uff09</label><input type="password" id="cfg-ant" placeholder="sk-ant-..." autocomplete="off"></div>
-    <div class="m-btns"><button class="m-btn p" onclick="saveSettings()">\U0001f680 \u540c\u671f\u3092\u958b\u59cb</button><button class="m-btn s" onclick="closeSettings()">\u9589\u3058\u308b</button></div>
+    <div class="m-row"><label>Anthropic API Key（AIレシピ・任意）</label><input type="password" id="cfg-ant" placeholder="sk-ant-..." autocomplete="off"></div>
+    <div class="m-btns"><button class="m-btn p" onclick="saveSettings()">🚀 同期を開始</button><button class="m-btn s" onclick="closeSettings()">閉じる</button></div>
   </div>
 </div>
 
@@ -310,22 +310,22 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
 </div>
 
 <div class="ov" id="preview-ov" onclick="if(event.target===this)closePreview()">
-  <div class="mbox"><div class="m-title">\u2728 \u751f\u6210\u30ec\u30b7\u30d4\u3092\u78ba\u8a8d</div><div id="preview-content"></div>
-    <div class="m-btns"><button class="m-btn s" onclick="closePreview()">\u30ad\u30e3\u30f3\u30bb\u30eb</button><button class="m-btn p" onclick="saveCustom()">\u2705 \u4fdd\u5b58</button></div></div>
+  <div class="mbox"><div class="m-title">✨ 生成レシピを確認</div><div id="preview-content"></div>
+    <div class="m-btns"><button class="m-btn s" onclick="closePreview()">キャンセル</button><button class="m-btn p" onclick="saveCustom()">✅ 保存</button></div></div>
 </div>
 
 <div class="ov" id="fb-ov" onclick="if(event.target===this)closeFb()">
-  <div class="mbox"><div class="m-title">\u2b50 \u98df\u4e8b\u306e\u8a55\u4fa1</div>
+  <div class="mbox"><div class="m-title">⭐ 食事の評価</div>
     <p style="font-size:14px;color:var(--muted);margin-bottom:8px" id="fb-name"></p>
     <div class="stars" id="fb-stars"></div>
-    <textarea id="fb-note" placeholder="\u611f\u60f3\u30fb\u6539\u5584\u30e1\u30e2" style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
-    <div class="m-btns"><button class="m-btn s" onclick="closeFb()">\u30b9\u30ad\u30c3\u30d7</button><button class="m-btn p" onclick="saveFb()">\u2705 \u4fdd\u5b58</button></div></div>
+    <textarea id="fb-note" placeholder="感想・改善メモ" style="width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:14px;padding:14px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
+    <div class="m-btns"><button class="m-btn s" onclick="closeFb()">スキップ</button><button class="m-btn p" onclick="saveFb()">✅ 保存</button></div></div>
 </div>
 
 <div class="ov" id="weekly-ov" onclick="if(event.target===this)closeWeeklyModal()">
-  <div class="mbox"><div class="m-title">\U0001f4c5 \u9031\u6b21\u30bf\u30b9\u30af\u3092\u8ffd\u52a0</div>
-    <div class="inrow"><input type="text" id="wc-emoji" class="inp" placeholder="\U0001f4cc" style="max-width:70px;text-align:center;font-size:20px"><input type="text" id="wc-input" class="inp" placeholder="\u30bf\u30b9\u30af\u540d"></div>
-    <div class="m-btns"><button class="m-btn s" onclick="closeWeeklyModal()">\u30ad\u30e3\u30f3\u30bb\u30eb</button><button class="m-btn p" onclick="addWeeklyCustom()">\u2705 \u8ffd\u52a0</button></div></div>
+  <div class="mbox"><div class="m-title">📅 週次タスクを追加</div>
+    <div class="inrow"><input type="text" id="wc-emoji" class="inp" placeholder="📌" style="max-width:70px;text-align:center;font-size:20px"><input type="text" id="wc-input" class="inp" placeholder="タスク名"></div>
+    <div class="m-btns"><button class="m-btn s" onclick="closeWeeklyModal()">キャンセル</button><button class="m-btn p" onclick="addWeeklyCustom()">✅ 追加</button></div></div>
 </div>
 
 <script>
@@ -408,40 +408,40 @@ const MEALS=[
 ];
 
 const STAPLES=[
-  {id:'s01',n:'\u98f2\u65991',c:'\u6c34\u95a2\u9023'},{id:'s02',n:'\u98f2\u65992',c:'\u6c34\u95a2\u9023'},{id:'s03',n:'\u98f2\u65993',c:'\u6c34\u95a2\u9023'},
-  {id:'s04',n:'\u6e67\u6c34\u30bf\u30f3\u30af',c:'\u6c34\u95a2\u9023'},{id:'s05',n:'\u8c46\u4e73',c:'\u6c34\u95a2\u9023'},{id:'s06',n:'\u6c37\u7d50',c:'\u6c34\u95a2\u9023'},
-  {id:'s07',n:'\u8d64\u30ef\u30a4\u30f3',c:'\u6c34\u95a2\u9023'},{id:'s08',n:'\u30d0\u30ca\u30ca',c:'\u6c34\u95a2\u9023'},{id:'s09',n:'\u30bf\u30d0\u30b3',c:'\u6c34\u95a2\u9023'},
-  {id:'s11',n:'\u30d3\u30cb\u30fc\u30eb2L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s12',n:'\u30d3\u30cb\u30fc\u30ebSS',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
-  {id:'s13',n:'\u71c3\u3048\u308b\u30b4\u30df\u888b20L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s14',n:'\u71c3\u3048\u306a\u3044\u30b4\u30df\u888b20L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
-  {id:'s15',n:'\u900f\u660e\u30b4\u30df\u888b30L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},{id:'s16',n:'\u534a\u900f\u660e\u888b15L',c:'\u30d3\u30cb\u30fc\u30eb\u95a2\u9023'},
-  {id:'s21',n:'\u30b7\u30e3\u30f3\u30d7\u30fc',c:'\u98a8\u5442\u7cfb'},{id:'s22',n:'\u30c8\u30ea\u30fc\u30c8\u30e1\u30f3\u30c8',c:'\u98a8\u5442\u7cfb'},
-  {id:'s23',n:'\u6d17\u9854',c:'\u98a8\u5442\u7cfb'},{id:'s24',n:'\u30dc\u30c7\u30a3\u30fc\u30bd\u30fc\u30d7',c:'\u98a8\u5442\u7cfb'},
-  {id:'s25',n:'\u5316\u7ca7\u6c34',c:'\u98a8\u5442\u7cfb'},{id:'s26',n:'\u30aa\u30fc\u30eb\u30a4\u30f3\u30ef\u30f3\u30b8\u30a7\u30eb',c:'\u98a8\u5442\u7cfb'},
-  {id:'s27',n:'\u65e5\u713c\u3051\u6b62\u3081',c:'\u98a8\u5442\u7cfb'},{id:'s28',n:'\u6b6f\u78e8\u304d\u7c89',c:'\u98a8\u5442\u7cfb'},
-  {id:'s29',n:'\u30de\u30a6\u30b9\u30a6\u30a9\u30c3\u30b7\u30e5',c:'\u98a8\u5442\u7cfb'},{id:'s2a',n:'GUM\u30d5\u30ed\u30b9',c:'\u98a8\u5442\u7cfb'},
-  {id:'s2b',n:'\u30de\u30c4\u30ad\u30e8\u6975\u7d30\u30d5\u30ed\u30b9',c:'\u98a8\u5442\u7cfb'},
-  {id:'s31',n:'\u30c8\u30a4\u30ec\u62ed\u304d',c:'\u63b2\u9664\u7cfb'},{id:'s32',n:'\u30d0\u30b9\u30b8\u30a7\u30c3\u30c8',c:'\u63b2\u9664\u7cfb'},
-  {id:'s33',n:'\u30c8\u30a4\u30ec\u30de\u30b8\u30c3\u30af\u30ea\u30f3',c:'\u63b2\u9664\u7cfb'},{id:'s34',n:'\u30b3\u30ed\u30b3\u30ed',c:'\u63b2\u9664\u7cfb'},
-  {id:'s35',n:'\u6d17\u6fef\u6d17\u5264',c:'\u63b2\u9664\u7cfb'},{id:'s36',n:'\u67d4\u8edf\u5264',c:'\u63b2\u9664\u7cfb'},
-  {id:'s37',n:'\u30cf\u30f3\u30c9\u30bd\u30fc\u30d7',c:'\u63b2\u9664\u7cfb'},{id:'s38',n:'\u98df\u5668\u6d17\u5264Joy',c:'\u63b2\u9664\u7cfb'},
-  {id:'s39',n:'\u6d17\u6fef\u69fd\u30af\u30ea\u30fc\u30ca\u30fc',c:'\u63b2\u9664\u7cfb'},{id:'s3a',n:'\u8d85\u6d45\u578b\u6c34\u5207\u308a',c:'\u63b2\u9664\u7cfb'},
-  {id:'s41',n:'\u30c6\u30a3\u30c3\u30b7\u30e5',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s42',n:'\u30c8\u30a4\u30ec\u30c3\u30c8\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
-  {id:'s43',n:'\u30ad\u30c3\u30c1\u30f3\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s44',n:'\u306a\u3093\u3067\u3082\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
-  {id:'s45',n:'\u30e9\u30c3\u30d7',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s46',n:'\u30af\u30c3\u30ad\u30f3\u30b0\u30da\u30fc\u30d1\u30fc',c:'\u30da\u30fc\u30d1\u30fc\u985e'},
-  {id:'s47',n:'\u30a6\u30a7\u30c3\u30c8\u30c6\u30a3\u30c3\u30b7\u30e5',c:'\u30da\u30fc\u30d1\u30fc\u985e'},{id:'s48',n:'\u96d1\u5dfe',c:'\u30da\u30fc\u30d1\u30fc\u985e'}
+  {id:'s01',n:'飲料1',c:'水関連'},{id:'s02',n:'飲料2',c:'水関連'},{id:'s03',n:'飲料3',c:'水関連'},
+  {id:'s04',n:'湧水タンク',c:'水関連'},{id:'s05',n:'豆乳',c:'水関連'},{id:'s06',n:'氷結',c:'水関連'},
+  {id:'s07',n:'赤ワイン',c:'水関連'},{id:'s08',n:'バナナ',c:'水関連'},{id:'s09',n:'タバコ',c:'水関連'},
+  {id:'s11',n:'ビニール2L',c:'ビニール関連'},{id:'s12',n:'ビニールSS',c:'ビニール関連'},
+  {id:'s13',n:'燃えるゴミ袋20L',c:'ビニール関連'},{id:'s14',n:'燃えないゴミ袋20L',c:'ビニール関連'},
+  {id:'s15',n:'透明ゴミ袋30L',c:'ビニール関連'},{id:'s16',n:'半透明袋15L',c:'ビニール関連'},
+  {id:'s21',n:'シャンプー',c:'風呂系'},{id:'s22',n:'トリートメント',c:'風呂系'},
+  {id:'s23',n:'洗顔',c:'風呂系'},{id:'s24',n:'ボディーソープ',c:'風呂系'},
+  {id:'s25',n:'化粧水',c:'風呂系'},{id:'s26',n:'オールインワンジェル',c:'風呂系'},
+  {id:'s27',n:'日焼け止め',c:'風呂系'},{id:'s28',n:'歯磨き粉',c:'風呂系'},
+  {id:'s29',n:'マウスウォッシュ',c:'風呂系'},{id:'s2a',n:'GUMフロス',c:'風呂系'},
+  {id:'s2b',n:'マツキヨ極細フロス',c:'風呂系'},
+  {id:'s31',n:'トイレ拭き',c:'掲除系'},{id:'s32',n:'バスジェット',c:'掲除系'},
+  {id:'s33',n:'トイレマジックリン',c:'掲除系'},{id:'s34',n:'コロコロ',c:'掲除系'},
+  {id:'s35',n:'洗濯洗剤',c:'掲除系'},{id:'s36',n:'柔軟剤',c:'掲除系'},
+  {id:'s37',n:'ハンドソープ',c:'掲除系'},{id:'s38',n:'食器洗剤Joy',c:'掲除系'},
+  {id:'s39',n:'洗濯槽クリーナー',c:'掲除系'},{id:'s3a',n:'超浅型水切り',c:'掲除系'},
+  {id:'s41',n:'ティッシュ',c:'ペーパー類'},{id:'s42',n:'トイレットペーパー',c:'ペーパー類'},
+  {id:'s43',n:'キッチンペーパー',c:'ペーパー類'},{id:'s44',n:'なんでもペーパー',c:'ペーパー類'},
+  {id:'s45',n:'ラップ',c:'ペーパー類'},{id:'s46',n:'クッキングペーパー',c:'ペーパー類'},
+  {id:'s47',n:'ウェットティッシュ',c:'ペーパー類'},{id:'s48',n:'雑巾',c:'ペーパー類'}
 ];
-const TRASH={1:{l:'\u71c3\u3048\u308b\u30b4\u30df',i:'\U0001f525',c:'#e07b54'},2:{l:'\u71c3\u3048\u306a\u3044\u30b4\u30df',i:'\U0001f6af',c:'#7a8fa6'},3:{l:'\u30da\u30c3\u30c8\u30dc\u30c8\u30eb',i:'\u267b\ufe0f',c:'#4a9e7f'},4:{l:'\u71c3\u3048\u308b\u30b4\u30df',i:'\U0001f525',c:'#e07b54'},5:{l:'\u74f6\u30fb\u7f36\u30b4\u30df',i:'\U0001f376',c:'#c4963a'}};
-const CLEANING={0:{i:'\U0001f6c1',l:'\u30d0\u30b9\u30eb\u30fc\u30e0\u63b2\u9664'},1:{i:'\U0001f6aa',l:'\u73c4\u95a2\u30fb\u30de\u30f3\u30b7\u30e7\u30f3\u968e\u6bb5\u63b2\u9664',note:'\u30b4\u30df\u6368\u3066\u65e5\u306e\u63b2\u9664\uff08\u56fa\u5b9a\uff09'},2:{i:'\U0001f373',l:'\u30ad\u30c3\u30c1\u30f3\u63b2\u9664'},3:{i:'\U0001faa5',l:'\u6d17\u9762\u6240\u30fb\u30c8\u30a4\u30ec\u63b2\u9664'},4:{i:'\U0001f6aa',l:'\u73c4\u95a2\u30fb\u30de\u30f3\u30b7\u30e7\u30f3\u968e\u6bb5\u63b2\u9664',note:'\u30b4\u30df\u6368\u3066\u65e5\u306e\u63b2\u9664\uff08\u56fa\u5b9a\uff09'},5:{i:'\U0001f3e0',l:'\u30ea\u30d3\u30f3\u30b0\u30fb\u5e8a\u63b2\u9664'},6:{i:'\U0001fa9f',l:'\u7a93\u30fb\u30d9\u30e9\u30f3\u30c0\u63b2\u9664'}};
-const DAILY=[{id:'meditation',e:'\U0001f9d8',l:'\u77a5\u60f3',s:'5\u5206'},{id:'reading',e:'\U0001f4d6',l:'\u8aad\u66f8',s:'20\u30da\u30fc\u30b8'},{id:'toilet',e:'\U0001f6bf',l:'\u30c8\u30a4\u30ec\u63b2\u9664',s:''},{id:'walk',e:'\U0001f6b6',l:'\u6563\u6b69',s:''},{id:'hunting',e:'\U0001f3af',l:'\u72e9\u731f\u514d\u8a31\u52c9\u5f37',s:''}];
-const WEEKLY=[{id:'carwash',e:'\U0001f697',l:'\u6d17\u8eca',s:'\u90311\u56de'},{id:'bedding',e:'\U0001f6cf\ufe0f',l:'\u5e03\u56e3\u95a2\u9023\u6d17\u6fef',s:'\u90311\u56de'}];
-const TLABELS={trash:'\u30b4\u30df\u6368\u3066',cleaning:'\u63b2\u9664',meal:'\u98df\u4e8b',meditation:'\u77a5\u60f3',reading:'\u8aad\u66f8',toilet:'\u30c8\u30a4\u30ec\u63b2\u9664',walk:'\u6563\u6b69',hunting:'\u72e9\u731f\u514d\u8a31\u52c9\u5f37',carwash:'\u6d17\u8eca',bedding:'\u5e03\u56e3\u6d17\u6fef'};
+const TRASH={1:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},2:{l:'燃えないゴミ',i:'🚯',c:'#7a8fa6'},3:{l:'ペットボトル',i:'♻️',c:'#4a9e7f'},4:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},5:{l:'瓶・缶ゴミ',i:'🍶',c:'#c4963a'}};
+const CLEANING={0:{i:'🛁',l:'バスルーム掲除'},1:{i:'🚪',l:'珄関・マンション階段掲除',note:'ゴミ捨て日の掲除（固定）'},2:{i:'🍳',l:'キッチン掲除'},3:{i:'🪥',l:'洗面所・トイレ掲除'},4:{i:'🚪',l:'珄関・マンション階段掲除',note:'ゴミ捨て日の掲除（固定）'},5:{i:'🏠',l:'リビング・床掲除'},6:{i:'🪟',l:'窓・ベランダ掲除'}};
+const DAILY=[{id:'meditation',e:'🧘',l:'瞥想',s:'5分'},{id:'reading',e:'📖',l:'読書',s:'20ページ'},{id:'toilet',e:'🚿',l:'トイレ掲除',s:''},{id:'walk',e:'🚶',l:'散歩',s:''},{id:'hunting',e:'🎯',l:'狩猟免許勉強',s:''}];
+const WEEKLY=[{id:'carwash',e:'🚗',l:'洗車',s:'週1回'},{id:'bedding',e:'🛏️',l:'布団関連洗濯',s:'週1回'}];
+const TLABELS={trash:'ゴミ捨て',cleaning:'掲除',meal:'食事',meditation:'瞥想',reading:'読書',toilet:'トイレ掲除',walk:'散歩',hunting:'狩猟免許勉強',carwash:'洗車',bedding:'布団洗濯'};
 const HIDS=Object.keys(TLABELS);
-const DRINKS=[{id:'water',i:'\U0001f4a7',n:'\u6c34',goal:2000,color:'#7ab8d4',steps:[150,350,500]},{id:'soymilk',i:'\U0001f95b',n:'\u8c46\u4e73',goal:400,color:'#c4963a',steps:[200,400]},{id:'alcohol',i:'\U0001f37a',n:'\u304a\u9152',goal:350,color:'#b08ac0',steps:[150,350]}];
-const CUISINES=[{e:'\U0001f363',l:'\u5bff\u53f8'},{e:'\U0001f35c',l:'\u30e9\u30fc\u30e1\u30f3'},{e:'\U0001f355',l:'\u30d4\u30b6'},{e:'\U0001f354',l:'\u30d0\u30fc\u30ac\u30fc'},{e:'\U0001f969',l:'\u8089\u6599\u7406'},{e:'\U0001f371',l:'\u5b9a\u98df'},{e:'\U0001f32e',l:'\u30a8\u30b9\u30cb\u30c3\u30af'},{e:'\U0001f362',l:'\u5c45\u9152\u5c4b'},{e:'\u2615',l:'\u30ab\u30d5\u30a7'},{e:'\U0001f370',l:'\u30b9\u30a4\u30fc\u30c4'}];
+const DRINKS=[{id:'water',i:'💧',n:'水',goal:2000,color:'#7ab8d4',steps:[150,350,500]},{id:'soymilk',i:'🥛',n:'豆乳',goal:400,color:'#c4963a',steps:[200,400]},{id:'alcohol',i:'🍺',n:'お酒',goal:350,color:'#b08ac0',steps:[150,350]}];
+const CUISINES=[{e:'🍣',l:'寿司'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ'},{e:'🍔',l:'バーガー'},{e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},{e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
 
 let state={days:{},weeks:{},staplesNeeded:{},shopMemo:[],boughtToday:{},fridge:[],customMeals:[],meals:{},lunchMeals:{},drinks:{},mealFeedback:{},quickTasks:[],weeklyCustom:[]};
 let cfg={apiKey:'',binId:'',anthropicKey:''};
-let histChart=null,syncTimer=null,recIdxs=[],selectedCuisine='\U0001f363',pendingCustom=null,pendingFbId=null,selectedRating=0;
+let histChart=null,syncTimer=null,recIdxs=[],selectedCuisine='🍣',pendingCustom=null,pendingFbId=null,selectedRating=0;
 let curMealTab='rec',curStockTab='fridge',curShopTab='today',mealSlotTarget=null,eoSlotTarget='dinner';
 
 const pad=n=>String(n).padStart(2,'0');
@@ -518,11 +518,11 @@ function closeSettings(){document.getElementById('settings-ov').classList.remove
 function showSync(m,ok){const el=document.getElementById('sync-status');el.className=ok?'sync-ok':'sync-err';el.textContent=m;}
 async function saveSettings(){
   const k=document.getElementById('cfg-key').value.trim(),b=document.getElementById('cfg-bin').value.trim(),a=document.getElementById('cfg-ant').value.trim();
-  if(!k){showSync('\u274c APIキーを入力してください',false);return;}
-  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('\U0001f504 接続中...',true);
+  if(!k){showSync('❌ APIキーを入力してください',false);return;}
+  cfg.apiKey=k;cfg.binId=b;if(a)cfg.anthropicKey=a;saveCfg();showSync('🔄 接続中...',true);
   const res=cfg.binId?await pullCloud():await pushCloud();
-  if(res===true)showSync('\u2705 '+(cfg.binId?'同期完了！':'新規作成完了！ Bin ID: '+cfg.binId),true);
-  else showSync('\u274c エラー: '+(res==='timeout'?'タイムアウト':res),false);
+  if(res===true)showSync('✅ '+(cfg.binId?'同期完了！':'新規作成完了！ Bin ID: '+cfg.binId),true);
+  else showSync('❌ エラー: '+(res==='timeout'?'タイムアウト':res),false);
   renderAll();
 }
 
@@ -554,12 +554,12 @@ function deleteQuickTask(id){state.quickTasks=(state.quickTasks||[]).filter(t=>t
 function renderQuickTasks(){
   const el=document.getElementById('qt-list');if(!el)return;el.innerHTML='';
   const tasks=(state.quickTasks||[]).filter(t=>!t.done);
-  if(!tasks.length){el.innerHTML='<p class="empty-txt">\u30bf\u30b9\u30af\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</p>';return;}
+  if(!tasks.length){el.innerHTML='<p class="empty-txt">タスクを追加してください</p>';return;}
   tasks.forEach(t=>{
     const d=document.createElement('div');d.className='qt-item';
-    const ok=document.createElement('button');ok.className='qt-done';ok.textContent='\u2713 \u5b8c\u4e86';ok.onclick=()=>doneQuickTask(t.id);
+    const ok=document.createElement('button');ok.className='qt-done';ok.textContent='✓ 完了';ok.onclick=()=>doneQuickTask(t.id);
     const sp=document.createElement('span');sp.className='qt-txt';sp.textContent=t.text;
-    const rm=document.createElement('button');rm.className='qt-del';rm.textContent='\u2715';rm.onclick=()=>deleteQuickTask(t.id);
+    const rm=document.createElement('button');rm.className='qt-del';rm.textContent='✕';rm.onclick=()=>deleteQuickTask(t.id);
     d.appendChild(ok);d.appendChild(sp);d.appendChild(rm);el.appendChild(d);
   });
 }
@@ -596,7 +596,7 @@ function toggleLunchEaten(){const k=todayStr();if(!state.lunchMeals[k])state.lun
 function syncMealDone(){const k=todayStr();const d=getDinner();if(!state.days[k])state.days[k]={};state.days[k].meal=(d.cooked&&d.eaten)||(d.type==='eatout'&&d.eaten);}
 function logEatOut(){
   const rest=document.getElementById('eo-rest').value.trim(),dish=document.getElementById('eo-dish').value.trim();
-  if(!dish){alert('\u6599\u7406\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044');return;}
+  if(!dish){alert('料理名を入力してください');return;}
   const k=todayStr();const name=rest?rest+' / '+dish:dish;
   const obj={type:'eatout',eatOutName:name,restaurant:rest,dish:dish,emoji:selectedCuisine,eaten:false,cooked:true};
   if(eoSlotTarget==='lunch'){if(!state.lunchMeals)state.lunchMeals={};state.lunchMeals[k]=obj;}
@@ -609,26 +609,26 @@ function openRecipe(id){
   const m=mealById(id);if(!m)return;
   const sel=(mealSlotTarget==='lunch'?getLunch():getDinner()).menuId===id;
   document.getElementById('recipe-content').innerHTML=recipeHTML(m,true);
-  const slotName=mealSlotTarget==='lunch'?'\u663c\u98df':'\u591c\u3054\u98df';
-  document.getElementById('recipe-btns').innerHTML='<button class="m-btn s" onclick="closeRecipe()">\u9589\u3058\u308b</button><button class="m-btn p" onclick="selectMeal(\''+id+'\')">'+(sel?'\u2713 \u9078\u629e\u6e08\u307f':slotName+'\u306b\u3059\u308b')+'</button>';
+  const slotName=mealSlotTarget==='lunch'?'昼食':'夜ご食';
+  document.getElementById('recipe-btns').innerHTML='<button class="m-btn s" onclick="closeRecipe()">閉じる</button><button class="m-btn p" onclick="selectMeal(\''+id+'\')">'+(sel?'✓ 選択済み':slotName+'にする')+'</button>';
   document.getElementById('recipe-ov').classList.add('open');
 }
 function closeRecipe(){document.getElementById('recipe-ov').classList.remove('open');}
 function recipeHTML(m,fb){
   const f=fb?(state.mealFeedback||{})[m.id]||{}:{};const tips=f.recipeTips||[],notes=f.notes||[];
-  const ings=(m.ings||[]).map(i=>{const miss=fb&&!fridgeHas(i.n);return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'\u2713 ')+i.n+'</span><span>'+i.a+'</span></div>';}).join('');
+  const ings=(m.ings||[]).map(i=>{const miss=fb&&!fridgeHas(i.n);return '<div class="ing-row"><span'+(miss?' class="ing-miss"':'')+'>'+(miss?'':'✓ ')+i.n+'</span><span>'+i.a+'</span></div>';}).join('');
   const steps=(m.steps||[]).map((s,i)=>'<div class="step-row"><div class="step-num">'+(i+1)+'</div><div class="step-txt">'+s+'</div></div>').join('');
-  const tipsH=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">\U0001f916 AI\u30ec\u30b7\u30d4\u6539\u5584\u30d2\u30f3\u30c8</h3>'+tips.map(t=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">\U0001f4a1 '+t+'</div>').join('')+'</div>':'';
-  const notesH=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">\U0001f4dd \u30e1\u30e2</h3>'+notes.slice(-3).map(n=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">\u2605'+n.rating+'</span> '+n.text+'</div>').join('')+'</div>':'';
-  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'\U0001f373')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+' \u30fb \u23f1 '+m.time+'\u5206</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.cal:'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.protein:'?')+'g</div><div class="l">\u86cb\u767d\u8cea</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.fat:'?')+'g</div><div class="l">\u8102\u8cea</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.carb:'?')+'g</div><div class="l">\u7cd6\u8cea</div></div></div>'+(ings?'<div class="r-sec"><h3>\u6750\u6599</h3>'+ings+'</div>':'')+(steps?'<div class="r-sec"><h3>\u4f5c\u308a\u65b9</h3>'+steps+'</div>':'')+tipsH+notesH;
+  const tipsH=tips.length?'<div class="r-sec"><h3 style="color:var(--gold)">🤖 AIレシピ改善ヒント</h3>'+tips.map(t=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">💡 '+t+'</div>').join('')+'</div>':'';
+  const notesH=notes.length?'<div class="r-sec"><h3 style="color:var(--purple)">📝 メモ</h3>'+notes.slice(-3).map(n=>'<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span style="color:'+(n.rating>=4?'var(--green)':n.rating<=2?'var(--red)':'var(--gold)')+'">★'+n.rating+'</span> '+n.text+'</div>').join('')+'</div>':'';
+  return '<div class="r-header"><div class="r-emoji">'+(m.emoji||'🍳')+'</div><div class="r-info"><h2>'+m.name+'</h2><p>'+m.desc+' ・ ⏱ '+m.time+'分</p></div></div><div class="r-nutr"><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.cal:'?')+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.protein:'?')+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.fat:'?')+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+(m.nutr?m.nutr.carb:'?')+'g</div><div class="l">糖質</div></div></div>'+(ings?'<div class="r-sec"><h3>材料</h3>'+ings+'</div>':'')+(steps?'<div class="r-sec"><h3>作り方</h3>'+steps+'</div>':'')+tipsH+notesH;
 }
 function scoreMeal(m){let s=0;(m.ings||[]).forEach(i=>{if(fridgeHas(i.n))s+=2;});const h=Object.values(state.meals||{}).concat(Object.values(state.lunchMeals||{})).filter(v=>v.menuId===m.id);s-=h.length*3;const r=getRating(m.id);if(r>0)s+=r*2;return s;}
 function shuffleRec(){const a=allMeals();const idx=a.map((_,i)=>i);for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}recIdxs=idx.slice(0,6);renderMealTab('rec');}
 
 // ===== FEEDBACK =====
-function openFb(id){pendingFbId=id;selectedRating=0;const f=(state.mealFeedback||{})[id]||{},avg=f.avgRating||0;document.getElementById('fb-name').textContent=(mealById(id)||{}).name||'';document.getElementById('fb-stars').innerHTML=[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating('+n+')" data-v="'+n+'">'+(n<=Math.round(avg)?'\u2b50':'\u2606')+'</span>').join('');document.getElementById('fb-note').value='';document.getElementById('fb-ov').classList.add('open');}
+function openFb(id){pendingFbId=id;selectedRating=0;const f=(state.mealFeedback||{})[id]||{},avg=f.avgRating||0;document.getElementById('fb-name').textContent=(mealById(id)||{}).name||'';document.getElementById('fb-stars').innerHTML=[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating('+n+')" data-v="'+n+'">'+(n<=Math.round(avg)?'⭐':'☆')+'</span>').join('');document.getElementById('fb-note').value='';document.getElementById('fb-ov').classList.add('open');}
 function closeFb(){document.getElementById('fb-ov').classList.remove('open');pendingFbId=null;}
-function setRating(n){selectedRating=n;document.querySelectorAll('.star').forEach(s=>{s.textContent=parseInt(s.dataset.v)<=n?'\u2b50':'\u2606';});}
+function setRating(n){selectedRating=n;document.querySelectorAll('.star').forEach(s=>{s.textContent=parseInt(s.dataset.v)<=n?'⭐':'☆';});}
 async function saveFb(){
   if(!pendingFbId||!selectedRating)return;
   if(!state.mealFeedback)state.mealFeedback={};const id=pendingFbId,note=document.getElementById('fb-note').value.trim();
@@ -642,7 +642,7 @@ async function saveFb(){
 async function improveRecipe(id,fb,rating){
   const m=mealById(id);if(!m)return;
   try{
-    const p='\u6599\u7406\u300c'+m.name+'\u300d\u306e\u30d5\u30a3\u30fc\u30c9\u30d0\u30c3\u30af\uff1a\u300c'+fb+'\u300d\uff08\u8a55\u4fa1\uff1a'+rating+'/5\uff09\u3002\u6539\u5584\u30dd\u30a4\u30f3\u30c8\u30923\u3064\u4ee5\u5185\u3067JSON\u306e\u307f\uff1a{"tips":["\u6539\u5584"]}';
+    const p='料理「'+m.name+'」のフィードバック：「'+fb+'」（評価：'+rating+'/5）。改善ポイントを3つ以内でJSONのみ：{"tips":["改善"]}';
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:p}]})});
     const d=await r.json();const txt=(d.content||[])[0]?.text||'{}';const res=JSON.parse(txt.replace(/```json|```/g,'').trim());
     if(res.tips&&res.tips.length){if(!state.mealFeedback[id].recipeTips)state.mealFeedback[id].recipeTips=[];state.mealFeedback[id].recipeTips=res.tips.concat(state.mealFeedback[id].recipeTips).slice(0,6);}
@@ -651,22 +651,22 @@ async function improveRecipe(id,fb,rating){
 
 // ===== CUSTOM MENU =====
 async function genRecipe(){
-  const name=document.getElementById('custom-name').value.trim();if(!name){alert('\u6599\u7406\u540d\u3092\u5165\u529b');return;}
-  if(!cfg.anthropicKey){alert('\u2699\uFE0F\u304b\u3089Claude API\u30ad\u30fc\u3092\u8a2d\u5b9a\u3059\u308b\u3068AI\u751f\u6210\u304c\u4f7f\u3048\u307e\u3059');return;}
-  const btn=document.getElementById('ai-btn');btn.textContent='\U0001f504 \u751f\u6210\u4e2d';btn.disabled=true;
+  const name=document.getElementById('custom-name').value.trim();if(!name){alert('料理名を入力');return;}
+  if(!cfg.anthropicKey){alert('⚙️からClaude APIキーを設定するとAI生成が使えます');return;}
+  const btn=document.getElementById('ai-btn');btn.textContent='🔄 生成中';btn.disabled=true;
   try{
-    const p='\u6599\u7406\u540d\u300c'+name+'\u300d\u306e\u30ec\u30b7\u30d4\u3092JSON\u306e\u307f\uff1a{"emoji":"\U0001f373","desc":"\u8aac\u660e","tags":["\u30bf\u30b0"],"time":20,"nutr":{"cal":400,"protein":20,"fat":12,"carb":40},"ings":[{"n":"\u98df\u6750","a":"\u91cf"}],"steps":["\u624b\u9806"]}';
+    const p='料理名「'+name+'」のレシピをJSONのみ：{"emoji":"🍳","desc":"説明","tags":["タグ"],"time":20,"nutr":{"cal":400,"protein":20,"fat":12,"carb":40},"ings":[{"n":"食材","a":"量"}],"steps":["手順"]}';
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:p}]})});
     const d=await r.json();const txt=(d.content||[])[0]?.text||'{}';
     pendingCustom=Object.assign({id:'c'+Date.now(),name:name,isCustom:true},JSON.parse(txt.replace(/```json|```/g,'').trim()));
     document.getElementById('preview-content').innerHTML=recipeHTML(pendingCustom,false);
     document.getElementById('preview-ov').classList.add('open');
-  }catch(e){alert('\u751f\u6210\u5931\u6557: '+e.message);}
-  btn.textContent='\U0001f916 \u751f\u6210';btn.disabled=false;
+  }catch(e){alert('生成失敗: '+e.message);}
+  btn.textContent='🤖 生成';btn.disabled=false;
 }
 function closePreview(){document.getElementById('preview-ov').classList.remove('open');}
 function saveCustom(){if(!pendingCustom)return;state.customMeals.push(pendingCustom);saveLocal();sched();closePreview();document.getElementById('custom-name').value='';pendingCustom=null;recIdxs=[];renderMealTab('custom');}
-function delCustom(id){if(!confirm('\u524a\u9664\u3057\u307e\u3059\u304b\uff1f'))return;state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);saveLocal();sched();recIdxs=[];renderMealTab('custom');}
+function delCustom(id){if(!confirm('削除しますか？'))return;state.customMeals=(state.customMeals||[]).filter(m=>m.id!==id);saveLocal();sched();recIdxs=[];renderMealTab('custom');}
 
 // ===== HOME =====
 function mkBtn(icon,label,sub,done,accent,onClick){
@@ -675,7 +675,7 @@ function mkBtn(icon,label,sub,done,accent,onClick){
   const inf=document.createElement('div');inf.className='t-info';
   const l=document.createElement('div');l.className='t-lbl';l.textContent=label;inf.appendChild(l);
   if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;inf.appendChild(s);}
-  const c=document.createElement('div');c.className='chk';if(done){c.textContent='\u2713';c.style.background=accent;c.style.border='2px solid '+accent;c.style.color='#111a14';}
+  const c=document.createElement('div');c.className='chk';if(done){c.textContent='✓';c.style.background=accent;c.style.border='2px solid '+accent;c.style.color='#111a14';}
   b.appendChild(ic);b.appendChild(inf);b.appendChild(c);return b;
 }
 function subBtn(cls,txt,onClick){const b=document.createElement('button');b.className='sub-btn '+cls;b.textContent=txt;b.onclick=onClick;return b;}
@@ -690,17 +690,17 @@ function renderMealSlot(container,label,icon,slot,slotKind){
   const onEaten=isLunch?toggleLunchEaten:toggleDinnerEaten;
   const onReset=isLunch?resetLunch:resetDinner;
   if(slot.type==='eatout'){
-    if(!slot.eaten)wrap.appendChild(mkBtn(slot.emoji||'\U0001f37d\uFE0F','\u5916\u98df: '+slot.eatOutName,'\u98df\u3079\u305f\u3089\u30bf\u30c3\u30d7',false,'#c4963a',onEaten));
-    else wrap.appendChild(mkBtn(slot.emoji||'\U0001f37d\uFE0F','\u5916\u98df: '+slot.eatOutName,'\u5b8c\u4e86',true,'#6fcf97',()=>{}));
-    wrap.appendChild(subBtn('sub-del','\u2715 \u5916\u98df\u8a18\u9332\u3092\u524a\u9664',onReset));
+    if(!slot.eaten)wrap.appendChild(mkBtn(slot.emoji||'🍽️','外食: '+slot.eatOutName,'食べたらタップ',false,'#c4963a',onEaten));
+    else wrap.appendChild(mkBtn(slot.emoji||'🍽️','外食: '+slot.eatOutName,'完了',true,'#6fcf97',()=>{}));
+    wrap.appendChild(subBtn('sub-del','✕ 外食記録を削除',onReset));
   }else if(!slot.menuId||!mealById(slot.menuId)){
-    wrap.appendChild(mkBtn('\U0001f373','\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u3076','\u30bf\u30c3\u30d7\u3057\u3066\u9078\u629e',false,'#6fcf97',onSelect));
-    wrap.appendChild(subBtn('sub-eatout','\U0001f37d\uFE0F \u5916\u98df\u3059\u308b',onEatout));
+    wrap.appendChild(mkBtn('🍳','メニューを選ぶ','タップして選択',false,'#6fcf97',onSelect));
+    wrap.appendChild(subBtn('sub-eatout','🍽️ 外食する',onEatout));
   }else{
     const m=mealById(slot.menuId);
-    if(!slot.cooked){wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name+'\u3092\u8abf\u7406','',false,'#e07b54',onCooked));wrap.appendChild(subBtn('sub-change','\u5909\u66f4\u3059\u308b',onReset));}
-    else if(!slot.eaten){wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name+'\u3092\u98df\u3079\u308b','\u8abf\u7406\u5b8c\u4e86\uff01',false,'#c4963a',onEaten));wrap.appendChild(subBtn('sub-change','\u5909\u66f4\u3059\u308b',onReset));}
-    else{wrap.appendChild(mkBtn(m.emoji||'\U0001f373',m.name,'\u5b8c\u4e86',true,'#6fcf97',()=>{}));wrap.appendChild(subBtn('sub-change','\U0001f504 \u30e1\u30cb\u30e5\u30fc\u3092\u5909\u66f4',onReset));}
+    if(!slot.cooked){wrap.appendChild(mkBtn(m.emoji||'🍳',m.name+'を調理','',false,'#e07b54',onCooked));wrap.appendChild(subBtn('sub-change','変更する',onReset));}
+    else if(!slot.eaten){wrap.appendChild(mkBtn(m.emoji||'🍳',m.name+'を食べる','調理完了！',false,'#c4963a',onEaten));wrap.appendChild(subBtn('sub-change','変更する',onReset));}
+    else{wrap.appendChild(mkBtn(m.emoji||'🍳',m.name,'完了',true,'#6fcf97',()=>{}));wrap.appendChild(subBtn('sub-change','🔄 メニューを変更',onReset));}
   }
   container.appendChild(wrap);
 }
@@ -708,22 +708,22 @@ function renderMealSlot(container,label,icon,slot,slotKind){
 function renderHome(){
   const dow=new Date().getDay(),d=new Date();
   document.getElementById('hdr-date').textContent=d.toLocaleDateString('ja-JP',{month:'long',day:'numeric'});
-  document.getElementById('hdr-day').textContent=['\u65e5','\u6708','\u706b','\u6c34','\u6728','\u91d1','\u571f'][dow]+'\u66dc\u65e5';
+  document.getElementById('hdr-day').textContent=['日','月','火','水','木','金','土'][dow]+'曜日';
   renderQuickTasks();
   renderDrink();
   const tr=TRASH[dow],ts=document.getElementById('sec-trash'),tt=document.getElementById('trash-task');
-  if(tr){ts.style.display='';tt.innerHTML='';tt.appendChild(mkBtn('\U0001f5d1\uFE0F',tr.i+' '+tr.l,'\u4eca\u65e5\u306e\u30b4\u30df',getDayDone('trash'),tr.c,()=>toggleDay('trash')));}else ts.style.display='none';
+  if(tr){ts.style.display='';tt.innerHTML='';tt.appendChild(mkBtn('🗑️',tr.i+' '+tr.l,'今日のゴミ',getDayDone('trash'),tr.c,()=>toggleDay('trash')));}else ts.style.display='none';
   const cl=CLEANING[dow],ce=document.getElementById('clean-task');ce.innerHTML='';ce.appendChild(mkBtn(cl.i,cl.l,cl.note||'',getDayDone('cleaning'),'#7ab8d4',()=>toggleDay('cleaning')));
   const me=document.getElementById('meal-task');me.innerHTML='';
-  renderMealSlot(me,'\u663c\u98df','\U0001f31e',getLunch(),'lunch');
-  renderMealSlot(me,'\u591c\u3054\u98df','\U0001f319',getDinner(),'dinner');
+  renderMealSlot(me,'昼食','🌞',getLunch(),'lunch');
+  renderMealSlot(me,'夜ご食','🌙',getDinner(),'dinner');
   const de=document.getElementById('daily-tasks');de.innerHTML='';
   DAILY.forEach(t=>de.appendChild(mkBtn(t.e,t.l,t.s,getDayDone(t.id),'#6fcf97',()=>toggleDay(t.id))));
   const ns=getNeededStaples(),nm=getActiveMemo(),ss=document.getElementById('sec-shop');
   if(ns.length||nm.length){
     ss.style.display='';const ch=document.getElementById('shop-chips');ch.innerHTML='';
     const g=document.createElement('div');g.className='chip-grid';
-    ns.forEach(s=>{const c=document.createElement('button');c.className='chip chip-need';c.innerHTML='<span style="font-size:13px">\U0001f4e6</span><span>'+s.n+'</span><span style="font-size:11px;color:rgba(111,207,151,0.6)">\u2713</span>';c.onclick=()=>toggleStaple(s.id);g.appendChild(c);});
+    ns.forEach(s=>{const c=document.createElement('button');c.className='chip chip-need';c.innerHTML='<span style="font-size:13px">📦</span><span>'+s.n+'</span><span style="font-size:11px;color:rgba(111,207,151,0.6)">✓</span>';c.onclick=()=>toggleStaple(s.id);g.appendChild(c);});
     nm.forEach(i=>{const c=document.createElement('button');c.className='chip chip-memo';c.innerHTML='<span>'+i.text+'</span>';c.onclick=()=>buyMemo(i.id);g.appendChild(c);});
     ch.appendChild(g);
   }else ss.style.display='none';
@@ -748,40 +748,40 @@ function toggleWeek(id){const k=mondayStr();if(!state.weeks[k])state.weeks[k]={}
 // ===== WEEKLY CUSTOM =====
 function openWeeklyModal(){document.getElementById('weekly-ov').classList.add('open');}
 function closeWeeklyModal(){document.getElementById('weekly-ov').classList.remove('open');}
-function addWeeklyCustom(){const txt=document.getElementById('wc-input').value.trim(),em=document.getElementById('wc-emoji').value.trim()||'\U0001f4cc';if(!txt)return;if(!state.weeklyCustom)state.weeklyCustom=[];state.weeklyCustom.push({id:'wc'+Date.now(),label:txt,emoji:em});document.getElementById('wc-input').value='';document.getElementById('wc-emoji').value='';saveLocal();sched();closeWeeklyModal();renderHome();}
+function addWeeklyCustom(){const txt=document.getElementById('wc-input').value.trim(),em=document.getElementById('wc-emoji').value.trim()||'📌';if(!txt)return;if(!state.weeklyCustom)state.weeklyCustom=[];state.weeklyCustom.push({id:'wc'+Date.now(),label:txt,emoji:em});document.getElementById('wc-input').value='';document.getElementById('wc-emoji').value='';saveLocal();sched();closeWeeklyModal();renderHome();}
 function deleteWeeklyCustom(id){state.weeklyCustom=(state.weeklyCustom||[]).filter(t=>t.id!==id);saveLocal();sched();renderHome();}
 function renderWeeklySection(){
   const el=document.getElementById('weekly-tasks');if(!el)return;el.innerHTML='';
   WEEKLY.forEach(t=>el.appendChild(mkBtn(t.e,t.l,t.s,getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id))));
   (state.weeklyCustom||[]).forEach(t=>{
-    const b=mkBtn(t.emoji,t.label,'\u90311\u56de',getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id));
+    const b=mkBtn(t.emoji,t.label,'週1回',getWeekDone(t.id),'#b08ac0',()=>toggleWeek(t.id));
     b.style.position='relative';
-    const del=document.createElement('button');del.style.cssText='position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;color:rgba(255,80,80,0.4);font-size:18px;cursor:pointer;padding:4px';del.textContent='\u2715';del.onclick=(e)=>{e.stopPropagation();deleteWeeklyCustom(t.id);};
+    const del=document.createElement('button');del.style.cssText='position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;color:rgba(255,80,80,0.4);font-size:18px;cursor:pointer;padding:4px';del.textContent='✕';del.onclick=(e)=>{e.stopPropagation();deleteWeeklyCustom(t.id);};
     b.appendChild(del);el.appendChild(b);
   });
-  const add=document.createElement('button');add.style.cssText='width:100%;padding:14px;background:rgba(176,138,192,0.07);border:1px dashed rgba(176,138,192,0.25);border-radius:var(--radius);color:rgba(176,138,192,0.7);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px;margin-top:2px';add.textContent='\uff0b \u30bf\u30b9\u30af\u3092\u8ffd\u52a0';add.onclick=openWeeklyModal;el.appendChild(add);
+  const add=document.createElement('button');add.style.cssText='width:100%;padding:14px;background:rgba(176,138,192,0.07);border:1px dashed rgba(176,138,192,0.25);border-radius:var(--radius);color:rgba(176,138,192,0.7);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px;margin-top:2px';add.textContent='＋ タスクを追加';add.onclick=openWeeklyModal;el.appendChild(add);
 }
 
 // ===== MEAL TAB =====
 function renderMealTab(t){
   if(t==='rec'){
     const a=allMeals();
-    document.getElementById('which-slot').textContent=(mealSlotTarget==='lunch'?'\U0001f31e \u663c\u98df':'\U0001f319 \u591c\u3054\u98df')+'\u306e\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u629e';
+    document.getElementById('which-slot').textContent=(mealSlotTarget==='lunch'?'🌞 昼食':'🌙 夜ご食')+'のメニューを選択';
     if(!recIdxs.length){const sc=a.map((m,i)=>({i,s:scoreMeal(m)})).sort((x,y)=>y.s-x.s);recIdxs=sc.slice(0,6).map(x=>x.i);}
     const el=document.getElementById('meal-cards');if(!el)return;el.innerHTML='';
     const cur=(mealSlotTarget==='lunch'?getLunch():getDinner());
     recIdxs.forEach(idx=>{
       const m=a[idx];if(!m)return;const sel=cur.menuId===m.id,avail=(m.ings||[]).filter(i=>fridgeHas(i.n)).length;
-      const r=getRating(m.id),stars=r?'<span style="font-size:12px;color:#c4963a">\u2605'+r.toFixed(1)+'</span>':'';
+      const r=getRating(m.id),stars=r?'<span style="font-size:12px;color:#c4963a">★'+r.toFixed(1)+'</span>':'';
       const c=document.createElement('button');c.className='meal-card'+(sel?' sel':'');c.onclick=()=>openRecipe(m.id);
-      c.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'\U0001f373')+'</div><div style="flex:1;min-width:0"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div class="mc-right"><div class="mc-meta">\u23f1 '+m.time+'\u5206</div><div class="mc-meta">\u98df\u6750 '+avail+'/'+(m.ings||[]).length+'</div>'+stars+'</div></div><div class="mc-tags">'+(m.tags||[]).map(x=>'<span class="mc-tag">'+x+'</span>').join('')+'</div><div class="mc-nutr"><div class="mc-n"><b>'+(m.nutr?m.nutr.cal:'?')+'</b> kcal</div><div class="mc-n"><b>'+(m.nutr?m.nutr.protein:'?')+'g</b> \u86cb\u767d</div><div class="mc-n"><b>'+(m.nutr?m.nutr.fat:'?')+'g</b> \u8102\u8cea</div><div class="mc-n"><b>'+(m.nutr?m.nutr.carb:'?')+'g</b> \u7cd6\u8cea</div></div>';
+      c.innerHTML='<div class="mc-top"><div class="mc-emoji">'+(m.emoji||'🍳')+'</div><div style="flex:1;min-width:0"><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div></div><div class="mc-right"><div class="mc-meta">⏱ '+m.time+'分</div><div class="mc-meta">食材 '+avail+'/'+(m.ings||[]).length+'</div>'+stars+'</div></div><div class="mc-tags">'+(m.tags||[]).map(x=>'<span class="mc-tag">'+x+'</span>').join('')+'</div><div class="mc-nutr"><div class="mc-n"><b>'+(m.nutr?m.nutr.cal:'?')+'</b> kcal</div><div class="mc-n"><b>'+(m.nutr?m.nutr.protein:'?')+'g</b> 蛋白</div><div class="mc-n"><b>'+(m.nutr?m.nutr.fat:'?')+'g</b> 脂質</div><div class="mc-n"><b>'+(m.nutr?m.nutr.carb:'?')+'g</b> 糖質</div></div>';
       el.appendChild(c);
     });
   }else if(t==='custom'){
     const el=document.getElementById('custom-list');if(!el)return;el.innerHTML='';
     const cs=state.customMeals||[];
-    if(!cs.length){el.innerHTML='<div class="empty"><div class="ei">\u2728</div><div class="et">\u30ab\u30b9\u30bf\u30e0\u30e1\u30cb\u30e5\u30fc\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093</div></div>';return;}
-    cs.forEach(m=>{const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';row.innerHTML='<span style="font-size:26px">'+(m.emoji||'\U0001f373')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' \u30fb '+(m.time||'?')+'\u5206</div></div><button class="pill" onclick="openRecipe(\''+m.id+'\')">\u8a73\u7d30</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">\u2715</button>';el.appendChild(row);});
+    if(!cs.length){el.innerHTML='<div class="empty"><div class="ei">✨</div><div class="et">カスタムメニューはまだありません</div></div>';return;}
+    cs.forEach(m=>{const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';row.innerHTML='<span style="font-size:26px">'+(m.emoji||'🍳')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' ・ '+(m.time||'?')+'分</div></div><button class="pill" onclick="openRecipe(\''+m.id+'\')">詳細</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>';el.appendChild(row);});
   }else if(t==='eatout')renderEatOut();
   else if(t==='nutr')renderNutr();
 }
@@ -789,21 +789,21 @@ function renderEatOut(){
   eoSlot(eoSlotTarget);
   const cb=document.getElementById('cuisine-btns');if(cb){cb.innerHTML='';CUISINES.forEach(c=>{const b=document.createElement('button');b.className='cu-btn'+(selectedCuisine===c.e?' on':'');b.textContent=c.e+' '+c.l;b.onclick=()=>{selectedCuisine=c.e;document.querySelectorAll('.cu-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};cb.appendChild(b);});}
   const hi=document.getElementById('eo-hist');if(!hi)return;hi.innerHTML='';
-  const all=[];Object.entries(state.meals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'\u591c']);});Object.entries(state.lunchMeals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'\u663c']);});
+  const all=[];Object.entries(state.meals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'夜']);});Object.entries(state.lunchMeals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'昼']);});
   all.sort((a,b)=>b[0].localeCompare(a[0]));
-  if(!all.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">\u5916\u98df\u306e\u8a18\u9332\u304c\u3042\u308a\u307e\u305b\u3093</div></div>';return;}
-  all.slice(0,10).forEach(([d,m,slot])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'\U0001f37d\uFE0F')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+d+' \u30fb '+slot+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+(m.eaten?'\u2705':'\u2b1c')+'</span>';hi.appendChild(row);});
+  if(!all.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">外食の記録がありません</div></div>';return;}
+  all.slice(0,10).forEach(([d,m,slot])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+d+' ・ '+slot+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+(m.eaten?'✅':'⬜')+'</span>';hi.appendChild(row);});
 }
 function renderNutr(){
   const el=document.getElementById('nutr-detail');if(!el)return;el.innerHTML='';
   const wm=[];for(let i=0;i<7;i++){const k=daysAgo(i);[state.meals,state.lunchMeals].forEach(src=>{const rec=(src||{})[k];if(rec&&rec.menuId){const m=mealById(rec.menuId);if(m&&m.nutr)wm.push(m);}});}
-  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">\U0001f4ca</div><div class="et">\u307e\u3060\u98df\u4e8b\u306e\u8a18\u9332\u304c\u3042\u308a\u307e\u305b\u3093<br>\u30e1\u30cb\u30e5\u30fc\u3092\u9078\u3093\u3067\u300c\u98df\u3079\u305f\u300d\u3092\u62bc\u3059\u3068\u8a18\u9332\u3055\u308c\u307e\u3059</div></div>';return;}
+  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">まだ食事の記録がありません<br>メニューを選んで「食べた」を押すと記録されます</div></div>';return;}
   const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});const n=wm.length;
-  el.innerHTML='<div class="sec-label">\u904e\u53bb7\u65e5\u306e\u5e73\u5747\uff08'+n+'\u98df\u5206\uff09</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">\u86cb\u767d\u8cea</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">\u8102\u8cea</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">\u7cd6\u8cea</div></div></div>'+[['\u86cb\u767d\u8cea','#6fcf97',avg.protein/n*4],['\u8102\u8cea','#c4963a',avg.fat/n*9],['\u7cd6\u8cea','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1,p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">\u4eca\u9031\u306e\u98df\u4e8b</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+(m.emoji||'\U0001f373')+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
+  el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1,p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+(m.emoji||'🍳')+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
 }
 
 // ===== STOCK =====
-function addFridge(){const name=document.getElementById('fi-name').value.trim(),amt=document.getElementById('fi-amt').value.trim();if(!name)return;state.fridge.push({id:Date.now().toString(),name:name,amt:amt||'\u9069\u91cf'});document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';saveLocal();sched();renderStockTab('fridge');}
+function addFridge(){const name=document.getElementById('fi-name').value.trim(),amt=document.getElementById('fi-amt').value.trim();if(!name)return;state.fridge.push({id:Date.now().toString(),name:name,amt:amt||'適量'});document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';saveLocal();sched();renderStockTab('fridge');}
 function delFridge(id){state.fridge=(state.fridge||[]).filter(f=>f.id!==id);saveLocal();sched();renderStockTab('fridge');}
 function toggleStaple(id){
   if(!state.staplesNeeded)state.staplesNeeded={};state.staplesNeeded[id]=!state.staplesNeeded[id];
@@ -814,15 +814,15 @@ function toggleStaple(id){
 function renderStockTab(t){
   if(t==='fridge'){
     const el=document.getElementById('fridge-list');if(!el)return;el.innerHTML='';
-    if(!(state.fridge||[]).length){el.innerHTML='<div class="empty"><div class="ei">\U0001f9ca</div><div class="et">\u98df\u6750\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</div></div>';return;}
-    state.fridge.forEach(f=>{const row=document.createElement('div');row.className='fi-row';row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">\u2715</button>';el.appendChild(row);});
+    if(!(state.fridge||[]).length){el.innerHTML='<div class="empty"><div class="ei">🧊</div><div class="et">食材を追加してください</div></div>';return;}
+    state.fridge.forEach(f=>{const row=document.createElement('div');row.className='fi-row';row.innerHTML='<span class="fi-name">'+f.name+'</span><span class="fi-amt">'+f.amt+'</span><button class="fi-del" onclick="delFridge(\''+f.id+'\')">✕</button>';el.appendChild(row);});
   }else{
     const el=document.getElementById('staples-list');if(!el)return;el.innerHTML='';
     [...new Set(STAPLES.map(s=>s.c))].forEach(cat=>{
       const h=document.createElement('div');h.className='staple-cat';h.textContent=cat;el.appendChild(h);
       STAPLES.filter(s=>s.c===cat).forEach(m=>{
         const need=isStapleNeeded(m.id);const row=document.createElement('div');row.className='staple-row'+(need?' on':'');row.onclick=()=>toggleStaple(m.id);
-        row.innerHTML='<div class="staple-chk">'+(need?'\u2713':'')+'</div><span class="staple-name">'+m.n+'</span>'+(need?'<span class="need-badge">\u8cb7\u3046</span>':'');
+        row.innerHTML='<div class="staple-chk">'+(need?'✓':'')+'</div><span class="staple-name">'+m.n+'</span>'+(need?'<span class="need-badge">買う</span>':'');
         el.appendChild(row);
       });
     });
@@ -839,13 +839,13 @@ function renderShopTab(t){
   if(t==='today'){
     const el=document.getElementById('sh-today-content');if(!el)return;el.innerHTML='';
     const st=getNeededStaples(),mm=getActiveMemo();
-    if(!st.length&&!mm.length){el.innerHTML='<div class="empty"><div class="ei">\u2705</div><div class="et">\u4eca\u65e5\u306e\u8cb7\u3044\u7269\u30ea\u30b9\u30c8\u306f\u7a7a\u3067\u3059</div></div>';return;}
-    if(st.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='\U0001f4e6 \u5e38\u5099\u54c1';el.appendChild(l);st.forEach(s=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+s.n+'</span><button class="buy-btn" onclick="buyStaple(\''+s.id+'\')">\u2713 \u8cfc\u5165\u5b8c\u4e86</button>';el.appendChild(row);});}
-    if(mm.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='\U0001f4dd \u30e1\u30e2\u30ea\u30b9\u30c8';el.appendChild(l);mm.forEach(i=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+i.text+'</span><button class="buy-btn" onclick="buyMemo(\''+i.id+'\')">\u2713 \u8cfc\u5165\u5b8c\u4e86</button>';el.appendChild(row);});}
+    if(!st.length&&!mm.length){el.innerHTML='<div class="empty"><div class="ei">✅</div><div class="et">今日の買い物リストは空です</div></div>';return;}
+    if(st.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='📦 常備品';el.appendChild(l);st.forEach(s=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+s.n+'</span><button class="buy-btn" onclick="buyStaple(\''+s.id+'\')">✓ 購入完了</button>';el.appendChild(row);});}
+    if(mm.length){const l=document.createElement('div');l.className='shop-cat-lbl';l.textContent='📝 メモリスト';el.appendChild(l);mm.forEach(i=>{const row=document.createElement('div');row.className='shop-item on';row.innerHTML='<span class="shop-name">'+i.text+'</span><button class="buy-btn" onclick="buyMemo(\''+i.id+'\')">✓ 購入完了</button>';el.appendChild(row);});}
   }else{
     const el=document.getElementById('manage-list');if(!el)return;el.innerHTML='';
-    if(!(state.shopMemo||[]).length){el.innerHTML='<div class="empty"><div class="ei">\U0001f4dd</div><div class="et">\u30e1\u30e2\u3092\u8ffd\u52a0\u3057\u3066\u304f\u3060\u3055\u3044</div></div>';return;}
-    state.shopMemo.forEach(i=>{const bt=isBoughtToday(i.id);const row=document.createElement('div');row.className='shop-item'+(i.active?' on':'');row.innerHTML='<button class="big-chk'+(i.active?' on':'')+'" onclick="toggleMemoActive(\''+i.id+'\')">'+(i.active?'\u2713':'')+'</button><span class="shop-name"'+(bt?' style="text-decoration:line-through;color:var(--muted)"':'')+'>'+i.text+'</span>'+(bt?'<span style="font-size:11px;color:var(--green)">\u8cfc\u5165\u6e08</span>':'')+'<button class="del-btn" onclick="deleteMemo(\''+i.id+'\')">\u2715</button>';el.appendChild(row);});
+    if(!(state.shopMemo||[]).length){el.innerHTML='<div class="empty"><div class="ei">📝</div><div class="et">メモを追加してください</div></div>';return;}
+    state.shopMemo.forEach(i=>{const bt=isBoughtToday(i.id);const row=document.createElement('div');row.className='shop-item'+(i.active?' on':'');row.innerHTML='<button class="big-chk'+(i.active?' on':'')+'" onclick="toggleMemoActive(\''+i.id+'\')">'+(i.active?'✓':'')+'</button><span class="shop-name"'+(bt?' style="text-decoration:line-through;color:var(--muted)"':'')+'>'+i.text+'</span>'+(bt?'<span style="font-size:11px;color:var(--green)">購入済</span>':'')+'<button class="del-btn" onclick="deleteMemo(\''+i.id+'\')">✕</button>';el.appendChild(row);});
   }
 }
 
@@ -855,9 +855,9 @@ function renderHist(){
   const td=HIDS.filter(id=>{if(id==='carwash'||id==='bedding')return getWeekDone(id);if(id==='trash')return tr&&getDayDone('trash');if(id==='meal')return (dinner.cooked&&dinner.eaten)||(dinner.type==='eatout'&&dinner.eaten);return getDayDone(id);}).length;
   let streak=0;for(let i=1;i<=60;i++){const k=daysAgo(i),dd=(state.days||{})[k];if(dd&&HIDS.some(id=>dd[id]))streak++;else break;}
   const rd=Object.keys(state.days||{}).filter(k=>{const dd=(state.days||{})[k];return dd&&HIDS.some(id=>dd[id]);}).length;
-  document.getElementById('st-streak').textContent='\U0001f525 '+streak;
-  document.getElementById('st-tcnt').textContent='\u2705 '+td;
-  document.getElementById('st-days').textContent='\U0001f4c5 '+rd;
+  document.getElementById('st-streak').textContent='🔥 '+streak;
+  document.getElementById('st-tcnt').textContent='✅ '+td;
+  document.getElementById('st-days').textContent='📅 '+rd;
   const labels=[],data=[],colors=[];
   for(let i=13;i>=1;i--){const k=daysAgo(i),dd=(state.days||{})[k]||{},cnt=HIDS.filter(id=>dd[id]).length,dt=new Date();dt.setDate(dt.getDate()-i);labels.push((dt.getMonth()+1)+'/'+dt.getDate());data.push(cnt);colors.push(cnt>=8?'#6fcf97':cnt>=5?'#3a8f6a':cnt>=2?'#1e5a42':'#152e22');}
   if(histChart)histChart.destroy();
