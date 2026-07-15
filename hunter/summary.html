@@ -7,12 +7,13 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --page-bg:#080d08; --text-main:#ddeedd; --text-sub:var(--text-sub); --text-sub2:var(--text-sub);
+  --page-bg:#080d08; --text-main:#ddeedd; --text-sub:#8aaa8a; --text-sub2:#6b8a6b;
   --hdr-bg:#0f160f; --hdr-border:rgba(74,222,128,.2);
-  --tab-bg:rgba(255,255,255,.05); --tab-border:rgba(255,255,255,.2); --tab-text:var(--text-sub);
+  --tab-bg:rgba(255,255,255,.05); --tab-border:rgba(255,255,255,.2); --tab-text:#8aaa8a;
   --card-border-soft:rgba(255,255,255,.1); --card-border-soft2:rgba(255,255,255,.05);
   --th-bg:rgba(255,255,255,.07);
   --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --orange-acc:#fb923c;
+  --hunter:#fb923c; --gun:#60a5fa;
 }
 html.light{
   --page-bg:#f4f8f4; --text-main:#0f2a14; --text-sub:#3d5a3d; --text-sub2:#3d5a3d;
@@ -21,12 +22,16 @@ html.light{
   --card-border-soft:rgba(0,0,0,.1); --card-border-soft2:rgba(0,0,0,.06);
   --th-bg:rgba(0,0,0,.05);
   --green:#15803d; --yellow:#b45309; --red:#dc2626; --orange-acc:#c2410c;
+  --hunter:#ea580c; --gun:#2563eb;
 }
 body{background:var(--page-bg);color:var(--text-main);font-family:-apple-system,'Hiragino Sans',sans-serif;padding-bottom:30px;}
 .hdr{background:var(--hdr-bg);border-bottom:1px solid var(--hdr-border);padding:max(14px,calc(env(safe-area-inset-top,0px)+10px)) 14px 12px;position:sticky;top:0;z-index:10;}
 .hdr h1{font-size:17px;font-weight:700;color:var(--green);}
 .hdr a{color:var(--text-sub2);font-size:13px;text-decoration:none;margin-top:4px;display:inline-block;}
 .theme-toggle{position:absolute;top:max(14px,calc(env(safe-area-inset-top,0px)+10px));right:14px;background:var(--tab-bg);border:1px solid var(--tab-border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--text-main);cursor:pointer;}
+.exam-toggle-btn{padding:12px 8px;border-radius:12px;border:2px solid var(--tab-border);background:var(--tab-bg);color:var(--text-main);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.exam-toggle-btn.on.hunter{border-color:var(--hunter,#fb923c);background:rgba(251,146,60,.1);color:var(--hunter,#fb923c);}
+.exam-toggle-btn.on.gun{border-color:var(--gun,#60a5fa);background:rgba(96,165,250,.1);color:var(--gun,#60a5fa);}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--hdr-bg);border-bottom:1px solid var(--card-border-soft2);position:sticky;top:56px;z-index:9;}
 .tab{padding:6px 11px;border-radius:20px;border:1px solid var(--tab-border);background:var(--tab-bg);color:var(--tab-text);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .tab.on{border:2px solid var(--green);background:rgba(74,222,128,.12);color:var(--green);}
@@ -139,11 +144,17 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
 </head>
 <body>
 <div class="hdr" style="position:relative;">
-  <h1>📖 重要まとめ（体系版）</h1>
+  <h1 id="pageTitle">📖 重要まとめ（体系版）</h1>
   <a href="index.html">← アプリに戻る</a>
   <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
 </div>
-<div class="tabs">
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 12px 0;">
+  <button id="etab-hunter" class="exam-toggle-btn on hunter" onclick="selExamSummary('hunter')">🦆 狩猟免許</button>
+  <button id="etab-gun" class="exam-toggle-btn gun" onclick="selExamSummary('gun')">🔫 猟銃講習会</button>
+</div>
+
+<div class="tabs gun-tabs" style="display:none;">
   <button class="tab on" onclick="show('s0',this)">🔢 数字一覧</button>
   <button class="tab" onclick="show('s1',this)">📋 所持許可</button>
   <button class="tab" onclick="show('s2',this)">🔫 銃の構造</button>
@@ -153,11 +164,234 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
   <button class="tab" onclick="show('s6',this)">⚖️ 法令体系</button>
 </div>
 
+<div class="tabs hunter-tabs" style="display:grid;">
+  <button class="tab on" onclick="show('h0',this)">🎯 テーマハブ</button>
+  <button class="tab" onclick="show('h1',this)">⚖️ 法令・制度</button>
+  <button class="tab" onclick="show('h2',this)">🦅 鳥獣識別</button>
+  <button class="tab" onclick="show('h3',this)">🪤 猟具・猟法</button>
+  <button class="tab" onclick="show('h4',this)">🌿 保護管理</button>
+</div>
+
+<!-- ══════════ 狩猟免許コンテンツ ══════════ -->
+<div id="hunter-content">
+
+<div id="h0" class="sec on">
+
+  <div class="card c-red" style="border-width:2px;">
+    <h2>🎯 テーマ別・集中特訓ハブ（狩猟免許）</h2>
+    <p style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">苦手なテーマだけを抽出して集中的に問題演習できます。</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="index.html?topic=trap&exam=hunter" style="display:block;text-align:center;padding:13px;background:rgba(248,113,113,.15);border:2px solid var(--red);border-radius:10px;color:var(--red);font-weight:700;text-decoration:none;font-size:14px;">⚠️ ひっかけ問題集を解く →</a>
+      <a href="index.html?topic=kekkaku&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">❌ 欠格事由・免許取消し →</a>
+      <a href="index.html?topic=toroku&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">📋 狩猟者登録 →</a>
+      <a href="index.html?topic=koushin&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">🔄 免許の更新・有効期間 →</a>
+      <a href="index.html?topic=bird_id&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">🦅 鳥獣識別（狩猟鳥獣か否か） →</a>
+      <a href="index.html?topic=ryogu&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">🪤 猟具・禁止猟法 →</a>
+      <a href="index.html?topic=hogo&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">🌿 保護管理・鉛弾規制 →</a>
+      <a href="index.html?topic=kuiki&exam=hunter" style="display:block;text-align:center;padding:12px;background:rgba(251,146,60,.1);border:1px solid var(--hunter);border-radius:10px;color:var(--hunter);font-weight:700;text-decoration:none;font-size:13px;">🚫 鳥獣保護区・禁止区域 →</a>
+    </div>
+  </div>
+
+  <div class="card c-blu">
+    <h2>📊 試験の基本データ</h2>
+    <table>
+      <tr><th>項目</th><th>内容</th></tr>
+      <tr><td>出題形式</td><td>三肢択一式</td></tr>
+      <tr><td>問題数</td><td class="ok">30問</td>（既に他区分の免許保有者は法令免除で15問）</tr>
+      <tr><td>試験時間</td><td>90分</td></tr>
+      <tr><td>合格基準</td><td class="ok">70%以上（30問中21問以上）</td></tr>
+      <tr><td>出題内訳</td><td>法令13問・猟具6問・鳥獣9問・保護管理2問</td></tr>
+    </table>
+    <div class="why">💡 試験は①知識試験→②適性試験→③技能試験の順。知識試験に合格しないと次に進めない</div>
+  </div>
+
+  <div class="card c-grn">
+    <h2>🗓️ 免許の有効期間</h2>
+    <table>
+      <tr><td>有効期間</td><td class="ok">3年間</td></tr>
+      <tr><td>満了日</td><td>取得（更新）した年から3年目の<strong style="color:var(--yellow);">9月14日</strong></td></tr>
+      <tr><td>更新できなかった場合</td><td class="ng">運転免許と違い「うっかり失効後の更新」制度はなし。試験の受け直しが必要</td></tr>
+    </table>
+    <div class="warn-box">
+      <p>⚠️ 満了日を1日でも過ぎると自動失効。無免許での狩猟は刑事罰（1年以下の懲役又は100万円以下の罰金）の対象</p>
+    </div>
+  </div>
+
+</div>
+
+<div id="h1" class="sec">
+
+  <div class="card c-red">
+    <h2>❌ 狩猟免許の欠格事由（第40条）</h2>
+    <table>
+      <tr><th>号</th><th>内容</th></tr>
+      <tr><td>一</td><td>網猟・わな猟：<strong class="yl">18歳</strong>未満／第一種・第二種銃猟：<strong class="yl">20歳</strong>未満</td></tr>
+      <tr><td>二</td><td>精神障害、発作による意識障害のおそれのある病気（統合失調症・そううつ病・てんかん等）</td></tr>
+      <tr><td>三</td><td>麻薬、大麻、あへん又は覚醒剤の中毒者</td></tr>
+      <tr><td>四</td><td>自己の行為の是非を判別し、又はその判別に従って行動する能力がなく、又は著しく低い者</td></tr>
+      <tr><td>五</td><td>鳥獣保護管理法違反で罰金以上の刑に処され、執行終了等から<strong class="yl">3年</strong>を経過しない者</td></tr>
+      <tr><td>六</td><td>狩猟免許を取り消され、取消しの日から<strong class="yl">3年</strong>を経過しない者</td></tr>
+    </table>
+    <div class="warn-box">
+      <p>❌「取消し後1年間は再受験できない」← 誤り。正しくは<strong>3年間</strong>（第40条第6号）</p>
+    </div>
+    <div class="why">💡 欠格事由に該当する者は、そもそも狩猟免許試験を「受験」することもできない（第47条）</div>
+  </div>
+
+  <div class="card c-ora">
+    <h2>🔫 狩猟免許の種類</h2>
+    <table>
+      <tr><th>種類</th><th>対象猟具</th></tr>
+      <tr><td>網猟免許</td><td>むそう網・はり網・つき網・なげ網等</td></tr>
+      <tr><td>わな猟免許</td><td>くくりわな・箱わな・囲いわな</td></tr>
+      <tr><td>第一種銃猟免許</td><td class="ok">散弾銃・ライフル銃・空気銃（全て）</td></tr>
+      <tr><td>第二種銃猟免許</td><td>空気銃のみ</td></tr>
+    </table>
+    <div class="warn-box">
+      <p>❌「第一種銃猟免許は散弾銃とライフル銃のみ」← 誤り。空気銃も使用可（登録時に装薬銃・空気銃を選択）</p>
+    </div>
+  </div>
+
+  <div class="card c-pur">
+    <h2>📋 狩猟免許と狩猟者登録（別制度・要注意）</h2>
+    <table>
+      <tr><th></th><th>狩猟免許</th><th>狩猟者登録</th></tr>
+      <tr><td>性質</td><td>資格そのもの</td><td>その年その都道府県で猟をする許可</td></tr>
+      <tr><td>単位</td><td>全国共通</td><td class="yl">都道府県ごと</td></tr>
+      <tr><td>有効期間</td><td>3年</td><td>1年（その狩猟期間のみ）</td></tr>
+      <tr><td>申請・交付先</td><td>都道府県知事</td><td>都道府県知事</td></tr>
+      <tr><td>記載事項変更届出</td><td>-</td><td class="yl">1か月以内</td></tr>
+      <tr><td>返納期限</td><td>-</td><td class="yl">満了後30日以内</td></tr>
+    </table>
+    <div class="warn-box">
+      <p>❌「免許があれば狩猟者登録なしで狩猟できる」← 誤り。登録なしでは狩猟期間中でも捕獲不可</p>
+      <p>❌「1つの県で登録すれば全国どこでも狩猟できる」← 誤り。他県で狩猟するには別途その県の登録が必要</p>
+    </div>
+  </div>
+
+  <div class="card c-yel">
+    <h2>🚫 捕獲が禁止される場所</h2>
+    <table>
+      <tr><td>鳥獣保護区</td><td class="ng">狩猟自体が禁止</td></tr>
+      <tr><td>休猟区</td><td class="ng">狩猟自体が禁止</td></tr>
+      <tr><td>公道</td><td class="ng">狩猟自体が禁止</td></tr>
+      <tr><td>特定猟具使用禁止区域</td><td class="yl">指定された猟具（銃等）のみ使用禁止。それ以外の猟法なら可能な場合あり</td></tr>
+      <tr><td>垣・さく内、作物のある土地</td><td class="yl">土地占有者の承諾が必須</td></tr>
+    </table>
+    <div class="why">💡 「鳥獣保護区等＝狩猟自体が禁止」と「特定猟具使用禁止区域＝特定の猟具だけ禁止」を区別する</div>
+  </div>
+
+</div>
+
+<div id="h2" class="sec">
+
+  <div class="card c-grn">
+    <h2>🦅 狩猟鳥獣・非狩猟鳥獣の頻出パターン</h2>
+    <p style="margin-bottom:8px;font-size:12px;">現在の狩猟鳥獣は<strong class="yl">鳥類26種・獣類20種の合計46種</strong>（令和4年9月15日施行の改正後）</p>
+    <table>
+      <tr><th>混同しやすいペア</th><th>正解</th></tr>
+      <tr><td>イノシシ vs ニホンザル・カモシカ</td><td>イノシシ＝<span class="ok">狩猟鳥獣</span>／サル・カモシカ＝<span class="ng">非狩猟鳥獣</span></td></tr>
+      <tr><td>タヌキ・キツネ・アライグマ・ハクビシン・アナグマ・テン</td><td class="ok">いずれも狩猟鳥獣</td></tr>
+      <tr><td>ニホンリス vs タイワンリス・シマリス</td><td>ニホンリス＝<span class="ng">非狩猟鳥獣</span>／タイワンリス・シマリス＝<span class="ok">狩猟鳥獣</span></td></tr>
+      <tr><td>ムササビ・モモンガ・オコジョ</td><td class="ng">いずれも非狩猟鳥獣</td></tr>
+      <tr><td>イタチ</td><td class="yl">オスのみ狩猟鳥獣、メスは非狩猟鳥獣</td></tr>
+      <tr><td>キジバト vs アオバト・ドバト</td><td>キジバト＝<span class="ok">狩猟鳥獣</span>／アオバト・ドバト＝<span class="ng">非狩猟鳥獣</span></td></tr>
+      <tr><td>ツグミ・モズ・ホオジロ</td><td class="ng">いずれも非狩猟鳥獣（ツグミはかつて狩猟鳥だったが現在は非狩猟）</td></tr>
+    </table>
+  </div>
+
+  <div class="card c-blu">
+    <h2>🦆 カモ類：オスのみ狩猟鳥獣のグループ</h2>
+    <p style="font-size:12px;margin-bottom:8px;">以下は<strong class="yl">オスのみ</strong>狩猟鳥獣（メスは非狩猟鳥獣）：</p>
+    <p style="font-size:13px;line-height:2.0;">マガモ・コガモ・ヨシガモ・オナガガモ・ハシビロガモ・ホシハジロ・キンクロハジロ・スズガモ・クロガモ</p>
+    <div class="warn-box">
+      <p>⚠️ カルガモは<strong>雌雄問わず</strong>狩猟鳥獣（例外パターン）</p>
+    </div>
+    <div class="why">💡 メスと外見が似た近縁の非狩猟鳥獣（オシドリ・トモエガモ等）との誤認捕獲に要注意</div>
+  </div>
+
+  <div class="card c-ora">
+    <h2>🚫 捕獲が禁止されているキジ科・シギ科</h2>
+    <table>
+      <tr><td>ヤマドリのメス</td><td class="ng">捕獲禁止（オスのみ可）</td></tr>
+      <tr><td>キジのメス</td><td class="ng">捕獲禁止（オスのみ可）</td></tr>
+      <tr><td>ヤマシギ</td><td class="ng">捕獲禁止</td></tr>
+      <tr><td>クロガモ</td><td class="ng">捕獲禁止</td></tr>
+    </table>
+  </div>
+
+  <div class="card c-pur">
+    <h2>🥚 ヒナ・卵の扱い</h2>
+    <div class="warn-box">
+      <p>❌「狩猟期間中ならヒナや卵も捕獲・採取できる」← 誤り</p>
+    </div>
+    <p style="font-size:13px;">狩猟鳥獣に指定されている種であっても、<strong class="yl">ヒナや卵の捕獲・採取は狩猟期間中であっても禁止</strong>されている。</p>
+  </div>
+
+</div>
+
+<div id="h3" class="sec">
+
+  <div class="card c-red">
+    <h2>🪤 使用できるわな・禁止されているわな</h2>
+    <table>
+      <tr><td>くくりわな</td><td class="ok">使用可</td></tr>
+      <tr><td>箱わな</td><td class="ok">使用可</td></tr>
+      <tr><td>囲いわな</td><td class="ok">使用可</td></tr>
+      <tr><td>とらばさみ</td><td class="ng">原則禁止（獣への損傷が大きいため）</td></tr>
+    </table>
+    <div class="why">💡 はこわな＝内部に餌を置く／囲いわな＝餌を置かず広い範囲を囲う、という構造の違い</div>
+  </div>
+
+  <div class="card c-blu">
+    <h2>🔧 くくりわなの締め付け防止金具</h2>
+    <p style="font-size:13px;line-height:1.8;">目的：<strong class="yl">錯誤捕獲（捕獲する意図のない獣がかかること）</strong>が生じた際に容易に解放できるようにし、また必要以上に強く締め付けることによる獣への損傷を軽減するため。</p>
+  </div>
+
+  <div class="card c-grn">
+    <h2>🔫 空気散弾銃</h2>
+    <div class="warn-box">
+      <p>❌「威力が高いため使用が推奨されている」← 誤り</p>
+    </div>
+    <p style="font-size:13px;">威力が不十分で<strong class="yl">半矢</strong>（獲物に致命傷を与えられず苦しませる状態）になる可能性が高いため、<strong class="ng">使用が禁止</strong>されている。</p>
+  </div>
+
+  <div class="card c-yel">
+    <h2>🏷️ わな・網の標識</h2>
+    <p style="font-size:13px;">わな及び網には、<strong class="yl">設置場所を問わず</strong>、住所・氏名等を記載した標識を付けることが義務付けられている。</p>
+    <div class="warn-box">
+      <p>❌「人の往来の激しい場所に限り標識が必要」← 誤り。場所を問わず必須</p>
+    </div>
+  </div>
+
+</div>
+
+<div id="h4" class="sec">
+
+  <div class="card c-grn">
+    <h2>🌿 個体数管理・指定管理鳥獣捕獲等事業</h2>
+    <p style="font-size:13px;line-height:1.8;">生息数が著しく増加している鳥獣（<strong class="yl">指定管理鳥獣</strong>、例：ニホンジカ・イノシシ）について、<strong>都道府県</strong>が捕獲等を推進するために実施する事業。</p>
+  </div>
+
+  <div class="card c-blu">
+    <h2>💥 鉛弾規制・非鉛化</h2>
+    <p style="font-size:13px;line-height:1.8;">鉛弾によるワシ・タカ類等の鉛中毒被害を防止するため、地域によっては<strong class="yl">鉛散弾規制地域</strong>が指定され、非鉛弾（スチールショット等）への切り替えが推奨・義務化されている場合がある。</p>
+  </div>
+
+</div>
+
+</div>
+<!-- ══════════ /狩猟免許コンテンツ ══════════ -->
+
+<!-- ══════════ 猟銃講習会コンテンツ ══════════ -->
+<div id="gun-content" style="display:none;">
+
 <!-- ① 数字一覧 -->
 <div id="s0" class="sec on">
 
   <div class="card c-red" style="border-width:2px;">
     <h2>🎯 テーマ別・集中特訓ハブ</h2>
+
     <p style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">苦手なテーマだけを抽出して集中的に問題演習できます。ここから直接ジャンプ！</p>
     <div style="display:flex;flex-direction:column;gap:8px;">
       <a href="index.html?topic=trap" style="display:block;text-align:center;padding:13px;background:rgba(248,113,113,.15);border:2px solid var(--red);border-radius:10px;color:var(--red);font-weight:700;text-decoration:none;font-size:14px;">⚠️ ひっかけ問題集を解く →</a>
@@ -921,6 +1155,9 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
 
 </div>
 
+</div>
+<!-- ══════════ /猟銃講習会コンテンツ ══════════ -->
+
 <a href="index.html" class="back-btn">← クイズアプリに戻る</a>
 
 <script>
@@ -931,6 +1168,41 @@ function show(id, btn){
   btn.classList.add('on');
   window.scrollTo(0,0);
 }
+
+// ── 試験切り替え（狩猟免許 / 猟銃講習会）──
+function selExamSummary(exam){
+  const hunterContent = document.getElementById('hunter-content');
+  const gunContent = document.getElementById('gun-content');
+  const hunterTabs = document.querySelector('.hunter-tabs');
+  const gunTabs = document.querySelector('.gun-tabs');
+  const etabHunter = document.getElementById('etab-hunter');
+  const etabGun = document.getElementById('etab-gun');
+  const title = document.getElementById('pageTitle');
+
+  if(exam==='hunter'){
+    hunterContent.style.display='block'; gunContent.style.display='none';
+    hunterTabs.style.display='grid'; gunTabs.style.display='none';
+    etabHunter.className='exam-toggle-btn on hunter'; etabGun.className='exam-toggle-btn gun';
+    title.textContent='📖 重要まとめ（狩猟免許）';
+  } else {
+    hunterContent.style.display='none'; gunContent.style.display='block';
+    hunterTabs.style.display='none'; gunTabs.style.display='flex';
+    etabGun.className='exam-toggle-btn on gun'; etabHunter.className='exam-toggle-btn hunter';
+    title.textContent='📖 重要まとめ（猟銃講習会）';
+  }
+  try{ localStorage.setItem('hunting_summary_exam', exam); }catch(e){}
+  window.scrollTo(0,0);
+}
+
+(function initExamSummary(){
+  let exam='gun';
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('exam');
+    exam = p || localStorage.getItem('hunting_summary_exam') || 'gun';
+  }catch(e){}
+  selExamSummary(exam);
+})();
 
 // ── ダーク/ライトモード（index.htmlと同じlocalStorageキーで同期）──
 function applyTheme(mode){

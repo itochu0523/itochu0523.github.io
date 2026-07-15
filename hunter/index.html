@@ -8015,14 +8015,17 @@ function updHome(){
 function renderTopicButtons(){
   const wrap = document.getElementById('topicBtnList');
   if(!wrap) return;
-  const db = [...HUNTER_QDB, ...(S.customQ?.hunter||[]), ...GUN_QDB, ...(S.customQ?.gun||[])];
-  wrap.innerHTML = Object.entries(TOPICS).map(([key,topic])=>{
+  const db = S.exam==='hunter'
+    ? [...HUNTER_QDB, ...(S.customQ?.hunter||[])]
+    : [...GUN_QDB, ...(S.customQ?.gun||[])];
+  const topics = getTopicsForExam();
+  wrap.innerHTML = Object.entries(topics).map(([key,topic])=>{
     let cnt=0;
     try{ cnt = db.filter(q=>topic.match(q)).length; }catch(e){}
     return `<button class="mbtn" style="margin-bottom:0;" onclick="startTopicQuiz('${key}')">
       <span class="mi">🎯</span>
       <div class="mt"><div class="mn">${topic.name}</div><div class="ms">この分野だけ集中して解く</div></div>
-      <span class="mbadge" style="background:var(--blue,#60a5fa);">${cnt}</span>
+      <span class="mbadge" style="background:${S.exam==='hunter'?'var(--hunter)':'var(--gun)'};">${cnt}</span>
     </button>`;
   }).join('');
 }
@@ -8356,7 +8359,7 @@ function showCatBrowse(catKey){
 }
 
 // ── テーマ別集中学習システム（summary.htmlから問題へジャンプ） ──
-const TOPICS = {
+const GUN_TOPICS = {
   shikko_torikeshi: {
     name:'⚖️ 失効・取消し',
     match:(q)=>/失効|取り消|取消し/.test(q.q+q.explain)
@@ -8387,10 +8390,53 @@ const TOPICS = {
   },
 };
 
-function getTopicQuestions(topicKey){
-  const topic = TOPICS[topicKey];
+const HUNTER_TOPICS = {
+  kekkaku: {
+    name:'❌ 欠格事由・免許取消し',
+    match:(q)=>/欠格事由|取り消|取消し|罰金以上/.test(q.q+q.explain)
+  },
+  toroku: {
+    name:'📋 狩猟者登録',
+    match:(q)=>/狩猟者登録/.test(q.q+q.explain)
+  },
+  koushin: {
+    name:'🔄 免許の更新・有効期間',
+    match:(q)=>/更新|有効期間|失効/.test(q.q+q.explain)
+  },
+  bird_id: {
+    name:'🦅 鳥獣識別（狩猟鳥獣か否か）',
+    match:(q)=>q.cat==='bird'
+  },
+  ryogu: {
+    name:'🪤 猟具・禁止猟法',
+    match:(q)=>q.cat==='gun'
+  },
+  hogo: {
+    name:'🌿 保護管理・鉛弾規制',
+    match:(q)=>q.cat==='eco'
+  },
+  kuiki: {
+    name:'🚫 鳥獣保護区・禁止区域',
+    match:(q)=>/鳥獣保護区|休猟区|特定猟具使用禁止区域|公道/.test(q.q+q.explain)
+  },
+  trap: {
+    name:'⚠️ ひっかけ問題集',
+    match:(q)=>/必ず|いかなる場合も|一切|絶対に|全て(の)?場合|例外(は|が)?無い|しか(でき|認められ)/.test(q.q)
+  },
+};
+
+function getTopicsForExam(){ return S.exam==='hunter' ? HUNTER_TOPICS : GUN_TOPICS; }
+
+function getTopicsForExam(){ return S.exam==='hunter' ? HUNTER_TOPICS : GUN_TOPICS; }
+
+function getTopicQuestions(topicKey, examType){
+  const ex = examType || S.exam;
+  const topics = ex==='hunter' ? HUNTER_TOPICS : GUN_TOPICS;
+  const topic = topics[topicKey];
   if(!topic) return [];
-  const db = [...HUNTER_QDB, ...(S.customQ?.hunter||[]), ...GUN_QDB, ...(S.customQ?.gun||[])];
+  const db = ex==='hunter'
+    ? [...HUNTER_QDB, ...(S.customQ?.hunter||[])]
+    : [...GUN_QDB, ...(S.customQ?.gun||[])];
   return db.filter(q => {
     try{ return topic.match(q); }catch(e){ return false; }
   });
@@ -8403,25 +8449,31 @@ function tagExamType(q){
 }
 
 function startTopicQuiz(topicKey){
-  const qs = getTopicQuestions(topicKey);
-  const topic = TOPICS[topicKey];
+  // 現在選択中の試験（S.exam）のテーマとして検索する
+  const qs = getTopicQuestions(topicKey, S.exam);
   if(!qs.length){ toast('該当する問題が見つかりませんでした'); return; }
-  // gun/hunter混在の可能性があるため、多い方のexamに揃える（大半はgun）
-  const gunCount = qs.filter(q=>tagExamType(q)==='gun').length;
-  const hunterCount = qs.length - gunCount;
-  S.exam = gunCount>=hunterCount ? 'gun' : 'hunter';
-  const filtered = shuffle(qs.filter(q=>tagExamType(q)===S.exam));
+  const filtered = shuffle(qs);
   sess = {qs:filtered, idx:0, ans:[], mode:'topic', t0:Date.now()};
   showScreen('quiz');
   renderQ();
 }
 
-// summary.html等の別ページから ?topic=XXX で開かれた場合、自動でそのテーマのクイズを開始
+// summary.html等の別ページから ?topic=XXX&exam=hunter|gun で開かれた場合、自動でそのテーマのクイズを開始
 function handleTopicParam(){
   try{
     const params = new URLSearchParams(window.location.search);
     const topic = params.get('topic');
-    if(topic && TOPICS[topic]){
+    const examParam = params.get('exam');
+    if(!topic) return;
+    if(examParam==='hunter' || examParam==='gun'){
+      S.exam = examParam;
+    } else {
+      // exam指定がなければ、gun/hunterどちらのテーマに存在するか自動判定
+      if(GUN_TOPICS[topic] && !HUNTER_TOPICS[topic]) S.exam='gun';
+      else if(HUNTER_TOPICS[topic] && !GUN_TOPICS[topic]) S.exam='hunter';
+    }
+    const topics = S.exam==='hunter' ? HUNTER_TOPICS : GUN_TOPICS;
+    if(topics[topic]){
       setTimeout(()=>startTopicQuiz(topic), 100);
     }
   }catch(e){}
