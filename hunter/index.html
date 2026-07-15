@@ -408,6 +408,10 @@ textarea{resize:vertical;min-height:80px;}
     <button class="icon-btn" onclick="doFullSync()" title="同期">🔄</button>
   </div>
   <div class="scroll">
+    <div style="background:linear-gradient(135deg,rgba(74,222,128,.15),rgba(251,191,36,.1));border:2px solid var(--green);border-radius:14px;padding:14px;margin-bottom:12px;text-align:center;">
+      <div style="font-size:15px;font-weight:700;color:var(--green);">🎉 猟銃等講習会 合格おめでとうございます！ 🎉</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">2026年7月15日 修了 → 次は狩猟免許試験（9月12・13日）へ！</div>
+    </div>
     <div class="cdrow" id="countdownRow"></div>
     <div style="display:flex;gap:8px;margin-bottom:12px;">
       <a href="summary.html" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;background:#0a1a10;border:1px solid rgba(74,222,128,.3);border-radius:12px;color:#4ade80;font-size:13px;font-weight:700;text-decoration:none;">📖 重要まとめ</a>
@@ -8300,7 +8304,7 @@ function selExam(exam){
 function renderCountdown(){
   const today=new Date(); today.setHours(0,0,0,0);
   const exams=[
-    {l:'初心者講習（銃）',d:new Date('2026-07-15')},
+    {l:'講習修了証明書 有効期限',d:new Date('2029-07-14')},
     {l:'狩猟免許試験',d:new Date('2026-09-12')}
   ];
   document.getElementById('countdownRow').innerHTML=exams.map(e=>{
