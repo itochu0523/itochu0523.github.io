@@ -8898,7 +8898,14 @@ function gotoTab(tab){
     b.classList.toggle('on',tabs[i]===tab);
   }));
   if(tab==='dash'){ updDash(); switchDash(S.dashTab||'hunter'); }
-  if(tab==='notes') renderNotes();
+  if(tab==='notes'){
+    const ntFilter=document.getElementById('nt-filter');
+    const ntExam=document.getElementById('nt-exam');
+    const tagVal=S.exam==='hunter'?'h':'g';
+    if(ntFilter) ntFilter.value=tagVal;
+    if(ntExam) ntExam.value=tagVal;
+    renderNotes();
+  }
   if(tab==='summary') smTab(0); // まとめタブ：最初のセクションを表示
   if(tab==='settings'){
     const cfg=getCfg();
@@ -8919,6 +8926,7 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 // 初期化
 // ════════════════════════════════════
 load();
+S.exam='hunter'; // 今後は狩猟免許をデフォルト表示にする
 initTheme();
 handleTopicParam();
 updateAll();

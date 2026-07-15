@@ -164,7 +164,7 @@ html.light [style*="color:#8aaa8a"]{color:#3d5a3d !important;}
   <button class="tab" onclick="show('s6',this)">⚖️ 法令体系</button>
 </div>
 
-<div class="tabs hunter-tabs" style="display:grid;">
+<div class="tabs hunter-tabs" style="display:flex;">
   <button class="tab on" onclick="show('h0',this)">🎯 テーマハブ</button>
   <button class="tab" onclick="show('h1',this)">⚖️ 法令・制度</button>
   <button class="tab" onclick="show('h2',this)">🦅 鳥獣識別</button>
@@ -1181,7 +1181,7 @@ function selExamSummary(exam){
 
   if(exam==='hunter'){
     hunterContent.style.display='block'; gunContent.style.display='none';
-    hunterTabs.style.display='grid'; gunTabs.style.display='none';
+    hunterTabs.style.display='flex'; gunTabs.style.display='none';
     etabHunter.className='exam-toggle-btn on hunter'; etabGun.className='exam-toggle-btn gun';
     title.textContent='📖 重要まとめ（狩猟免許）';
   } else {
@@ -1195,11 +1195,11 @@ function selExamSummary(exam){
 }
 
 (function initExamSummary(){
-  let exam='gun';
+  let exam='hunter'; // 今後は狩猟免許をデフォルト表示にする
   try{
     const params = new URLSearchParams(window.location.search);
     const p = params.get('exam');
-    exam = p || localStorage.getItem('hunting_summary_exam') || 'gun';
+    if(p) exam = p;
   }catch(e){}
   selExamSummary(exam);
 })();
