@@ -2,434 +2,405 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ハンターへの道">
+<title>🦅 ハンターへの道</title>
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
-<title>🦅 ハンターへの道</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
-  :root{--green:#52b788;--green-dark:#2d6a4f;--green-dim:rgba(82,183,136,0.15);--text:#e8e8e8;--muted:#888;--card:rgba(255,255,255,0.04)}
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{background:linear-gradient(135deg,#0d1b2a 0%,#1b2838 40%,#0f2027 100%);min-height:100vh;font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;color:var(--text);padding-bottom:80px}
+:root{--bg:#080f0a;--bg2:#0f1a10;--bg3:#1a2e1c;--g:#52b788;--gd:#2d6a4f;--gy:rgba(82,183,136,0.12);--text:#e8f5e9;--muted:#6b7280;--card:rgba(255,255,255,0.035);--border:rgba(82,183,136,0.12)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:var(--bg);min-height:100vh;font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:var(--text);padding-bottom:80px}
 
-  #header{background:linear-gradient(90deg,#1a3a2a,#0d2518);border-bottom:2px solid #2d6a4f;padding:14px 14px 10px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
-  .hd-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .hd-sub{font-size:10px;color:#74b49b;letter-spacing:2px;text-transform:uppercase}
-  .hd-ttl{font-size:17px;font-weight:700;color:#e8f5e9;line-height:1.2}
-  .prog-row{display:flex;justify-content:space-between;font-size:11px;color:#74b49b;margin-bottom:4px}
-  .prog-bar{background:#0d2518;border-radius:8px;height:9px;overflow:hidden}
-  .prog-fill{height:100%;background:linear-gradient(90deg,#2d6a4f,#52b788);border-radius:8px;transition:width .5s}
-  #cannow{display:none;margin-top:7px;background:var(--green-dim);border:1px solid var(--green);border-radius:7px;padding:4px 10px;font-size:11px;color:#95d5b2}
-  #sync-status{font-size:10px;margin-top:5px;color:#555;min-height:14px}
-  #sync-status.ok{color:#52b788}
-  #sync-status.err{color:#e88}
-  #sync-status.ing{color:#e8a838}
+/* ── HEADER ── */
+#hd{background:linear-gradient(135deg,#0a1e0c 0%,#061408 100%);border-bottom:1px solid rgba(82,183,136,0.2);padding:14px 14px 10px;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,0.6)}
+.hd-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hd-icon{width:40px;height:40px;border-radius:10px;filter:drop-shadow(0 0 8px rgba(82,183,136,0.6))}
+.hd-texts .sub{font-size:9px;color:rgba(82,183,136,0.7);letter-spacing:2px;text-transform:uppercase}
+.hd-texts .ttl{font-size:17px;font-weight:800;color:#e8f5e9;line-height:1.2;letter-spacing:-0.5px}
+.prog-row{display:flex;justify-content:space-between;font-size:10px;color:rgba(82,183,136,0.7);margin-bottom:4px}
+.prog-bg{background:rgba(82,183,136,0.1);border-radius:6px;height:7px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#2d6a4f,#52b788,#95d5b2);border-radius:6px;transition:width .6s ease}
+#cannow-badge{display:none;margin-top:6px;background:rgba(82,183,136,0.12);border:1px solid rgba(82,183,136,0.35);border-radius:7px;padding:4px 10px;font-size:10px;color:#95d5b2}
+#sync-bar{font-size:9px;margin-top:4px;color:rgba(82,183,136,0.4);min-height:12px}
+#sync-bar.ok{color:#52b788}#sync-bar.err{color:#f87171}#sync-bar.ing{color:#fbbf24}
 
-  #tabs{padding:9px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #tabs::-webkit-scrollbar{display:none}
-  .tabs-inner{display:flex;gap:6px;min-width:max-content}
-  .tbtn{padding:5px 11px;border-radius:20px;border:none;cursor:pointer;font-size:11px;font-family:inherit;white-space:nowrap;background:rgba(255,255,255,.07);color:#aaa;transition:all .2s}
-  .tbtn.act{font-weight:700;color:#fff}
-  .t-pend{border:1px solid #444;background:transparent;color:#888}
-  .t-pend.on{border-color:#e8a838;background:rgba(232,168,56,.15);color:#e8a838}
+/* ── TOOLBAR ── */
+#toolbar{padding:8px 12px;display:flex;gap:6px;flex-wrap:wrap}
+.tb{padding:5px 10px;border-radius:8px;border:1px solid rgba(82,183,136,0.25);background:rgba(82,183,136,0.08);color:rgba(82,183,136,0.8);font-size:10px;font-family:inherit;cursor:pointer;transition:all .2s}
+.tb:active{background:rgba(82,183,136,0.2)}
 
-  #toolbar{padding:0 12px 10px;display:flex;gap:7px;flex-wrap:wrap}
-  .tlbtn{padding:5px 11px;border-radius:7px;border:1px solid #2d6a4f;background:rgba(45,106,79,.2);color:#74b49b;font-size:11px;font-family:inherit;cursor:pointer;transition:all .2s}
-  .tlbtn:active{background:rgba(45,106,79,.4)}
-  .tlbtn.sync-btn{border-color:#52b788;background:rgba(82,183,136,.2);color:#95d5b2}
+/* ── TABS ── */
+#tabs{padding:6px 12px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#tabs::-webkit-scrollbar{display:none}
+.tabs-inner{display:flex;gap:5px;min-width:max-content}
+.tab{padding:5px 10px;border-radius:16px;border:none;cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap;background:rgba(255,255,255,0.05);color:#888;transition:all .2s}
+.tab.on{font-weight:700;color:#fff}
+.tab-pend{border:1px solid #444;background:transparent;color:#666}
+.tab-pend.on{border-color:#fbbf24;background:rgba(251,191,36,.12);color:#fbbf24}
 
-  #tasks{padding:0 12px}
-  .ph-sec{margin-bottom:20px}
-  .ph-hd{display:flex;align-items:center;gap:8px;padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid rgba(255,255,255,.06)}
-  .ph-nm{font-weight:700;font-size:14px}
-  .ph-ct{font-size:10px;color:#666;margin-left:auto;background:rgba(255,255,255,.05);padding:2px 8px;border-radius:10px}
+/* ── TASKS ── */
+#tasks{padding:0 12px}
+.phase-sec{margin-bottom:20px}
+.phase-hd{display:flex;align-items:center;gap:8px;padding:8px 0 6px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.phase-nm{font-weight:800;font-size:13px}
+.phase-ct{font-size:9px;color:#555;margin-left:auto;background:rgba(255,255,255,0.04);padding:2px 7px;border-radius:8px}
 
-  .tcard{border-radius:9px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.07);transition:all .2s}
-  .tcard.done{background:rgba(82,183,136,.06);border-color:rgba(45,106,79,.3)}
-  .tcard.now{background:rgba(82,183,136,.1);border-color:rgba(82,183,136,.3)}
-  .tcard.norm{background:var(--card)}
+.tcard{border-radius:10px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,0.06);transition:all .2s}
+.tcard.done{background:rgba(82,183,136,0.05);border-color:rgba(45,106,79,0.25)}
+.tcard.now{background:rgba(82,183,136,0.09);border-color:rgba(82,183,136,0.28)}
+.tcard.urg.now{background:rgba(251,191,36,0.07);border-color:rgba(251,191,36,0.25)}
+.tcard.norm{background:var(--card)}
 
-  .thead{padding:10px 11px;cursor:pointer;user-select:none;display:flex;align-items:flex-start;gap:8px}
-  .chk{width:21px;height:21px;border-radius:50%;flex-shrink:0;border:2px solid #555;background:transparent;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;transition:all .2s;font-family:inherit}
-  .chk.on{border-color:var(--green);background:var(--green)}
-  .tmain{flex:1;min-width:0}
-  .trow{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-  .ttl{font-size:13px;font-weight:600;color:var(--text)}
-  .ttl.done{text-decoration:line-through;color:#4a7c59}
-  .b-now{font-size:9px;background:rgba(82,183,136,.15);color:var(--green);border:1px solid rgba(82,183,136,.4);border-radius:4px;padding:1px 5px;white-space:nowrap}
-  .b-urg{font-size:9px;background:rgba(217,83,79,.15);color:#e88;border:1px solid rgba(217,83,79,.4);border-radius:4px;padding:1px 5px;white-space:nowrap}
-  .b-dt{font-size:9px;color:#777;background:rgba(255,255,255,.05);border-radius:4px;padding:1px 5px}
-  .tdet{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
-  .chev{color:#555;font-size:11px;flex-shrink:0;margin-top:3px}
+.thead{padding:10px 11px;cursor:pointer;user-select:none;display:flex;align-items:flex-start;gap:8px}
+.chk{width:20px;height:20px;border-radius:50%;flex-shrink:0;border:2px solid #444;background:transparent;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;transition:all .2s;font-family:inherit}
+.chk.on{border-color:var(--g);background:var(--g)}
+.tmain{flex:1;min-width:0}
+.trow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:2px}
+.ttl{font-size:13px;font-weight:600;color:var(--text)}
+.ttl.done{text-decoration:line-through;color:#4a7c59}
+.b-now{font-size:8px;background:rgba(82,183,136,0.15);color:#52b788;border:1px solid rgba(82,183,136,0.35);border-radius:4px;padding:1px 5px;white-space:nowrap}
+.b-urg{font-size:8px;background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.35);border-radius:4px;padding:1px 5px;white-space:nowrap}
+.b-done{font-size:8px;background:rgba(82,183,136,0.1);color:#4a7c59;border:1px solid rgba(45,106,79,0.3);border-radius:4px;padding:1px 5px;white-space:nowrap}
+.b-dt{font-size:8px;color:#666;background:rgba(255,255,255,0.04);border-radius:4px;padding:1px 5px}
+.tdet{font-size:11px;color:#5a6e5e;line-height:1.5}
+.chev{color:#444;font-size:10px;flex-shrink:0;margin-top:3px}
 
-  .titems{border-top:1px solid rgba(255,255,255,.05);padding:8px 11px 9px 40px;background:rgba(0,0,0,.2);display:none}
-  .titems.open{display:block}
-  .ilabel{font-size:10px;color:#74b49b;margin-bottom:4px;letter-spacing:1px}
-  .irow{font-size:11px;color:#ccc;padding:2px 0;display:flex;align-items:flex-start;gap:5px}
-  .idot{color:var(--green);font-size:9px;margin-top:3px;flex-shrink:0}
+.titems{border-top:1px solid rgba(255,255,255,0.04);padding:0;background:rgba(0,0,0,0.2);display:none;overflow:hidden;transition:max-height .3s}
+.titems.open{display:block}
+.titems-inner{padding:8px 11px 10px 38px}
+.ilbl{font-size:9px;color:rgba(82,183,136,0.6);margin-bottom:5px;letter-spacing:1px;font-weight:700}
+.irow{font-size:11px;color:#8aab8e;padding:2px 0;display:flex;align-items:flex-start;gap:5px;line-height:1.4}
+.idot{color:rgba(82,183,136,0.5);font-size:9px;margin-top:3px;flex-shrink:0}
+.irow.done-item{color:#4a6e4e;text-decoration:line-through}
 
-  .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px}
-  .ov.open{display:flex}
-  .mbox{background:#1a2e22;border:1px solid #2d6a4f;border-radius:13px;padding:18px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto}
-  .mbox h3{color:#74b49b;font-size:14px;margin-bottom:4px}
-  .mbox p{color:#aaa;font-size:11px;margin-bottom:10px;line-height:1.6}
-  .mbox textarea{width:100%;height:110px;background:rgba(0,0,0,.3);border:1px solid #2d6a4f;border-radius:7px;color:#e8e8e8;font-size:10px;padding:7px;font-family:monospace;resize:none;margin-bottom:10px}
-  .mbox input{width:100%;background:rgba(0,0,0,.3);border:1px solid #2d6a4f;border-radius:7px;color:#e8e8e8;font-size:12px;padding:8px;font-family:inherit;margin-bottom:8px}
-  .mbtns{display:flex;gap:7px;flex-wrap:wrap}
-  .mb{flex:1;padding:8px;border-radius:7px;border:none;font-size:12px;font-family:inherit;cursor:pointer;min-width:70px}
-  .mb.p{background:var(--green);color:#fff;font-weight:700}
-  .mb.s{background:rgba(255,255,255,.1);color:#ccc}
-  .mb.w{background:rgba(232,168,56,.2);color:#e8a838;border:1px solid rgba(232,168,56,.4)}
-  .sstep{background:rgba(0,0,0,.3);border-radius:7px;padding:9px 11px;margin-bottom:7px;border-left:3px solid var(--green)}
-  .sstep h4{font-size:11px;color:#95d5b2;margin-bottom:3px}
-  .sstep code{font-size:10px;color:#74b49b;background:rgba(0,0,0,.4);padding:3px 6px;border-radius:3px;display:block;margin-top:3px;white-space:pre-wrap;word-break:break-all;line-height:1.6}
-  .sstep p{color:#999;font-size:10px;margin:3px 0 0;line-height:1.5}
-  .highlight-box{background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.3);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:#95d5b2;line-height:1.7}
+/* ── MODAL ── */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:20px}
+.ov.open{display:flex}
+.mbox{background:#0f1e10;border:1px solid rgba(82,183,136,0.25);border-radius:14px;padding:18px;width:100%;max-width:400px;max-height:88vh;overflow-y:auto}
+.mbox h3{color:#74b49b;font-size:14px;margin-bottom:8px}
+.mbox p{color:#6a8a6e;font-size:11px;margin-bottom:10px;line-height:1.7}
+.mbox textarea{width:100%;height:100px;background:rgba(0,0,0,0.3);border:1px solid rgba(82,183,136,0.25);border-radius:7px;color:#e8f5e9;font-size:10px;padding:7px;font-family:monospace;resize:none;margin-bottom:10px}
+.mbox input{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(82,183,136,0.25);border-radius:7px;color:#e8f5e9;font-size:12px;padding:8px;font-family:inherit;margin-bottom:8px}
+.mbtns{display:flex;gap:7px;flex-wrap:wrap}
+.mb{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-family:inherit;cursor:pointer;min-width:70px}
+.mb.p{background:var(--g);color:#fff;font-weight:700}
+.mb.s{background:rgba(255,255,255,0.07);color:#aaa}
 
-  #foot{margin:14px 12px 0;background:rgba(255,255,255,.03);border-radius:9px;padding:9px 11px;font-size:10px;color:#555;line-height:1.8;border:1px solid rgba(255,255,255,.05)}
-  #foot strong{color:#74b49b}
+/* ── FOOTER ── */
+#foot{margin:14px 12px 0;background:rgba(255,255,255,0.02);border-radius:9px;padding:8px 11px;font-size:9px;color:#3a4e3c;line-height:1.8;border:1px solid rgba(255,255,255,0.04)}
 </style>
 </head>
 <body>
-
-<div id="header">
+<div id="hd">
   <div class="hd-top">
-    <img src="data:image/png;base64,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" width="44" height="44" style="flex-shrink:0;border-radius:10px;filter:drop-shadow(0 0 8px rgba(82,183,136,0.7))">
-    <div style="flex:1">
-      <div class="hd-sub">山形転入 ＆ 車手続き ＆ 狩猟免許 ＆ 銃所持許可</div>
-      <div class="hd-ttl">ハンターへの道 完全タイムライン</div>
+    <img class="hd-icon" src="data:image/png;base64,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" alt="">
+    <div class="hd-texts">
+      <div class="sub">山形県 狩猟免許 ＆ 銃所持許可</div>
+      <div class="ttl">ハンターへの道</div>
     </div>
   </div>
-  <div class="prog-row"><span>全体進捗</span><span id="ptxt">0 / 0 完了 (0%)</span></div>
-  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
-  <div id="cannow"></div>
-  <div id="sync-status">🔄 同期中...</div>
+  <div class="prog-row"><span>全体進捗</span><span id="ptxt">0/0</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+  <div id="cannow-badge"></div>
+  <div id="sync-bar">接続確認中...</div>
+</div>
+
+<div id="toolbar">
+  <button class="tb" onclick="showMod('sync-m')">☁️ 同期設定</button>
+  <button class="tb" onclick="manualSync()">🔄 今すぐ同期</button>
+  <button class="tb" onclick="doExp()">💾 バックアップ</button>
+  <button class="tb" onclick="showMod('imp-m')">📥 読み込み</button>
 </div>
 
 <div id="tabs"><div class="tabs-inner" id="ti"></div></div>
-
-<div id="toolbar">
-  <button class="tlbtn sync-btn" onclick="manualSync()">☁️ 今すぐ同期</button>
-  <button class="tlbtn" onclick="openM('sync-setup-m')">⚙️ 同期設定</button>
-  <button class="tlbtn" onclick="openIcs()">📅 カレンダー</button>
-  <button class="tlbtn" onclick="doExp()">💾 バックアップ</button>
-</div>
-
 <div id="tasks"></div>
 
 <div id="foot">
-  ℹ️ <strong>注意</strong>　手続きの受付時間・書類は変更の場合があります。当日前に必ず確認を。<br>
-  ☁️ <strong>同期</strong>　JSONBin.io（無料）経由でMac・iPhone間リアルタイム同期。初回は「⚙️同期設定」を。
+  ✅ チェックで進捗管理 ・ 各タスクをタップで詳細表示<br>
+  ☁️ JSONBin.io同期でMac・iPhone間リアルタイム共有
 </div>
 
-<!-- 同期設定 Modal -->
-<div class="ov" id="sync-setup-m" onclick="bgClose(event,'sync-setup-m')">
+<!-- Sync Modal -->
+<div class="ov" id="sync-m" onclick="bgClose(event,'sync-m')">
   <div class="mbox">
-    <h3>☁️ Mac↔iPhone リアルタイム同期設定</h3>
-    <p>JSONBin.io（完全無料）を使ってMacとiPhoneのチェック状態をリアルタイム同期します。</p>
-
-    <div class="highlight-box">
-      🎯 <strong>仕組み</strong>：チェックするたびに無料クラウドに保存 → 別のデバイスで自動読込<br>
-      ✅ 完全無料・登録5分・以降は自動
-    </div>
-
-    <div class="sstep">
-      <h4>Step 1｜JSONBin.ioでAPIキーを取得</h4>
-      <p>① <strong>https://jsonbin.io</strong> にアクセス → 「Sign Up Free」</p>
-      <p>② メール認証後、ダッシュボード上部「API Keys」→「+ CREATE ACCESS KEY」</p>
-      <p>③ 名前を「hunter」にして作成 → 表示された「Secret Key」をコピー（$2b$...で始まる文字列）</p>
-    </div>
-
-    <div class="sstep">
-      <h4>Step 2｜APIキーを入力して初期化</h4>
-      <input type="password" id="api-key-input" placeholder="$2b$10$...（Secret Key）">
-      <div class="mbtns">
-        <button class="mb p" onclick="initSync()">🚀 同期を開始する</button>
-      </div>
-      <p style="margin-top:6px">※ キーはこのブラウザ内にのみ保存されます。両デバイスで同じキーを入力してください。</p>
-    </div>
-
-    <div class="sstep" id="bin-id-section" style="display:none">
-      <h4>Step 3｜iPhoneでも同じ設定をする</h4>
-      <p>iPhoneのSafariでこのアプリを開き、「⚙️同期設定」→ 同じAPIキーと以下のBin IDを入力：</p>
-      <div style="background:rgba(0,0,0,.4);border-radius:5px;padding:6px;margin-top:4px">
-        <span style="font-size:10px;color:#74b49b;font-family:monospace" id="bin-id-display">（初期化後に表示）</span>
-      </div>
-      <input type="text" id="bin-id-input" placeholder="既存のBin ID（任意）" style="margin-top:8px">
-    </div>
-
-    <div class="mbtns" style="margin-top:12px">
-      <button class="mb s" onclick="closeM('sync-setup-m')">閉じる</button>
-      <button class="mb w" onclick="clearSync()">🗑 同期設定を削除</button>
-    </div>
-  </div>
-</div>
-
-<!-- ICS -->
-<div class="ov" id="ics-m" onclick="bgClose(event,'ics-m')">
-  <div class="mbox">
-    <h3>📅 Googleカレンダーに追加</h3>
-    <p>ICSをコピー → テキストエディタに貼り付けて「schedule.ics」で保存 → Googleカレンダー「他のカレンダー＋」→「ファイルからインポート」</p>
-    <textarea id="ics-txt" readonly></textarea>
+    <h3>☁️ クラウド同期設定</h3>
+    <p>JSONBin.io（無料）でMac↔iPhone間の進捗をリアルタイム同期します。</p>
+    <input type="password" id="api-key-inp" placeholder="$2b$...（Secret Key）">
+    <input type="text" id="bin-id-inp" placeholder="既存のBin ID（任意）">
+    <div id="bin-display" style="font-size:10px;color:#52b788;margin-bottom:8px;min-height:14px"></div>
     <div class="mbtns">
-      <button class="mb p" onclick="copyIcs()">📋 コピー</button>
-      <button class="mb s" onclick="closeM('ics-m')">閉じる</button>
+      <button class="mb p" onclick="initSync()">🚀 同期開始</button>
+      <button class="mb s" onclick="closeMod('sync-m')">閉じる</button>
     </div>
+    <p style="margin-top:8px;font-size:10px">両デバイスで同じAPIキー＋Bin IDを入力してください</p>
   </div>
 </div>
 
-<!-- Import -->
+<!-- Import Modal -->
 <div class="ov" id="imp-m" onclick="bgClose(event,'imp-m')">
   <div class="mbox">
     <h3>📥 バックアップから読み込む</h3>
-    <textarea id="imp-txt" placeholder='{"tasks":[...]}' style="height:130px"></textarea>
+    <textarea id="imp-txt" placeholder='{"tasks":[...]}'></textarea>
     <div class="mbtns">
       <button class="mb p" onclick="applyImp()">読み込む</button>
-      <button class="mb s" onclick="closeM('imp-m')">キャンセル</button>
+      <button class="mb s" onclick="closeMod('imp-m')">キャンセル</button>
     </div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-// MASTER DATA（更新済み）
-// ══════════════════════════════════════════════
-const PHASES=["🏠 転入・行政手続き","🚗 車・免許手続き","📚 狩猟免許の準備","🎓 初心者講習会","📝 狩猟免許試験","🤝 猟友会・保険","🔫 銃所持許可","🦌 狩猟登録・初猟"];
-const PCOL={"🏠 転入・行政手続き":"#4a9eca","🚗 車・免許手続き":"#17a2b8","📚 狩猟免許の準備":"#5cb85c","🎓 初心者講習会":"#e8a838","📝 狩猟免許試験":"#d9534f","🤝 猟友会・保険":"#9b59b6","🔫 銃所持許可":"#e67e22","🦌 狩猟登録・初猟":"#27ae60"};
-
-const INIT=[
-  // 転入・行政
-  {id:101,phase:"🏠 転入・行政手続き",title:"転出届 発行済み",detail:"東京都目黒区役所にて5/12に発行済み",date:"2025-05-12",done:true,now:false,urg:false,items:[]},
-  {id:102,phase:"🏠 転入・行政手続き",title:"転入届を提出 ✅",detail:"山形市役所 市民課にて完了",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
-  {id:103,phase:"🏠 転入・行政手続き",title:"マイナンバーカード住所更新 ✅",detail:"転入届と同時に完了",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
-  {id:104,phase:"🏠 転入・行政手続き",title:"住民票を複数枚取得 ✅",detail:"3〜4枚取得済み",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
-  {id:105,phase:"🏠 転入・行政手続き",title:"国民健康保険の切り替え",detail:"前の保険を脱退して山形市国保に加入（会社員で社保継続の場合は不要）",date:null,done:false,now:true,urg:false,items:["住民票","前職の健康保険資格喪失証明書","印鑑"]},
-  {id:106,phase:"🏠 転入・行政手続き",title:"国民年金の住所変更",detail:"市役所窓口または年金機構オンラインで変更",date:null,done:false,now:true,urg:false,items:["マイナンバーカード or 基礎年金番号通知書","新住所の住民票"]},
-  {id:107,phase:"🏠 転入・行政手続き",title:"銀行・クレジットカードの住所変更",detail:"各銀行アプリ or Webで変更",date:null,done:false,now:true,urg:false,items:["各銀行・カード会社のアプリ or Web","通帳・カード番号を手元に"]},
-  {id:108,phase:"🏠 転入・行政手続き",title:"各種サービス・サブスクの住所変更",detail:"Amazon・楽天・保険会社・スマホキャリアなど",date:null,done:false,now:true,urg:false,items:["Amazonアカウント設定","楽天・その他EC","スマホキャリアアプリ","各種保険会社"]},
-
-  // 車・免許
-  {id:201,phase:"🚗 車・免許手続き",title:"運転免許証の住所変更 ✅",detail:"完了済み",date:"2025-05-15",done:true,now:false,urg:false,items:[]},
-  {id:202,phase:"🚗 車・免許手続き",title:"車検証の住所変更・ナンバー変更 ✅",detail:"軽自動車検査協会 山形事務所にて完了",date:"2025-05-15",done:true,now:false,urg:false,items:[]},
-  {id:203,phase:"🚗 車・免許手続き",title:"ソニー損保 住所・ナンバー変更 ✅",detail:"Webマイページにて完了",date:null,done:true,now:false,urg:false,items:[]},
-  {id:204,phase:"🚗 車・免許手続き",title:"自賠責保険の住所変更",detail:"次の車検時でOK（軽自動車検査協会の担当者確認済み）",date:null,done:false,now:false,urg:false,items:["次回車検時に対応","自賠責保険証書を保管しておく"]},
-
-  // 狩猟免許の準備
-  {id:301,phase:"📚 狩猟免許の準備",title:"山形県猟友会に連絡・猟友会の方と面会 ✅",detail:"猟友会の方に直接会い、情報収集完了",date:null,done:true,now:false,urg:false,items:[]},
-  {id:302,phase:"📚 狩猟免許の準備",title:"狩猟教本・問題集を入手 ✅",detail:"猟友会の方から教本と問題集をいただいた",date:null,done:true,now:false,urg:false,items:[]},
-  {id:303,phase:"📚 狩猟免許の準備",title:"初心者講習会の受講料を支払い・領収書取得 ✅",detail:"山形は全額免除制度あり。領収書を保管しておくと返金される",date:null,done:true,now:false,urg:false,items:["領収書を必ず保管しておく（返金に必要）"]},
-  {id:304,phase:"📚 狩猟免許の準備",title:"教本・問題集を使って自主学習",detail:"7/15の講習会までに教本を一通り読んでおく。鳥獣識別は特に重要",date:"2025-07-15",done:false,now:true,urg:false,items:["狩猟教本（猟友会からもらったもの）","問題集","鳥獣識別の練習（写真で覚える）"]},
-  {id:305,phase:"📚 狩猟免許の準備",title:"医師の診断書を手配",detail:"狩猟免許申請に必要。試験申込前に取得しておく",date:null,done:false,now:true,urg:false,items:["かかりつけ医または内科に予約","「狩猟免許申請用の診断書が必要」と伝える","費用：5,000〜10,000円程度"]},
-  {id:306,phase:"📚 狩猟免許の準備",title:"証明写真を用意（多めに）",detail:"各申請書類に使用。6ヶ月以内撮影のもの",date:null,done:false,now:true,urg:false,items:["証明写真（3cm×2.4cm）を6枚以上","コンビニ証明写真機 or 写真屋"]},
-
-  // 初心者講習会
-  {id:400,phase:"🎓 初心者講習会",title:"初心者講習会 申し込み",detail:"6月15日（月）9:00〜 受付開始。早めに申し込む！",date:"2025-06-15",done:false,now:true,urg:true,items:["6/15（月）9:00〜 申込受付開始","山形県猟友会に電話 or 窓口で申込","申込書・受講料（既払い）・証明写真2枚・印鑑","受講票を受け取り保管"]},
-  {id:401,phase:"🎓 初心者講習会",title:"初心者講習会の日程確定 ✅",detail:"7月15日・置賜総合センターにて受講予定。受講料支払い済み",date:"2025-07-15",done:true,now:false,urg:false,items:[]},
-  {id:402,phase:"🎓 初心者講習会",title:"初心者講習会を受講（7/15）",detail:"置賜総合センターにて。座学（法律・安全・識別）＋実技（銃の取扱い模擬）",date:"2025-07-15",done:false,now:false,urg:false,items:["狩猟教本（予習済みのもの）","筆記用具","昼食・飲み物","受講票・領収書","動きやすい服装","証明写真（念のため2枚）"]},
-
-  // 狩猟免許試験
-  {id:501,phase:"📝 狩猟免許試験",title:"狩猟免許試験に申し込む",detail:"試験は9月12・13日。申込期限を猟友会・みどり自然課に確認して早めに提出",date:"2025-08-01",done:false,now:false,urg:true,items:["申請書（みどり自然課からDL）","証明写真2枚（3cm×2.4cm）","住民票（山形市）","医師の診断書","受験手数料（約5,200円）","欠格事由に関する申告書"]},
-  {id:502,phase:"📝 狩猟免許試験",title:"狩猟免許試験を受験・合格（9/12 or 9/13）",detail:"筆記（知識・鳥獣識別）＋適性（視力・聴力）＋技能（銃の扱い）",date:"2025-09-12",done:false,now:false,urg:false,items:["受験票","筆記用具","狩猟教本（直前復習）","動きやすい服装（技能試験）","証明写真（念のため）"]},
-  {id:503,phase:"📝 狩猟免許試験",title:"狩猟免許の交付申請",detail:"合格通知受領後、山形県みどり自然課に申請。数日〜1週間で交付",date:null,done:false,now:false,urg:false,items:["合格通知書","申請書","証明写真","交付手数料（約1,800円）","住民票"]},
-
-  // 猟友会・保険
-  {id:601,phase:"🤝 猟友会・保険",title:"山形県猟友会に正式入会",detail:"免許取得後に正式入会手続き。すでに猟友会の方と面識あり・スムーズなはず",date:null,done:false,now:false,urg:false,items:["狩猟免許証コピー","入会申込書","年会費（地区による・約5,000〜15,000円）","印鑑"]},
-  {id:602,phase:"🤝 猟友会・保険",title:"ハンター保険に加入",detail:"猟友会経由で加入。狩猟者登録前に必要",date:null,done:false,now:false,urg:false,items:["狩猟免許証","保険申込書","保険料（年間約2,000〜5,000円）"]},
-
-  // 銃所持許可（別経路で進行中）
-  {id:701,phase:"🔫 銃所持許可",title:"猟銃等講習会（初心者）を受講",detail:"公安委員会主催。銃所持許可申請の前提条件。別経路で並行進行中",date:null,done:false,now:false,urg:false,items:["申込書","証明写真","受講料（約6,700円）","住民票"]},
-  {id:702,phase:"🔫 銃所持許可",title:"猟銃等講習会の考査に合格",detail:"筆記試験あり。合格証明書を取得",date:null,done:false,now:false,urg:false,items:["テキスト（講習会で配布）を熟読","合格証明書を受け取り保管"]},
-  {id:703,phase:"🔫 銃所持許可",title:"ガンロッカー・実包等保管庫を設置",detail:"許可前に自宅での設置確認あり",date:null,done:false,now:false,urg:false,items:["ガンロッカー購入（3〜8万円）","実包等保管庫購入（1〜3万円）","施錠できる設置場所の確保","ネジ固定など防犯対策"]},
-  {id:704,phase:"🔫 銃所持許可",title:"銃砲店で購入する銃を選ぶ",detail:"別経路で進行中",date:null,done:false,now:false,urg:false,items:["予算検討（猟銃：15〜40万円程度）","銃砲店への相談"]},
-  {id:705,phase:"🔫 銃所持許可",title:"銃所持許可申請（山形県警）",detail:"所轄警察署（生活安全課）に申請。審査に約2〜3ヶ月",date:null,done:false,now:false,urg:false,items:["申請書","住民票","身分証明書（本籍地市区町村発行）","医師の診断書","同居親族書","経歴書","猟銃等講習会考査合格証明書","狩猟免許証コピー","証明写真（2枚）","手数料（約10,500円）"]},
-  {id:706,phase:"🔫 銃所持許可",title:"警察の立入検査・許可証受領",detail:"自宅のガンロッカー確認後、許可証発行",date:null,done:false,now:false,urg:false,items:["ガンロッカー・保管庫の設置確認","許可証受領後に銃砲店で銃を受取"]},
-
-  // 狩猟登録
-  {id:801,phase:"🦌 狩猟登録・初猟",title:"狩猟者登録（山形県）",detail:"毎年10月頃〜受付。猟期（11/15〜翌2/15）前に登録が必要",date:"2025-10-01",done:false,now:false,urg:false,items:["狩猟免許証","銃所持許可証","ハンター保険証","登録手数料（約1,800円）","猟友会会員証"]},
-  {id:802,phase:"🦌 狩猟登録・初猟",title:"猟場・猟区・入猟許可の確認",detail:"山形県内の入猟可能エリアを猟友会の方に確認（顔見知りになっているので聞きやすい！）",date:null,done:false,now:false,urg:false,items:["山形県猟友会の方に相談","地形図・鳥獣保護区マップ確認"]},
-  {id:803,phase:"🦌 狩猟登録・初猟",title:"🎉 初猟！",detail:"猟期：11月15日〜翌2月15日。猟友会の先輩に同行してもらえると安全！",date:"2025-11-15",done:false,now:false,urg:false,items:["猟具一式","狩猟者登録証","蛍光ベスト・安全装備","無線機・スマートフォン","十分な食料・防寒具"]},
+// ════════════════════════════════════════════════════
+// 完全タスクデータベース（令和7年・山形県対応）
+// ════════════════════════════════════════════════════
+const PHASES = [
+  "🏠 転入・行政手続き",
+  "🚗 車・免許手続き",
+  "📚 狩猟免許の準備",
+  "🎓 初心者講習会",
+  "📝 狩猟免許試験",
+  "🤝 猟友会・保険",
+  "🔫 銃所持許可【書類準備】",
+  "🔫 銃所持許可【設備準備】",
+  "🔫 銃所持許可【申請・取得】",
+  "🏪 銃の選定・購入",
+  "🦌 狩猟登録・初猟",
 ];
 
-// ══════════════════════════════════════════════
+const PCOL = {
+  "🏠 転入・行政手続き":"#4a9eca",
+  "🚗 車・免許手続き":"#17a2b8",
+  "📚 狩猟免許の準備":"#5cb85c",
+  "🎓 初心者講習会":"#e8a838",
+  "📝 狩猟免許試験":"#d9534f",
+  "🤝 猟友会・保険":"#9b59b6",
+  "🔫 銃所持許可【書類準備】":"#e67e22",
+  "🔫 銃所持許可【設備準備】":"#d35400",
+  "🔫 銃所持許可【申請・取得】":"#c0392b",
+  "🏪 銃の選定・購入":"#16a085",
+  "🦌 狩猟登録・初猟":"#27ae60",
+};
+
+const INIT = [
+// ── 転入・行政手続き ──
+{id:101,ph:"🏠 転入・行政手続き",tt:"転出届 発行済み",dt:"東京都目黒区役所にて5/12に発行済み",date:"2025-05-12",done:true,now:false,urg:false,items:[]},
+{id:102,ph:"🏠 転入・行政手続き",tt:"転入届を提出 ✅",dt:"山形市役所にて完了",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
+{id:103,ph:"🏠 転入・行政手続き",tt:"マイナンバーカード住所更新 ✅",dt:"転入届と同時に完了",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
+{id:104,ph:"🏠 転入・行政手続き",tt:"住民票を複数枚取得 ✅",dt:"3〜4枚取得済み",date:"2025-05-14",done:true,now:false,urg:false,items:[]},
+{id:105,ph:"🏠 転入・行政手続き",tt:"国民健康保険の切り替え",dt:"山形市役所で手続き。社保継続の場合は不要",date:null,done:false,now:true,urg:false,items:["住民票","前職の健康保険資格喪失証明書","印鑑"]},
+{id:106,ph:"🏠 転入・行政手続き",tt:"国民年金の住所変更",dt:"市役所窓口またはマイナポータルで変更",date:null,done:false,now:true,urg:false,items:["マイナンバーカード","新住所の住民票"]},
+{id:107,ph:"🏠 転入・行政手続き",tt:"銀行・クレジットカードの住所変更",dt:"各銀行アプリ or Webで変更",date:null,done:false,now:true,urg:false,items:["各銀行・カード会社アプリ"]},
+{id:108,ph:"🏠 転入・行政手続き",tt:"各種サービス・サブスクの住所変更",dt:"Amazon・楽天・スマホキャリア・保険会社など",date:null,done:false,now:true,urg:false,items:["Amazon・楽天・ECサイト","スマホキャリアアプリ","各種保険会社"]},
+
+// ── 車・免許手続き ──
+{id:201,ph:"🚗 車・免許手続き",tt:"運転免許証の住所変更 ✅",dt:"完了済み",date:"2025-05-15",done:true,now:false,urg:false,items:[]},
+{id:202,ph:"🚗 車・免許手続き",tt:"車検証の住所変更・ナンバー変更 ✅",dt:"軽自動車検査協会 山形事務所にて完了",date:"2025-05-15",done:true,now:false,urg:false,items:[]},
+{id:203,ph:"🚗 車・免許手続き",tt:"ソニー損保 住所・ナンバー変更 ✅",dt:"Webマイページにて完了",date:null,done:true,now:false,urg:false,items:[]},
+{id:204,ph:"🚗 車・免許手続き",tt:"自賠責保険の住所変更",dt:"次の車検時でOK（軽自動車検査協会の担当者確認済み）",date:null,done:false,now:false,urg:false,items:["次回車検時に対応","自賠責保険証書を保管しておく"]},
+
+// ── 狩猟免許の準備 ──
+{id:301,ph:"📚 狩猟免許の準備",tt:"山形県猟友会に連絡・面会 ✅",dt:"猟友会の方に直接会い、情報収集完了",date:null,done:true,now:false,urg:false,items:[]},
+{id:302,ph:"📚 狩猟免許の準備",tt:"狩猟教本・問題集を入手 ✅",dt:"猟友会の方から教本と問題集をいただいた",date:null,done:true,now:false,urg:false,items:[]},
+{id:303,ph:"📚 狩猟免許の準備",tt:"受講料支払い・領収書取得 ✅",dt:"山形は全額免除。領収書を保管しておくと返金される",date:null,done:true,now:false,urg:false,items:["領収書を必ず保管（返金に必要）"]},
+{id:304,ph:"📚 狩猟免許の準備",tt:"教本・問題集で自主学習",dt:"7/25の狩猟講習会まで毎日勉強。鳥獣識別を特に重点的に",date:"2025-07-25",done:false,now:true,urg:false,items:["狩猟教本（猟友会からもらったもの）","問題集","鳥獣識別（46種を完全マスター）","禁猟法・猟期・数値の暗記"]},
+{id:305,ph:"📚 狩猟免許の準備",tt:"医師の診断書を手配（狩猟免許申請用）",dt:"狩猟免許申請に必要。試験申込前に取得。かかりつけ医でOK",date:null,done:false,now:true,urg:false,items:["かかりつけ医または内科に予約","「狩猟免許申請用の診断書」と伝える","費用：5,000〜10,000円程度","発行から3か月以内のものが必要"]},
+{id:306,ph:"📚 狩猟免許の準備",tt:"証明写真を用意（6枚以上まとめて）",dt:"狩猟免許・銃所持許可の両方で使用。6枚以上まとめて撮影推奨",date:null,done:false,now:true,urg:false,items:["証明写真（3cm×2.4cm）を6枚以上","コンビニ証明写真機 or 写真屋","清潔感ある服装・表情","撮影日と氏名を裏に記入"]},
+
+// ── 初心者講習会 ──
+{id:400,ph:"🎓 初心者講習会",tt:"初心者講習会 申し込み ✅",dt:"6/15（月）9:00〜 申込完了済み",date:"2025-06-15",done:true,now:false,urg:false,items:[]},
+{id:401,ph:"🎓 初心者講習会",tt:"猟銃等講習会（初心者講習）合格 ✅",dt:"7/15 置賜総合センターにて合格🎉 講習修了証明書取得（有効期限：2029年7月14日）",date:"2025-07-15",done:true,now:false,urg:false,items:["講習修了証明書（有効期限：令和11年7月14日）"]},
+{id:402,ph:"🎓 初心者講習会",tt:"講習修了証明書を安全な場所に保管",dt:"所持許可申請に必要。有効期間3年なので期限切れに注意",date:null,done:false,now:true,urg:true,items:["講習修了証明書（重要書類）","有効期限：令和11年7月14日まで","コピーも取っておくと安心"]},
+
+// ── 狩猟免許試験 ──
+{id:501,ph:"📝 狩猟免許試験",tt:"狩猟免許講習会に参加（7/25）",dt:"山形ビッグウイングにて。技能試験対策として強く推奨",date:"2025-07-25",done:false,now:true,urg:true,items:["狩猟教本","筆記用具","昼食・飲み物","受講票","動きやすい服装（技能試験対策）","証明写真（念のため2枚）"]},
+{id:502,ph:"📝 狩猟免許試験",tt:"狩猟免許試験に申し込む",dt:"受付期間：8/3〜8/17。村山会場（9/12）。手数料5,200円",date:"2025-08-03",done:false,now:false,urg:true,items:["申請書（みどり自然課からDL or 窓口）","証明写真2枚（3cm×2.4cm）","住民票（山形市・発行3か月以内）","医師の診断書（発行3か月以内）","受験手数料5,200円（山形県証紙またはPayPay等）","欠格事由に関する申告書","返信用封筒（長3封筒・110円切手）"]},
+{id:503,ph:"📝 狩猟免許試験",tt:"狩猟免許試験を受験・合格（9/12）",dt:"村山会場（山形市・村山総合支庁本庁舎）。知識・適性・技能の3試験",date:"2025-09-12",done:false,now:false,urg:false,items:["受験票","筆記用具","狩猟教本（直前復習）","動きやすい服装（技能試験）","証明写真（念のため）"]},
+{id:504,ph:"📝 狩猟免許試験",tt:"狩猟免許証（免状）の交付・受領",dt:"合格後約2週間で郵送。合格発表後に490円切手を提出",date:null,done:false,now:false,urg:false,items:["合格発表後に490円切手を提出","免状が郵送で届く（約2週間後）","受領したら内容確認（氏名・免許種別）","コピーして保管"]},
+
+// ── 猟友会・保険 ──
+{id:601,ph:"🤝 猟友会・保険",tt:"山形猟友会（山形市地区）に正式入会",dt:"狩猟免許取得後に手続き。狩猟者登録・保険加入に必要",date:null,done:false,now:false,urg:false,items:["狩猟免状コピー","入会申込書","年会費（地区による・5,000〜15,000円程度）","印鑑","山形猟友会事務局：090-1225-5185（森 信昭）"]},
+{id:602,ph:"🤝 猟友会・保険",tt:"ハンター保険（狩猟者賠償責任保険）に加入",dt:"猟友会経由で加入。狩猟者登録前に必要。被害補償に不可欠",date:null,done:false,now:false,urg:false,items:["狩猟免状","保険申込書（猟友会から入手）","保険料（年間約2,000〜5,000円）"]},
+
+// ── 銃所持許可【書類準備】──
+{id:701,ph:"🔫 銃所持許可【書類準備】",tt:"住民票を取得（銃所持許可申請用）",dt:"本籍地・家族全員記載、発行3か月以内のもの。コンビニ交付可",date:null,done:false,now:true,urg:false,items:["本籍地・家族全員記載の住民票","発行から3か月以内","コンビニのマルチコピー機で取得可（マイナンバーカード必要）","手数料：300円程度","教習資格認定申請と所持許可申請で使い回せる（期限注意）"]},
+{id:702,ph:"🔫 銃所持許可【書類準備】",tt:"身分証明書を取得（本籍地市区町村から）",dt:"本籍地の市区町村長が発行する証明書。運転免許証とは別物！",date:null,done:false,now:true,urg:false,items:["本籍地の市区町村役場（目黒区 or 現住所）に請求","「破産手続開始の決定を受けて復権を得ない者に該当しないこと」の証明","発行から3か月以内","郵送請求も可能（往復の切手・返信用封筒が必要）","手数料：300円程度"]},
+{id:703,ph:"🔫 銃所持許可【書類準備】",tt:"医師の診断書を取得（銃所持許可申請用）",dt:"かかりつけ医または精神科等で取得。銃の申請専用の診断書が必要",date:null,done:false,now:true,urg:false,items:["かかりつけ医または内科に予約","「猟銃・空気銃の所持許可申請に必要な診断書」と伝える","精神保健指定医か2年以上の精神科経験医の署名が必要","費用：5,000〜10,000円程度","発行から3か月以内","過去の受診記録（初診日記載の診察券等）を持参"]},
+{id:704,ph:"🔫 銃所持許可【書類準備】",tt:"経歴書を作成",dt:"現住所・職歴・猟銃等所持歴・犯歴等を記載する書類",date:null,done:false,now:true,urg:false,items:["警察署の生活安全課で様式を入手","現住所・職歴（直近の職歴を中心に）","猟銃等所持歴：「無し」でOK","犯歴：過去に罰金以上の刑があれば道交法含め記載（無ければ無し）","丁寧に記入し捨印を押す"]},
+{id:705,ph:"🔫 銃所持許可【書類準備】",tt:"同居親族書を作成",dt:"同居しているすべての家族を記載する書類",date:null,done:false,now:true,urg:false,items:["警察署の生活安全課で様式を入手","同居の親族全員（氏名・続柄・生年月日）を記載","一人暮らしの場合は「なし」","記入は正確に（警察が確認する）"]},
+{id:706,ph:"🔫 銃所持許可【書類準備】",tt:"申請書類一式を警察署で受け取る",dt:"山形警察署 生活安全課に直接行って申請書類一式を入手",date:null,done:false,now:true,urg:false,items:["山形警察署 生活安全課に電話で事前確認","「猟銃所持許可申請に必要な書類をすべて教えてください」と聞く","銃砲所持許可申請書（所定様式）","教習資格認定申請書（所定様式）","各種申告書","まとめて持ち帰り記入方法を確認"]},
+{id:707,ph:"🔫 銃所持許可【書類準備】",tt:"委託保管先の銃砲店を決め・相談",dt:"アパート住まいのため委託保管が必要。山形市内に銃砲店なし",date:null,done:false,now:true,urg:true,items:["森岡銃砲火薬店（寒河江市栄町・0237-86-6178）車で約30分","伊藤銃砲火薬店（長井市中道・0238-88-4850）","大川火薬銃砲店（鶴岡市本町・0235-22-0607）射撃場有り","電話して「委託保管をお願いしたい・所持許可申請を相談したい」","保管料・手続きの流れを確認","委託保管用の「保管承諾書」を発行してもらう"]},
+{id:708,ph:"🔫 銃所持許可【書類準備】",tt:"証明写真を準備（銃所持許可申請用）",dt:"申請書に添付。最新のもの6か月以内",date:null,done:false,now:true,urg:false,items:["縦3cm×横2.4cm","無帽・正面・肩から上・カラー","6か月以内撮影","裏面に氏名と撮影年月日を記入","2〜3枚用意（申請で2枚使用）"]},
+
+// ── 銃所持許可【設備準備】──
+{id:801,ph:"🔫 銃所持許可【設備準備】",tt:"委託保管先（銃砲店）の決定と保管契約",dt:"警察に申請する際に「保管場所」として届け出る。事前に確定が必要",date:null,done:false,now:false,urg:false,items:["選んだ銃砲店と契約","委託保管承諾書を取得","保管場所（銃砲店の住所）を警察に届け出る","保管料の支払い方法を確認","※ガンロッカーは委託保管なら自宅設置不要"]},
+{id:802,ph:"🔫 銃所持許可【設備準備】",tt:"【参考】ガンロッカーの基準を把握",dt:"自宅保管する場合の基準。委託保管なら不要だが知識として",date:null,done:false,now:false,urg:false,items:["スチール板厚1.0mm以上","かんぬき機構で扉上下が固定される","蝶番切断しても扉が外れない構造","内部に銃を固定する鎖等が必要","施錠は鍵違い120種類以上","かけ忘れ防止装置付き","床または壁にネジで固定（重量17kg以上なら可）"]},
+{id:803,ph:"🔫 銃所持許可【設備準備】",tt:"【参考】装弾ロッカーの基準を把握",dt:"実包（弾薬）の保管設備。銃とは別に施錠して保管が必要",date:null,done:false,now:false,urg:false,items:["金属製・施錠できる","銃（ガンロッカー）とは別の場所・別の容器","壁か床に固定","空気銃のみの場合は不要","市販価格：1.5万円程度〜"]},
+
+// ── 銃所持許可【申請・取得】──
+{id:901,ph:"🔫 銃所持許可【申請・取得】",tt:"教習資格認定申請を提出",dt:"初心者講習合格後の第一の警察手続き。審査に1〜2か月かかる",date:null,done:false,now:true,urg:true,items:["申請先：山形警察署 生活安全課","手数料：8,900円（山形県証紙）","必要書類：教習資格認定申請書・顔写真2枚・住民票・身分証明書・経歴書・診断書・同居親族書・講習修了証明書","身辺調査が入る（近隣・職場等）","認定証の有効期間：交付から3か月","認定証が届いたら即座に次のステップへ"]},
+{id:902,ph:"🔫 銃所持許可【申請・取得】",tt:"射撃教習用 火薬類譲受許可申請",dt:"教習資格認定証を受け取ったら即申請。射撃教習で使う実包の購入許可",date:null,done:false,now:false,urg:false,items:["申請先：山形警察署 生活安全課","手数料：2,400円","必要書類：火薬類等譲受許可申請書・消費等計画書・教習資格認定証","どの射撃場でどの種目（トラップ/スキート）を受けるか事前確認","実包：トラップは12番7.5号、スキートは12番9号","75発分（3ラウンド）が目安","許可証を受け取ったら銃砲店で実包を購入"]},
+{id:903,ph:"🔫 銃所持許可【申請・取得】",tt:"銃砲店で購入する銃を仮決定・相談",dt:"教習資格認定後、銃砲店で銃の相談。譲渡等承諾書を発行してもらう",date:null,done:false,now:false,urg:false,items:["候補：三越銃砲（上位二連）・ベレッタ・ミロク等","散弾銃（上下二連・12番）が初心者に多い","予算検討：本体15〜35万円＋消耗品","銃砲店に「委託保管もお願いしたい」と伝える","譲渡等承諾書を発行してもらう（所持許可申請に添付）"]},
+{id:904,ph:"🔫 銃所持許可【申請・取得】",tt:"射撃教習を受講・合格",dt:"認定証と譲受許可証を持って射撃場へ。最後の1ラウンドが考査",date:null,done:false,now:false,urg:false,items:["羽黒射撃場（鶴岡・大川火薬銃砲店運営・0235-62-4355）","赤湯クレー射撃場（南陽市・0238-49-2750）","東根クレー射撃場（東根市・0237-43-5341）","射撃場に事前予約電話","持参：認定証・譲受許可証・実包75発・費用3〜4万円","考査：トラップは25枚中2枚命中で合格","合格後その場で「教習修了証明書」交付（有効期間1年）"]},
+{id:905,ph:"🔫 銃所持許可【申請・取得】",tt:"銃砲所持許可申請を提出",dt:"教習修了証明書を受け取ったら速やかに申請。標準処理期間35日",date:null,done:false,now:false,urg:false,items:["申請先：山形警察署 生活安全課（平日9:00〜16:30）","手数料：10,500円（山形県証紙）","必要書類（新規）：銃砲所持許可申請書・顔写真2枚・住民票・身分証明書・経歴書・診断書・同居親族書・講習修了証明書・教習修了証明書・譲渡等承諾書・銃砲等保管状況報告書（委託保管なら保管承諾書）","警察による立入検査・家族面談・近隣調査が入る","標準処理期間：35日以内","所持許可証の有効期間：許可した日から3回目の誕生日まで"]},
+{id:906,ph:"🔫 銃所持許可【申請・取得】",tt:"警察の立入検査・保管確認",dt:"申請後、警察官が自宅訪問（委託保管の確認・家族面談等）",date:null,done:false,now:false,urg:false,items:["事前に日程調整の電話が来る","委託保管なら銃砲店の保管状況を確認","家族全員への面談がある","近隣への聞き込みも行われる","丁寧かつ正直に対応する"]},
+{id:907,ph:"🔫 銃所持許可【申請・取得】",tt:"所持許可証を受領",dt:"許可が下りたら警察署で受領。郵送または本人・代理人受領可",date:null,done:false,now:false,urg:false,items:["警察署から連絡が来る","所持許可証を受領","内容確認：氏名・住所・銃の種別・口径・製造番号","許可年月日から3か月以内に銃を受け取る（期限厳守！）","あわせて「猟銃用火薬類等譲受許可証」を申請"]},
+
+// ── 銃の選定・購入 ──
+{id:1001,ph:"🏪 銃の選定・購入",tt:"銃砲店で銃を最終決定・仮押さえ",dt:"所持許可申請前後に最終決定。委託保管とセットで相談",date:null,done:false,now:false,urg:false,items:["候補：ミロク上下二連12番など","実際に手に取って重さ・長さを確認","12番が狩猟・射撃の標準サイズ","予算：本体15〜35万円","弾代・クリーニング用品等の消耗品費も考慮","委託保管料（月2,000〜3,000円程度）も確認"]},
+{id:1002,ph:"🏪 銃の選定・購入",tt:"火薬類譲受許可証の申請（実包購入用）",dt:"所持許可証交付後に申請。実包（弾薬）を購入するために必要",date:null,done:false,now:false,urg:false,items:["申請先：山形警察署 生活安全課","自宅保管の上限は実包・空包あわせて800個まで","手数料：2,400円","消費等計画書も一緒に提出","許可証の有効期間は最長1年","銃砲店で実包を購入（購入記録が残る）"]},
+{id:1003,ph:"🏪 銃の選定・購入",tt:"銃砲店で銃を受け取る",dt:"所持許可証を持参して銃砲店で受け取り。許可日から3か月以内",date:null,done:false,now:false,urg:false,items:["所持許可証を必ず持参","許可日から3か月以内（期限厳守）","銃の型番・製造番号が許可証と一致するか確認","委託保管の場合は銃砲店にそのまま預ける","クリーニング用品（ガンクリーナー・オイル等）も購入推奨"]},
+{id:1004,ph:"🏪 銃の選定・購入",tt:"警察署で銃の「確認」を受ける",dt:"銃を受け取ってから14日以内に管轄署で確認手続き必須",date:null,done:false,now:false,urg:false,items:["銃を受け取った日から14日以内（絶対に期限厳守）","山形警察署 生活安全課に持参","銃・所持許可証・印鑑を持参","警察官が銃番号・全長・銃身長・口径を確認","確認完了で銃の所持が正式に認められる","同時に実包の「無許可消費」の説明を受ける"]},
+{id:1005,ph:"🏪 銃の選定・購入",tt:"銃の帳簿を作成・記録開始",dt:"実包の購入・消費を記録する帳簿の作成。法律上の義務",date:null,done:false,now:false,urg:false,items:["市販のノート or 専用帳簿","記録内容：購入日・数量・種類・消費日・消費数量・残数","令和7年改正で「散弾/単弾の別」と「使用した銃の銃番号」の記載が必要","最終記載日から3年間保存義務","定期的に在庫確認・帳簿との照合"]},
+
+// ── 狩猟登録・初猟 ──
+{id:1101,ph:"🦌 狩猟登録・初猟",tt:"狩猟者登録（山形県）",dt:"毎年10月頃〜受付開始。猟期（11/15〜翌2/15）前に必要",date:"2025-10-01",done:false,now:false,urg:false,items:["申請先：村山総合支庁環境課（023-621-8426）","狩猟免状・銃所持許可証・ハンター保険証","狩猟税（第一種銃猟：16,500円程度）","猟友会員証","猟友会経由で登録代行が便利"]},
+{id:1102,ph:"🦌 狩猟登録・初猟",tt:"猟場・入猟エリアの下調べ",dt:"山形県内の入猟可能エリアを猟友会の先輩に確認",date:null,done:false,now:false,urg:false,items:["山形猟友会の先輩ハンターに相談","鳥獣保護区マップを確認（みどり自然課）","地形図・GPSアプリで猟場を把握","近隣農家・地権者との関係構築"]},
+{id:1103,ph:"🦌 狩猟登録・初猟",tt:"狩猟装備を揃える",dt:"安全に狩猟するための必須装備を準備",date:null,done:false,now:false,urg:false,items:["蛍光オレンジのハンターベスト（必須・誤射防止）","長靴・ウェーダー（田畑・水辺用）","防寒着・手袋・帽子（猟期は冬）","無線機またはスマートフォン（緊急連絡用）","鴨・雉用ゲームバッグ","ナイフ・血抜き用道具"]},
+{id:1104,ph:"🦌 狩猟登録・初猟",tt:"🎉 初猟！",dt:"猟期：11月15日〜翌2月15日。先輩ハンターと同行が安全",date:"2025-11-15",done:false,now:false,urg:false,items:["猟具一式（銃・実包）","狩猟者登録証を必ず携帯","蛍光ベスト・安全装備","十分な食料・水・防寒具","スマートフォン（GPS・緊急連絡）","先輩ハンターと同行（初回は必須）"]},
+];
+
+// ════════════════════════════════════════════════════
 // SYNC（JSONBin.io）
-// ══════════════════════════════════════════════
-const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
+// ════════════════════════════════════════════════════
+const JB = 'https://api.jsonbin.io/v3';
 let syncTimer = null;
 
-function getSyncConf(){
-  try{
-    return {
-      key: localStorage.getItem('jb_key')||'',
-      binId: localStorage.getItem('jb_bin')||''
-    };
-  }catch(e){return {key:'',binId:''};}
+function getSC(){
+  try{return{key:localStorage.getItem('jb_key')||'',bin:localStorage.getItem('jb_bin')||''};}
+  catch(e){return{key:'',bin:''};}
 }
-function setSyncConf(key,binId){
-  localStorage.setItem('jb_key',key);
-  localStorage.setItem('jb_bin',binId);
-}
+function setSC(k,b){localStorage.setItem('jb_key',k);localStorage.setItem('jb_bin',b);}
 
-function setStatus(msg,cls=''){
-  const el=document.getElementById('sync-status');
-  el.textContent=msg;
-  el.className=cls;
-}
+function sts(msg,cls=''){const e=document.getElementById('sync-bar');e.textContent=msg;e.className=cls;}
 
-async function pushToCloud(data){
-  const {key,binId}=getSyncConf();
-  if(!key||!binId)return;
+async function pushCloud(data){
+  const {key,bin}=getSC();if(!key||!bin)return;
   try{
-    setStatus('☁️ 保存中...',  'ing');
-    const res=await fetch(`${JSONBIN_BASE}/b/${binId}`,{
-      method:'PUT',
+    sts('☁️ 保存中...','ing');
+    const r=await fetch(`${JB}/b/${bin}`,{method:'PUT',
       headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Private':'false'},
-      body:JSON.stringify({tasks:data})
-    });
-    if(!res.ok)throw new Error(res.status);
+      body:JSON.stringify({tasks:data})});
+    if(!r.ok)throw new Error(r.status);
     const now=new Date();
-    setStatus(`✅ 同期完了 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`, 'ok');
-  }catch(e){
-    setStatus('⚠️ 同期失敗（オフライン？）','err');
-  }
+    sts(`✅ 同期完了 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`,'ok');
+  }catch(e){sts('⚠️ 同期失敗','err');}
 }
 
-async function pullFromCloud(){
-  const {key,binId}=getSyncConf();
-  if(!key||!binId){setStatus('⚙️ 同期未設定','');return;}
+async function pullCloud(){
+  const {key,bin}=getSC();if(!key||!bin){sts('⚙️ 同期未設定（ツールバーから設定）');return;}
   try{
-    setStatus('🔄 同期中...','ing');
-    const res=await fetch(`${JSONBIN_BASE}/b/${binId}/latest`,{
-      headers:{'X-Master-Key':key}
-    });
-    if(!res.ok)throw new Error(res.status);
-    const json=await res.json();
-    const arr=json.record?.tasks||[];
+    sts('🔄 同期中...','ing');
+    const r=await fetch(`${JB}/b/${bin}/latest`,{headers:{'X-Master-Key':key}});
+    if(!r.ok)throw new Error(r.status);
+    const j=await r.json();const arr=j.record?.tasks||[];
     if(arr.length>0){
       tasks=INIT.map(t=>{const f=arr.find(x=>x.id===t.id);return f?{...t,done:f.done}:{...t};});
-      saveLocal();
-      render();
+      saveL();render();
     }
     const now=new Date();
-    setStatus(`✅ 同期完了 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`, 'ok');
-  }catch(e){
-    setStatus('⚠️ クラウド読込失敗','err');
-  }
+    sts(`✅ 同期完了 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`,'ok');
+  }catch(e){sts('⚠️ クラウド読込失敗','err');}
 }
 
 async function initSync(){
-  const key=document.getElementById('api-key-input').value.trim();
+  const key=document.getElementById('api-key-inp').value.trim();
   if(!key){alert('APIキーを入力してください');return;}
-  setStatus('🚀 初期化中...','ing');
+  sts('🚀 初期化中...','ing');
   try{
-    // 既存Bin IDがあれば使う
-    const existingBin=document.getElementById('bin-id-input').value.trim();
-    if(existingBin){
-      setSyncConf(key,existingBin);
-      await pullFromCloud();
-      document.getElementById('bin-id-display').textContent=existingBin;
-      document.getElementById('bin-id-section').style.display='block';
-      return;
-    }
-    // 新規Bin作成
-    const res=await fetch(`${JSONBIN_BASE}/b`,{
-      method:'POST',
+    const existBin=document.getElementById('bin-id-inp').value.trim();
+    if(existBin){setSC(key,existBin);await pullCloud();document.getElementById('bin-display').textContent='Bin ID: '+existBin;return;}
+    const r=await fetch(`${JB}/b`,{method:'POST',
       headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'hunter-timeline','X-Bin-Private':'false'},
-      body:JSON.stringify({tasks:tasks.map(t=>({id:t.id,done:t.done}))})
-    });
-    if(!res.ok)throw new Error(await res.text());
-    const json=await res.json();
-    const binId=json.metadata.id;
-    setSyncConf(key,binId);
-    document.getElementById('bin-id-display').textContent=binId;
-    document.getElementById('bin-id-section').style.display='block';
-    setStatus('✅ 同期設定完了！','ok');
-    alert(`✅ 同期設定完了！\n\niPhoneでも「⚙️同期設定」を開き、\n同じAPIキーとBin ID「${binId}」を入力してください。`);
-  }catch(e){
-    setStatus('❌ 設定失敗','err');
-    alert('設定に失敗しました。APIキーを確認してください。\n'+e.message);
-  }
+      body:JSON.stringify({tasks:tasks.map(t=>({id:t.id,done:t.done}))})});
+    if(!r.ok)throw new Error(await r.text());
+    const j=await r.json();const bin=j.metadata.id;
+    setSC(key,bin);
+    document.getElementById('bin-display').textContent='Bin ID: '+bin;
+    sts('✅ 同期設定完了！','ok');
+    alert(`✅ 同期完了！
+iPhoneでも同じAPIキーとBin ID「${bin}」を入力してください。`);
+  }catch(e){sts('❌ 設定失敗','err');alert('失敗: '+e.message);}
 }
 
-function clearSync(){
-  if(!confirm('同期設定を削除しますか？'))return;
-  localStorage.removeItem('jb_key');
-  localStorage.removeItem('jb_bin');
-  setStatus('⚙️ 同期未設定','');
-  alert('同期設定を削除しました。');
-}
+async function manualSync(){await pullCloud();}
 
-async function manualSync(){
-  await pullFromCloud();
-}
-
-// チェック変更時に自動プッシュ（1秒デバウンス）
-function schedulePush(){
+function schedPush(){
   clearTimeout(syncTimer);
-  syncTimer=setTimeout(()=>pushToCloud(tasks.map(t=>({id:t.id,done:t.done}))),1000);
+  syncTimer=setTimeout(()=>pushCloud(tasks.map(t=>({id:t.id,done:t.done}))),800);
 }
 
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════════
-let tasks=loadLocal(),activePhase="全て",showPend=false,expId=null;
+// ════════════════════════════════════════════════════
+let tasks=loadL(), activePhase='全て', showPend=false, expId=null;
 
-function loadLocal(){
-  try{
-    const s=localStorage.getItem('hunter_v4');
+function loadL(){
+  try{const s=localStorage.getItem('hunter_v5');
     if(s){const sv=JSON.parse(s);return INIT.map(t=>{const f=sv.find(x=>x.id===t.id);return f?{...t,done:f.done}:{...t};});}
   }catch(e){}
   return INIT.map(t=>({...t}));
 }
-function saveLocal(){
-  localStorage.setItem('hunter_v4',JSON.stringify(tasks.map(t=>({id:t.id,done:t.done}))));
-}
+function saveL(){localStorage.setItem('hunter_v5',JSON.stringify(tasks.map(t=>({id:t.id,done:t.done}))));}
 
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════════
 // RENDER
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════════
 function render(){
-  const done=tasks.filter(t=>t.done).length,pct=Math.round(done/tasks.length*100);
-  document.getElementById('ptxt').textContent=`${done} / ${tasks.length} 完了 (${pct}%)`;
+  const done=tasks.filter(t=>t.done).length;
+  const pct=Math.round(done/tasks.length*100);
+  document.getElementById('ptxt').textContent=`${done}/${tasks.length} (${pct}%)`;
   document.getElementById('pfill').style.width=pct+'%';
   const cn=tasks.filter(t=>!t.done&&t.now).length;
-  const cb=document.getElementById('cannow');
+  const cb=document.getElementById('cannow-badge');
   cb.style.display=cn>0?'block':'none';
-  cb.textContent=`⚡ 今すぐできること：残り ${cn} 件`;
+  cb.textContent=`⚡ 今すぐできること：${cn}件`;
 
+  // tabs
   const ti=document.getElementById('ti');
   ti.innerHTML=['全て',...PHASES].map(p=>{
-    const act=activePhase===p,col=PCOL[p]||'#52b788';
+    const act=activePhase===p;
+    const col=PCOL[p]||'#52b788';
     const st=act&&p!=='全て'?`background:${col};color:#fff;font-weight:700`:act?`background:#52b788;color:#fff;font-weight:700`:'';
-    return `<button class="tbtn${act?' act':''}" style="${st}" onclick="setP(${JSON.stringify(p)})">${p}</button>`;
-  }).join('')+`<button class="tbtn t-pend${showPend?' on':''}" onclick="togPend()">未完了のみ</button>`;
+    return `<button class="tab${act?' on':''}" style="${st}" onclick="setP(${JSON.stringify(p)})">${p}</button>`;
+  }).join('')+`<button class="tab tab-pend${showPend?' on':''}" onclick="togPend()">未完了のみ</button>`;
 
+  // tasks
   const phases=PHASES.filter(p=>activePhase==='全て'||p===activePhase);
   let html='';
   for(const ph of phases){
-    const pt=tasks.filter(t=>{if(t.phase!==ph)return false;if(showPend&&t.done)return false;return true;});
+    const pt=tasks.filter(t=>{if(t.ph!==ph)return false;if(showPend&&t.done)return false;return true;});
     if(!pt.length)continue;
-    const pd=tasks.filter(t=>t.phase===ph&&t.done).length,ptot=tasks.filter(t=>t.phase===ph).length,col=PCOL[ph];
-    html+=`<div class="ph-sec"><div class="ph-hd" style="border-bottom-color:${col}44"><span class="ph-nm" style="color:${col}">${ph}</span><span class="ph-ct">${pd}/${ptot}</span></div>`;
+    const pd=tasks.filter(t=>t.ph===ph&&t.done).length;
+    const ptot=tasks.filter(t=>t.ph===ph).length;
+    const col=PCOL[ph];
+    html+=`<div class="phase-sec"><div class="phase-hd" style="border-bottom-color:${col}30">
+      <span class="phase-nm" style="color:${col}">${ph}</span>
+      <span class="phase-ct">${pd}/${ptot}</span></div>`;
     for(const t of pt){
-      const cls=t.done?'done':t.now?'now':'norm',bl=t.done?'#2d6a4f':t.now?'#52b788':col,ex=expId===t.id;
+      const cls=t.done?'done':t.now&&t.urg?'urg now':t.now?'now':'norm';
+      const bl=t.done?'#2d6a4f':t.urg&&t.now?'#fbbf24':t.now?'#52b788':col;
+      const ex=expId===t.id;
       html+=`<div class="tcard ${cls}" style="border-left:3px solid ${bl}">
         <div class="thead" onclick="togExp(${t.id})">
           <button class="chk${t.done?' on':''}" onclick="event.stopPropagation();togDone(${t.id})">${t.done?'✓':''}</button>
           <div class="tmain">
             <div class="trow">
-              <span class="ttl${t.done?' done':''}">${t.title}</span>
+              <span class="ttl${t.done?' done':''}">${t.tt}</span>
+              ${t.done?'<span class="b-done">✅ 完了</span>':''}
               ${t.urg&&!t.done?'<span class="b-urg">⚠️ 急ぎ</span>':''}
-              ${t.now&&!t.done?'<span class="b-now">⚡ 今すぐ可</span>':''}
+              ${t.now&&!t.done?'<span class="b-now">⚡ 今すぐ</span>':''}
               ${t.date?`<span class="b-dt">📅 ${t.date}</span>`:''}
             </div>
-            <div class="tdet">${t.detail}</div>
+            <div class="tdet">${t.dt}</div>
           </div>
           <span class="chev">${ex?'▲':'▼'}</span>
         </div>
-        ${t.items.length?`<div class="titems${ex?' open':''}"><div class="ilabel">📋 持ち物・準備するもの</div>${t.items.map(i=>`<div class="irow"><span class="idot">◆</span>${i}</div>`).join('')}</div>`:''}
+        ${t.items.length?`<div class="titems${ex?' open':''}"><div class="titems-inner">
+          <div class="ilbl">📋 持ち物・やること</div>
+          ${t.items.map(i=>`<div class="irow"><span class="idot">◆</span>${i}</div>`).join('')}
+        </div></div>`:''}
       </div>`;
     }
     html+='</div>';
@@ -442,30 +413,21 @@ function togPend(){showPend=!showPend;render();}
 function togExp(id){expId=expId===id?null:id;render();}
 function togDone(id){
   tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);
-  saveLocal();
-  schedulePush();
-  render();
+  saveL();schedPush();render();
 }
 
-function openM(id){
-  if(id==='sync-setup-m'){
-    const{binId}=getSyncConf();
-    if(binId){document.getElementById('bin-id-display').textContent=binId;document.getElementById('bin-id-section').style.display='block';}
-  }
+// ════════════════════════════════════════════════════
+// MODALS / EXPORT
+// ════════════════════════════════════════════════════
+function showMod(id){
+  if(id==='sync-m'){const{bin}=getSC();if(bin)document.getElementById('bin-display').textContent='現在のBin ID: '+bin;}
   document.getElementById(id).classList.add('open');
 }
-function closeM(id){document.getElementById(id).classList.remove('open');}
-function bgClose(e,id){if(e.target.id===id)closeM(id);}
-
-function openIcs(){document.getElementById('ics-txt').value=genIcs();openM('ics-m');}
-function copyIcs(){
-  const ta=document.getElementById('ics-txt');ta.select();document.execCommand('copy');
-  if(navigator.clipboard)navigator.clipboard.writeText(ta.value).catch(()=>{});
-  alert('コピーしました！');
-}
+function closeMod(id){document.getElementById(id).classList.remove('open');}
+function bgClose(e,id){if(e.target.id===id)closeMod(id);}
 
 function doExp(){
-  const data=JSON.stringify({tasks:tasks.map(t=>({id:t.id,title:t.title,done:t.done}))},null,2);
+  const data=JSON.stringify({tasks:tasks.map(t=>({id:t.id,tt:t.tt,done:t.done}))},null,2);
   try{
     const b=new Blob([data],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
     a.href=u;a.download='hunter-progress.json';a.click();URL.revokeObjectURL(u);
@@ -475,39 +437,45 @@ function doExp(){
 function applyImp(){
   try{
     const raw=document.getElementById('imp-txt').value.trim();
-    const json=JSON.parse(raw),arr=json.tasks||json;
+    const j=JSON.parse(raw),arr=j.tasks||j;
     tasks=INIT.map(t=>{const f=arr.find(x=>x.id===t.id);return f?{...t,done:f.done}:{...t};});
-    saveLocal();closeM('imp-m');render();alert('読み込みました！');
+    saveL();closeMod('imp-m');render();alert('読み込みました！');
   }catch(e){alert('形式エラー');}
 }
 
-function genIcs(){
-  const now=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-  let L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HunterTimeline//JP','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
-  for(const t of tasks.filter(t=>t.date)){
-    const d=t.date.replace(/-/g,'');
-    L.push('BEGIN:VEVENT',`UID:ht-${t.id}-${d}@h`,`DTSTAMP:${now}`,`DTSTART;VALUE=DATE:${d}`,`DTEND;VALUE=DATE:${d}`,
-      `SUMMARY:${t.phase.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim()} ${t.title}`,
-      `DESCRIPTION:${t.detail}`,'END:VEVENT');
-  }
-  const MS=[
-    {s:'20250615',t:'🎓 初心者講習会 申込受付開始',d:'6/15（月）9:00〜 山形県猟友会へ申込'},
-    {s:'20250715',t:'🎓 狩猟初心者講習会',d:'置賜総合センターにて受講（7/15）'},
-    {s:'20250912',t:'📝 狩猟免許試験（9/12）',d:'山形県主催'},
-    {s:'20250913',t:'📝 狩猟免許試験（9/13）',d:'山形県主催'},
-    {s:'20251015',t:'🦌 狩猟者登録 受付開始（目安）',d:'猟期前に登録'},
-    {s:'20251115',t:'🦌 猟期スタート！',d:'山形県 11/15〜翌2/15'},
-  ];
-  for(const m of MS)L.push('BEGIN:VEVENT',`UID:ht-ms-${m.s}@h`,`DTSTAMP:${now}`,`DTSTART;VALUE=DATE:${m.s}`,`DTEND;VALUE=DATE:${m.s}`,`SUMMARY:${m.t}`,`DESCRIPTION:${m.d}`,'END:VEVENT');
-  L.push('END:VCALENDAR');
-  return L.join('\r\n');
+// ════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════
+
+// 既存の完了状態を引き継ぐ（旧hunter_v4から移行）
+function migrateOld(){
+  try{
+    const old=localStorage.getItem('hunter_v4');
+    if(!old||localStorage.getItem('hunter_v5'))return;
+    const arr=JSON.parse(old);
+    const idMap={101:101,102:102,103:103,104:104,105:105,106:106,107:107,108:108,
+      201:201,202:202,203:203,204:204,
+      301:301,302:302,303:303,304:304,305:305,306:306,
+      400:400,401:401,402:402,
+      501:501,502:502,503:503,
+      601:601,602:602,
+      701:901,703:703};
+    tasks=tasks.map(t=>{
+      const f=arr.find(x=>x.id===t.id);
+      return f?{...t,done:f.done}:{...t};
+    });
+    // 旧401（日程確定✅）→新401（合格✅）
+    // 旧402（講習受講）→新501（講習会参加）
+    const old402=arr.find(x=>x.id===402);
+    if(old402?.done){tasks=tasks.map(t=>t.id===501?{...t,done:true}:t);}
+    saveL();
+  }catch(e){}
 }
 
-// 起動時にクラウドから最新を取得
+migrateOld();
 render();
-pullFromCloud();
-// 5分ごとに自動同期
-setInterval(pullFromCloud, 5*60*1000);
+pullCloud();
+setInterval(pullCloud, 5*60*1000);
 </script>
 </body>
 </html>
