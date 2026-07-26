@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ひろあきレシピ</title>
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --primary: #2D5016;
+    --accent: #8B4513;
+    --accent2: #C17F3A;
+    --text: #1A1A1A;
+    --muted: #6B6B6B;
+    --border: #E0D8CC;
+    --tag-bg: #EDF2E8;
+    --tag-text: #2D5016;
+    --danger: #C0392B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: var(--primary); padding: 16px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
+  header h1 { color: #fff; font-size: 18px; font-weight: 700; letter-spacing: 0.05em; }
+  header p { color: rgba(255,255,255,0.7); font-size: 11px; margin-top: 2px; }
+  .add-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 7px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  .add-btn:active { background: rgba(255,255,255,0.35); }
+
+  .search-bar { padding: 14px 16px 8px; }
+  .search-bar input { width: 100%; padding: 9px 16px; border: 1.5px solid var(--border); border-radius: 24px; font-size: 14px; background: white; outline: none; color: var(--text); }
+  .search-bar input:focus { border-color: var(--primary); }
+
+  .categories { display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .cat-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+  .recipe-list { padding: 0 12px 100px; display: flex; flex-direction: column; gap: 10px; }
+  .recipe-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+  .card-header { padding: 14px 14px 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .card-title { font-size: 15px; font-weight: 700; line-height: 1.4; flex: 1; }
+  .card-emoji { font-size: 26px; flex-shrink: 0; }
+  .card-footer { padding: 0 14px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tag { padding: 2px 9px; border-radius: 10px; background: var(--tag-bg); color: var(--tag-text); font-size: 11px; font-weight: 600; }
+  .edit-small { background: none; border: 1px solid var(--border); color: var(--muted); padding: 3px 10px; border-radius: 10px; font-size: 11px; cursor: pointer; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; overflow-y: auto; padding: 16px 0; }
+  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  .modal { background: white; width: min(560px, calc(100% - 24px)); border-radius: 20px; overflow: hidden; margin: auto; }
+  .modal-top { background: var(--primary); padding: 18px 18px 14px; color: white; }
+  .modal-top h2 { font-size: 17px; font-weight: 700; line-height: 1.4; padding-right: 40px; }
+  .close-btn { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .modal-top { position: relative; }
+  .modal-body { padding: 18px; }
+
+  .servings-control { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 10px 14px; background: var(--bg); border-radius: 12px; }
+  .servings-control span { font-size: 13px; color: var(--muted); flex: 1; }
+  .servings-control .count { font-size: 18px; font-weight: 700; color: var(--primary); min-width: 28px; text-align: center; }
+  .btn-round { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--primary); background: white; color: var(--primary); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+  .section-title { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1.5px solid var(--border); }
+  .ingredients-list { margin-bottom: 18px; }
+  .ingredient-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #F0EBE3; font-size: 14px; }
+  .ingredient-row:last-child { border-bottom: none; }
+  .ingredient-amount { color: var(--accent); font-weight: 600; font-size: 13px; text-align: right; }
+  .steps-list { display: flex; flex-direction: column; gap: 11px; margin-bottom: 18px; }
+  .step-item { display: flex; gap: 10px; align-items: flex-start; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-text { font-size: 14px; line-height: 1.7; flex: 1; }
+  .notes-box { padding: 12px; background: #FFF8F0; border-radius: 10px; border-left: 3px solid var(--accent2); }
+  .notes-box p { font-size: 13px; line-height: 1.7; color: var(--muted); }
+  .modal-edit-btn { display: block; width: 100%; margin-top: 16px; padding: 11px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--primary); font-weight: 600; cursor: pointer; }
+
+  /* Edit Modal */
+  .edit-modal { background: white; width: min(600px, calc(100% - 24px)); border-radius: 20px; overflow: hidden; margin: auto; }
+  .edit-modal-top { background: var(--accent); padding: 16px 18px; color: white; position: relative; }
+  .edit-modal-top h2 { font-size: 16px; font-weight: 700; padding-right: 40px; }
+  .edit-body { padding: 16px 18px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 5px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text); outline: none; font-family: inherit; }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .form-row input { flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+  .form-row input:focus { border-color: var(--primary); }
+  .del-row { background: none; border: none; color: #999; font-size: 18px; cursor: pointer; padding: 2px 6px; flex-shrink: 0; }
+  .add-row-btn { background: none; border: 1.5px dashed var(--border); color: var(--muted); padding: 7px; border-radius: 8px; font-size: 13px; cursor: pointer; width: 100%; margin-top: 4px; }
+  .save-btn { display: block; width: 100%; padding: 13px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 16px; }
+  .delete-recipe-btn { display: block; width: 100%; padding: 10px; background: none; color: var(--danger); border: 1.5px solid var(--danger); border-radius: 12px; font-size: 14px; cursor: pointer; margin-top: 8px; }
+
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+  .empty-state p { font-size: 14px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🍚 ひろあきレシピ</h1>
+    <p>山形の食材を活かした毎日のごはん</p>
+  </div>
+  <button class="add-btn" onclick="openAddRecipe()">＋ 追加</button>
+</header>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="レシピを検索..." oninput="filterRecipes()">
+</div>
+<div class="categories" id="categories"></div>
+<div class="recipe-list" id="recipeList"></div>
+
+<!-- View Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-top">
+      <button class="close-btn" onclick="closeRecipe()">✕</button>
+      <h2 id="modalTitle"></h2>
+    </div>
+    <div class="modal-body">
+      <div class="servings-control">
+        <span>人数調整</span>
+        <button class="btn-round" onclick="changeServings(-1)">－</button>
+        <div class="count" id="servingsCount">2</div>
+        <button class="btn-round" onclick="changeServings(1)">＋</button>
+        <span style="font-size:13px;color:var(--muted)">人前</span>
+      </div>
+      <div class="ingredients-list">
+        <div class="section-title">▍材料</div>
+        <div id="modalIngredients"></div>
+      </div>
+      <div class="steps-list">
+        <div class="section-title">▍手順</div>
+        <div id="modalSteps"></div>
+      </div>
+      <div class="notes-box" id="modalNotes" style="display:none">
+        <div class="section-title" style="margin-bottom:6px">▍ポイント</div>
+        <p id="modalNotesText"></p>
+      </div>
+      <button class="modal-edit-btn" onclick="openEditFromView()">✏️ このレシピを編集</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit/Add Modal -->
+<div class="modal-overlay" id="editOverlay" onclick="closeEditModal(event)">
+  <div class="edit-modal" id="editModal">
+    <div class="edit-modal-top">
+      <button class="close-btn" onclick="closeEdit()">✕</button>
+      <h2 id="editTitle">レシピを編集</h2>
+    </div>
+    <div class="edit-body">
+      <div class="form-group">
+        <label>タイトル</label>
+        <input type="text" id="editName" placeholder="例：親子丼">
+      </div>
+      <div class="form-group">
+        <label>絵文字</label>
+        <input type="text" id="editEmoji" placeholder="🍳" style="max-width:80px">
+      </div>
+      <div class="form-group">
+        <label>カテゴリー</label>
+        <select id="editCategory">
+          <option>丼</option>
+          <option>炒め物</option>
+          <option>パスタ</option>
+          <option>副菜・和え物</option>
+          <option>サンドイッチ</option>
+          <option>鍋・スープ</option>
+          <option>おにぎり</option>
+          <option>ご飯もの</option>
+          <option>揚げ物</option>
+          <option>タレ・つゆ</option>
+          <option>下ごしらえ</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>基本人数（人前）</label>
+        <input type="number" id="editServings" value="2" min="1" style="max-width:80px">
+      </div>
+      <div class="form-group">
+        <label>材料</label>
+        <div id="editIngredients"></div>
+        <button class="add-row-btn" onclick="addIngredientRow()">＋ 材料を追加</button>
+      </div>
+      <div class="form-group">
+        <label>手順</label>
+        <div id="editSteps"></div>
+        <button class="add-row-btn" onclick="addStepRow()">＋ 手順を追加</button>
+      </div>
+      <div class="form-group">
+        <label>ポイント・メモ</label>
+        <textarea id="editNotes" placeholder="コツや注意点など..."></textarea>
+      </div>
+      <button class="save-btn" onclick="saveRecipe()">💾 保存する</button>
+      <button class="delete-recipe-btn" id="deleteBtn" onclick="deleteRecipe()" style="display:none">🗑️ このレシピを削除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'hiro_recipes_v2';
+
+const defaultRecipes = [
+  {
+    id: 1, title: '親子丼', emoji: '🍳', category: '丼', tags: ['卵','鶏肉','ご飯'], baseServings: 1,
+    ingredients: [
+      {name:'鶏もも肉',amount:200,unit:'g'},
+      {name:'玉ねぎ（薄切り）',amount:1,unit:'個'},
+      {name:'玉ねぎの葉（3cm長さ）',amount:3,unit:'本'},
+      {name:'卵',amount:2,unit:'個'},
+      {name:'昆布＋椎茸出汁',amount:100,unit:'ml'},
+      {name:'醤油',amount:'大さじ2',unit:''},
+      {name:'みりん',amount:'大さじ2',unit:''},
+      {name:'砂糖',amount:'小さじ2',unit:''},
+      {name:'顆粒出汁',amount:'小さじ2',unit:''},
+      {name:'白米',amount:150,unit:'g'},
+    ],
+    steps: [
+      '小鍋に出汁・醤油・みりん・砂糖・顆粒出汁を入れて中火で煮立てる',
+      '玉ねぎを加えて中火で2分煮る。透明になったら鶏肉を加えてさらに3分煮る',
+      '溶き卵の2/3を回し入れて蓋をして30秒。半熟になったら残りの1/3を流し入れて火を止める。卵は混ぜない！',
+      'ご飯にのせ、玉ねぎの葉を散らして完成',
+    ],
+    notes: '卵は火を止めてから混ぜない！2回に分けて入れるのがふわとろの秘訣。出汁は昆布＋椎茸が最高。',
+  },
+  {
+    id: 2, title: '牛丼', emoji: '🐄', category: '丼', tags: ['牛肉','ご飯','玉ねぎ'], baseServings: 2,
+    ingredients: [
+      {name:'牛薄切り肉',amount:300,unit:'g'},
+      {name:'玉ねぎ（薄切り）',amount:1,unit:'個'},
+      {name:'出汁',amount:200,unit:'ml'},
+      {name:'醤油',amount:'大さじ2',unit:''},
+      {name:'みりん',amount:'大さじ2',unit:''},
+      {name:'酒',amount:'大さじ1',unit:''},
+      {name:'砂糖',amount:'少々',unit:''},
+      {name:'白米',amount:300,unit:'g'},
+    ],
+    steps: [
+      '鍋に出汁・醤油・みりん・酒・砂糖を入れて中火で煮立てる',
+      '玉ねぎを加えて3分煮る。透明になったら牛肉を加える',
+      '牛肉の色が変わったら弱火にして3〜5分煮る',
+      'ご飯にのせて完成。お好みで紅生姜を添える',
+    ],
+    notes: '砂糖は少々から味見して調整。出汁はかつお節出汁が定番。煮すぎると牛肉が硬くなるので注意。',
+  },
+  {
+    id: 3, title: '鶏そぼろ・卵そぼろ二色丼', emoji: '🍚', category: '丼', tags: ['鶏挽肉','卵','ご飯'], baseServings: 2,
+    ingredients: [
+      {name:'鶏挽肉',amount:200,unit:'g'},
+      {name:'卵',amount:3,unit:'個'},
+      {name:'生姜すりおろし',amount:'小さじ1',unit:''},
+      {name:'醤油（鶏そぼろ用）',amount:'大さじ1と1/2',unit:''},
+      {name:'みりん（鶏そぼろ用）',amount:'大さじ1と1/2',unit:''},
+      {name:'酒（鶏そぼろ用）',amount:'大さじ1',unit:''},
+      {name:'砂糖（鶏そぼろ用）',amount:'小さじ1',unit:''},
+      {name:'砂糖（卵そぼろ用）',amount:'小さじ1',unit:''},
+      {name:'みりん（卵そぼろ用）',amount:'小さじ1',unit:''},
+      {name:'塩（卵そぼろ用）',amount:'少々',unit:''},
+      {name:'白米',amount:300,unit:'g'},
+    ],
+    steps: [
+      '小鍋に鶏挽肉・生姜・醤油・みりん・酒・砂糖を入れて中火にかける。箸4本で炒めながらそぼろ状にほぐす。汁がなくなるまで煮詰める',
+      '別の小鍋に卵・砂糖・みりん・塩を入れてよく混ぜる。弱火でゆっくりかき混ぜて半熟手前で火を止める',
+      'ご飯をどんぶりに盛り、鶏そぼろと卵そぼろを左右に並べて完成',
+    ],
+    notes: '鶏そぼろは箸4本で炒めると細かくほぐれやすい。卵そぼろは半熟手前で止める。薄めから味見して足す。',
+  },
+  {
+    id: 4, title: '豚こまキムチ丼・卵黄のせ', emoji: '🌶️', category: '丼', tags: ['豚肉','キムチ','ご飯'], baseServings: 1,
+    ingredients: [
+      {name:'豚こま肉',amount:150,unit:'g'},
+      {name:'キムチ',amount:100,unit:'g'},
+      {name:'三つ葉の茎（3cm長さ）',amount:4,unit:'本'},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+      {name:'醤油',amount:'小さじ1',unit:''},
+      {name:'みりん',amount:'小さじ1',unit:''},
+      {name:'白胡麻',amount:'小さじ1',unit:''},
+      {name:'卵黄',amount:1,unit:'個'},
+      {name:'白米',amount:150,unit:'g'},
+    ],
+    steps: [
+      'フライパンにごま油を熱し、豚こまを広げて中火で炒める。色が変わったら裏返して30秒',
+      'キムチを加えて30秒炒め合わせる。醤油とみりんを加えて味見し、薄ければ少量足す',
+      '火を止めて三つ葉の茎を加えてさっと混ぜる',
+      'ご飯にのせ、白胡麻をふりかけ、真ん中に卵黄をそっと乗せて完成',
+    ],
+    notes: 'キムチの塩分があるので醤油は薄めから。三つ葉は火を止めてから加える。卵黄を崩しながら食べると最高。',
+  },
+  {
+    id: 5, title: '牛コマ野菜炒め', emoji: '🥩', category: '炒め物', tags: ['牛肉','野菜炒め'], baseServings: 2,
+    ingredients: [
+      {name:'牛コマ',amount:150,unit:'g'},
+      {name:'玉ねぎ（薄切り）',amount:'半分',unit:''},
+      {name:'ピーマン（細切り）',amount:1,unit:'個'},
+      {name:'キャベツ（ざく切り）',amount:3,unit:'枚'},
+      {name:'にんじん（ざく切り）',amount:'半分',unit:''},
+      {name:'漬けだれ：醤油',amount:'大さじ2',unit:''},
+      {name:'漬けだれ：みりん',amount:'大さじ2',unit:''},
+      {name:'漬けだれ：酒',amount:'大さじ1',unit:''},
+      {name:'漬けだれ：砂糖',amount:'小さじ1',unit:''},
+      {name:'漬けだれ：生姜すりおろし',amount:'たっぷり',unit:''},
+      {name:'炒め：醤油',amount:'大さじ1',unit:''},
+      {name:'炒め：みりん',amount:'大さじ1',unit:''},
+      {name:'炒め：酒',amount:'大さじ1',unit:''},
+      {name:'炒め：砂糖',amount:'小さじ1〜1.5',unit:''},
+      {name:'炒め：生姜またはにんにく',amount:'少々',unit:''},
+    ],
+    steps: [
+      '牛コマを漬けだれ（醤油・みりん・酒・砂糖・生姜）に玉ねぎの薄切りと一緒に15〜30分漬けておく',
+      '炒め合わせ調味料（醤油・みりん・酒・砂糖・生姜・にんにく）を小さな器に混ぜておく',
+      'フライパンに油を熱し、強火で牛肉と玉ねぎを炒める。色が変わったら取り出す',
+      '同じフライパンで野菜（にんじん→キャベツ→ピーマンの順）を炒める',
+      '牛肉を戻し入れ、合わせ調味料を回しかけて全体に絡める。薄めから味見して調整',
+    ],
+    notes: '牛コマは事前に漬けておくと柔らかくなる。野菜は火が通りにくいものから順に炒める。',
+  },
+  {
+    id: 6, title: '生キクラゲのふわとろ卵炒め', emoji: '🍄', category: '炒め物', tags: ['キクラゲ','卵'], baseServings: 1,
+    ingredients: [
+      {name:'生キクラゲ（ひと口大にちぎる）',amount:80,unit:'g'},
+      {name:'卵',amount:2,unit:'個'},
+      {name:'ごま油',amount:'小さじ2',unit:''},
+      {name:'塩',amount:'小さじ1/2',unit:''},
+      {name:'酒',amount:'小さじ1',unit:''},
+    ],
+    steps: [
+      'フライパンにごま油を熱し、キクラゲを中火で1分炒める。酒を回しかけてさらに30秒',
+      '溶き卵を回し入れ、大きくゆっくりかき混ぜる。半熟になったらすぐ火を止める',
+      '塩をふって全体に軽く混ぜてすぐ盛る',
+    ],
+    notes: '卵は半熟で止めるのが絶対のポイント。醤油なしでも十分美味しい。塩ごま油だけで素材の旨みが活きる。',
+  },
+  {
+    id: 7, title: 'じゃがいもと厚揚げ・アスパラの味噌炒め', emoji: '🥔', category: '炒め物', tags: ['じゃがいも','厚揚げ','アスパラ'], baseServings: 2,
+    ingredients: [
+      {name:'じゃがいも（皮ごと薄切り）',amount:2,unit:'個'},
+      {name:'厚揚げ（ひと口大）',amount:1,unit:'丁'},
+      {name:'アスパラ（3cm長さ）',amount:4,unit:'本'},
+      {name:'大葉（飾り用）',amount:4,unit:'枚'},
+      {name:'味噌',amount:'大さじ1',unit:''},
+      {name:'みりん',amount:'大さじ1',unit:''},
+      {name:'酒',amount:'大さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ1/2',unit:''},
+      {name:'生姜すりおろし',amount:'小さじ1',unit:''},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+    ],
+    steps: [
+      '小さな器に味噌・みりん・酒・砂糖・生姜を混ぜてタレを作る。じゃがいもは薄切りにして水に1分さらし水気を拭く',
+      'フライパンにごま油を熱し、厚揚げを中火で両面に焼き色をつける。焼けたら一旦取り出す',
+      '同じフライパンでじゃがいもを強火で2分、触らずに焼き色をつける。アスパラを加えてさらに1分炒める',
+      '厚揚げを戻し入れて弱火にし、タレを回しかけて全体に絡める。すぐ火を止める',
+      '火を止めてから大葉を散らして完成',
+    ],
+    notes: '味噌タレは焦げやすいので弱火で素早く絡める。大葉は火を止めてから加えて香りを活かす。',
+  },
+  {
+    id: 8, title: '明太子バター白ワインパスタ', emoji: '🍝', category: 'パスタ', tags: ['明太子','パスタ','バター'], baseServings: 2,
+    ingredients: [
+      {name:'パスタ',amount:200,unit:'g'},
+      {name:'明太子（皮を除いてみを出す）',amount:3,unit:'腹'},
+      {name:'バター',amount:20,unit:'g'},
+      {name:'白ワイン',amount:'大さじ4',unit:''},
+      {name:'マヨネーズ',amount:'大さじ2',unit:''},
+      {name:'醤油',amount:'小さじ1',unit:''},
+      {name:'ニンニクすりおろし',amount:'小さじ1',unit:''},
+      {name:'大葉（細く切る）',amount:4,unit:'枚'},
+      {name:'パスタの茹で汁',amount:'大さじ3',unit:''},
+      {name:'塩（茹で湯用）',amount:'小さじ1',unit:''},
+    ],
+    steps: [
+      '大きな鍋にたっぷりの湯を沸かし塩を入れる。パスタを表示通りに茹でる。茹で上がり直前に茹で汁大さじ3を取っておく',
+      'フライパンにバターを弱火で溶かす。ニンニクを加えて1分炒め、白ワインを加えて中火で2分煮詰めてアルコールを飛ばす',
+      '火を止めて明太子とマヨネーズを加えてさっくり混ぜる',
+      '茹で上がったパスタを加え、茹で汁を加えて素早く混ぜる。醤油を回しかけて味を整える',
+      '皿に盛り、大葉をたっぷり散らして完成',
+    ],
+    notes: '明太子は火を止めてから混ぜるのが最大のポイント。白ワインはアルコールをしっかり飛ばす。茹で汁を必ず取っておく。',
+  },
+  {
+    id: 9, title: '本場ペペロンチーノ', emoji: '🌶️', category: 'パスタ', tags: ['パスタ','ニンニク','唐辛子'], baseServings: 2,
+    ingredients: [
+      {name:'スパゲッティ（1.6〜1.8mm）',amount:200,unit:'g'},
+      {name:'ニンニク（薄切り）',amount:4,unit:'片'},
+      {name:'唐辛子（種を取り輪切り）',amount:2,unit:'本'},
+      {name:'オリーブオイル（たっぷり）',amount:'大さじ5',unit:''},
+      {name:'塩（茹で湯用）',amount:'小さじ1',unit:''},
+      {name:'パスタの茹で汁',amount:'大さじ6',unit:''},
+      {name:'イタリアンパセリ（粗みじん切り）',amount:4,unit:'本'},
+      {name:'黒胡椒',amount:'少々',unit:''},
+    ],
+    steps: [
+      '大きな鍋に湯を沸かす。塩を入れる（一口飲んで少し塩辛いくらいが目安）',
+      'パスタを袋の表示より1分早く茹で始める。茹で上がり直前に茹で汁大さじ6を取っておく',
+      'フライパンにオリーブオイルとニンニクを入れて弱火にかける。薄いきつね色になったら唐辛子を加える。絶対に強火にしない',
+      '火を止めて茹で汁の半量を加え、フライパンを振りながら激しく混ぜる。白っぽく乳化すれば成功',
+      'パスタをフライパンに入れ、残りの茹で汁を加えながら強火で素早く混ぜる',
+      '皿に盛りイタリアンパセリをたっぷり散らす。黒胡椒をひとふりして完成',
+    ],
+    notes: '本場の最大のポイントは「乳化」。オリーブオイルと茹で汁を激しく混ぜてクリーミーなソースにする。ニンニクは絶対に焦がさない。',
+  },
+  {
+    id: 10, title: 'きゅうりとちくわのごま和え', emoji: '🥒', category: '副菜・和え物', tags: ['きゅうり','ちくわ','和え物'], baseServings: 2,
+    ingredients: [
+      {name:'きゅうり（乱切り）',amount:2,unit:'本'},
+      {name:'ちくわ（斜め薄切り）',amount:2,unit:'本'},
+      {name:'塩（塩もみ用）',amount:'小さじ1/2',unit:''},
+      {name:'すりごま',amount:'大さじ2',unit:''},
+      {name:'醤油',amount:'小さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ1',unit:''},
+      {name:'みりん',amount:'小さじ1/2',unit:''},
+    ],
+    steps: [
+      'きゅうりを乱切りにする。塩をふって手でよく揉み、2分置く',
+      'ちくわを斜め薄切りにする',
+      'ボウルにすりごま・醤油・砂糖・みりんを入れてよく混ぜる',
+      'きゅうりを手でしっかり水気を絞る',
+      'タレのボウルにきゅうりとちくわを入れてよく和える',
+    ],
+    notes: '水気をしっかり絞るのが一番のポイント。乱切りにすると断面が増えてタレが絡みやすい。',
+  },
+  {
+    id: 11, title: 'きゅうりの浅漬け', emoji: '🥒', category: '副菜・和え物', tags: ['きゅうり','浅漬け'], baseServings: 2,
+    ingredients: [
+      {name:'きゅうり',amount:2,unit:'本'},
+      {name:'塩',amount:'小さじ1',unit:''},
+      {name:'塩昆布',amount:'小さじ1',unit:''},
+      {name:'昆布',amount:1,unit:'枚'},
+      {name:'鷹の爪',amount:1,unit:'本'},
+      {name:'白ごま',amount:'少々',unit:''},
+      {name:'酢',amount:'大さじ1〜2',unit:''},
+    ],
+    steps: [
+      'きゅうりを薄切りまたは斜め切りにして塩もみする',
+      '2分置いてから水気を絞る',
+      '塩昆布・昆布・鷹の爪・酢・白ごまを加えて混ぜる',
+      '冷蔵庫で30分以上置いて味を馴染ませる',
+    ],
+    notes: '酢はきつければ少なめに調整。昆布は角切り5cmが目安。',
+  },
+  {
+    id: 12, title: 'きゅうり浅漬け（ご飯に合う）', emoji: '🥒', category: '副菜・和え物', tags: ['きゅうり','浅漬け','ご飯'], baseServings: 2,
+    ingredients: [
+      {name:'きゅうり',amount:2,unit:'本'},
+      {name:'醤油',amount:'大さじ1〜2',unit:''},
+      {name:'酢',amount:'少々',unit:''},
+      {name:'鷹の爪',amount:1,unit:'本'},
+      {name:'塩昆布',amount:'大さじ1',unit:''},
+      {name:'鶏ガラスープの素',amount:'小さじ1',unit:''},
+      {name:'昆布（角切り5cm）',amount:1,unit:'枚'},
+      {name:'白胡麻',amount:'少々',unit:''},
+    ],
+    steps: [
+      'きゅうりを薄切りにして塩もみし2分置く',
+      '水気を絞ってボウルに入れる',
+      '醤油・酢・塩昆布・鶏ガラ・昆布・鷹の爪・白胡麻を加えて混ぜる',
+      '冷蔵庫で30分以上置いて味を馴染ませる',
+    ],
+    notes: 'ご飯に合わせるなら醤油多め・酢少々がベスト。鶏ガラスープで旨みをプラス。',
+  },
+  {
+    id: 13, title: 'コールスロー', emoji: '🥬', category: '副菜・和え物', tags: ['キャベツ','サラダ'], baseServings: 2,
+    ingredients: [
+      {name:'キャベツ（千切り）',amount:200,unit:'g'},
+      {name:'塩（塩もみ用）',amount:'小さじ1/2',unit:''},
+      {name:'マヨネーズ',amount:'大さじ2と1/2',unit:''},
+      {name:'酢',amount:'小さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ1/2',unit:''},
+      {name:'黒胡椒',amount:'少々',unit:''},
+    ],
+    steps: [
+      'キャベツに塩をふって手で軽く揉み10分置く',
+      'キッチンペーパーで水気をしっかり絞る',
+      'ボウルにマヨネーズ・酢・砂糖を入れてよく混ぜる',
+      '水気を絞ったキャベツとドレッシングをよく混ぜる。黒胡椒をふって完成',
+    ],
+    notes: '水気をしっかり絞るのが一番のポイント。',
+  },
+  {
+    id: 14, title: 'ハムきゅうりサンド（コウケンテツ風）', emoji: '🥪', category: 'サンドイッチ', tags: ['きゅうり','ハム','パン'], baseServings: 2,
+    ingredients: [
+      {name:'きゅうり',amount:1,unit:'本'},
+      {name:'ロースハム',amount:4,unit:'枚'},
+      {name:'スライスチーズ',amount:2,unit:'枚'},
+      {name:'食パン（8枚切り）',amount:4,unit:'枚'},
+      {name:'バター（室温）',amount:20,unit:'g'},
+      {name:'練り辛子',amount:'小さじ1',unit:''},
+      {name:'塩',amount:'小さじ1/2',unit:''},
+      {name:'水（塩水用）',amount:200,unit:'ml'},
+    ],
+    steps: [
+      'きゅうりを1.5mm厚さの薄切りにする。塩を水に溶かして塩水を作り、きゅうりを5分浸ける',
+      'きゅうりをキッチンペーパーでしっかり水気を拭く',
+      'バターと練り辛子を混ぜてからしバターを作る',
+      '食パン4枚の片面にからしバターを端まで塗る',
+      '1枚のパンにチーズ・ハム・きゅうりを重ねて並べる',
+      'もう1枚のパンを上に重ねて軽く押さえる。ラップで包んで冷蔵庫で10分休ませる。半分に切る',
+    ],
+    notes: '塩水につけることでパリパリ食感が生まれる（塩もみより水っぽくならない）。端まで塗ることで一口目から味が決まる。',
+  },
+  {
+    id: 15, title: '極上たまごサンド（コウケンテツ風）', emoji: '🥚', category: 'サンドイッチ', tags: ['卵','パン'], baseServings: 2,
+    ingredients: [
+      {name:'卵',amount:3,unit:'個'},
+      {name:'食パン（8枚切り）',amount:2,unit:'枚'},
+      {name:'マヨネーズ',amount:'大さじ2',unit:''},
+      {name:'牛乳（または生クリーム）',amount:'大さじ1',unit:''},
+      {name:'バター（室温）',amount:10,unit:'g'},
+      {name:'練り辛子',amount:'小さじ1/2',unit:''},
+      {name:'砂糖',amount:'ひとつまみ',unit:''},
+      {name:'塩',amount:'少々',unit:''},
+    ],
+    steps: [
+      '卵をボウルに割り、牛乳と塩・砂糖を加えてよく溶く',
+      'フライパンに油少々を熱し、卵液を入れて弱火でゆっくりかき混ぜながら照り卵状に仕上げる。半熟で火を止める',
+      'マヨネーズを加えてさっくり混ぜる',
+      'バターと練り辛子を混ぜてからしバターを作る。食パンの片面に端まで塗る',
+      '1枚のパンにたまごをたっぷりのせ、もう1枚で押さえる。冷蔵庫で5分休ませてから半分に切る',
+    ],
+    notes: 'とろとろふわふわに仕上げるコツは半熟で火を止めること。牛乳または生クリームを加えるとコクと滑らかさがアップ。',
+  },
+  {
+    id: 16, title: 'はまぐり鍋・雑炊締め', emoji: '🦪', category: '鍋・スープ', tags: ['はまぐり','鍋','雑炊'], baseServings: 2,
+    ingredients: [
+      {name:'はまぐり（砂抜き済み）',amount:10,unit:'個'},
+      {name:'白菜（ぶつ切り）',amount:200,unit:'g'},
+      {name:'春菊（3cm長さ）',amount:100,unit:'g'},
+      {name:'豆腐（ひと口大）',amount:1,unit:'丁'},
+      {name:'水',amount:800,unit:'ml'},
+      {name:'酒',amount:'大さじ1',unit:''},
+      {name:'塩',amount:'少々',unit:''},
+      {name:'ご飯（雑炊用）',amount:300,unit:'g'},
+      {name:'卵（雑炊用）',amount:1,unit:'個'},
+      {name:'三つ葉（雑炊仕上げ）',amount:1,unit:'束'},
+    ],
+    steps: [
+      '鍋に水を入れ、はまぐりを加えて中火にかける。貝が開き始めたら酒を加える',
+      '貝が全部開いたら取り出して別皿に退けておく。出汁は鍋に残す',
+      '出汁に白菜を入れて3分、豆腐を加えて2分、春菊を加えて30秒',
+      '塩で味を整え、はまぐりを戻してさっと温める',
+      '残った出汁にご飯を入れて2分煮る。溶き卵を回し入れ半熟で止める。三つ葉を添えて完成',
+    ],
+    notes: 'はまぐりは砂抜き必須（塩水に2〜3時間）。火を通しすぎると身が硬くなる。雑炊用に出汁を半分以上残す。',
+  },
+  {
+    id: 17, title: '玉ねぎとじゃがいもの豆乳スープ', emoji: '🧅', category: '鍋・スープ', tags: ['玉ねぎ','じゃがいも','スープ'], baseServings: 2,
+    ingredients: [
+      {name:'玉ねぎ（薄切り）',amount:1,unit:'個'},
+      {name:'じゃがいも（ひと口大）',amount:2,unit:'個'},
+      {name:'バター',amount:15,unit:'g'},
+      {name:'コンソメ',amount:1,unit:'個'},
+      {name:'水',amount:400,unit:'ml'},
+      {name:'豆乳',amount:150,unit:'ml'},
+      {name:'塩・黒胡椒',amount:'少々',unit:''},
+    ],
+    steps: [
+      'フライパンにバターを熱し、玉ねぎを弱火で20〜30分、飴色になるまでじっくり炒める',
+      '鍋に移して水・コンソメ・じゃがいもを加えて中火で沸騰させる',
+      '弱火にして15〜20分煮る。じゃがいもに箸がスッと通ればOK',
+      'フォークや木べらでじゃがいもを粗く潰す',
+      '豆乳を加えて弱火でひと煮立ち（沸騰させすぎない）。塩・黒胡椒で味を整えて完成',
+    ],
+    notes: '玉ねぎを飴色にするのが美味しさの命。豆乳は最後に弱火でさっと温める程度でOK。',
+  },
+  {
+    id: 18, title: 'たくわんとじゃこ・大葉のごま油おにぎり', emoji: '🍙', category: 'おにぎり', tags: ['おにぎり','たくわん','大葉'], baseServings: 2,
+    ingredients: [
+      {name:'ご飯',amount:300,unit:'g'},
+      {name:'たくわん（5mm角に切る）',amount:30,unit:'g'},
+      {name:'ちりめんじゃこ',amount:15,unit:'g'},
+      {name:'大葉（細く切る）',amount:4,unit:'枚'},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+      {name:'塩（仕上げ用）',amount:'少々',unit:''},
+    ],
+    steps: [
+      'たくわんを5mm角に切る。大葉を細く刻む',
+      'ボウルに熱いご飯を入れ、たくわん・じゃこ・ごま油を加えてさっくり混ぜる',
+      '大葉を加えて軽く混ぜる',
+      '手に塩をつけて適量を手に取り三角または丸く握る',
+    ],
+    notes: '大葉は食べる直前に刻むと香りが一番強い。ごま油は少量で。',
+  },
+  {
+    id: 19, title: '明太子めんつゆごま油ご飯', emoji: '🐟', category: 'ご飯もの', tags: ['明太子','ご飯'], baseServings: 1,
+    ingredients: [
+      {name:'白米',amount:150,unit:'g'},
+      {name:'明太子（皮を除いてみを出す）',amount:1,unit:'腹'},
+      {name:'めんつゆ（濃縮）',amount:'小さじ1',unit:''},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+      {name:'醤油',amount:'小さじ1/2',unit:''},
+      {name:'大葉（細く切る）',amount:3,unit:'枚'},
+      {name:'白胡麻',amount:'小さじ1',unit:''},
+    ],
+    steps: [
+      '小さな器に明太子・めんつゆ・ごま油・醤油を入れてさっくり混ぜる',
+      '熱いご飯にタレを回しかけてさっくり混ぜる。混ぜすぎず明太子の粒感を残す',
+      '大葉を散らし、白胡麻をふりかけて完成',
+    ],
+    notes: '明太子は混ぜすぎずプチプチ食感を残す。めんつゆは濃縮タイプなら小さじ1で十分。',
+  },
+  {
+    id: 20, title: 'めんつゆ（手作り）', emoji: '🍜', category: 'タレ・つゆ', tags: ['つゆ','出汁','めんつゆ'], baseServings: 4,
+    ingredients: [
+      {name:'醤油',amount:30,unit:'ml'},
+      {name:'みりん',amount:40,unit:'ml'},
+      {name:'顆粒出汁（あご→昆布→かつお）',amount:'適量',unit:''},
+      {name:'水（昆布出汁または椎茸出汁）',amount:130,unit:'ml'},
+      {name:'塩',amount:'小さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ2',unit:''},
+    ],
+    steps: [
+      '昆布出汁または椎茸出汁を130ml用意する',
+      '鍋に出汁・醤油・みりん・塩・砂糖・顆粒出汁を入れて弱火で煮立てる',
+      '砂糖が溶けたら火を止めて冷ます',
+      '冷蔵庫で保存（1週間目安）',
+    ],
+    notes: '水は150mlより130mlの方がコクが出る。あご出汁→昆布出汁→かつお出汁の順で風味が良い。',
+  },
+  {
+    id: 21, title: '冷やし中華タレ', emoji: '🍜', category: 'タレ・つゆ', tags: ['冷やし中華','タレ'], baseServings: 2,
+    ingredients: [
+      {name:'醤油',amount:'大さじ2',unit:''},
+      {name:'米酢または黒酢',amount:'大さじ2',unit:''},
+      {name:'砂糖',amount:'大さじ1',unit:''},
+      {name:'水',amount:'大さじ2',unit:''},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+      {name:'すりごま',amount:'小さじ1',unit:''},
+      {name:'生姜またはにんにく',amount:'少々',unit:''},
+    ],
+    steps: [
+      '全ての材料をボウルに入れてよく混ぜる',
+      '砂糖が溶けたら完成。冷蔵庫で冷やして使う',
+    ],
+    notes: 'このタレで2人前。前回水が多すぎたので大さじ2が正解。辣油を加えるとピリ辛でより美味しい。',
+  },
+  {
+    id: 22, title: 'ごまだれ', emoji: '🥗', category: 'タレ・つゆ', tags: ['ごまだれ','タレ'], baseServings: 4,
+    ingredients: [
+      {name:'すりごま',amount:'大さじ3',unit:''},
+      {name:'醤油',amount:'大さじ2',unit:''},
+      {name:'酢',amount:'大さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ1',unit:''},
+      {name:'ごま油',amount:'小さじ1',unit:''},
+      {name:'豆乳',amount:100,unit:'ml'},
+      {name:'にんにく・生姜',amount:'少々',unit:''},
+    ],
+    steps: [
+      'ボウルにすりごま・醤油・酢・砂糖を入れてよく混ぜる',
+      '豆乳を少しずつ加えて好みの濃度に調整',
+      'ごま油・にんにく・生姜で香りづけ',
+      '味見して必要なら砂糖または醤油で調整',
+    ],
+    notes: '豆乳の代わりに水でもOK。濃度はお好みで調整。',
+  },
+  {
+    id: 23, title: '味噌だれ', emoji: '🍯', category: 'タレ・つゆ', tags: ['味噌だれ','タレ'], baseServings: 2,
+    ingredients: [
+      {name:'味噌',amount:'大さじ1と1/2',unit:''},
+      {name:'酒',amount:'大さじ1',unit:''},
+      {name:'みりん',amount:'大さじ1',unit:''},
+      {name:'砂糖',amount:'小さじ1',unit:''},
+      {name:'醤油',amount:'小さじ1',unit:''},
+    ],
+    steps: [
+      '全ての材料を小さな器に入れてよく混ぜる',
+      '炒め物に使う場合は最後に弱火で素早く絡める',
+    ],
+    notes: '焦げやすいので炒め物に使う時は必ず弱火で。薄めから味見して足す。',
+  },
+  {
+    id: 24, title: '鮨飯（酢飯）', emoji: '🍣', category: 'ご飯もの', tags: ['酢飯','鮨'], baseServings: 2,
+    ingredients: [
+      {name:'米',amount:2,unit:'合'},
+      {name:'赤酢',amount:'大さじ3〜3.5',unit:''},
+      {name:'砂糖',amount:'大さじ3〜3.5',unit:''},
+      {name:'塩',amount:'小さじ1強',unit:''},
+    ],
+    steps: [
+      'ご飯を炊く（やや硬めに炊くのがコツ）',
+      '赤酢・砂糖・塩を混ぜて合わせ酢を作る',
+      '炊きたてのご飯に合わせ酢を回しかけて切るように混ぜる',
+      'うちわで扇いで粗熱を取りながら混ぜると艶が出る',
+    ],
+    notes: '一膳用は赤酢大さじ1・砂糖小さじ2・塩ふたつまみ。赤酢を使うと風味が豊かになる。',
+  },
+  {
+    id: 25, title: '温泉卵・半熟卵・固ゆで卵', emoji: '🥚', category: '下ごしらえ', tags: ['卵','茹で卵'], baseServings: 1,
+    ingredients: [
+      {name:'卵',amount:1,unit:'個'},
+      {name:'水（温泉卵用：70〜75度）',amount:'適量',unit:''},
+    ],
+    steps: [
+      '【温泉卵】70〜75度のお湯で13分。茹でた後は冷蔵庫で冷やす',
+      '【とろとろ半熟卵】沸騰した湯で7分前後',
+      '【半熟卵】沸騰した湯で8分',
+      '【固ゆで卵】沸騰した湯で11分',
+      'いずれも茹でた後は冷水にとって冷やす',
+    ],
+    notes: '温泉卵は温度管理が大事。70〜75度をキープすること。半熟はとろとろ好みなら7分、もう少し固めなら8分。',
+  },
+  {
+    id: 26, title: 'だだちゃ豆・とうもろこしの茹で方', emoji: '🌽', category: '下ごしらえ', tags: ['だだちゃ豆','とうもろこし','山形'], baseServings: 1,
+    ingredients: [
+      {name:'だだちゃ豆',amount:1,unit:'袋'},
+      {name:'とうもろこし',amount:1,unit:'本'},
+      {name:'塩（だだちゃ豆用）',amount:'少々',unit:''},
+    ],
+    steps: [
+      '【だだちゃ豆】先端を切る。塩を少々加えた湯で3分茹でる',
+      '【とうもろこし】ひげは残したまま皮を剥く。塩を加えた湯で3分茹でる（良いとうもろこしは短めに）',
+      '塩は茹でる湯に入れず、食べる時に振る（とうもろこしの場合）',
+    ],
+    notes: 'だだちゃ豆は茹ですぎると甘みが飛ぶ。とうもろこしは良いものほど短時間で十分。塩は後から振る方が食感が良い。',
+  },
+  {
+    id: 27, title: '芋煮（山形風）', emoji: '🍲', category: '鍋・スープ', tags: ['芋煮','牛肉','山形'], baseServings: 4,
+    ingredients: [
+      {name:'牛肉',amount:300,unit:'g'},
+      {name:'里芋',amount:600,unit:'g'},
+      {name:'ねぎ',amount:2,unit:'本'},
+      {name:'舞茸',amount:100,unit:'g'},
+      {name:'ごぼう',amount:1,unit:'本'},
+      {name:'こんにゃく',amount:1,unit:'枚'},
+      {name:'出汁（かつお・椎茸・出汁パック）',amount:800,unit:'ml'},
+      {name:'醤油',amount:'大さじ3',unit:''},
+      {name:'みりん',amount:'大さじ2',unit:''},
+      {name:'酒',amount:'大さじ2',unit:''},
+      {name:'砂糖',amount:'大さじ1',unit:''},
+      {name:'塩',amount:'少々',unit:''},
+    ],
+    steps: [
+      '里芋は皮をむいて一口大に切る。ごぼうは乱切りにして水にさらす。こんにゃくは手でちぎって下茹でする',
+      '鍋に出汁を入れて中火にかけ、ごぼう・こんにゃくを先に入れて5分煮る',
+      '里芋・舞茸を加えてさらに10分煮る',
+      '醤油・みりん・酒・砂糖・塩を加えて味を整える',
+      '牛肉とねぎを加えて牛肉に火が通ったら完成',
+    ],
+    notes: '出汁はかつお・椎茸・出汁パックの組み合わせが一番美味しい。里芋は最初に下茹ですると滑りが取れる。醤油ベースが山形風。',
+  },
+  {
+    id: 28, title: '鶏もも茹で鶏＋鶏出汁雑炊', emoji: '🍗', category: '鍋・スープ', tags: ['鶏肉','雑炊','出汁'], baseServings: 2,
+    ingredients: [
+      {name:'鶏もも肉',amount:1,unit:'枚'},
+      {name:'水',amount:800,unit:'ml'},
+      {name:'生姜スライス',amount:3,unit:'枚'},
+      {name:'酒',amount:'大さじ2',unit:''},
+      {name:'塩',amount:'小さじ1',unit:''},
+      {name:'ご飯（雑炊用）',amount:300,unit:'g'},
+      {name:'卵（雑炊用）',amount:2,unit:'個'},
+      {name:'醤油（雑炊用）',amount:'小さじ2',unit:''},
+      {name:'塩（雑炊味調え）',amount:'少々',unit:''},
+    ],
+    steps: [
+      '鶏もも肉を常温に30分出しておく',
+      '鍋に水・酒・生姜・塩を入れて中火にかける。沸騰したら鶏もも肉を皮目を下にして入れる',
+      '再沸騰したら弱火にして蓋をして15分茹でる。火を止めてそのまま20〜30分余熱で置く',
+      '鶏肉を取り出して食べやすく切る。茹で汁はざるで濾して鶏出汁にする',
+      '鶏出汁を鍋に入れて醤油・塩で薄めに味を整える。ご飯を加えて弱火で5分煮る',
+      '溶き卵を回し入れて蓋をして30秒。半熟で火を止める。三つ葉または大葉を散らして完成',
+    ],
+    notes: '余熱で置く時間が鶏肉をしっとりさせる命。茹で汁は絶対に捨てない。雑炊は薄めの味付けで鶏出汁の旨みを活かす。',
+  },
+];
+
+let recipes = [];
+let currentCategory = 'すべて';
+let currentRecipe = null;
+let currentServings = 2;
+let editingId = null;
+
+async function loadRecipes() {
+  try {
+    const result = await window.storage.get('hiro_recipes');
+    if (result && result.value) {
+      const saved = JSON.parse(result.value);
+      recipes = saved.length > 0 ? saved : [...defaultRecipes];
+    } else {
+      recipes = [...defaultRecipes];
+    }
+  } catch(e) {
+    recipes = [...defaultRecipes];
+  }
+  renderAll();
+}
+
+async function saveToStorage() {
+  try {
+    await window.storage.set('hiro_recipes', JSON.stringify(recipes));
+  } catch(e) {}
+}
+
+const allCategories = ['すべて','丼','炒め物','パスタ','副菜・和え物','サンドイッチ','鍋・スープ','おにぎり','ご飯もの','揚げ物','タレ・つゆ','下ごしらえ','その他'];
+
+function renderAll() {
+  renderCategories();
+  filterRecipes();
+}
+
+function renderCategories() {
+  const el = document.getElementById('categories');
+  el.innerHTML = allCategories.map(cat => `
+    <button class="cat-btn ${cat === currentCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+  `).join('');
+}
+
+function setCategory(cat) {
+  currentCategory = cat;
+  renderAll();
+}
+
+function filterRecipes() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = recipes.filter(r => {
+    const matchCat = currentCategory === 'すべて' || r.category === currentCategory;
+    const matchQuery = !query || r.title.includes(query) || (r.tags||[]).some(t => t.includes(query));
+    return matchCat && matchQuery;
+  });
+  const el = document.getElementById('recipeList');
+  if (filtered.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div style="font-size:40px">🍳</div><p>レシピが見つかりません</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(r => `
+    <div class="recipe-card" onclick="openRecipe(${r.id})">
+      <div class="card-header">
+        <div class="card-title">${r.title}</div>
+        <div class="card-emoji">${r.emoji}</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="tag">${r.category}</span>
+          ${(r.tags||[]).slice(0,2).map(t=>`<span class="tag">${t}</span>`).join('')}
+        </div>
+        <button class="edit-small" onclick="event.stopPropagation();openEditRecipe(${r.id})">編集</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openRecipe(id) {
+  currentRecipe = recipes.find(r => r.id === id);
+  if(!currentRecipe) return;
+  currentServings = currentRecipe.baseServings || 2;
+  renderModal();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRecipe() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeRecipe();
+}
+
+function changeServings(delta) {
+  currentServings = Math.max(1, currentServings + delta);
+  renderModal();
+}
+
+function renderModal() {
+  const r = currentRecipe;
+  const base = r.baseServings || 2;
+  const ratio = currentServings / base;
+  document.getElementById('modalTitle').textContent = `${r.emoji} ${r.title}`;
+  document.getElementById('servingsCount').textContent = currentServings;
+
+  document.getElementById('modalIngredients').innerHTML = (r.ingredients||[]).map(ing => {
+    let amtDisplay = '';
+    if (typeof ing.amount === 'number') {
+      const a = ing.amount * ratio;
+      amtDisplay = (a % 1 === 0 ? a : Math.round(a * 10) / 10) + (ing.unit || '');
+    } else {
+      amtDisplay = String(ing.amount) + (ing.unit ? ' ' + ing.unit : '');
+    }
+    return `<div class="ingredient-row"><span>${ing.name}</span><span class="ingredient-amount">${amtDisplay}</span></div>`;
+  }).join('');
+
+  document.getElementById('modalSteps').innerHTML = (r.steps||[]).map((s,i) => `
+    <div class="step-item"><div class="step-num">${i+1}</div><div class="step-text">${s}</div></div>
+  `).join('');
+
+  if (r.notes) {
+    document.getElementById('modalNotes').style.display = 'block';
+    document.getElementById('modalNotesText').textContent = r.notes;
+  } else {
+    document.getElementById('modalNotes').style.display = 'none';
+  }
+}
+
+function openEditFromView() {
+  closeRecipe();
+  setTimeout(() => openEditRecipe(currentRecipe.id), 150);
+}
+
+// Edit/Add
+function openAddRecipe() {
+  editingId = null;
+  document.getElementById('editTitle').textContent = '新しいレシピを追加';
+  document.getElementById('editName').value = '';
+  document.getElementById('editEmoji').value = '🍳';
+  document.getElementById('editCategory').value = '丼';
+  document.getElementById('editServings').value = 2;
+  document.getElementById('editNotes').value = '';
+  document.getElementById('deleteBtn').style.display = 'none';
+  document.getElementById('editIngredients').innerHTML = '';
+  document.getElementById('editSteps').innerHTML = '';
+  addIngredientRow();
+  addIngredientRow();
+  addStepRow();
+  document.getElementById('editOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function openEditRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  if (!r) return;
+  editingId = id;
+  document.getElementById('editTitle').textContent = 'レシピを編集';
+  document.getElementById('editName').value = r.title;
+  document.getElementById('editEmoji').value = r.emoji;
+  document.getElementById('editCategory').value = r.category;
+  document.getElementById('editServings').value = r.baseServings || 2;
+  document.getElementById('editNotes').value = r.notes || '';
+  document.getElementById('deleteBtn').style.display = 'block';
+
+  const ingEl = document.getElementById('editIngredients');
+  ingEl.innerHTML = '';
+  (r.ingredients||[]).forEach(ing => addIngredientRow(ing.name, String(ing.amount), ing.unit||''));
+
+  const stepEl = document.getElementById('editSteps');
+  stepEl.innerHTML = '';
+  (r.steps||[]).forEach(s => addStepRow(s));
+
+  document.getElementById('editOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeEditModal(e) {
+  if (e.target === document.getElementById('editOverlay')) closeEdit();
+}
+
+function addIngredientRow(name='', amount='', unit='') {
+  const el = document.getElementById('editIngredients');
+  const div = document.createElement('div');
+  div.className = 'form-row';
+  div.innerHTML = `
+    <input type="text" placeholder="材料名" value="${name}" style="flex:2">
+    <input type="text" placeholder="量" value="${amount}" style="flex:1">
+    <input type="text" placeholder="単位" value="${unit}" style="flex:1">
+    <button class="del-row" onclick="this.parentElement.remove()">×</button>
+  `;
+  el.appendChild(div);
+}
+
+function addStepRow(text='') {
+  const el = document.getElementById('editSteps');
+  const idx = el.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'form-row';
+  div.style.alignItems = 'flex-start';
+  div.innerHTML = `
+    <div style="padding:8px;font-size:12px;font-weight:700;color:var(--primary);min-width:24px">${idx}</div>
+    <textarea placeholder="手順を入力..." style="flex:1;resize:vertical;min-height:60px;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none">${text}</textarea>
+    <button class="del-row" onclick="this.parentElement.remove()">×</button>
+  `;
+  el.appendChild(div);
+}
+
+function saveRecipe() {
+  const title = document.getElementById('editName').value.trim();
+  if (!title) { alert('タイトルを入力してください'); return; }
+
+  const ingredients = Array.from(document.getElementById('editIngredients').children).map(row => {
+    const inputs = row.querySelectorAll('input');
+    const name = inputs[0].value.trim();
+    const amtStr = inputs[1].value.trim();
+    const unit = inputs[2].value.trim();
+    if (!name) return null;
+    const amtNum = parseFloat(amtStr);
+    return { name, amount: isNaN(amtNum) ? amtStr : amtNum, unit };
+  }).filter(Boolean);
+
+  const steps = Array.from(document.getElementById('editSteps').children).map(row => {
+    const ta = row.querySelector('textarea');
+    return ta ? ta.value.trim() : '';
+  }).filter(Boolean);
+
+  const recipe = {
+    id: editingId || Date.now(),
+    title,
+    emoji: document.getElementById('editEmoji').value || '🍳',
+    category: document.getElementById('editCategory').value,
+    tags: [document.getElementById('editCategory').value],
+    baseServings: parseInt(document.getElementById('editServings').value) || 2,
+    ingredients,
+    steps,
+    notes: document.getElementById('editNotes').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = recipes.findIndex(r => r.id === editingId);
+    if (idx >= 0) recipes[idx] = recipe;
+  } else {
+    recipes.push(recipe);
+  }
+
+  saveToStorage();
+  closeEdit();
+  filterRecipes();
+}
+
+function deleteRecipe() {
+  if (!editingId) return;
+  if (!confirm('このレシピを削除しますか？')) return;
+  recipes = recipes.filter(r => r.id !== editingId);
+  saveToStorage();
+  closeEdit();
+  filterRecipes();
+}
+
+loadRecipes();
+</script>
+</body>
+</html>
