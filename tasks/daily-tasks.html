@@ -216,8 +216,12 @@ body{background:linear-gradient(155deg,#0e1710,#111a14 50%,#131520);min-height:1
     <div id="meal-cards"></div>
   </div>
   <div id="mv-custom" style="display:none">
-    <p class="hint">料理名を入力してAIでレシピ生成（⚙️でAPIキー設定）</p>
-    <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="料理名..."><button class="add-btn" id="ai-btn" onclick="genRecipe()">🤖 生成</button></div>
+    <p class="hint">料理名を入力して「手動で追加」（AIを使わない）、または「AIで生成」でレシピを自動作成（⚙️でAPIキー設定）</p>
+    <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="料理名を入力..."></div>
+    <div class="inrow" style="gap:8px">
+      <button class="add-btn" onclick="addManual()" style="flex:1;background:rgba(111,207,151,0.15);color:var(--green);border:1px solid rgba(111,207,151,0.3)">➕ 手動で追加</button>
+      <button class="add-btn" id="ai-btn" onclick="genRecipe()" style="flex:1">🤖 AIで生成</button>
+    </div>
     <div id="custom-list"></div>
   </div>
   <div id="mv-eatout" style="display:none">
@@ -650,6 +654,15 @@ async function improveRecipe(id,fb,rating){
 }
 
 // ===== CUSTOM MENU =====
+function addManual(){
+  const name=document.getElementById('custom-name').value.trim();
+  if(!name){alert('料理名を入力してください');return;}
+  const meal={id:'c'+Date.now(),name:name,emoji:'🍽️',desc:'手動追加',tags:['カスタム'],time:20,nutr:{cal:0,protein:0,fat:0,carb:0},ings:[],steps:[],isCustom:true};
+  state.customMeals.push(meal);
+  saveLocal();sched();
+  document.getElementById('custom-name').value='';
+  recIdxs=[];renderMealTab('custom');
+}
 async function genRecipe(){
   const name=document.getElementById('custom-name').value.trim();if(!name){alert('料理名を入力');return;}
   if(!cfg.anthropicKey){alert('⚙️からClaude APIキーを設定するとAI生成が使えます');return;}
