@@ -246,6 +246,31 @@ body{background:
 .sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:10px 13px;border-radius:11px;margin-top:8px;white-space:pre-line;line-height:1.5;}
 .sync-err{background:rgba(248,113,113,0.1);color:var(--red);font-size:12px;padding:10px 13px;border-radius:11px;margin-top:8px;white-space:pre-line;line-height:1.5;}
 
+
+/* Price comparison */
+.price-cat{font-size:12px;font-weight:700;color:var(--muted);padding:14px 0 8px;letter-spacing:0.5px;}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 15px;margin-bottom:10px;}
+.price-card-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.price-name{flex:1;font-size:15px;font-weight:600;color:white;}
+.price-verdict{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;}
+.pv-net{background:rgba(122,184,212,0.15);color:var(--blue);border:1px solid rgba(122,184,212,0.3);}
+.pv-super{background:rgba(111,207,151,0.15);color:var(--green);border:1px solid rgba(111,207,151,0.3);}
+.pv-none{background:rgba(255,255,255,0.05);color:var(--faint);}
+.price-cols{display:flex;gap:10px;}
+.price-col{flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:11px;transition:all 0.2s;}
+.price-col.cheaper{border-color:rgba(111,207,151,0.4);background:rgba(111,207,151,0.06);}
+.price-col-lbl{font-size:11px;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:5px;font-weight:600;}
+.price-input-wrap{display:flex;align-items:center;gap:4px;}
+.price-yen{font-size:15px;color:var(--muted);}
+.price-inp{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:9px;padding:9px 10px;color:white;font-size:16px;outline:none;font-family:inherit;text-align:right;min-height:42px;}
+.price-inp:focus{border-color:rgba(111,207,151,0.4);}
+.price-inp.win{color:var(--green);font-weight:700;}
+.price-link-row{margin-top:8px;}
+.price-link-inp{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:9px;padding:8px 10px;color:var(--blue);font-size:12px;outline:none;font-family:inherit;min-height:38px;}
+.price-buy-btn{display:block;width:100%;margin-top:7px;padding:10px;background:rgba(122,184,212,0.15);border:1px solid rgba(122,184,212,0.35);border-radius:10px;color:var(--blue);font-size:13px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;}
+.price-diff{text-align:center;font-size:12px;color:var(--muted);margin-top:10px;}
+.price-diff b{color:var(--green);font-weight:700;}
+
 /* Bottom nav */
 #nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,16,12,0.82);backdrop-filter:blur(24px) saturate(1.4);
   -webkit-backdrop-filter:blur(24px) saturate(1.4);border-top:1px solid rgba(255,255,255,0.08);display:flex;z-index:100;
@@ -353,6 +378,7 @@ body{background:
   <div class="tab-row">
     <button class="tab-btn on" id="st-fridge" onclick="sTab('fridge')">🧊 冷蔵庫</button>
     <button class="tab-btn" id="st-staples" onclick="sTab('staples')">📦 常備品</button>
+    <button class="tab-btn" id="st-price" onclick="sTab('price')">💰 価格比較</button>
   </div>
   <div id="sv-fridge">
     <div class="inrow"><input type="text" id="fi-name" class="inp" placeholder="食材名" style="flex:2"><input type="text" id="fi-amt" class="inp" placeholder="量" style="flex:1;min-width:60px"><button class="add-btn" onclick="addFridge()">追加</button></div>
@@ -361,6 +387,10 @@ body{background:
   <div id="sv-staples" style="display:none">
     <p class="hint">✅ チェックで買い物リストに追加、もう一度チェックで削除（完了）</p>
     <div id="staples-list"></div>
+  </div>
+  <div id="sv-price" style="display:none">
+    <p class="hint">💡 各商品のネット価格とスーパー価格を入力すると、安い方に色が付きます。ネット価格には購入リンクも設定できます。</p>
+    <div id="price-list"></div>
   </div>
   <div style="height:16px"></div>
 </div>
@@ -549,7 +579,7 @@ const HIDS=Object.keys(TLABELS);
 const DRINKS=[{id:'water',i:'💧',n:'水',goal:2000,color:'#7ab8d4',steps:[150,350,500]},{id:'soymilk',i:'🥛',n:'豆乳',goal:400,color:'#c4963a',steps:[200,400]},{id:'alcohol',i:'🍺',n:'お酒',goal:350,color:'#b08ac0',steps:[150,350]}];
 const CUISINES=[{e:'🍣',l:'寿司'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ'},{e:'🍔',l:'バーガー'},{e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},{e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
 
-let state={days:{},weeks:{},staplesNeeded:{},shopMemo:[],boughtToday:{},fridge:[],customMeals:[],meals:{},lunchMeals:{},drinks:{},mealFeedback:{},quickTasks:[],weeklyCustom:[]};
+let state={days:{},weeks:{},staplesNeeded:{},staplePrices:{},shopMemo:[],boughtToday:{},fridge:[],customMeals:[],meals:{},lunchMeals:{},drinks:{},mealFeedback:{},quickTasks:[],weeklyCustom:[]};
 let cfg={apiKey:'',binId:'',anthropicKey:''};
 let histChart=null,syncTimer=null,recIdxs=[],selectedCuisine='🍣',pendingCustom=null,pendingFbId=null,selectedRating=0;
 let curMealTab='rec',curStockTab='fridge',curShopTab='today',mealSlotTarget=null,eoSlotTarget='dinner';
@@ -574,7 +604,7 @@ function getNeededStaples(){return STAPLES.filter(s=>isStapleNeeded(s.id)&&!isBo
 
 function ensureFields(o){
   o=o||{};
-  if(!o.days)o.days={};if(!o.weeks)o.weeks={};if(!o.staplesNeeded)o.staplesNeeded={};
+  if(!o.days)o.days={};if(!o.weeks)o.weeks={};if(!o.staplesNeeded)o.staplesNeeded={};if(!o.staplePrices)o.staplePrices={};
   if(!o.shopMemo)o.shopMemo=[];if(!o.boughtToday)o.boughtToday={};if(!o.fridge)o.fridge=[];
   if(!o.customMeals)o.customMeals=[];if(!o.meals)o.meals={};if(!o.lunchMeals)o.lunchMeals={};
   if(!o.drinks)o.drinks={};if(!o.mealFeedback)o.mealFeedback={};if(!o.quickTasks)o.quickTasks=[];
@@ -647,7 +677,14 @@ function setPage(id){
   if(id==='shop')renderShopTab(curShopTab);
 }
 function mTab(t){curMealTab=t;['rec','custom','eatout','nutr'].forEach(k=>{const b=document.getElementById('mt-'+k);if(b)b.className='tab-btn'+(t===k?' on':'');const v=document.getElementById('mv-'+k);if(v)v.style.display=t===k?'':'none';});renderMealTab(t);}
-function sTab(t){curStockTab=t;document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');document.getElementById('sv-fridge').style.display=t==='fridge'?'':'none';document.getElementById('sv-staples').style.display=t==='staples'?'':'none';renderStockTab(t);}
+function sTab(t){curStockTab=t;
+  document.getElementById('st-fridge').className='tab-btn'+(t==='fridge'?' on':'');
+  document.getElementById('st-staples').className='tab-btn'+(t==='staples'?' on':'');
+  document.getElementById('st-price').className='tab-btn'+(t==='price'?' on':'');
+  document.getElementById('sv-fridge').style.display=t==='fridge'?'':'none';
+  document.getElementById('sv-staples').style.display=t==='staples'?'':'none';
+  document.getElementById('sv-price').style.display=t==='price'?'':'none';
+  renderStockTab(t);}
 function shTab(t){curShopTab=t;document.getElementById('sh-today').className='tab-btn'+(t==='today'?' on':'');document.getElementById('sh-manage').className='tab-btn'+(t==='manage'?' on':'');document.getElementById('shv-today').style.display=t==='today'?'':'none';document.getElementById('shv-manage').style.display=t==='manage'?'':'none';renderShopTab(t);}
 function eoSlot(s){eoSlotTarget=s;document.getElementById('eoslot-lunch').className='tab-btn'+(s==='lunch'?' on':'');document.getElementById('eoslot-dinner').className='tab-btn'+(s==='dinner'?' on':'');}
 
@@ -930,7 +967,60 @@ function toggleStaple(id){
   else{const k=todayStr();if(state.boughtToday[k])delete state.boughtToday[k]['st_'+id];}
   saveLocal();sched();renderHome();renderStockTab('staples');renderShopTab(curShopTab);
 }
+
+// ===== PRICE COMPARISON =====
+function getPrice(id){return (state.staplePrices||{})[id]||{net:'',super:'',url:''};}
+function setPrice(id,field,val){
+  if(!state.staplePrices)state.staplePrices={};
+  if(!state.staplePrices[id])state.staplePrices[id]={net:'',super:'',url:''};
+  state.staplePrices[id][field]=val;
+  saveLocal();sched();
+}
+function updatePriceNum(id,field,val){
+  const n=val.replace(/[^0-9.]/g,'');
+  setPrice(id,field,n);
+  renderStockTab('price');
+}
+function updatePriceUrl(id,val){setPrice(id,'url',val.trim());renderStockTab('price');}
+function normalizeUrl(u){if(!u)return '';if(!/^https?:\/\//i.test(u))return 'https://'+u;return u;}
+function renderPriceList(){
+  const el=document.getElementById('price-list');if(!el)return;el.innerHTML='';
+  [...new Set(STAPLES.map(s=>s.c))].forEach(cat=>{
+    const h2=document.createElement('div');h2.className='price-cat';h2.textContent=cat;el.appendChild(h2);
+    STAPLES.filter(s=>s.c===cat).forEach(m=>{
+      const p=getPrice(m.id);
+      const net=parseFloat(p.net),sup=parseFloat(p.super);
+      const hasNet=!isNaN(net)&&p.net!=='',hasSup=!isNaN(sup)&&p.super!=='';
+      let verdict='',vClass='pv-none',netWin=false,supWin=false,diffHtml='';
+      if(hasNet&&hasSup){
+        if(net<sup){verdict='ネットが安い';vClass='pv-net';netWin=true;}
+        else if(sup<net){verdict='スーパーが安い';vClass='pv-super';supWin=true;}
+        else{verdict='同じ価格';vClass='pv-none';}
+        const diff=Math.abs(net-sup);
+        if(diff>0)diffHtml='<div class="price-diff">差額 <b>'+diff.toLocaleString()+'円</b>（'+(netWin?'ネット':'スーパー')+'がお得）</div>';
+      }else if(hasNet){verdict='ネットのみ';vClass='pv-net';}
+      else if(hasSup){verdict='スーパーのみ';vClass='pv-super';}
+      const url=normalizeUrl(p.url);
+      const buyBtn=url?'<a class="price-buy-btn" href="'+url+'" target="_blank" rel="noopener">🛒 ネットで購入する</a>':'';
+      const card=document.createElement('div');card.className='price-card';
+      card.innerHTML=
+        '<div class="price-card-top"><span class="price-name">'+m.n+'</span>'
+        +'<span class="price-verdict '+vClass+'">'+(verdict||'未入力')+'</span></div>'
+        +'<div class="price-cols">'
+        +'<div class="price-col'+(netWin?' cheaper':'')+'"><div class="price-col-lbl">🌐 ネット</div>'
+        +'<div class="price-input-wrap"><span class="price-yen">¥</span><input type="number" inputmode="decimal" class="price-inp'+(netWin?' win':'')+'" value="'+(p.net||'')+'" placeholder="0" onchange="updatePriceNum(\''+m.id+'\',\'net\',this.value)"></div>'
+        +'<div class="price-link-row"><input type="text" class="price-link-inp" value="'+(p.url||'')+'" placeholder="購入URL（任意）" onchange="updatePriceUrl(\''+m.id+'\',this.value)"></div>'
+        +buyBtn+'</div>'
+        +'<div class="price-col'+(supWin?' cheaper':'')+'"><div class="price-col-lbl">🏪 スーパー</div>'
+        +'<div class="price-input-wrap"><span class="price-yen">¥</span><input type="number" inputmode="decimal" class="price-inp'+(supWin?' win':'')+'" value="'+(p.super||'')+'" placeholder="0" onchange="updatePriceNum(\''+m.id+'\',\'super\',this.value)"></div></div>'
+        +'</div>'+diffHtml;
+      el.appendChild(card);
+    });
+  });
+}
+
 function renderStockTab(t){
+  if(t==='price'){renderPriceList();return;}
   if(t==='fridge'){
     const el=document.getElementById('fridge-list');if(!el)return;el.innerHTML='';
     if(!(state.fridge||[]).length){el.innerHTML='<div class="empty"><div class="ei">🧊</div><div class="et">食材を追加してください</div></div>';return;}
