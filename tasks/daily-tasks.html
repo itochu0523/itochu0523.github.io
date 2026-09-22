@@ -19,13 +19,25 @@
   --card:rgba(255,255,255,0.045);--card-hi:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);
   --bg1:#0c140f;--bg2:#0f1712;--radius:20px;--radius-sm:14px;
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  --body-grad:linear-gradient(170deg,#0c140f 0%,#0f1712 55%,#0e1218 100%);
+  --modal-grad:linear-gradient(180deg,#1a2b1f,#16241a);
+  --nav-bg:rgba(10,16,12,0.86);
+}
+/* ライトモード用パレット：既存のダーク基調を保ちつつ明色に置き換え */
+:root[data-theme="light"]{
+  --text:#12261a;--muted:rgba(18,38,26,0.55);--faint:rgba(18,38,26,0.35);
+  --card:rgba(18,38,26,0.045);--card-hi:rgba(18,38,26,0.055);--border:rgba(18,38,26,0.12);
+  --bg1:#f3f8f4;--bg2:#eaf3ec;
+  --body-grad:linear-gradient(170deg,#f6faf7 0%,#eef6f0 55%,#e9f1ef 100%);
+  --modal-grad:linear-gradient(180deg,#ffffff,#f3f8f4);
+  --nav-bg:rgba(255,255,255,0.86);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{overscroll-behavior-y:none;}
 body{background:
   radial-gradient(1200px 600px at 50% -10%,rgba(111,207,151,0.08),transparent 60%),
-  linear-gradient(170deg,#0c140f 0%,#0f1712 55%,#0e1218 100%);
-  background-attachment:fixed;min-height:100vh;
+  var(--body-grad);
+  background-attachment:fixed;min-height:100vh;transition:background 0.3s;
   font-family:'Noto Sans JP',system-ui,sans-serif;color:var(--text);
   overflow-x:hidden;padding-bottom:calc(84px + var(--safe-b));
   -webkit-font-smoothing:antialiased;}
@@ -37,7 +49,7 @@ body{background:
 .header{display:flex;align-items:center;justify-content:space-between;padding:calc(20px + var(--safe-t)) 2px 18px;}
 .h-left{min-width:0;}
 .h-date{color:var(--green);font-size:12px;font-weight:600;letter-spacing:1.5px;margin-bottom:3px;opacity:0.85;}
-.h-title{color:white;font-size:26px;font-weight:800;letter-spacing:-0.5px;}
+.h-title{color:var(--text);font-size:26px;font-weight:800;letter-spacing:-0.5px;}
 .h-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
 .gear{background:rgba(255,255,255,0.05);border:1px solid var(--border);width:42px;height:42px;border-radius:50%;
   font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -48,7 +60,7 @@ body{background:
   display:flex;align-items:center;gap:18px;}
 .hero-ring{flex-shrink:0;position:relative;}
 .hero-txt{flex:1;min-width:0;}
-.hero-pct-big{font-size:30px;font-weight:800;color:white;line-height:1;margin-bottom:4px;}
+.hero-pct-big{font-size:30px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px;}
 .hero-label{font-size:13px;color:var(--muted);font-weight:500;}
 .hero-sub{font-size:12px;color:var(--green);margin-top:6px;font-weight:600;}
 
@@ -68,7 +80,7 @@ body{background:
 .t-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;
   flex-shrink:0;font-size:26px;background:rgba(255,255,255,0.05);transition:background 0.2s;}
 .t-info{flex:1;min-width:0;}
-.t-lbl{color:white;font-size:16px;font-weight:600;line-height:1.35;}
+.t-lbl{color:var(--text);font-size:16px;font-weight:600;line-height:1.35;}
 .task-btn.done .t-lbl{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(111,207,151,0.4);}
 .t-sub{color:var(--muted);font-size:12px;line-height:1.3;margin-top:2px;}
 .chk{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
@@ -85,7 +97,7 @@ body{background:
 /* Input row */
 .inrow{display:flex;gap:9px;margin-bottom:11px;}
 .inp{flex:1;background:var(--card-hi);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:14px 16px;color:white;font-size:15px;outline:none;font-family:inherit;min-height:52px;transition:border-color 0.2s;}
+  padding:14px 16px;color:var(--text);font-size:15px;outline:none;font-family:inherit;min-height:52px;transition:border-color 0.2s;}
 .inp:focus{border-color:rgba(111,207,151,0.4);}
 .inp::placeholder{color:var(--faint);}
 .add-btn{background:var(--green);border:none;border-radius:var(--radius-sm);padding:0 20px;color:#0c140f;font-weight:700;
@@ -98,7 +110,7 @@ body{background:
 .qt-done{flex-shrink:0;min-width:72px;height:44px;border-radius:12px;border:2px solid var(--green);
   background:rgba(111,207,151,0.1);color:var(--green);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 .qt-done:active{transform:scale(0.94);}
-.qt-txt{flex:1;font-size:16px;color:white;font-weight:500;}
+.qt-txt{flex:1;font-size:16px;color:var(--text);font-weight:500;}
 .qt-del{flex-shrink:0;background:none;border:none;color:rgba(248,113,113,0.5);font-size:22px;cursor:pointer;padding:2px 8px;}
 .empty-txt{font-size:13px;color:var(--faint);padding:8px 2px;}
 
@@ -115,15 +127,15 @@ body{background:
 .chip{display:flex;align-items:center;gap:7px;border-radius:30px;padding:12px 17px;min-height:48px;
   cursor:pointer;font-size:15px;font-family:inherit;border:1px solid;transition:transform 0.12s;}
 .chip:active{transform:scale(0.95);}
-.chip-need{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);color:white;}
-.chip-memo{background:var(--card-hi);border-color:var(--border);color:white;}
+.chip-need{background:rgba(111,207,151,0.1);border-color:rgba(111,207,151,0.3);color:var(--text);}
+.chip-memo{background:var(--card-hi);border-color:var(--border);color:var(--text);}
 
 /* Drink */
 .drink-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:9px;}
 .drink-icon{font-size:23px;width:34px;text-align:center;flex-shrink:0;}
 .drink-info{flex:1;min-width:0;}
-.drink-name{font-size:13px;font-weight:600;color:white;margin-bottom:5px;}
+.drink-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
 .dp-bg{height:7px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;}
 .dp-bar{height:100%;border-radius:4px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);}
 .drink-amt{font-size:11px;color:var(--muted);text-align:right;min-width:48px;line-height:1.4;}
@@ -137,13 +149,13 @@ body{background:
 .meal-card.sel{background:rgba(111,207,151,0.08);border-color:rgba(111,207,151,0.35);}
 .mc-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:9px;}
 .mc-emoji{font-size:32px;flex-shrink:0;}
-.mc-name{font-size:16px;font-weight:700;color:white;}
+.mc-name{font-size:16px;font-weight:700;color:var(--text);}
 .mc-desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4;}
 .mc-right{text-align:right;flex-shrink:0;}
 .mc-meta{font-size:11px;color:var(--muted);line-height:1.5;}
 .mc-nutr{display:flex;gap:12px;padding-top:10px;border-top:1px solid var(--border);}
 .mc-n{font-size:11px;color:var(--muted);}
-.mc-n b{color:white;font-weight:700;}
+.mc-n b{color:var(--text);font-weight:700;}
 .mc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
 .mc-tag{font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:500;}
 
@@ -155,14 +167,14 @@ body{background:
 .staple-chk{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
   display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#0c140f;flex-shrink:0;transition:all 0.2s;}
 .staple-row.on .staple-chk{background:var(--green);border-color:var(--green);}
-.staple-name{flex:1;font-size:15px;color:white;}
+.staple-name{flex:1;font-size:15px;color:var(--text);}
 .need-badge{font-size:11px;padding:5px 11px;border-radius:20px;background:rgba(111,207,151,0.15);
   border:1px solid rgba(111,207,151,0.3);color:var(--green);font-weight:600;}
 
 /* Fridge */
 .fi-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:9px;min-height:56px;}
-.fi-name{flex:1;font-size:15px;color:white;}
+.fi-name{flex:1;font-size:15px;color:var(--text);}
 .fi-amt{font-size:13px;color:var(--muted);}
 .fi-del{background:none;border:none;color:rgba(248,113,113,0.5);font-size:20px;cursor:pointer;padding:4px 8px;}
 
@@ -170,7 +182,7 @@ body{background:
 .shop-item{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:15px 16px;margin-bottom:9px;min-height:60px;}
 .shop-item.on{background:rgba(111,207,151,0.06);border-color:rgba(111,207,151,0.2);}
-.shop-name{flex:1;font-size:16px;color:white;}
+.shop-name{flex:1;font-size:16px;color:var(--text);}
 .shop-cat-lbl{font-size:11px;font-weight:700;letter-spacing:0.8px;color:var(--muted);margin:14px 0 8px;padding-left:2px;}
 .big-chk{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:transparent;
   display:flex;align-items:center;justify-content:center;color:#0c140f;font-weight:800;font-size:15px;cursor:pointer;flex-shrink:0;font-family:inherit;transition:all 0.2s;}
@@ -198,7 +210,7 @@ body{background:
 .empty .et{font-size:14px;color:var(--muted);text-align:center;line-height:1.7;}
 
 .cuisine-btns{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px;}
-.cu-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:8px 13px;color:white;
+.cu-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:8px 13px;color:var(--text);
   font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;transition:all 0.2s;}
 .cu-btn.on{border-color:var(--green);color:var(--green);background:rgba(111,207,151,0.08);}
 .eo-row{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
@@ -233,25 +245,33 @@ body{background:
 /* Modal */
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:200;align-items:flex-end;}
 .ov.open{display:flex;animation:fade 0.25s ease;}
-.mbox{background:linear-gradient(180deg,#1a2b1f,#16241a);border-radius:26px 26px 0 0;padding:26px 20px calc(38px + var(--safe-b));
+.mbox{background:var(--modal-grad);border-radius:26px 26px 0 0;padding:26px 20px calc(38px + var(--safe-b));
   width:100%;max-width:520px;margin:0 auto;max-height:90vh;overflow-y:auto;border-top:1px solid rgba(111,207,151,0.15);}
 .m-title{font-size:19px;font-weight:800;margin-bottom:16px;}
 .m-row{margin-bottom:13px;}
 .m-row label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500;}
-.m-row input{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:white;font-size:14px;outline:none;font-family:monospace;}
+.m-row input{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:14px;outline:none;font-family:monospace;}
 .m-btns{display:flex;gap:11px;margin-top:18px;}
 .m-btn{flex:1;padding:16px;border-radius:var(--radius-sm);border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;min-height:54px;}
 .m-btn.p{background:var(--green);color:#0c140f;}
-.m-btn.s{background:rgba(255,255,255,0.08);color:white;}
+.m-btn.s{background:rgba(255,255,255,0.08);color:var(--text);}
 .sync-ok{background:rgba(111,207,151,0.1);color:var(--green);font-size:12px;padding:10px 13px;border-radius:11px;margin-top:8px;white-space:pre-line;line-height:1.5;}
 .sync-err{background:rgba(248,113,113,0.1);color:var(--red);font-size:12px;padding:10px 13px;border-radius:11px;margin-top:8px;white-space:pre-line;line-height:1.5;}
+
+/* テーマ切替スイッチ */
+.theme-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:15px;}
+.theme-row-lbl{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+.theme-switch{position:relative;width:52px;height:30px;border-radius:16px;background:rgba(255,255,255,0.12);border:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:background 0.25s;}
+.theme-switch.on{background:var(--green);}
+.theme-switch .knob{position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.3);transition:transform 0.25s;}
+.theme-switch.on .knob{transform:translateX(22px);}
 
 
 /* Price comparison */
 .price-cat{font-size:12px;font-weight:700;color:var(--muted);padding:14px 0 8px;letter-spacing:0.5px;}
 .price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 15px;margin-bottom:10px;}
 .price-card-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.price-name{flex:1;font-size:15px;font-weight:600;color:white;}
+.price-name{flex:1;font-size:15px;font-weight:600;color:var(--text);}
 .price-verdict{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;}
 .pv-net{background:rgba(122,184,212,0.15);color:var(--blue);border:1px solid rgba(122,184,212,0.3);}
 .pv-super{background:rgba(111,207,151,0.15);color:var(--green);border:1px solid rgba(111,207,151,0.3);}
@@ -262,7 +282,7 @@ body{background:
 .price-col-lbl{font-size:11px;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:5px;font-weight:600;}
 .price-input-wrap{display:flex;align-items:center;gap:4px;}
 .price-yen{font-size:15px;color:var(--muted);}
-.price-inp{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:9px;padding:9px 10px;color:white;font-size:16px;outline:none;font-family:inherit;text-align:right;min-height:42px;}
+.price-inp{width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:9px;padding:9px 10px;color:var(--text);font-size:16px;outline:none;font-family:inherit;text-align:right;min-height:42px;}
 .price-inp:focus{border-color:rgba(111,207,151,0.4);}
 .price-inp.win{color:var(--green);font-weight:700;}
 .price-link-row{margin-top:8px;}
@@ -272,11 +292,12 @@ body{background:
 .price-diff b{color:var(--green);font-weight:700;}
 
 /* Bottom nav */
-#nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,16,12,0.82);backdrop-filter:blur(24px) saturate(1.4);
+/* ボトムナビは両テーマ共通で常にダークガラス調（視認性とブランド感のため固定） */
+#nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav-bg);backdrop-filter:blur(24px) saturate(1.4);
   -webkit-backdrop-filter:blur(24px) saturate(1.4);border-top:1px solid rgba(255,255,255,0.08);display:flex;z-index:100;
   padding-bottom:var(--safe-b);height:calc(66px + var(--safe-b));}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;
-  color:var(--faint);cursor:pointer;font-family:inherit;transition:color 0.2s;position:relative;padding-top:8px;}
+  color:rgba(234,244,236,0.45);cursor:pointer;font-family:inherit;transition:color 0.2s;position:relative;padding-top:8px;}
 .nb .ni{font-size:22px;transition:transform 0.2s;}
 .nb .nl{font-size:10px;font-weight:600;}
 .nb.on{color:var(--green);}
@@ -348,6 +369,12 @@ body{background:
   <div id="mv-custom" style="display:none">
     <p class="hint">料理名を入力して「手動で追加」（AIを使わない）、または「AIで生成」でレシピを自動作成（⚙️でAPIキー設定）</p>
     <div class="inrow"><input type="text" id="custom-name" class="inp" placeholder="料理名を入力..."></div>
+    <div class="inrow" style="gap:7px">
+      <input type="text" id="custom-cal" class="inp" placeholder="kcal" inputmode="numeric" style="flex:1">
+      <input type="text" id="custom-p" class="inp" placeholder="蛋白質g" inputmode="numeric" style="flex:1">
+      <input type="text" id="custom-f" class="inp" placeholder="脂質g" inputmode="numeric" style="flex:1">
+      <input type="text" id="custom-c" class="inp" placeholder="糖質g" inputmode="numeric" style="flex:1">
+    </div>
     <div class="inrow" style="gap:9px">
       <button class="add-btn" onclick="addManual()" style="flex:1;background:rgba(111,207,151,0.15);color:var(--green);border:1px solid rgba(111,207,151,0.3)">➕ 手動で追加</button>
       <button class="add-btn" id="ai-btn" onclick="genRecipe()" style="flex:1">🤖 AIで生成</button>
@@ -361,11 +388,14 @@ body{background:
       <button class="tab-btn" id="eoslot-lunch" onclick="eoSlot('lunch')">🌞 昼食</button>
       <button class="tab-btn on" id="eoslot-dinner" onclick="eoSlot('dinner')">🌙 夜ご食</button>
     </div>
-    <div class="slot-label">ジャンル</div>
+    <div class="slot-label">カテゴリ（ジャンル）</div>
     <div class="cuisine-btns" id="cuisine-btns"></div>
-    <div class="inrow"><input type="text" id="eo-rest" class="inp" placeholder="店名（任意）"></div>
-    <div class="inrow"><input type="text" id="eo-dish" class="inp" placeholder="料理・注文内容"><button class="add-btn" onclick="logEatOut()">記録</button></div>
-    <div class="slot-label" style="margin-top:4px">外食履歴</div>
+    <div class="inrow"><input type="text" id="eo-rest" class="inp" placeholder="店名（任意）" style="flex:2"><input type="text" id="eo-pref" class="inp" placeholder="県（任意）" style="flex:1;min-width:80px"></div>
+    <div class="inrow"><input type="text" id="eo-dish" class="inp" placeholder="料理・注文内容"></div>
+    <div class="inrow"><input type="text" id="eo-cal" class="inp" placeholder="kcal（任意）" inputmode="numeric" style="flex:1"></div>
+    <div class="inrow"><input type="text" id="eo-tabelog" class="inp" placeholder="食べログリンク（貼るだけで記録OK）" style="flex:1"><button class="add-btn" onclick="logEatOut()">記録</button></div>
+    <p class="hint" style="margin-top:-4px">💡 料理名を入れなくても、食べログのリンクだけ貼れば記録できます</p>
+    <div class="slot-label" style="margin-top:4px">外食履歴（タップでカテゴリを変更）</div>
     <div id="eo-hist"></div>
   </div>
   <div id="mv-nutr" style="display:none"><div id="nutr-detail"></div></div>
@@ -435,6 +465,7 @@ body{background:
 <div class="ov" id="settings-ov" onclick="if(event.target===this)closeSettings()">
   <div class="mbox">
     <div class="m-title">⚙️ 設定・クラウド同期</div>
+    <div class="theme-row"><div class="theme-row-lbl" id="theme-lbl">🌙 ダークモード</div><div class="theme-switch" id="theme-switch" onclick="toggleTheme()"><div class="knob"></div></div></div>
     <div class="m-row"><label>JSONBin Secret Key</label><input type="password" id="cfg-key" placeholder="$2b$10$..." autocomplete="off"></div>
     <div class="m-row"><label>Bin ID（初回は空欄OK）</label><input type="text" id="cfg-bin" placeholder="自動生成"></div>
     <div id="sync-status"></div>
@@ -457,7 +488,7 @@ body{background:
   <div class="mbox"><div class="m-title">⭐ 食事の評価</div>
     <p style="font-size:14px;color:var(--muted);margin-bottom:8px" id="fb-name"></p>
     <div class="stars" id="fb-stars"></div>
-    <textarea id="fb-note" placeholder="感想・改善メモ" style="width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:var(--radius-sm);padding:15px;color:white;font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
+    <textarea id="fb-note" placeholder="感想・改善メモ" style="width:100%;background:var(--card-hi);border:1px solid var(--border);border-radius:var(--radius-sm);padding:15px;color:var(--text);font-size:14px;outline:none;font-family:inherit;resize:none;min-height:80px;margin-bottom:12px"></textarea>
     <div class="m-btns"><button class="m-btn s" onclick="closeFb()">スキップ</button><button class="m-btn p" onclick="saveFb()">✅ 保存</button></div></div>
 </div>
 
@@ -568,13 +599,13 @@ const STAPLES=[
   {id:'s41',n:'ティッシュ',c:'ペーパー類'},{id:'s42',n:'トイレットペーパー',c:'ペーパー類'},
   {id:'s43',n:'キッチンペーパー',c:'ペーパー類'},{id:'s44',n:'なんでもペーパー',c:'ペーパー類'},
   {id:'s45',n:'ラップ',c:'ペーパー類'},{id:'s46',n:'クッキングペーパー',c:'ペーパー類'},
-  {id:'s47',n:'ウェットティッシュ',c:'ペーパー類'},{id:'s48',n:'雑巾',c:'ペーパー類'}
+  {id:'s47',n:'ウェットティッシュ',c:'ペーパー類'}
 ];
 const TRASH={1:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},2:{l:'燃えないゴミ',i:'🚯',c:'#7a8fa6'},3:{l:'ペットボトル',i:'♻️',c:'#4a9e7f'},4:{l:'燃えるゴミ',i:'🔥',c:'#e07b54'},5:{l:'瓶・缶ゴミ',i:'🍶',c:'#c4963a'}};
 const CLEANING={0:{i:'🛁',l:'バスルーム掲除'},1:{i:'🚪',l:'珄関・マンション階段掲除',note:'ゴミ捨て日の掲除（固定）'},2:{i:'🍳',l:'キッチン掲除'},3:{i:'🪥',l:'洗面所・トイレ掲除'},4:{i:'🚪',l:'珄関・マンション階段掲除',note:'ゴミ捨て日の掲除（固定）'},5:{i:'🏠',l:'リビング・床掲除'},6:{i:'🪟',l:'窓・ベランダ掲除'}};
-const DAILY=[{id:'meditation',e:'🧘',l:'瞥想',s:'5分'},{id:'reading',e:'📖',l:'読書',s:'20ページ'},{id:'toilet',e:'🚿',l:'トイレ掲除',s:''},{id:'walk',e:'🚶',l:'散歩',s:''},{id:'hunting',e:'🎯',l:'狩猟免許勉強',s:''}];
+const DAILY=[{id:'meditation',e:'🧘',l:'瞑想',s:'5分'},{id:'reading',e:'📖',l:'読書',s:'20ページ'},{id:'toilet',e:'🚿',l:'トイレ掲除',s:''},{id:'walk',e:'🚶',l:'散歩',s:''}];
 const WEEKLY=[{id:'carwash',e:'🚗',l:'洗車',s:'週1回'},{id:'bedding',e:'🛏️',l:'布団関連洗濯',s:'週1回'}];
-const TLABELS={trash:'ゴミ捨て',cleaning:'掲除',meal:'食事',meditation:'瞥想',reading:'読書',toilet:'トイレ掲除',walk:'散歩',hunting:'狩猟免許勉強',carwash:'洗車',bedding:'布団洗濯'};
+const TLABELS={trash:'ゴミ捨て',cleaning:'掲除',meal:'食事',meditation:'瞑想',reading:'読書',toilet:'トイレ掲除',walk:'散歩',carwash:'洗車',bedding:'布団洗濯'};
 const HIDS=Object.keys(TLABELS);
 const DRINKS=[{id:'water',i:'💧',n:'水',goal:2000,color:'#7ab8d4',steps:[150,350,500]},{id:'soymilk',i:'🥛',n:'豆乳',goal:400,color:'#c4963a',steps:[200,400]},{id:'alcohol',i:'🍺',n:'お酒',goal:350,color:'#b08ac0',steps:[150,350]}];
 const CUISINES=[{e:'🍣',l:'寿司'},{e:'🍜',l:'ラーメン'},{e:'🍕',l:'ピザ'},{e:'🍔',l:'バーガー'},{e:'🥩',l:'肉料理'},{e:'🍱',l:'定食'},{e:'🌮',l:'エスニック'},{e:'🍢',l:'居酒屋'},{e:'☕',l:'カフェ'},{e:'🍰',l:'スイーツ'}];
@@ -586,7 +617,7 @@ let curMealTab='rec',curStockTab='fridge',curShopTab='today',mealSlotTarget=null
 
 const pad=n=>String(n).padStart(2,'0');
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
-function mondayStr(){const d=new Date(),w=d.getDay();d.setDate(d.getDate()-(w===0?6:w-1));return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function mondayStr(){/* 日曜始まりの週キー（関数名は既存互換のため維持） */const d=new Date(),w=d.getDay();d.setDate(d.getDate()-w);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function allMeals(){return MEALS.concat(state.customMeals||[]);}
 function mealById(id){return allMeals().find(m=>m.id===id);}
@@ -618,6 +649,23 @@ function loadLocal(){
 }
 function saveLocal(){localStorage.setItem('dts2',JSON.stringify(state));}
 function saveCfg(){localStorage.setItem('dtc2',JSON.stringify(cfg));}
+
+// ===== テーマ（ライト/ダーク） =====
+// 端末ローカルの見た目設定のみ。JSONbin同期の対象外（cfg/stateには触れない）。
+function applyTheme(mode){
+  const light=mode==='light';
+  document.documentElement.setAttribute('data-theme',light?'light':'dark');
+  const sw=document.getElementById('theme-switch');if(sw)sw.classList.toggle('on',light);
+  const lb=document.getElementById('theme-lbl');if(lb)lb.textContent=light?'☀️ ライトモード':'🌙 ダークモード';
+  const mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',light?'#eef6f0':'#0e1710');
+}
+function loadTheme(){let m='dark';try{m=localStorage.getItem('dt-theme')||'dark';}catch(e){}applyTheme(m);}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+  const next=cur==='light'?'dark':'light';
+  try{localStorage.setItem('dt-theme',next);}catch(e){}
+  applyTheme(next);
+}
 
 async function fetchT(url,opts){const ct=new AbortController();const t=setTimeout(()=>ct.abort(),10000);try{const r=await fetch(url,Object.assign({},opts,{signal:ct.signal}));clearTimeout(t);return r;}catch(e){clearTimeout(t);throw e;}}
 async function pushCloud(){
@@ -743,13 +791,29 @@ function toggleLunchEaten(){const k=todayStr();if(!state.lunchMeals[k])state.lun
 function syncMealDone(){const k=todayStr();const d=getDinner();if(!state.days[k])state.days[k]={};state.days[k].meal=(d.cooked&&d.eaten)||(d.type==='eatout'&&d.eaten);}
 function logEatOut(){
   const rest=document.getElementById('eo-rest').value.trim(),dish=document.getElementById('eo-dish').value.trim();
-  if(!dish){alert('料理名を入力してください');return;}
-  const k=todayStr();const name=rest?rest+' / '+dish:dish;
-  const obj={type:'eatout',eatOutName:name,restaurant:rest,dish:dish,emoji:selectedCuisine,eaten:false,cooked:true};
+  const pref=document.getElementById('eo-pref').value.trim();
+  const cal=document.getElementById('eo-cal').value.trim();
+  const tabelog=document.getElementById('eo-tabelog').value.trim();
+  // 料理名が空でも、食べログのリンクがあればそれをトリガーに登録できるようにする
+  if(!dish&&!tabelog){alert('料理名か食べログリンクのどちらかを入力してください');return;}
+  const k=todayStr();const label=dish||'食べログで記録';const name=rest?rest+' / '+label:label;
+  const obj={type:'eatout',eatOutName:name,restaurant:rest,dish:dish,pref:pref,tabelogUrl:tabelog,cal:cal?Number(cal):0,emoji:selectedCuisine,eaten:false,cooked:true};
   if(eoSlotTarget==='lunch'){if(!state.lunchMeals)state.lunchMeals={};state.lunchMeals[k]=obj;}
   else{if(!state.meals)state.meals={};state.meals[k]=obj;}
   document.getElementById('eo-rest').value='';document.getElementById('eo-dish').value='';
+  document.getElementById('eo-pref').value='';document.getElementById('eo-cal').value='';document.getElementById('eo-tabelog').value='';
   saveLocal();sched();renderHome();renderEatOut();
+}
+// 外食履歴のカテゴリ（ジャンル）を後から付け直す
+function editEatoutCategory(day,slot){
+  const src=slot==='昼'?state.lunchMeals:state.meals;
+  const rec=(src||{})[day];if(!rec)return;
+  const opts=CUISINES.map((c,i)=>(i+1)+':'+c.e+c.l).join('  ');
+  const ans=prompt('カテゴリを選択（番号を入力）\n'+opts,'');
+  const idx=parseInt(ans,10)-1;
+  if(!CUISINES[idx])return;
+  rec.emoji=CUISINES[idx].e;
+  saveLocal();sched();renderEatOut();
 }
 
 function openRecipe(id){
@@ -800,10 +864,17 @@ async function improveRecipe(id,fb,rating){
 function addManual(){
   const name=document.getElementById('custom-name').value.trim();
   if(!name){alert('料理名を入力してください');return;}
-  const meal={id:'c'+Date.now(),name:name,emoji:'🍽️',desc:'手動追加',tags:['カスタム'],time:20,nutr:{cal:0,protein:0,fat:0,carb:0},ings:[],steps:[],isCustom:true};
+  // 栄養値（任意）：未入力は0のまま＝「記録なし」として集計から除外される
+  const cal=Number(document.getElementById('custom-cal').value.trim()||0);
+  const protein=Number(document.getElementById('custom-p').value.trim()||0);
+  const fat=Number(document.getElementById('custom-f').value.trim()||0);
+  const carb=Number(document.getElementById('custom-c').value.trim()||0);
+  const meal={id:'c'+Date.now(),name:name,emoji:'🍽️',desc:'手動追加',tags:['カスタム'],time:20,nutr:{cal:cal,protein:protein,fat:fat,carb:carb},ings:[],steps:[],isCustom:true};
   state.customMeals.push(meal);
   saveLocal();sched();
   document.getElementById('custom-name').value='';
+  document.getElementById('custom-cal').value='';document.getElementById('custom-p').value='';
+  document.getElementById('custom-f').value='';document.getElementById('custom-c').value='';
   recIdxs=[];renderMealTab('custom');
 }
 async function genRecipe(){
@@ -947,7 +1018,7 @@ function renderMealTab(t){
     const el=document.getElementById('custom-list');if(!el)return;el.innerHTML='';
     const cs=state.customMeals||[];
     if(!cs.length){el.innerHTML='<div class="empty"><div class="ei">✨</div><div class="et">カスタムメニューはまだありません</div></div>';return;}
-    cs.forEach(m=>{const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';row.innerHTML='<span style="font-size:26px">'+(m.emoji||'🍳')+'</span><div style="flex:1"><div style="color:white;font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' ・ '+(m.time||'?')+'分</div></div><button class="pill" onclick="openRecipe(\''+m.id+'\')">詳細</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>';el.appendChild(row);});
+    cs.forEach(m=>{const row=document.createElement('div');row.style.cssText='background:var(--card);border:1px solid rgba(111,207,151,0.15);border-radius:14px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px';row.innerHTML='<span style="font-size:26px">'+(m.emoji||'🍳')+'</span><div style="flex:1"><div style="color:var(--text);font-weight:600">'+m.name+'</div><div style="font-size:12px;color:var(--muted)">'+(m.desc||'')+' ・ '+(m.time||'?')+'分</div></div><button class="pill" onclick="openRecipe(\''+m.id+'\')">詳細</button><button onclick="delCustom(\''+m.id+'\')" style="background:none;border:none;color:rgba(255,80,80,0.5);font-size:18px;cursor:pointer;padding:4px">✕</button>';el.appendChild(row);});
   }else if(t==='eatout')renderEatOut();
   else if(t==='nutr')renderNutr();
 }
@@ -958,14 +1029,27 @@ function renderEatOut(){
   const all=[];Object.entries(state.meals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'夜']);});Object.entries(state.lunchMeals||{}).forEach(([d,m])=>{if(m.type==='eatout')all.push([d,m,'昼']);});
   all.sort((a,b)=>b[0].localeCompare(a[0]));
   if(!all.length){hi.innerHTML='<div class="empty" style="padding:20px"><div class="et">外食の記録がありません</div></div>';return;}
-  all.slice(0,10).forEach(([d,m,slot])=>{const row=document.createElement('div');row.className='eo-row';row.innerHTML='<span style="font-size:20px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:white">'+m.eatOutName+'</div><div style="font-size:11px;color:var(--muted)">'+d+' ・ '+slot+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+(m.eaten?'✅':'⬜')+'</span>';hi.appendChild(row);});
+  all.slice(0,10).forEach(([d,m,slot])=>{const row=document.createElement('div');row.className='eo-row';row.style.cursor='pointer';row.onclick=()=>editEatoutCategory(d,slot);
+    const metaBits=[d+' ・ '+slot];if(m.pref)metaBits.push('📍'+m.pref);if(m.cal)metaBits.push(m.cal+'kcal');
+    const tblink=m.tabelogUrl?'<a href="'+normalizeUrl(m.tabelogUrl)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--blue);font-size:11px;text-decoration:underline;margin-left:6px">食べログ</a>':'';
+    row.innerHTML='<span style="font-size:20px">'+(m.emoji||'🍽️')+'</span><div style="flex:1"><div style="font-size:14px;color:var(--text)">'+m.eatOutName+tblink+'</div><div style="font-size:11px;color:var(--muted)">'+metaBits.join(' ・ ')+'</div></div><span style="font-size:12px;color:'+(m.eaten?'var(--green)':'var(--muted)')+'">'+(m.eaten?'✅':'⬜')+'</span>';hi.appendChild(row);});
 }
 function renderNutr(){
   const el=document.getElementById('nutr-detail');if(!el)return;el.innerHTML='';
-  const wm=[];for(let i=0;i<7;i++){const k=daysAgo(i);[state.meals,state.lunchMeals].forEach(src=>{const rec=(src||{})[k];if(rec&&rec.menuId){const m=mealById(rec.menuId);if(m&&m.nutr)wm.push(m);}});}
-  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">まだ食事の記録がありません<br>メニューを選んで「食べた」を押すと記録されます</div></div>';return;}
+  // 過去7日分：レシピ選択の食事に加え、外食記録（カロリーのみ手入力）も拾う。
+  // 栄養値が未入力（cal=0）の記録は「記録なし」として平均計算から除外する。
+  const wm=[];
+  for(let i=0;i<7;i++){
+    const k=daysAgo(i);
+    [state.meals,state.lunchMeals].forEach(src=>{
+      const rec=(src||{})[k];if(!rec)return;
+      if(rec.menuId){const m=mealById(rec.menuId);if(m&&m.nutr&&m.nutr.cal>0)wm.push(m);}
+      else if(rec.type==='eatout'&&rec.cal>0){wm.push({name:rec.eatOutName,emoji:rec.emoji||'🍽️',nutr:{cal:rec.cal,protein:0,fat:0,carb:0}});}
+    });
+  }
+  if(!wm.length){el.innerHTML='<div class="empty"><div class="ei">📊</div><div class="et">まだ食事の記録がありません<br>メニューを選んで「食べた」を押す、または外食にkcalを入力すると記録されます</div></div>';return;}
   const avg={cal:0,protein:0,fat:0,carb:0};wm.forEach(m=>{avg.cal+=m.nutr.cal;avg.protein+=m.nutr.protein;avg.fat+=m.nutr.fat;avg.carb+=m.nutr.carb;});const n=wm.length;
-  el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1,p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+(m.emoji||'🍳')+'</span><span style="font-size:14px;color:white">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
+  el.innerHTML='<div class="sec-label">過去7日の平均（'+n+'食分）</div><div class="r-nutr"><div class="r-nv"><div class="v">'+Math.round(avg.cal/n)+'</div><div class="l">kcal</div></div><div class="r-nv"><div class="v">'+Math.round(avg.protein/n)+'g</div><div class="l">蛋白質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.fat/n)+'g</div><div class="l">脂質</div></div><div class="r-nv"><div class="v">'+Math.round(avg.carb/n)+'g</div><div class="l">糖質</div></div></div>'+[['蛋白質','#6fcf97',avg.protein/n*4],['脂質','#c4963a',avg.fat/n*9],['糖質','#7ab8d4',avg.carb/n*4]].map(([lb,cl,v])=>{const tot=(avg.protein/n*4+avg.fat/n*9+avg.carb/n*4)||1,p=Math.round(v/tot*100);return '<div class="nb-row"><div class="nb-label"><span style="color:'+cl+'">'+lb+'</span><span>'+p+'%</span></div><div class="nb-bg"><div class="nb-bar" style="width:'+p+'%;background:'+cl+'"></div></div></div>';}).join('')+'<div class="sec-label" style="margin-top:14px">今週の食事</div>'+wm.map(m=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span style="font-size:22px">'+(m.emoji||'🍳')+'</span><span style="font-size:14px;color:var(--text)">'+m.name+'</span><span style="margin-left:auto;font-size:12px;color:var(--muted)">'+m.nutr.cal+'kcal</span></div>').join('');
 }
 
 // ===== STOCK =====
@@ -1087,7 +1171,7 @@ function renderHist(){
 }
 
 function renderAll(){renderHome();renderMealTab(curMealTab);renderStockTab(curStockTab);renderShopTab(curShopTab);}
-loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
+loadTheme();loadLocal();renderAll();pullCloud();setInterval(pullCloud,5*60*1000);
 
 </script>
 </body>
