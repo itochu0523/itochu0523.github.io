@@ -52,43 +52,51 @@ body{background:
   var(--body-grad);
   background-attachment:fixed;min-height:100vh;transition:background 0.3s;
   font-family:'Noto Sans JP',system-ui,sans-serif;color:var(--text);
-  overflow-x:hidden;padding-bottom:calc(84px + var(--safe-b));
+  overflow-x:hidden;padding-bottom:calc(96px + var(--safe-b));
   -webkit-font-smoothing:antialiased;}
 .page{display:none;max-width:520px;margin:0 auto;padding:0 16px;}
 .page.active{display:block;animation:fade 0.4s var(--ease-out);}
 @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 @keyframes pulseGlow{0%,100%{opacity:0.55;}50%{opacity:1;}}
 
-/* Header */
-.header{display:flex;align-items:center;justify-content:space-between;padding:calc(20px + var(--safe-t)) 2px 18px;}
+/* Header：日付/曜日のタイポグラフィを大胆に */
+.header{display:flex;align-items:flex-end;justify-content:space-between;padding:calc(18px + var(--safe-t)) 2px 20px;}
 .h-left{min-width:0;}
-.h-date{color:var(--green);font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:4px;opacity:0.9;}
-.h-title{color:var(--text);font-size:27px;font-weight:800;letter-spacing:-0.6px;}
+.h-date{color:var(--green);font-size:11px;font-weight:800;letter-spacing:3px;margin-bottom:2px;opacity:0.95;text-transform:uppercase;}
+.h-title{color:var(--text);font-size:34px;font-weight:800;letter-spacing:-1.2px;line-height:1.05;
+  background:linear-gradient(135deg,var(--text) 40%,var(--green) 150%);-webkit-background-clip:text;background-clip:text;}
 .h-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.gear{background:var(--card-hi);border:1px solid var(--border);width:44px;height:44px;border-radius:50%;
+.gear{background:var(--card-hi);border:1px solid var(--border);width:46px;height:46px;border-radius:16px;
   font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm),var(--card-inset);
   transition:transform 0.2s var(--ease-pop),box-shadow 0.2s,background 0.2s;}
-.gear:active{transform:scale(0.9) rotate(-18deg);box-shadow:var(--sh-sm);}
+.gear:active{transform:scale(0.88) rotate(-25deg);box-shadow:var(--sh-sm);}
 
-/* Progress ring hero：主役感を出すため厚み・グロー・内側グラデーションを重ねる */
-.hero{position:relative;background:linear-gradient(150deg,rgba(111,207,151,0.16),rgba(111,207,151,0.02) 60%);
-  border:1px solid rgba(111,207,151,0.22);border-radius:26px;padding:20px 22px;margin-bottom:22px;
-  display:flex;align-items:center;gap:18px;box-shadow:var(--sh-lg),var(--glow-green),var(--card-inset);
-  overflow:hidden;isolation:isolate;}
-.hero::before{content:'';position:absolute;top:-40%;right:-20%;width:70%;height:180%;
-  background:radial-gradient(circle,rgba(111,207,151,0.22),transparent 65%);z-index:-1;
-  animation:pulseGlow 5s ease-in-out infinite;}
-.hero-ring{flex-shrink:0;position:relative;filter:drop-shadow(0 4px 14px rgba(111,207,151,0.28));}
+/* Progress ring hero：第一印象を作る主役カード。メッシュ背景＋大型リングで存在感を出す */
+.hero{position:relative;background:linear-gradient(155deg,#15351f 0%,#0e2417 55%,#0c1c15 100%);
+  border:1px solid rgba(111,207,151,0.28);border-radius:28px;padding:26px 24px;margin-bottom:26px;
+  box-shadow:var(--sh-lg),var(--glow-green),var(--card-inset);overflow:hidden;isolation:isolate;}
+:root[data-theme="light"] .hero{background:linear-gradient(155deg,#e4f5ea 0%,#d3ecdd 55%,#c8e6d5 100%);}
+.hero-mesh{position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 0%,rgba(111,207,151,0.35),transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 100%,rgba(122,184,212,0.22),transparent 65%),
+    radial-gradient(ellipse 40% 40% at 90% 0%,rgba(176,138,192,0.18),transparent 60%);
+  animation:pulseGlow 6s ease-in-out infinite;}
+.hero-top{display:flex;align-items:center;gap:20px;position:relative;z-index:1;}
+.hero-ring{flex-shrink:0;position:relative;filter:drop-shadow(0 6px 18px rgba(111,207,151,0.35));}
 .hero-txt{flex:1;min-width:0;}
-.hero-pct-big{font-size:31px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px;letter-spacing:-0.5px;}
-.hero-label{font-size:13px;color:var(--muted);font-weight:500;}
-.hero-sub{font-size:12px;color:var(--green);margin-top:7px;font-weight:700;}
+.hero-pct-big{font-size:36px;font-weight:800;color:var(--text);line-height:1;margin-bottom:5px;letter-spacing:-1px;}
+.hero-label{font-size:13px;color:var(--muted);font-weight:600;}
+.hero-sub{font-size:13px;color:var(--green);margin-top:9px;font-weight:700;display:inline-block;
+  background:rgba(111,207,151,0.15);padding:5px 12px;border-radius:20px;}
 
-/* Section */
-.sec{margin-bottom:24px;}
+/* Section：セクションごとにアクセントカラーの縦バーで視線誘導 */
+.sec{margin-bottom:26px;position:relative;padding-left:15px;}
+.sec::before{content:'';position:absolute;left:0;top:1px;bottom:6px;width:3px;border-radius:4px;
+  background:var(--accent,var(--green));opacity:0.55;}
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;padding:0 2px;}
-.sec-label{font-size:12.5px;font-weight:800;letter-spacing:0.6px;color:var(--text);opacity:0.9;display:flex;align-items:center;gap:8px;}
-.sec-label .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(111,207,151,0.14);}
+.sec-label{font-size:13px;font-weight:800;letter-spacing:0.4px;color:var(--text);display:flex;align-items:center;gap:8px;}
+.sec-label .dot{width:8px;height:8px;border-radius:50%;background:var(--accent,var(--green));box-shadow:0 0 0 4px color-mix(in srgb,var(--accent,var(--green)) 18%,transparent);}
 .slot-label{font-size:11px;font-weight:700;letter-spacing:0.5px;color:var(--muted);margin-bottom:7px;padding-left:2px;display:flex;align-items:center;gap:5px;}
 
 /* Task button */
@@ -97,18 +105,22 @@ body{background:
   font-family:inherit;transition:transform 0.18s var(--ease-pop),background 0.25s,border-color 0.25s,box-shadow 0.25s;
   position:relative;overflow:hidden;box-shadow:var(--sh-sm),var(--card-inset);}
 .task-btn:active{transform:scale(0.965);box-shadow:0 1px 4px rgba(0,0,0,0.18);}
-.task-btn.done{background:linear-gradient(100deg,rgba(111,207,151,0.14),rgba(111,207,151,0.03));border-color:rgba(111,207,151,0.28);
-  box-shadow:var(--sh-sm),0 0 0 1px rgba(111,207,151,0.08) inset;}
-.t-icon{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:26px;background:var(--card-hi);transition:background 0.25s,transform 0.25s var(--ease-pop);box-shadow:var(--card-inset);}
-.task-btn.done .t-icon{background:rgba(111,207,151,0.16);transform:scale(1.04);}
+.task-btn.done{background:linear-gradient(100deg,rgba(111,207,151,0.16),rgba(111,207,151,0.03));border-color:rgba(111,207,151,0.32);
+  box-shadow:var(--sh-md),0 0 0 1px rgba(111,207,151,0.1) inset;animation:doneFlash 0.5s var(--ease-out);}
+@keyframes doneFlash{0%{box-shadow:0 0 0 0 rgba(111,207,151,0.5),var(--sh-sm);}100%{box-shadow:var(--sh-md),0 0 0 1px rgba(111,207,151,0.1) inset;}}
+/* アイコンは常にアクセントカラーの円で塗り、完了時はさらに強く発光させる（視覚言語をカードごとに変える） */
+.t-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:24px;background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--accent,var(--green)) 24%,transparent),color-mix(in srgb,var(--accent,var(--green)) 12%,transparent));
+  transition:background 0.25s,transform 0.3s var(--ease-pop),box-shadow 0.3s;box-shadow:0 0 0 1px color-mix(in srgb,var(--accent,var(--green)) 22%,transparent) inset;}
+.task-btn.done .t-icon{background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--accent,var(--green)) 55%,transparent),color-mix(in srgb,var(--accent,var(--green)) 25%,transparent));
+  transform:scale(1.06);box-shadow:0 4px 16px -4px color-mix(in srgb,var(--accent,var(--green)) 70%,transparent),0 0 0 1px color-mix(in srgb,var(--accent,var(--green)) 40%,transparent) inset;}
 .t-info{flex:1;min-width:0;}
-.t-lbl{color:var(--text);font-size:16px;font-weight:600;line-height:1.35;transition:color 0.25s;}
+.t-lbl{color:var(--text);font-size:16px;font-weight:700;line-height:1.35;transition:color 0.25s;}
 .task-btn.done .t-lbl{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(111,207,151,0.4);}
 .t-sub{color:var(--muted);font-size:12px;line-height:1.3;margin-top:2px;}
-.chk{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:17px;font-weight:800;border:2px solid rgba(255,255,255,0.16);background:transparent;transition:all 0.3s var(--ease-pop);}
-.task-btn.done .chk{transform:scale(1.08);box-shadow:0 3px 10px -2px rgba(111,207,151,0.5);}
+.chk{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;border:2px solid rgba(255,255,255,0.16);background:transparent;transition:all 0.3s var(--ease-pop);}
+.task-btn.done .chk{transform:scale(1.1);box-shadow:0 4px 14px -3px color-mix(in srgb,var(--accent,var(--green)) 65%,transparent);}
 
 /* Sub buttons under meal slot */
 .sub-btn{width:100%;margin-top:7px;padding:13px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;
@@ -343,22 +355,23 @@ body{background:
 .price-diff{text-align:center;font-size:12px;color:var(--muted);margin-top:10px;}
 .price-diff b{color:var(--green);font-weight:700;}
 
-/* Bottom nav */
-/* ボトムナビは両テーマ共通で常にダークガラス調（視認性とブランド感のため固定） */
-#nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav-bg);backdrop-filter:blur(24px) saturate(1.4);
-  -webkit-backdrop-filter:blur(24px) saturate(1.4);border-top:1px solid rgba(255,255,255,0.08);display:flex;z-index:100;
-  padding-bottom:var(--safe-b);height:calc(66px + var(--safe-b));box-shadow:0 -8px 30px rgba(0,0,0,0.18);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;
-  color:rgba(234,244,236,0.45);cursor:pointer;font-family:inherit;transition:color 0.25s;position:relative;padding-top:8px;}
-.nb .ni{font-size:22px;transition:transform 0.28s var(--ease-pop);display:inline-block;}
-.nb .nl{font-size:10px;font-weight:600;transition:transform 0.2s;}
-.nb:active .ni{transform:scale(0.82);}
-.nb.on{color:var(--green);}
-.nb.on .ni{transform:translateY(-3px) scale(1.12);filter:drop-shadow(0 3px 8px rgba(111,207,151,0.5));}
-.nb.on::before{content:'';position:absolute;top:0;width:28px;height:3px;border-radius:0 0 4px 4px;
-  background:linear-gradient(90deg,var(--green),var(--green-d));box-shadow:0 2px 8px rgba(111,207,151,0.6);
-  animation:navIn 0.35s var(--ease-pop);}
-@keyframes navIn{from{width:0;opacity:0;}to{width:28px;opacity:1;}}
+/* Bottom nav：フローティングのピル型ナビに刷新。アクティブタブが背景ごと浮き上がる */
+/* 両テーマ共通で常にダークガラス調（視認性とブランド感のため固定） */
+#nav{position:fixed;bottom:calc(10px + var(--safe-b));left:12px;right:12px;background:var(--nav-bg);
+  backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);
+  border:1px solid rgba(255,255,255,0.1);display:flex;z-index:100;border-radius:24px;height:64px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.35),0 2px 8px rgba(0,0,0,0.2);padding:6px;gap:4px;}
+.nb{flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;background:none;border:none;border-radius:18px;
+  color:rgba(234,244,236,0.5);cursor:pointer;font-family:inherit;transition:color 0.25s,background 0.3s var(--ease-pop),transform 0.2s var(--ease-pop);
+  position:relative;}
+.nb .ni{font-size:19px;transition:transform 0.28s var(--ease-pop);display:inline-block;}
+.nb .nl{font-size:0;max-width:0;font-weight:700;white-space:nowrap;overflow:hidden;transition:font-size 0.25s,max-width 0.3s var(--ease-pop);}
+.nb:active{transform:scale(0.93);}
+.nb.on{color:#0c140f;background:linear-gradient(135deg,var(--green),var(--green-d));
+  box-shadow:0 8px 20px -6px rgba(111,207,151,0.6);animation:navPop 0.35s var(--ease-pop);}
+.nb.on .ni{transform:scale(1.05);}
+.nb.on .nl{font-size:12px;max-width:60px;margin-left:1px;}
+@keyframes navPop{0%{transform:scale(0.85);}60%{transform:scale(1.04);}100%{transform:scale(1);}}
 </style>
 </head>
 <body>
@@ -371,23 +384,29 @@ body{background:
   </div>
 
   <div class="hero">
-    <div class="hero-ring">
-      <svg width="72" height="72" viewBox="0 0 72 72">
-        <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
-        <circle id="ring-arc" cx="36" cy="36" r="30" fill="none" stroke="#6fcf97" stroke-width="6"
-          stroke-linecap="round" transform="rotate(-90 36 36)" stroke-dasharray="188.5" stroke-dashoffset="188.5"
-          style="transition:stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1)"/>
-        <text x="36" y="41" text-anchor="middle" fill="white" font-size="16" font-weight="800" id="ring-pct">0%</text>
-      </svg>
-    </div>
-    <div class="hero-txt">
-      <div class="hero-pct-big" id="ring-sub">0/0</div>
-      <div class="hero-label">今日のタスク達成状況</div>
-      <div class="hero-sub" id="hero-msg">今日もがんばろう！</div>
+    <div class="hero-mesh"></div>
+    <div class="hero-top">
+      <div class="hero-ring">
+        <svg width="104" height="104" viewBox="0 0 104 104">
+          <circle cx="52" cy="52" r="44" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+          <circle id="ring-arc" cx="52" cy="52" r="44" fill="none" stroke="url(#ringGrad)" stroke-width="8"
+            stroke-linecap="round" transform="rotate(-90 52 52)" stroke-dasharray="276.5" stroke-dashoffset="276.5"
+            style="transition:stroke-dashoffset 0.8s cubic-bezier(0.16,1,0.3,1)"/>
+          <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#8fe0b0"/><stop offset="100%" stop-color="#4ba876"/>
+          </linearGradient></defs>
+          <text x="52" y="59" text-anchor="middle" fill="white" font-size="22" font-weight="800" id="ring-pct">0%</text>
+        </svg>
+      </div>
+      <div class="hero-txt">
+        <div class="hero-pct-big" id="ring-sub">0/0</div>
+        <div class="hero-label">今日のタスク達成状況</div>
+        <div class="hero-sub" id="hero-msg">今日もがんばろう！</div>
+      </div>
     </div>
   </div>
 
-  <div class="sec">
+  <div class="sec" style="--accent:var(--green)">
     <div class="sec-head"><div class="sec-label"><span class="dot"></span>⚡ すぐやるタスク</div></div>
     <div class="inrow">
       <input type="text" id="qt-input" class="inp" placeholder="タスクを入力..." onkeydown="if(event.key==='Enter')addQuickTask()">
@@ -396,13 +415,13 @@ body{background:
     <div id="qt-list"></div>
   </div>
 
-  <div class="sec"><div class="sec-head"><div class="sec-label"><span class="dot" style="background:var(--blue)"></span>💧 今日の水分</div></div><div id="drink-widget"></div></div>
-  <div class="sec" id="sec-trash" style="display:none"><div class="sec-head"><div class="sec-label"><span class="dot" style="background:var(--orange)"></span>🗑️ ゴミ捨て</div></div><div id="trash-task"></div></div>
-  <div class="sec"><div class="sec-head"><div class="sec-label"><span class="dot" style="background:var(--blue)"></span>🧹 今日の掲除</div></div><div id="clean-task"></div></div>
-  <div class="sec"><div class="sec-head"><div class="sec-label"><span class="dot" style="background:var(--gold)"></span>🍽️ 今日の食事</div></div><div id="meal-task"></div></div>
-  <div class="sec"><div class="sec-head"><div class="sec-label"><span class="dot"></span>📋 毎日タスク</div></div><div id="daily-tasks"></div></div>
-  <div class="sec" id="sec-shop" style="display:none"><div class="sec-head"><div class="sec-label"><span class="dot"></span>🛒 買い物リスト</div></div><div id="shop-chips"></div></div>
-  <div class="sec"><div class="sec-head"><div class="sec-label"><span class="dot" style="background:var(--purple)"></span>📅 今週のタスク</div></div><div id="weekly-tasks"></div></div>
+  <div class="sec" style="--accent:var(--blue)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>💧 今日の水分</div></div><div id="drink-widget"></div></div>
+  <div class="sec" id="sec-trash" style="display:none;--accent:var(--orange)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>🗑️ ゴミ捨て</div></div><div id="trash-task"></div></div>
+  <div class="sec" style="--accent:var(--blue)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>🧹 今日の掲除</div></div><div id="clean-task"></div></div>
+  <div class="sec" style="--accent:var(--gold)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>🍽️ 今日の食事</div></div><div id="meal-task"></div></div>
+  <div class="sec" style="--accent:var(--green)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>📋 毎日タスク</div></div><div id="daily-tasks"></div></div>
+  <div class="sec" id="sec-shop" style="display:none;--accent:var(--green)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>🛒 買い物リスト</div></div><div id="shop-chips"></div></div>
+  <div class="sec" style="--accent:var(--purple)"><div class="sec-head"><div class="sec-label"><span class="dot"></span>📅 今週のタスク</div></div><div id="weekly-tasks"></div></div>
   <div style="height:16px"></div>
 </div>
 
@@ -954,7 +973,11 @@ function delCustom(id){if(!confirm('削除しますか？'))return;state.customM
 // ===== HOME =====
 function mkBtn(icon,label,sub,done,accent,onClick){
   const b=document.createElement('button');b.className='task-btn'+(done?' done':'');b.onclick=onClick;
-  const ic=document.createElement('div');ic.className='t-icon';ic.style.background=done?accent+'28':'rgba(255,255,255,0.05)';ic.textContent=icon;
+  // アイコンは常にアクセントカラーの円で塗る（未完了は薄く、完了は濃く発光）
+  const ic=document.createElement('div');ic.className='t-icon';
+  ic.style.background='radial-gradient(circle at 30% 30%,'+accent+(done?'8c':'2e')+','+accent+(done?'40':'14')+')';
+  ic.style.boxShadow=(done?'0 4px 16px -4px '+accent+'66,':'')+'0 0 0 1px '+accent+'38 inset';
+  ic.textContent=icon;
   const inf=document.createElement('div');inf.className='t-info';
   const l=document.createElement('div');l.className='t-lbl';l.textContent=label;inf.appendChild(l);
   if(sub){const s=document.createElement('div');s.className='t-sub';s.textContent=sub;inf.appendChild(s);}
@@ -1020,7 +1043,7 @@ function renderHome(){
     +(state.weeklyCustom||[]).filter(t=>getWeekDone(t.id)).length;
   const shopTask=(ns.length||nm.length)?0:0;
   let total=(tr?1:0)+1+2+DAILY.length+WEEKLY.length+(state.weeklyCustom||[]).length;
-  const pct=total>0?Math.round(done/total*100):0,circ=2*Math.PI*22;
+  const pct=total>0?Math.round(done/total*100):0,circ=2*Math.PI*44;
   document.getElementById('ring-arc').style.strokeDashoffset=circ*(1-pct/100);
   document.getElementById('ring-pct').textContent=pct+'%';
   document.getElementById('ring-sub').textContent=done+'/'+total;
